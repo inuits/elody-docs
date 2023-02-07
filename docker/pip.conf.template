@@ -1,0 +1,4 @@
+[global]
+index-url = https://${PYPI_USERNAME}:${PYPI_PASSWORD}@${PYPI_HOST}${PYPI_PATH}
+index = https://${PYPI_USERNAME}:${PYPI_PASSWORD}@${PYPI_HOST}${PYPI_PATH}
+trusted-host = ${PYPI_HOST}
