@@ -24,6 +24,12 @@ together with a list of tupples of the mediafile/entity id together with the
 filename. The csv-importer can then update the entities/mediafiles with the values
 from the CSV file.
 
+Another possibility could be that the CSV is uploaded to the csv-importer which
+would return a document containing the representation of the entities/mediafiles
+in JSON-format. This could than be used to POST to the collection-api. The
+consumer of these endpoints can match the filenames in the form with the filenams
+in the upload-urls/tickets.
+
 ## Streamlining backend-import with uploads via frontend
 
 The backend/frontend upload/import funcionality in the current DAMS Antwerpen
