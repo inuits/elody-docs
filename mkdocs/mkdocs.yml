@@ -2,4 +2,5 @@ site_name: Inuits DAMS Docs
 nav:
   - CSV Export: csv-export.md
   - CSV Import: csv-import.md
+  - OCR Service: ocr-service.md
 theme: readthedocs
