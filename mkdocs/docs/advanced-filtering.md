@@ -92,7 +92,7 @@ should be "cm".
 The MultiSelectInput filter allows you to look for entities matching multiple
 given values.
 
-An example
+### An example
 ```
 [
   {
@@ -112,3 +112,53 @@ either "Erfgoedbibliotheek Hendrik Conscience (Antwerpen)" or
 
 ## MinMax filter
 
+The MinMax filter allows you to search for entities where the value lies between
+two set values. These values don't have to be numbers perse. They can also be
+dates.
+
+### An example
+```
+[
+  {
+    "type": "MinMaxInput",
+    "value": {
+      "max": 8
+    },
+    "metadata_field": "width",
+    "item_types": ["asset"]
+  }
+]
+```
+This query searches for assets with a width with a maximum of 8.
+
+### An example with relations
+```
+[
+  {
+    "type": "MinMaxInput",
+    "value": {
+      "min": 1
+    },
+    "relation_types": ["mediafiles"],
+    "item_types": ["asset"]
+  }
+]
+```
+This query searches for asset with at least one mediafile.
+
+### Using dates with a MinMax-filter
+```
+[
+  {
+    "type": "MinMaxInput",
+    "value": {
+      "min": "2023-03-30 09:50",
+      "max": "2023-02-15 22:35"
+    },
+    "metadata_field": "date"
+  }
+]
+```
+The MinMax filter can also be abused to filter on date values. In this example
+entities dated between the 15th of February, 22:35 and the 30th of March, 2023
+on 09:50.
