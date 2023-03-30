@@ -3,4 +3,5 @@ nav:
   - CSV Export: csv-export.md
   - CSV Import: csv-import.md
   - OCR Service: ocr-service.md
+  - Advanced Filtering: advanced-filtering.md
 theme: readthedocs
