@@ -58,12 +58,13 @@ This query searches for an entity created exactly on the 30th of March 2023, on
     "type": "TextInput",
     "value": "151",
     "key": "height",
-    "match_exact": true,
+    "parent": "123dazm9dza0g",
   }
 ]
 ```
 This query searches for entities with a height of exactly 151... whatever unit
-this refers to.
+this refers to. It also searches within the context of the entity "123dazm9dza0g".
+So all the results will have "123dazm9dza0g" as their parent.
 
 ### Combining multiple queries
 ```
@@ -87,6 +88,27 @@ exactly 151... Whatever unit. And in the next query we specify that the unit_hei
 should be "cm".
 
 ## MultiSelect filter
+
+The MultiSelectInput filter allows you to look for entities matching multiple
+given values.
+
+An example
+```
+[
+  {
+    "type": "MultiSelectInput",
+    "value": [
+      "Erfgoedbibliotheek Hendrik Conscience (Antwerpen)",
+      "Museum Plantin-Moretus (Antwerpen)"
+    ],
+    "item_types": ["museum"],
+    "key": "publisher"
+  }
+]
+```
+This query searches for entities of type museum which have a publisher which is
+either "Erfgoedbibliotheek Hendrik Conscience (Antwerpen)" or
+"Museum Plantin-Moretus (Antwerpen)".
 
 ## MinMax filter
 
