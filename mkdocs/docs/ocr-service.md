@@ -29,3 +29,18 @@ positive response. The id of the newly created mediafile in step 3 is given to t
 8. The user can now call the collection-api with the returned mediafile_id in step 4 to **fetch the OCRed image**.
 
 
+## Endpoint ```/ocr/correction``` 
+
+It is also possible to correct the mistakes of an already generated txt output.
+The user can do this by a post request with the body as ***multipart/form-data***.
+There are 2 properties to fill in:
+- ***mediafile_id*** with the id of the mediafile that contains the OCR txt output
+- ***updated_text*** representing the updated OCR txt output
+
+1. The engine will look for the mediafile and fetch the already generated txt OCR output
+2. It will compare the generated and the updated output and create a diff
+3. The diff will be stored as plain text in the metadata of the mediafile
+
+There are a few requirements:
+- The mediafile has to exist
+- The txt of the mediafile must be present in the metadata meaning that tesseract already should've ran a txt method on the mediafile
