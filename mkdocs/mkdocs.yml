@@ -4,4 +4,5 @@ nav:
   - CSV Import: csv-import.md
   - OCR Service: ocr-service.md
   - Advanced Filtering: advanced-filtering.md
+  - Advanced Filtering (deprecated version): advanced-filtering-deprecated-version.md
 theme: readthedocs
