@@ -405,7 +405,7 @@ time you apply filters as an end user.
 id: advancedFilter(
   key: "identifiers",
   label: "ID",
-  type: id
+  type: id,
   advancedFilterInputForRetrievingOptions: {
     key: "identifiers",
     value: "*",
@@ -427,7 +427,7 @@ id: advancedFilter(
 name: advancedFilter(
   key: "name",
   label: "Name",
-  type: selection
+  type: selection,
   advancedFilterInputForRetrievingOptions: {
     key: "name",
     value: "*",
@@ -468,7 +468,7 @@ query getAdvancedFilters($entityType: String!) {
       id: advancedFilter(
         key: "identifiers",
         label: "ID",
-        type: id
+        type: id,
         advancedFilterInputForRetrievingOptions: {
           key: "identifiers",
           value: "*",
@@ -491,7 +491,7 @@ query getAdvancedFilters($entityType: String!) {
       name: advancedFilter(
         key: "name",
         label: "Name",
-        type: selection
+        type: selection,
         advancedFilterInputForRetrievingOptions: {
           key: "name",
           value: "*",
