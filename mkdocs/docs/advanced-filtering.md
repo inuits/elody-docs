@@ -149,7 +149,7 @@ range.
 ]
 ```
 This query is searching for entities where the metadata field "created" has a
-minimum datetime value of "2022-04-14 15:00:00". It is a "greater then" match, so
+minimum datetime value of "2022-04-14T15:00:00". It is a "greater then" match, so
 the minimum value itself is not included in the result.
 
 ##### MaxMatcher
@@ -165,7 +165,7 @@ the minimum value itself is not included in the result.
 ]
 ```
 This query is searching for entities where the metadata field "created" has a
-maximum datetime value of "2022-04-14 15:00:00". It is a "less then" match, so
+maximum datetime value of "2022-04-14T15:00:00". It is a "less then" match, so
 the maximum value itself is not included in the result.
 
 ##### InBetweenMatcher
