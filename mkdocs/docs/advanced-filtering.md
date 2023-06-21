@@ -390,6 +390,18 @@ which filters on the key `name`. You can also define the same structure for filt
 type `date`, `number` and `boolean`.
 
 ```graphql
+name: advancedFilter(key: "name", label: "name", type: text, isDisplayedByDefault: true) {
+  key
+  label
+  type
+  isDisplayedByDefault
+}
+```
+=> Although this is optionally, it is recommended to add the `isDisplayedByDefault` parameter.
+Filters are not displayed unless you add them through the UI. This property will make sure
+the filter is displayed by default.
+
+```graphql
 type: advancedFilter(key: "type", label: "Type", type: selection) {
   key
   label
@@ -406,6 +418,7 @@ id: advancedFilter(
   key: "identifiers",
   label: "ID",
   type: id,
+  isDisplayedByDefault: true,
   advancedFilterInputForRetrievingOptions: {
     key: "identifiers",
     value: "*",
@@ -416,6 +429,7 @@ id: advancedFilter(
   key
   label
   type
+  isDisplayedByDefault
   advancedFilterInputForRetrievingOptions {
     key
     value
@@ -428,6 +442,7 @@ name: advancedFilter(
   key: "name",
   label: "Name",
   type: selection,
+  isDisplayedByDefault: true,
   advancedFilterInputForRetrievingOptions: {
     key: "name",
     value: "*",
@@ -439,6 +454,7 @@ name: advancedFilter(
   key
   label
   type
+  isDisplayedByDefault
   advancedFilterInputForRetrievingOptions {
     key
     value
@@ -469,6 +485,7 @@ query getAdvancedFilters($entityType: String!) {
         key: "identifiers",
         label: "ID",
         type: id,
+        isDisplayedByDefault: true,
         advancedFilterInputForRetrievingOptions: {
           key: "identifiers",
           value: "*",
@@ -479,6 +496,7 @@ query getAdvancedFilters($entityType: String!) {
         key
         label
         type
+        isDisplayedByDefault
         advancedFilterInputForRetrievingOptions {
           key
           value
@@ -492,6 +510,7 @@ query getAdvancedFilters($entityType: String!) {
         key: "name",
         label: "Name",
         type: selection,
+        isDisplayedByDefault: true,
         advancedFilterInputForRetrievingOptions: {
           key: "name",
           value: "*",
@@ -503,6 +522,7 @@ query getAdvancedFilters($entityType: String!) {
         key
         label
         type
+        isDisplayedByDefault
         advancedFilterInputForRetrievingOptions {
           key
           value
@@ -515,6 +535,7 @@ query getAdvancedFilters($entityType: String!) {
         key
         label
         type
+        isDisplayedByDefault
       }
       type: advancedFilter(key: "type", label: "Type", type: selection) {
         key
@@ -525,10 +546,16 @@ query getAdvancedFilters($entityType: String!) {
       }
     }
     ... on PoliceZone {
-      alternateName: advancedFilter(key: "alternateName", label: "Alternate name", type: text) {
+      alternateName: advancedFilter(
+        key: "alternateName",
+        label: "Alternate name",
+        type: text,
+        isDisplayedByDefault: true
+      ) {
         key
         label
         type
+        isDisplayedByDefault
       }
       type: advancedFilter(key: "type", label: "Type", type: selection) {
         key
