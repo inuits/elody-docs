@@ -4,13 +4,13 @@
 
 | **Field availability** | **Edit** | **Filter** |
 |------------------------|----------|------------|
-| **Date**               | ✔️       |            |
-| **Datetime**           | ✔️       | ✔️         |
-| **Boolean**            | ✔️       | ✔️         |
-| **Number**             | ✔️       | ✔️         |
-| **Text**               | ✔️       | ✔️         |
-| **Color**              | ✔️       |            |
-| **Coordinates**        | ✔️       |            |
+| **Date**               | ☑️       |            |
+| **Datetime**           | ☑️       | ☑️         |
+| **Boolean**            | ☑️       | ☑️         |
+| **Number**             | ☑️       | ☑️         |
+| **Text**               | ☑️       | ☑️         |
+| **Color**              | ☑️       |            |
+| **Coordinates**        | ☑️       |            |
 
 
 ### Add fields in graphql
