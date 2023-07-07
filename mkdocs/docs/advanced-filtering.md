@@ -114,6 +114,20 @@ matcher matches values that contain a given substring.
 This query is searching for entities of type "asset" that have a non-empty title
 metadata field.
 
+```json
+[
+  {
+    "type": "text",
+    "key": "identifiers",
+    "value": "*",
+    "parent": "c12d96fc-1bf7-4609-a9fc-8788df0f3415",
+  }
+]
+```
+This example demonstrates the `parent` key. This query is searching for all entities
+which have a `parent` or `belongsTo` relation with an entity with id
+"c12d96fc-1bf7-4609-a9fc-8788df0f3415"
+
 ##### NoneMatcher
 ```json
 [
@@ -414,6 +428,22 @@ type: advancedFilter(key: "type", label: "Type", type: selection) {
 time you apply filters as an end user.
 
 ```graphql
+parent: advancedFilter(key: "identifiers", label: "parent", type: text) {
+  key
+  label
+  type
+  defaultValue(value: "*")
+  hidden(value: true)
+}
+```
+=> This is a relation filter. Relation filters have the following requirements in order to
+work:
+
+- it should be a hidden filter with defaultValue `*`
+- label must be equal to `parent`
+- should be declared within `... on BaseEntity {}`
+
+```graphql
 id: advancedFilter(
   key: "identifiers",
   label: "ID",
@@ -569,8 +599,3 @@ query getAdvancedFilters($entityType: String!) {
   }
 }
 ```
-
-# Note
-Quering relations, searching within the context of an entity by using the `parent` field
-in the query are not yet supported because testing it was not possible during development.
-In any urgent case, the previous filter implementation does still exist in the codebase.
