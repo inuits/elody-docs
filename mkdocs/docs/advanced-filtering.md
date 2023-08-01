@@ -428,7 +428,7 @@ type: advancedFilter(key: "type", label: "Type", type: selection) {
 time you apply filters as an end user.
 
 ```graphql
-parent: advancedFilter(key: "identifiers", label: "parent", type: text) {
+parent: advancedFilter(key: "identifiers", label: "metadata.labels.parent", type: text) {
   key
   label
   type
@@ -440,7 +440,7 @@ parent: advancedFilter(key: "identifiers", label: "parent", type: text) {
 work:
 
 - it should be a hidden filter with defaultValue `*`
-- label must be equal to `parent`
+- label must be equal to `metadata.labels.parent`
 - should be declared within `... on BaseEntity {}`
 
 ```graphql
