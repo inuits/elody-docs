@@ -1,4 +1,4 @@
-site_name: Inuits DAMS Docs
+site_name: Inuits Elody Docs
 nav:
   - CSV Export: csv-export.md
   - CSV Import: csv-import.md
