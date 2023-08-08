@@ -114,20 +114,6 @@ matcher matches values that contain a given substring.
 This query is searching for entities of type "asset" that have a non-empty title
 metadata field.
 
-```json
-[
-  {
-    "type": "text",
-    "key": "identifiers",
-    "value": "*",
-    "parent": "c12d96fc-1bf7-4609-a9fc-8788df0f3415",
-  }
-]
-```
-This example demonstrates the `parent` key. This query is searching for all entities
-which have a `parent` or `belongsTo` relation with an entity with id
-"c12d96fc-1bf7-4609-a9fc-8788df0f3415"
-
 ##### NoneMatcher
 ```json
 [
@@ -284,6 +270,29 @@ is set to true.
 By using these filter types and matchers, you can easily filter data based on a variety
 of criteria and retrieve the specific subset of data that you need.
 
+### RelationFilterType
+The RelationFilterType is used to filter data based on relations. It will allow you to
+get all childs from an entity by using the `any` matcher in combination with the `parent`
+key. Note that filters with type `relation` will always filter on root keys, rather then
+metadata keys.
+
+#### Some matcher query examples
+##### AnyMatcher
+```json
+[
+  {
+    "type": "relation",
+    "key": "identifiers",
+    "value": "*",
+    "parent": "c12d96fc-1bf7-4609-a9fc-8788df0f3415",
+  }
+]
+```
+This example demonstrates the `parent` key which is used in RelationFilterType.
+This query is searching for all entities with a non-empty `identifiers` key in
+the root of the object, while also having a `component` or `belongsTo` relation
+with entity with id "c12d96fc-1bf7-4609-a9fc-8788df0f3415".
+
 ## How to define and use the filters in the frontend?
 Filters are defined in the `*.queries.ts` file within the customer specific GraphQL module.
 But before defining the filters themselves, make sure the following queries are in place:
@@ -296,6 +305,7 @@ query getFilterMatcherMapping {
     number
     selection
     boolean
+    relation
   }
 }
 ```
@@ -309,8 +319,8 @@ own component which provides the correct UI and the correct request body for the
 call
 
 For more info:<br/>
-[FiltersBase.vue](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-frontend/-/blob/master/src/components/filters-new/FiltersBase.vue)<br/>
-[matchers](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-frontend/-/tree/master/src/components/filters-new/matchers)
+[FiltersBase.vue](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-frontend/-/blob/master/src/components/filters/FiltersBase.vue)<br/>
+[matchers](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-frontend/-/tree/master/src/components/filters/matchers)
 
 ```graphql
 query getFilterOptions($input: AdvancedFilterInput!, $limit: Int!) {
@@ -428,7 +438,7 @@ type: advancedFilter(key: "type", label: "Type", type: selection) {
 time you apply filters as an end user.
 
 ```graphql
-parent: advancedFilter(key: "identifiers", label: "metadata.labels.parent", type: text) {
+parent: advancedFilter(key: "identifiers", label: "metadata.labels.parent", type: relation) {
   key
   label
   type
@@ -440,7 +450,7 @@ parent: advancedFilter(key: "identifiers", label: "metadata.labels.parent", type
 work:
 
 - it should be a hidden filter with defaultValue `*`
-- label must be equal to `metadata.labels.parent`
+- it should be of type `relation`
 - should be declared within `... on BaseEntity {}`
 
 ```graphql
