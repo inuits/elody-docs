@@ -15,7 +15,7 @@ Possible languages: ['**eng**', '**nld**', '**fra**']
 
 ## How does an image get OCRed
 1. The user makes a call to the endpoint **/ocr** with the correct body. 
-You can find more information about this in the [swagger documentation](http://ocr-service.dams.localhost:8100/api/docs/) (when the api is started):
+You can find more information about this in the [swagger documentation](http://ocr-service.dams.localhost:8200/api/docs/) (when the api is started):
 2. First of all the ocr-service checks if the given **mediafile_id** exists. Therefore, it
 makes a call to the [collection-api](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-collection) to check. If the image does not exist,
 the call is aborted with a 400 status code.
