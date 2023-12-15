@@ -34,7 +34,7 @@ WORKDIR /app/mkdocs
 RUN mkdocs build
 
 ### Production stage
-FROM docker.io/nginx:1.19.5-alpine as production-stage
+FROM docker.io/nginx:1.25.3-alpine as production-stage
 
 RUN rm -rf /usr/share/nginx/html/*
 
