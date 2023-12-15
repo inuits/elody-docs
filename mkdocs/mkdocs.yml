@@ -6,4 +6,5 @@ nav:
   - Advanced Filtering: advanced-filtering.md
   - Input Fields: edit-fields.md
   - Advanced Filtering (deprecated version): advanced-filtering-deprecated-version.md
+  - Deploying to new hosted env: deploying-to-new-hosted-env.md
 theme: readthedocs
