@@ -69,3 +69,117 @@ A reference commit showing how this should be filled in can be found [here](http
 The last step is to configure our services that make up elody.
 These services will run on Nomad, our container orchestrator and will be defined/managed in Terraform.
 An example commit showing how the first service (rabbitmq) was created, can be found [here](https://gitlab.inuits.io/customers/digipolis/dams-v2/digipolis-dams-v2-terraform/-/commit/e3f80e55872beb2f6594f117ab5e48a12e45abd2).
+
+### RabbitMQ
+
+Deploying a RabbitMQ is a bit more of an involved process. There are a few steps to be taken:
+
+#### Pin nomad client nodes on which the rabbit instances of the cluster will run
+
+Because the nodes of the RabbitMQ cluster need a static port assigned, all the
+nodes of the cluster need to run on seperate Nomad clients. This can be done by
+adding a tag to three specific nomad clients. An example commit showing how this
+can be achieved can be found [here](https://redmine.inuits.eu/projects/inuits-puppet-infra/repository/inuits-hiera-nomad/revisions/1b8bdcab8ffc015643853dc75682b661247d2200).
+Do note that these changes aren't instance after the pipeline for this has ran.
+Puppet runs every 30 minutes, so that's the time you should wait before continuing.
+
+#### Assign some static ports for Rabbit to use
+
+A static port will also have to be defined over which AMQP traffic can flow from
+and to RabbitMQ. These static ports have to be defined both in Consul and in
+Terraform. These changes take place in the Container Infra. This is an
+[example commit](https://gitlab.inuits.io/inuits/container-infra/infra-nomad-consul/-/commit/0bb7fc63970c1d2a694e5c8d7f25f1a9c8431667)
+for the changes that need to take place in Consul. And this is an
+[example commit](https://gitlab.inuits.io/inuits/container-infra/nomad-stack-base-jobs/-/commit/28bff7ae3dbe477527790769864ff626c1b8a4b7)
+for the changes in Terraform. Make sure that these ports aren't already in use
+by other RabbitMQ instances.
+
+#### Create the actual jobs and configure them
+
+When the previous steps were completed successfully. The last step is pretty
+trivial. Some configuration for RabbitMQ has to be added to Consul, like you can
+see [here](https://gitlab.inuits.io/customers/vliz/vliz-dams/vliz-dams-consul/-/blob/master/common/rabbitmq?ref_type=heads),
+[here](https://gitlab.inuits.io/customers/vliz/vliz-dams/vliz-dams-consul/-/blob/master/common/common?ref_type=heads),
+[here](https://gitlab.inuits.io/customers/vliz/vliz-dams/vliz-dams-consul/-/blob/master/dev/common?ref_type=heads)
+and [here](https://gitlab.inuits.io/customers/vliz/vliz-dams/vliz-dams-consul/-/blob/master/dev/rabbitmq?ref_type=heads).
+The Terraform configuration can be found [here](https://gitlab.inuits.io/customers/vliz/vliz-dams/vliz-dams-terraform/-/tree/master/modules/rabbitmq?ref_type=heads),
+[here](https://gitlab.inuits.io/customers/vliz/vliz-dams/vliz-dams-terraform/-/blob/master/main.tf?ref_type=heads#L33)
+and [here](https://gitlab.inuits.io/customers/vliz/vliz-dams/vliz-dams-terraform/-/blob/master/job.variables.tf?ref_type=heads#L23).
+
+Do be carefull when configuring the service via Terraform that also here some
+ports should be changed so that they are unique.
+
+### Giving access to terraform from other repos
+
+To have successfull pipelines you will also need to add a policy to vault.
+This can be done like so (VLIZ will be the example project here):
+
+```
+export VAULT_ADDR=https://active.vault.service.inuits.consul:8200
+export VAULT_SKIP_VERIFY=1
+
+vault login -method=oidc
+vault policy write vliz-dams-terraform -<<EOF
+path "sys/policies/acl/*"{
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+path "sys/capabilities-self" {
+  capabilities = ["update"]
+}
+path "auth/token/renew-self" {
+  capabilities = ["update"]
+}
+path "auth/token/lookup-self" {
+  capabilities = ["read"]
+}
+path "auth/token/create" {
+  capabilities = ["create", "update"]
+}
+path "inuits/data/container-infra/*" {
+  capabilities = ["read"]
+}
+path "inuits/metadata/container-infra/*" {
+  capabilities = ["list"]
+}
+path "vliz/data/dams/*" {
+  capabilities = ["read"]
+}
+path "vliz/metadata/dams/*" {
+  capabilities = ["list"]
+}
+EOF
+```
+
+Next up is to link the policy to a JWT role.
+```
+vault write auth/jwt/role/vliz-dams-terraform - <<EOF
+{
+  "role_type": "jwt",
+  "policies": ["vliz-dams-terraform"],
+  "token_explicit_max_ttl": 60,
+  "user_claim": "user_email",
+  "bound_claims": {
+    "project_path": "customers/vliz/vliz-dams/vliz-dams-terraform",
+    "ref_type": "branch"
+  }
+}
+EOF
+```
+
+The last step is to create roles for the different services. This way the
+different services can communicate with the Terraform pipeline to deploy to
+a dev environment for example (we will use the collection-api as an example here):
+```
+vault write auth/jwt/role/vliz-dams-collection - <<EOF
+{
+  "role_type": "jwt",
+  "policies": ["vliz-dams-terraform"],
+  "token_explicit_max_ttl": 60,
+  "user_claim": "user_email",
+  "bound_claims": {
+    "project_path": "customers/vliz/vliz-dams/vliz-dams-collection",
+    "ref_type": "branch"
+  }
+}
+EOF
+```
