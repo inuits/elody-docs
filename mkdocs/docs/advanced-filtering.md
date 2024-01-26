@@ -4,7 +4,7 @@ The advanced filtering system is a service provided by the collection-api which
 allows people to look for specific entities which answer to a specific filter.
 
 This service provides a set of filter types that can be easily used to
-filter metadata. Each filter type has a set of matchers that define the different
+filter data. Each filter type has a set of matchers that define the different
 filter criteria that can be used with that filter type. These matchers are used
 to generate the appropriate query for the filter criteria.
 
@@ -41,6 +41,22 @@ links:<br/>
 [filter_types.py](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-collection/-/blob/master/api/filters/types/filter_types.py)<br/>
 [matchers.py](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-collection/-/blob/master/api/filters/matchers/matchers.py)
 
+Here is a full-fledged example of a filter request body in advance
+(explanation follows below), you can play with this and use it as a template:
+```json
+[
+  {
+    "type": "text",
+    "parent_key": "metadata",
+    "key": "description",
+    "value": "teamwork",
+    "match_exact": false,
+    "metadata_key_as_label": "",
+    "provide_value_options_for_key": false
+  }
+]
+```
+
 ### IdFilterType
 The IdFilterType is used to filter data based on a unique identifier, such as a
 primary key, by looking at the values of the `identifiers` key of a dataset.
@@ -54,6 +70,7 @@ given value, and the contains matcher matches values that contain a given substr
 [
   {
     "type": "id",
+    "parent_key": "",
     "key": "identifiers",
     "value": ["R 53.5", "Bg9DTJPNRjLQmViHTb72qGeR"]
   }
@@ -67,6 +84,7 @@ or the identifier "Bg9DTJPNRjLQmViHTb72qGeR".
 [
   {
     "type": "id",
+    "parent_key": "",
     "key": "identifiers",
     "value": "R 53.5",
     "match_exact": true,
@@ -83,6 +101,7 @@ default). It only searches within the entity types `asset` and `manifest`.
 [
   {
     "type": "id",
+    "parent_key": "",
     "key": "identifiers",
     "value": "R",
     "match_exact": false
@@ -105,6 +124,7 @@ matcher matches values that contain a given substring.
 [
   {
     "type": "text",
+    "parent_key": "metadata",
     "key": "title",
     "value": "*",
     "item_types": ["asset"]
@@ -119,6 +139,7 @@ metadata field.
 [
   {
     "type": "text",
+    "parent_key": "metadata",
     "key": "description",
     "value": ""
   }
@@ -141,6 +162,7 @@ range.
 [
   {
     "type": "date",
+    "parent_key": "metadata",
     "key": "created",
     "value": {
         "min": "2022-04-14T15:00:00"
@@ -157,6 +179,7 @@ the minimum value itself is not included in the result.
 [
   {
     "type": "date",
+    "parent_key": "metadata",
     "key": "created",
     "value": {
         "max": "2022-04-14T15:00:00"
@@ -173,6 +196,7 @@ the maximum value itself is not included in the result.
 [
   {
     "type": "date",
+    "parent_key": "metadata",
     "key": "created",
     "value": {
         "min": "2022-04-13T00:00:00",
@@ -200,6 +224,7 @@ and the in_between matcher matches values that fall within a specific range.
 [
   {
     "type": "number",
+    "parent_key": "metadata",
     "key": "width",
     "value": {
         "min": 4137,
@@ -217,6 +242,7 @@ MinIncludedMatcher, which does a "greater then or equal" match.
 [
   {
     "type": "number",
+    "parent_key": "metadata",
     "key": "width",
     "value": {
         "max": 799,
@@ -241,6 +267,7 @@ multiple values that are equal to the given values, treating them as an OR opera
 [
   {
     "type": "selection",
+    "parent_key": "metadata",
     "key": "filesize",
     "value": ["482978", "13525477"]
   }
@@ -259,6 +286,7 @@ matcher: `exact`. The exact matcher matches values that are equal to a given val
 [
   {
     "type": "boolean",
+    "parent_key": "metadata",
     "key": "is_original",
     "value": true
   }
@@ -269,29 +297,6 @@ is set to true.
 
 By using these filter types and matchers, you can easily filter data based on a variety
 of criteria and retrieve the specific subset of data that you need.
-
-### RelationFilterType
-The RelationFilterType is used to filter data based on relations. It will allow you to
-get all childs from an entity by using the `any` matcher in combination with the `parent`
-key. Note that filters with type `relation` will always filter on root keys, rather then
-metadata keys.
-
-#### Some matcher query examples
-##### AnyMatcher
-```json
-[
-  {
-    "type": "relation",
-    "key": "identifiers",
-    "value": "*",
-    "parent": "c12d96fc-1bf7-4609-a9fc-8788df0f3415",
-  }
-]
-```
-This example demonstrates the `parent` key which is used in RelationFilterType.
-This query is searching for all entities with a non-empty `identifiers` key in
-the root of the object, while also having a `component` or `belongsTo` relation
-with entity with id "c12d96fc-1bf7-4609-a9fc-8788df0f3415".
 
 ## How to define and use the filters in the frontend?
 Filters are defined in the `*.queries.ts` file within the customer specific GraphQL module.
@@ -336,9 +341,6 @@ Now you can define filters. First provide the base:
 ```graphql
 query getAdvancedFilters($entityType: String!) {
   EntityTypeFilters(type: $entityType) {
-    ... on BaseEntity {
-        # define your filters here within the BaseEntity filter set
-    }
     ... on IotDevice {
         # define your filters here within the IotDevice filter set
     }
@@ -362,7 +364,7 @@ export const pzaIotRoutes = [
       title: "Home",
       type: Collection.Entities,
       requiresAuth: true,
-      entityType: "BaseEntity"
+      entityType: Entitytyping.Iotdevice
     },
     children: [
       {
@@ -396,17 +398,17 @@ export const pzaIotRoutes = [
 ```
 => this will make sure that:
 
-- when you visit `/`, the filters you defined under `BaseEntity` are loaded
-- when you visit `/iotDevices`, the filters you defined under `IotDevice` are loaded
+- when you visit `/` or `/iotDevices`, the filters you defined under `IotDevice` are loaded
 - when you visit `/zones`, the filters you defined under `PoliceZone` are loaded
 
 The second thing you should do is actually defining the filters, here you find an example
 of all different variations a filter definition can look like:
 ```graphql
-name: advancedFilter(key: "name", label: "name", type: text) {
+name: advancedFilter(type: text, parentKey: "metadata", key: "name", label: "name") {
+  type
+  parentKey
   key
   label
-  type
 }
 ```
 => This is the most basic form of a filter definition. It will provide you a text filter
@@ -415,9 +417,10 @@ type `date`, `number` and `boolean`.
 
 ```graphql
 name: advancedFilter(key: "name", label: "name", type: text, isDisplayedByDefault: true) {
+  type
+  parentKey
   key
   label
-  type
   isDisplayedByDefault
 }
 ```
@@ -426,9 +429,7 @@ Filters are not displayed unless you add them through the UI. This property will
 the filter is displayed by default.
 
 ```graphql
-type: advancedFilter(key: "type", label: "Type", type: selection) {
-  key
-  label
+type: advancedFilter(type: type) {
   type
   defaultValue(value: "IotDevice")
   hidden(value: true)
@@ -438,69 +439,59 @@ type: advancedFilter(key: "type", label: "Type", type: selection) {
 time you apply filters as an end user.
 
 ```graphql
-parent: advancedFilter(key: "identifiers", label: "metadata.labels.parent", type: relation) {
-  key
-  label
-  type
-  defaultValue(value: "*")
-  hidden(value: true)
-}
-```
-=> This is a relation filter. Relation filters have the following requirements in order to
-work:
-
-- it should be a hidden filter with defaultValue `*`
-- it should be of type `relation`
-- should be declared within `... on BaseEntity {}`
-
-```graphql
 id: advancedFilter(
-  key: "identifiers",
-  label: "ID",
-  type: id,
-  isDisplayedByDefault: true,
+  type: id
+  parentKey: ""
+  key: "identifiers"
+  label: "ID"
+  isDisplayedByDefault: true
   advancedFilterInputForRetrievingOptions: {
-    key: "identifiers",
-    value: "*",
-    type: text,
-    provide_value_options_for_key: true
+    type: text
+    parent_key: ""
+    key: "identifiers"
+    value: "*"
+    item_types: ["IotDevice"]
   }
 ) {
+  type
+  parentKey
   key
   label
-  type
   isDisplayedByDefault
   advancedFilterInputForRetrievingOptions {
+    type
+    parent_key
     key
     value
-    type
-    provide_value_options_for_key
+    item_types
   }
 }
 
 name: advancedFilter(
-  key: "name",
-  label: "Name",
-  type: selection,
-  isDisplayedByDefault: true,
+  type: selection
+  parentKey: "metadata"
+  key: "name"
+  label: "Name"
+  isDisplayedByDefault: true
   advancedFilterInputForRetrievingOptions: {
-    key: "name",
-    value: "*",
-    type: text,
-    item_types: ["IotDevice"],
-    provide_value_options_for_key: true
+    type: text
+    parent_key: "metadata"
+    key: "name"
+    value: "*"
+    item_types: ["IotDevice"]
   }
 ) {
+  type
+  parentKey
   key
   label
-  type
   isDisplayedByDefault
   advancedFilterInputForRetrievingOptions {
+    type
+    parent_key
     key
     value
-    type
     item_types
-    provide_value_options_for_key
   }
 }
 ```
@@ -512,7 +503,7 @@ list of values is then used in the UI to provide a list of checkboxes where you 
 the values you want to filter on, or used to provide completion for your input in the
 autocompletebox. Optionally, you can also provide `item_types` within
 `advancedFilterInputForRetrievingOptions`. What this does is making sure only the values
-of the key of specific entities are queried as options. Using the name filter I defined
+of the key of specific entities are queried as options. Using the name filter defined
 above as an example, this will make sure you only get names of Iot Devices as completion
 for your input.
 
@@ -520,92 +511,232 @@ Here is a complete example about defining filters:
 ```graphql
 query getAdvancedFilters($entityType: String!) {
   EntityTypeFilters(type: $entityType) {
-    ... on BaseEntity {
-      id: advancedFilter(
-        key: "identifiers",
-        label: "ID",
-        type: id,
-        isDisplayedByDefault: true,
-        advancedFilterInputForRetrievingOptions: {
-          key: "identifiers",
-          value: "*",
-          type: text,
-          provide_value_options_for_key: true
-        }
-      ) {
-        key
-        label
-        type
-        isDisplayedByDefault
-        advancedFilterInputForRetrievingOptions {
-          key
-          value
-          type
-          provide_value_options_for_key
-        }
-      }
-    }
     ... on IotDevice {
       name: advancedFilter(
-        key: "name",
-        label: "Name",
-        type: selection,
-        isDisplayedByDefault: true,
+        type: selection
+        parentKey: "metadata"
+        key: "name"
+        label: "metadata.labels.name"
+        isDisplayedByDefault: true
         advancedFilterInputForRetrievingOptions: {
-          key: "name",
-          value: "*",
-          type: text,
-          item_types: ["IotDevice"],
-          provide_value_options_for_key: true
+          type: text
+          parent_key: "metadata"
+          key: "name"
+          value: "*"
+          item_types: ["IotDevice"]
         }
       ) {
+        type
+        parentKey
         key
         label
-        type
         isDisplayedByDefault
         advancedFilterInputForRetrievingOptions {
+          type
+          parent_key
           key
           value
-          type
           item_types
-          provide_value_options_for_key
         }
+        tooltip(value: true)
       }
-      lastReported: advancedFilter(key: "date_last_reported", label: "Last reported", type: date) {
-        key
-        label
+      lastReported: advancedFilter(
+        type: date
+        parentKey: "metadata"
+        key: "date_last_reported"
+        label: "metadata.labels.date-last-reported"
+      ) {
         type
-        isDisplayedByDefault
-      }
-      type: advancedFilter(key: "type", label: "Type", type: selection) {
+        parentKey
         key
         label
+        tooltip(value: true)
+      }
+      type: advancedFilter(type: type) {
         type
         defaultValue(value: "IotDevice")
         hidden(value: true)
       }
     }
     ... on PoliceZone {
-      alternateName: advancedFilter(
-        key: "alternateName",
-        label: "Alternate name",
-        type: text,
+      code: advancedFilter(
+        type: text
+        parentKey: "metadata"
+        key: "code"
+        label: "metadata.labels.code"
         isDisplayedByDefault: true
       ) {
-        key
-        label
         type
-        isDisplayedByDefault
-      }
-      type: advancedFilter(key: "type", label: "Type", type: selection) {
+        parentKey
         key
         label
+        isDisplayedByDefault
+        tooltip(value: true)
+      }
+      type: advancedFilter(type: type) {
         type
         defaultValue(value: "PoliceZone")
         hidden(value: true)
       }
-    }
+      relation: advancedFilter(
+        type: selection
+        parentKey: "relations"
+        key: "zoneServedBy"
+      ) {
+        type
+        parentKey
+        key
+        defaultValue(value: [])
+        hidden(value: true)
+      }
     }
   }
 }
 ```
+
+## Special filters
+### TypeFilterType
+Filtering on types is special in the sense that it is much simpler then other filters.
+The main way of filtering on types is as follows:
+```json
+[
+  {
+    "type": "type",
+    "value": "PoliceZone"
+  }
+]
+```
+```graphql
+type: advancedFilter(type: type) {
+  type
+  defaultValue(value: "PoliceZone")
+  hidden(value: true)
+}
+```
+
+This is an alternative way to filter on types which allows you to filter on multiple types:
+```json
+[
+  {
+    "type": "selection",
+    "parent_key": "",
+    "key": "type",
+    "value": ["IotDevice", "PoliceZone"],
+    "match_exact": true
+  }
+]
+```
+
+## Relation filters
+Relation filters are special because the `key` and `value` you specify do **not** reflect
+to the `key` and `value` of a relation object. Relation filters are used to filter on
+relation types, which results in the following:
+
+- `key` => searches in relation.type
+- `value` => searches in relation.key
+
+Here is an example:
+```json
+[
+  {
+    "type": "selection",
+    "parent_key": "relations",
+    "key": "zoneServedBy",
+    "value": ["urn:ngsi-ld:IotDevice:5345ANT664ADJ1"],
+    "match_exact": true
+  }
+]
+```
+
+Relation filters in the graphql are more complex, sadly. This is because each entity type
+can only have 1 relation filter, which can then be used by all entity types other then
+itself. A relation filter should be hidden and should be defined as the very last filter
+of the entity type. Here is an example:
+```graphql
+query getAdvancedFilters($entityType: String!) {
+  EntityTypeFilters(type: $entityType) {
+    ... on PoliceZone {
+      code: advancedFilter(
+        type: text
+        parentKey: "metadata"
+        key: "code"
+        label: "metadata.labels.code"
+        isDisplayedByDefault: true
+      ) {
+        type
+        parentKey
+        key
+        label
+        isDisplayedByDefault
+        tooltip(value: true)
+      }
+      type: advancedFilter(type: type) {
+        type
+        defaultValue(value: "PoliceZone")
+        hidden(value: true)
+      }
+      relation: advancedFilter(
+        type: selection
+        parentKey: "relations"
+        key: "zoneServedBy"
+      ) {
+        type
+        parentKey
+        key
+        defaultValue(value: [])
+        hidden(value: true)
+      }
+    }
+  }
+}
+```
+=> This relation filter can only be used in the detail view of some other entity, like for
+example IotDevice. How it works in the frontend using an example:
+
+1. You open the details of an entity, for example IotDevice
+2. On the details page, there is collapsible view which loads the baseLibrary with a fixed
+entity type, for example PoliceZone
+3. The baseLibrary in this collapsible view will detect that it is on a details page of
+some other entity and will load the filters of PoliceZone (because that is what the
+baseLibrary is fixated on in step 2, this is defined in the graphql)
+4. Since it knows it is on a details page, it will pay special attention to the hidden
+relation filter by using the IotDevice's id as `value` for the relation filter
+5. It will apply the filter and send a request body to the api that looks exactly like the
+json example I gave above, together with a type filter
+
+
+### Relation filter for multiple different entity types
+In some cases different entity types can have the same relation types. In order to show
+these, add item types to the filter:
+```json
+[
+  {
+    "type": "selection",
+    "parent_key": "relations",
+    "key": "isControlledAssetFor",
+    "value": ["urn:ngsi-ld:IotDevice:5345ANT664ADJ1"],
+    "item_types": ["PoliceAsset", "PoliceVehicle"]
+    "match_exact": true
+  }
+]
+```
+```graphql
+relation: advancedFilter(
+  type: selection
+  parentKey: "relations"
+  key: "isControlledAssetFor"
+  itemTypes: ["PoliceAsset", "PoliceVehicle"]
+) {
+  type
+  parentKey
+  key
+  itemTypes
+  defaultValue(value: [])
+  hidden(value: true)
+}
+```
+=> This will show all controlled assets of an IotDevice in 1 collapsible view, with related
+entities of both PoliceAsset and PoliceVehicle types
+
+## Filter options
+TODO
