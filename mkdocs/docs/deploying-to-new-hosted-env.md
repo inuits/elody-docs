@@ -80,7 +80,7 @@ Because the nodes of the RabbitMQ cluster need a static port assigned, all the
 nodes of the cluster need to run on seperate Nomad clients. This can be done by
 adding a tag to three specific nomad clients. An example commit showing how this
 can be achieved can be found [here](https://redmine.inuits.eu/projects/inuits-puppet-infra/repository/inuits-hiera-nomad/revisions/1b8bdcab8ffc015643853dc75682b661247d2200).
-Do note that these changes aren't instance after the pipeline for this has ran.
+Do note that these changes aren't instant after the pipeline for this has ran.
 Puppet runs every 30 minutes, so that's the time you should wait before continuing.
 
 #### Assign some static ports for Rabbit to use
