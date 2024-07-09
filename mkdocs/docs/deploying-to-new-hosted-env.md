@@ -33,7 +33,7 @@ After this commit, the pipeline for this repo should do it's job and after 30 mi
 ### S3
 
 We can use our ceph instance to create an S3 bucket/user that can be consumed by the storage-api.
-This is nicely documented over [here](https://docs.inuits.io/storage/ceph/?h=ceph#creating-new-user-and-bucket).
+This is nicely documented over [here](https://docs.inuits.io/services/ceph/?h=s3#creating-new-user-and-bucket).
 
 ### Repositories
 
