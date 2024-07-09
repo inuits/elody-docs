@@ -13,6 +13,8 @@ If the `sshuttle` is open you should be able to reach the following services:
 * [Traefik](http://traefik-external.local.service.inuits.consul/dashboard/#/)
 * [Vault](http://vault.local.service.inuits.consul/ui)
 
+Credentials for both `Nomad` and `Traefik` can be found [here](http://vault.local.service.inuits.consul/ui/vault/secrets/inuits/show/container-infra/infra-nomad-jobs/ingress-internal/basic-auth)
+
 The last one (Vault) requires a log-in. If the system notifies you about a lack of "roles", this probably means you are not assigned to the correct role in freeipa.
 You should have the `dev` or `dailyops` role. You can ask dailyops to give you the correct roles.
 
