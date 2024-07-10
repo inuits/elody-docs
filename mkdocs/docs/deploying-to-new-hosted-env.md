@@ -91,10 +91,7 @@ A static port will also have to be defined over which AMQP traffic can flow from
 and to RabbitMQ. These static ports have to be defined both in Consul and in
 Terraform. These changes take place in the Container Infra. This is an
 [example commit](https://gitlab.inuits.io/inuits/container-infra/infra-nomad-consul/-/commit/0bb7fc63970c1d2a694e5c8d7f25f1a9c8431667)
-for the changes that need to take place in Consul. And this is an
-[example commit](https://gitlab.inuits.io/inuits/container-infra/nomad-stack-base-jobs/-/commit/28bff7ae3dbe477527790769864ff626c1b8a4b7)
-for the changes in Terraform. Make sure that these ports aren't already in use
-by other RabbitMQ instances.
+for the changes that need to take place in Consul.
 
 #### Create the actual jobs and configure them
 
