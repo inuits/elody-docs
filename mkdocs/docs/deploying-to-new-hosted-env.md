@@ -110,14 +110,21 @@ ports should be changed so that they are unique.
 
 ### Giving access to terraform from other repos
 
-To have successfull pipelines you will also need to add a policy to vault.
-This can be done like so (VLIZ will be the example project here):
-
+To have successfull pipelines you will also need to add a policy to vault using the [Vault CLI](https://developer.hashicorp.com/vault/install).
+Configure Vault CLI to use the correct Vault instance:
 ```
 export VAULT_ADDR=https://active.vault.service.inuits.consul:8200
 export VAULT_SKIP_VERIFY=1
+```
 
+And login to Vault using:
+```
 vault login -method=oidc
+```
+
+Adding the policy can be done like so (VLIZ will be the example project here):
+
+```
 vault policy write vliz-dams-terraform -<<EOF
 path "sys/policies/acl/*"{
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
