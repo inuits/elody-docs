@@ -4,7 +4,7 @@ Edit fields are defined within the customer-specific GraphQL instance, specifica
 
 ### Input fields inner workings
 
-Input fields are structured using the following JSON structure:
+Input fields are structured using the following GraphQL schema structure:
 
 ```js
   type InputField {
@@ -27,6 +27,7 @@ Input fields are structured using the following JSON structure:
     fieldKeyToSave(input: String): String
   }
 ```
+
 | Property                                   | Type                      | Description                                                                                                                              |
 |--------------------------------------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | **fieldName**                              | `string`                  | Name for the input field to be displayed as label                                                                                        |
