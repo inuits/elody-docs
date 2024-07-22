@@ -1,6 +1,6 @@
 # Edit fields
 
-Edit fields are defined within the customer-specific GraphQL module, specifically within the `fullEntity` fragment of the entity type.
+Edit fields are defined within the customer-specific GraphQL instance, specifically within the `fullEntity` fragment of the entity type.
 
 ### Input fields inner workings
 
