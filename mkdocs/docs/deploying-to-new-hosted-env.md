@@ -26,8 +26,8 @@ If this all went successfully, we can move onto the next section.
 
 An elody instance needs a db. In this guide, we will use mongo as an example.
 A MongoDB instance can be created by adding a db to this [hiera repo](https://redmine.inuits.eu/projects/db-cluster/repository/db-cluster-hiera).
-A reference implementation can be found [here](https://redmine.inuits.eu/projects/db-cluster/repository/db-cluster-hiera/revisions/8d77b6448a02c65aaa2eb5b3a775489ba7bd9e5a/diff).
-The password you see in this commit should be at least 32 characters, containing upper- and lowercase alphabetic characters and numbers.
+A reference implementation can be found [here](https://redmine.inuits.eu/projects/db-https://redmine.inuits.eu/projects/db-cluster/repository/db-cluster-hiera/revisions/d346020a696c1cb2ec294621a9983526d6b6f76a/diff).
+As you can see in the reference there is a path to a password in [Vault](https://vault.mgmtprod.inuits.eu:8200/ui/vault/secrets/inuits/show/dbcluster/puppet/dbprod/profile_mongodb/db_users), it should be at least 32 characters, containing upper- and lowercase alphabetic characters and numbers.
 After this commit, the pipeline for this repo should do it's job and after 30 minutes at max (puppet runs every 30 minutes), you should have a MongoDB ready to be accessed.
 
 ### S3
