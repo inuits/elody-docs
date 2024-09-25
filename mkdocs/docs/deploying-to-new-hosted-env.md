@@ -185,7 +185,7 @@ vault write auth/jwt/role/vliz-dams-collection - <<EOF
   "bound_claims": {
     "project_path": "customers/vliz/vliz-dams/vliz-dams-collection",
     "ref_type": "branch"
-  }
+  },
   "bound_audiences": ["https://gitlab.inuits.io", "https://active.vault.service.consul", "https://active.vault.service.consul:8200"]
 }
 }
