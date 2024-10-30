@@ -1,38 +1,61 @@
-# Technical implementation
+# Elody CSV Import Documentation
 
-## How uploads go currently in DAMS Antwerpen
+This guide explains how to bulk import data into Elody via CSV files. It provides step-by-step instructions for importing entities with textual metadata, relationships between entities, and media files.
 
-1. An upload form gets shown, images can be put here in a dropbox. A CSV with
-metadata can also be, optionally added. (external systems also can be selected).
-2. When adding files to the dropzone, uploadtickets get created. (POST request 
-to https://dams-a.antwerpen.be/uploadtickets/create, which in its turn asks for
-uploadtickets to mediamosa)
-3. When uploading the optional CSV file, the CSV gets saved to the temp 
-directory and is later parsed (POST request to https://dams-a.antwerpen.be/upload/csv)
-4. After clicking on submit, a Drupal batch operation is started. In this batch
-operation, the CSV that is optionally uploaded, gets parsed, but in the cache,
-and metadata for assets matching with a given filename/asset_id gets updated.
+---
 
-## How would the implementation look like in DAMS v2
+## Table of Contents
+1. [Introduction to CSV Import](#introduction-to-csv-import)
+2. [Basic Structure of the CSV](#basic-structure-of-the-csv)
+3. [Importing Textual Metadata](#importing-textual-metadata)
+4. [Adding Relationships](#adding-relationships)
+5. [Importing Media Files](#importing-media-files)
+6. [Using the *same_entity* Column](#using-the-same_entity-column)
+7. [Sample CSVs](#sample-csvs)
 
-Currently, the `/entities/<id>/mediafiles`, `/entities` endpoints don't support 
-posting multiple mediafiles/entities. We could support posting either a single
-document or an array of entities/mediafiles. This then returns single or multiple
-upload urls.
-~~As for the CSV upload with metadata, the csv could be streamed to the csv-importer
-together with a list of tupples of the mediafile/entity id together with the
-filename. The csv-importer can then update the entities/mediafiles with the values
-from the CSV file.~~
+---
 
-~~Another possibility could be that the CSV is uploaded to the csv-importer which
-would return a document containing the representation of the entities/mediafiles
-in JSON-format. This could than be used to POST to the collection-api. The
-consumer of these endpoints can match the filenames in the form with the filenams
-in the upload-urls/tickets.~~
+### Introduction to CSV Import
 
-## Streamlining backend-import with uploads via frontend
+In Elody, entities can be bulk imported using CSV files. Each entity can contain metadata in the form of text, such as descriptions or titles, and relationships with other entities. This process helps users manage data efficiently and accurately.
 
-The backend/frontend upload/import funcionality in the current DAMS Antwerpen
-doesn't re-use code.
-The two systems have been developed totally independent. In the new system we
-will re-use the code base for CSV parsing/updating metadata.
+### Basic Structure of the CSV
+
+The CSV files contain columns that correspond to technical keys for metadata and relationships. Note that these technical keys in the CSV may differ from the labels visible in the Elody interface.
+
+### Importing Textual Metadata
+
+For entities with only textual metadata, you can enter the desired text in the appropriate column in the CSV file. Use the technical keys of the metadata:
+
+- **Example:** If you want to add a description, place the text in the column with the key `description`.
+
+> **Note:** The technical keys in the CSV may differ from the labels you see in the Elody interface.
+
+### Adding Relationships
+
+Relationships in Elody connect entities with each other. When adding a relationship, you need to use the relationship name and the UUID of the related entity. You can always find an entity’s UUID in its URL.
+
+- **URL format for UUIDs:** `https://elody/$entitytype/$uuid`
+- **Example:** For a *hasPhotographer* relationship between a media file and a person, add the photographer’s UUID in the column with the name *hasPhotographer*.
+
+> **Tip:** To add multiple items to the same entity, such as multiple photographers, add each item on a new line. Only the relationship column needs to be filled in, and the other fields can remain blank.
+
+### Importing Media Files
+
+Elody allows users to import media files directly when creating an entity. Media files are a separate entity type in the Elody data model, but they can also be directly linked to other entity types:
+
+1. Add the filename in the *filename* column for the entity to which you want to link the media file.
+2. This method is available for all entity types that can contain media files, such as the *asset* type.
+
+### Using the *same_entity* Column
+
+To link multiple media files to a single entity, you can use the *same_entity* column. By setting the same number in the *same_entity* column:
+
+1. Enter all metadata for the entity in the first row.
+2. Use additional rows with the same number in *same_entity* to easily link multiple media files to this entity.
+
+### Sample CSVs
+
+In Elody's import modal, you can download sample CSVs that contain all possible metadata and relationship columns. These templates are a helpful starting point for entering your data and help avoid formatting errors.
+
+> **Tip:** Start with a sample CSV and complete it with your data to simplify the import process.
