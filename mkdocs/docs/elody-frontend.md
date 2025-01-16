@@ -324,7 +324,7 @@ The vue router configuration gets build up in `router.ts` in our frontend. When 
 
 These routes are declared in the client graphql, an example of such route looks like this:
 
-```json
+```js
 {
     path: "assets",
     name: RouteNames.Assets,
