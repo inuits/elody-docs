@@ -390,7 +390,6 @@ These routes are declared in the client graphql, an example of such route looks 
     name: RouteNames.Assets,
     component: "Home",
     meta: {
-      title: "navigation.assets",
       requiresAuth: false,
       showEntityTitle: true,
       type: Collection.Entities,
