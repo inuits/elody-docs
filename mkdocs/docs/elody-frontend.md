@@ -405,7 +405,6 @@ These routes are declared in the client graphql, an example of such route looks 
 | **name**           | `RouteNames`   | Name of the route                                                                                                                   |
 | **component**      | `string`       | The component the frontend should show when navigating to this route. You can find the list of available components in `router.ts`. |
 | **meta**           |                |                                                                                                                                     |
-| **title**          | `string`       | Title for the route                                                                                                                 |
 | **requiresAuth**   | `boolean`      | If the user needs to be logged in to access this route                                                                              |
 | **showEntityType** | `boolean`      | /                                                                                                                                   |
 | **type**           | `Collection`   | The collection where the entity type belongs.                                                                                       |
