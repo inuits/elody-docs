@@ -6,6 +6,7 @@ Here is a list of all base Elody repositories:
 
 **General Elody common repo**:
 - [elody-common](https://github.com/inuits/elody-common)
+- [elody-session-vue-3-oidc-library](https://github.com/inuits/elody-session-vue-3-oidc-library)
 
 
 ## Frontend
@@ -20,7 +21,6 @@ Here is a list of all base Elody repositories:
 - [elody-advanced-search-module](https://github.com/inuits/elody-advanced-search-module)
 - [elody-saved-search-module](https://github.com/inuits/elody-saved-search-module)
 - [elody-import-module](https://github.com/inuits/elody-import-module)
-- [elody-session-vue-3-oidc-library](https://github.com/inuits/elody-session-vue-3-oidc-library)
 
 ### Testing
 - [elody-cypress](https://github.com/inuits/elody-cypress)
