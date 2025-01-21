@@ -6,13 +6,13 @@ Here is a list of all base Elody repositories:
 
 **General Elody common repo**:
 - [elody-common](https://github.com/inuits/elody-common)
-- [elody-session-vue-3-oidc-library](https://github.com/inuits/elody-session-vue-3-oidc-library)
 
 
 ## Frontend
 
 ### Progressive Web Application
-- [pwa](https://github.com/inuits/elody-pwa) 
+- [pwa](https://github.com/inuits/elody-pwa)
+- [elody-session-vue-3-oidc-library](https://github.com/inuits/elody-session-vue-3-oidc-library)
 
 ### Graphql (modules)
 - [elody-base-graphql](https://github.com/inuits/elody-base-graphql)
