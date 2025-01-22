@@ -291,37 +291,31 @@ The `Elody base graphql` already contains [Datasources](https://www.apollographq
 The `client specific graphql module` provides all the required modules and datasources to the `start()` function exported by the `base graphql`, for example:
 
 ```ts
-const clientNameDataSourceMapping: ModuleDataSourceMapping[] = [
+import start, {
+  type ElodyConfig,
+  generateElodyConfig,
+  DataSources,
+} from "base-graphql";
+
+const clientNameElodyConfig: ElodyConfig = generateElodyConfig(
+  [
+    // An array of all the needed modules including your own client module
+    importModule,
+    mediafileModule,
+    advancedFilterModule,
+    savedSearchModule,
+    // clientNameModule,
+  ],
   {
-    module: clientNameModule,
-    dataSources: [],
-  },
-  {
-    module: mediafileModule,
-    dataSources: [],
-  },
-  {
-    module: advancedFilterModule,
-    dataSources: [],
-  },
-  {
-    module: importModule,
-    dataSources: [
-      (session: any, cache: any) => {
-        return { ImportAPI: new ImportAPI({ session, cache }) };
-      },
-    ],
-  },
-  {
-    module: savedSearchModule,
-    dataSources: [],
-  },
-];
+    // A key, value object of any optional extra datasources
+    ImportAPI: ImportAPI,
+  }
+);
 // Replace clientName with the name you wish to use for your elody setup
 ```
 
-The `DataSourceMapping` provides your Elody instance with the modules and datasources you wish to use for your setup.
-The Module variable and datasources need to be exported from your `client specific graphql module` or `custom elody module`. The datasources provide a list of datasources to be initialized that are needed for that specific module to be able to function, if none are required you can just keep the list empty.
+The `ElodyConfig` provides your Elody instance with the modules and datasources you wish to use for your setup.
+The Module variable and datasources need to be exported from your `client specific graphql module` or `custom elody module`. The datasources provide a key, value object with any datasources you wish to include, if none are required you can just keep it an empty object.
 
 Below, an example of our [Elody import module](https://github.com/inuits/elody-import-module), you can see it exports our `ImportAPI` datasource and the import [graphql module](https://the-guild.dev/graphql/modules).
 
@@ -341,7 +335,30 @@ const importModule = createModule({
 export { importModule, importResolver, importSchema, ImportAPI };
 ```
 
-Once you have your `DataSourceMapping`, you can provide it to the `start()` function as the first argument.
+Once you have your `ElodyConfig`, you can provide it to the `start()` function as the first argument.
+
+`!Important` If you decided to add aditional datasources, `Typescript` will warn you about the fact that the datasource does not exist. This is normal because the types in our `base-graphql` are not aware of any additional datasources. You can fix this by doing the fllowing:
+
+```ts
+export interface ClientNameDataSources extends DataSources {
+  ImportAPI: ImportAPI;
+}
+```
+
+Once you have this you can add the following to your `resolvers` file and adjust the type of your resolvers accordingly:
+
+```ts
+import { ClientNameDataSources } from "./main";
+
+interface ClientNameContextValue extends ContextValue {
+  dataSources: ClientNameDataSources;
+}
+
+// Previously this was typed as Resolvers<ContextValue>
+export const clientNameResolver: Resolvers<ClientNameContextValue> = {
+  // Your resolvers here
+};
+```
 
 ### Configurations
 
