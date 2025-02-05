@@ -10,9 +10,13 @@ In this example, we demonstrate how to upload a set of photos related to coastal
 
 Open the **upload module** in Elody via the sidebar. Select the "Upload entities with media files" option. Below is a screenshot with the highlighted option:
 
+![Menu -> Upload -> Upload entities with mediafiles](../images/upload-entities-with-mediafiles-menu.jpg)
+
 #### Step 2: Prepare the CSV File
 
-To simplify the process, you can first upload the images via the form. Add the files you want to use and then select the option to download a sample CSV. This CSV will automatically include the filenames, making it easier to fill in the correct metadata.
+To simplify the process, you can first upload the images via the form. Add three files you want to use and then select the option to download a sample CSV. This CSV will automatically include the filenames, making it easier to fill in the correct metadata.
+
+For the solution CSV provided in this example, we are going to use `mediafile-1.jpg`, `mediafile-2.jpeg` and `mediafile-3.png` for simplicity purposes.
 
 #### Step 3: Assign the Correct Context
 
@@ -29,19 +33,26 @@ Ensure that all media files belonging to the same media entity share the same va
 2. **tag**: We link the tag `Coastal Management` as a relationship to the keywords entity. Ensure this tag is created in Elody beforehand so it can be linked correctly.
 3. **marine_region**: Create a marine region with the title of Mediterranean Sea. To add this to the Media entity, place the title `Mediterranean Sea` in the second line in the column marine_region.
 
-Additionally, fill in only columns A through R (e.g., *title*, *description*, *coordinates*, etc.) for the first row. Columns starting from S, which pertain to specific media files, can be filled in separately for each row.
+Additionally, fill in only columns A through T (e.g., *title*, *description*, *coordinates*, etc.) for the first row. Columns starting from U, which pertain to specific media files, can be filled in separately for each row.
 
-
-#### Step 6: Assign Metadata to the Media Files
+#### Step 6: Assign Metadata and other relations to the Media Files
 
 To indicate the owner of the media files, add `vliz` to the *mediafile\_owner\_person* column. This column must be filled in for each row because it pertains to individual media files and can vary by file if desired. For this example, we use `vliz` throughout.
 
-#### Step 7: Remove Placeholder Data
+To provide another example of how to associate related entities with media files, we will assign different Confidentiality entities to each media file.
 
-Ensure that all placeholder data, such as `title of a keyword for mediafile`, is removed from the CSV. These placeholders are meant as examples and must be replaced with actual data relevant to your media files and metadata.
+Begin by creating three distinct Confidentiality entities with the following titles for simplicity: `Confidentiality 1`, `Confidentiality 2`, and `Confidentiality 3`.
 
+In the Confidentiality column, assign Confidentiality 1 to the second row, which corresponds to the first media file.
+Similarly, assign Confidentiality 2 to the third row, which corresponds to the second media file.
+For the third media file, assign Confidentiality 3 in the fourth row of the CSV.
 
-#### (optional) Step 8: Add multiple keywords an entity
+You may add any relevant metadata to the media files in the corresponding columns. Ensure that the data format matches the field type. For instance, enter a date in a date field and use only letters and numbers in a text field.
+
+We are going to specify the usage guidelines until field for the second mediafile. Enter `31/12/2030` in the appropriate column on the third line of the CSV.
+For the third media file, include a reference link to this documentation by entering  `https://github.com/inuits/elody-docs/blob/master/mkdocs/docs/csv-vliz-import-example.md` in the corresponding column on the fourth line of the CSV.
+
+#### Step 7: Add multiple keywords an entity
 
 To illustrate how you can add multiple keywords to a single entity, we will use the example of adding keywords to the `Koksijde 2014 Media` entity.
 
@@ -50,19 +61,36 @@ Ensure that the same_entity column for both keywords has the same identifier to 
 
 To add even more keywords, follow the same steps. Each new keyword should be placed on a new line under the `media_keyword` column. Make sure each line has the same identifier in the `same_entity` column to associate all keywords with the same entity.
 
-#### Step 9: Upload the CSV
+#### Step 8: Link the Media to a parent Album entity
+
+Ensure that you have created an Album entity through the user interface. For this example, create an album titled `Belgium Coast`.
+
+Once the Album entity is created, you can link it to the Media entity in the CSV file. In the `album` column, enter `Belgium Coast` in the row corresponding to the Media entity (that is the second row of the CSV).
+
+#### Step 9: Link the Media to a parent Collection Part entity
+
+Ensure that you have created a Collection Part entity through the user interface. For this example, create a collection part titled `Tourist Destination`.
+
+Once the Collection Part entity is created, you can link it to the Media entity in the CSV file. In the collection_part column, enter `Tourist Destination` in the row corresponding to the Media entity.
+
+#### Step 10: Remove Placeholder Data
+
+Ensure that all placeholder data, such as `title of a keyword for mediafile`, is removed from the CSV. These placeholders are meant as examples and must be replaced with actual data relevant to your media files and metadata.
+
+#### Step 11: Upload the CSV
 
 Now you can upload the CSV in the top window of the **upload module** and start the upload. Make sure the ZIP archive containing the media files is also uploaded as part of the process.
 
 Below is an example of how your CSV should look:
 
-| same_entity | title         | description | coordinates | context      | media_keyword      | language | asset_category | location_type | marine_region      | event | project | partner | creator_person | owner_person | creator_partner | owner_partner | type  | filename                                | mediafile_copyright_color | content_drager | external_link | usage_guidelines | usage_guidelines_until | embargo | qualityRating | mediafile_keyword | confidentiality | person | mediafile_creator_person | mediafile_creator_partner | mediafile_owner_person | mediafile_owner_partner |
-|-------------|---------------|-------------|-------------|--------------|--------------------|----------|----------------|---------------|--------------------|-------|---------|---------|----------------|--------------|-----------------|---------------|-------|-----------------------------------------|---------------------------|----------------|---------------|------------------|------------------------|---------|---------------|-------------------|-----------------|--------|--------------------------|---------------------------|------------------------|-------------------------|
-| 1           | Koksijde 2014 |             |             | vliz_context | Coastal Management |          |                |               | Mediterranean Sea  |       |         |         |                |              |                 |               | media | Screenshot from 2025-01-13 11-27-54.png |                           |                |               |                  |                        |         |               |                   |                 |        |                          |                           | vliz                   |                         |
-| 1           |               |             |             |              | Beach profiles     |          |                |               |                    |       |         |         |                |              |                 |               | media | Screenshot from 2025-01-13 11-26-26.png |                           |                |               |                  |                        |         |               |                   |                 |        |                          |                           | vliz                   |                         |
-| 1           |               |             |             |              |                    |          |                |               |                    |       |         |         |                |              |                 |               | media | Screenshot from 2025-01-09 10-02-48.png |                           |                |               |                  |                        |         |               |                   |                 |        |                          |                           | vliz                   |                         |
+|same_entity|title        |description|coordinates|context     |media_keyword     |language|asset_category|location_type|marine_region    |event|project|partner|album               |collection_part    |creator_person|owner_person|creator_partner|owner_partner|type                     | filename        |mediafile_copyright_color|content_drager|external_link                                                                           |usage_guidelines|usage_guidelines_until|embargo|qualityRating|mediafile_keyword|confidentiality  |person|mediafile_creator_person|mediafile_creator_partner|mediafile_owner_person|mediafile_owner_partner|
+|-----------|-------------|-----------|-----------|------------|------------------|--------|--------------|-------------|-----------------|-----|-------|-------|--------------------|-------------------|--------------|------------|---------------|-------------|-------------------------|-----------------|-------------------------|--------------|----------------------------------------------------------------------------------------|----------------|----------------------|-------|-------------|-----------------|-----------------|------|------------------------|-------------------------|----------------------|-----------------------|
+|1          |Koksijde 2014|           |           |vliz_context|Coastal Management|        |              |             |Mediterranean Sea|     |       |       |Belgium coast       |Tourist Destination|              |            |               |             |media                    | mediafile-1.jpg |                         |              |                                                                                        |                |                      |       |             |                 |Confidentiality 1|      |                        |                         |vliz                  |                       |
+|1          |             |           |           |            |Beach profiles    |        |              |             |                 |     |       |       |                    |                   |              |            |               |             |media                    | mediafile-2.jpg |                         |              |                                                                                        |                |31/12/2030            |       |             |                 |Confidentiality 2|      |                        |                         |vliz                  |                       |
+|1          |             |           |           |            |                  |        |              |             |                 |     |       |       |                    |                   |              |            |               |             |media                    | mediafile-3.jpg |                         |              |https://github.com/inuits/elody-docs/blob/master/mkdocs/docs/csv-vliz-import-example.md |                |                      |       |             |                 |Confidentiality 3|      |                        |                         |vliz                  |                       |
 
-#### Step 10: Validation and Error Checking
+
+#### Step 12: Validation and Error Checking
 
 After importing, you can check in Elody whether:
 
