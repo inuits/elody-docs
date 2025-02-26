@@ -104,114 +104,25 @@ By leveraging Elody, organizations can achieve **enhanced productivity, improved
 
 &nbsp;
 
-&nbsp;
 
 ## Core Features
 
 ### Entity Management
 
-Elody enables logical **data management, sharing, and distribution** through a **user-friendly interface** that is fully customizable to meet specific needs.
-With intuitive navigation and metadata configuration options, users can efficiently organize and interact with their data, ensuring a smooth and tailored experience.
-
-1. **Customizable Entity Definition for Tailored Metadata Management**
-
-Elody empowers users to define a **unique set of entities**, each with specific attributes, to structure their metadata efficiently and to enhance **organization and retrieval of entities**.
-Our highly flexible system enables developers to smoothly integrate these entity definitions into the customer-specific Elody application, ensuring a **tailored data schema** that meets individual business requirements.
-
-Entities within Elody can represent a wide range of **real-world and digital objects**, from physical assets to living organisms.
-This allows organizations to **digitally manage** and preserve their collections, bringing both tangible and intangible assets into a **structured digital environment**.
-
-2. **Flexible Viewing Options and Configurable Metadata Display for Enhanced User Experience**
-
-Entities are displayed as **structured lists** on overview pages, where users can configure which metadata fields are visible for which entity types.
-This makes sure that the **most relevant information is highlighted** in this teaser metadata, offering a **quick and informative** snapshot of each entity.
-
-Elody’s user interface offers multiple **viewing options** to accommodate different user preferences and **data presentation** needs.
-Entities can be displayed as **list items** for a structured, linear view or as **grid items** for a more visual and dynamic layout.
-This flexibility makes sure that users can navigate and interact with their data in the most **efficient and intuitive** way.
-
-![overviewpage_listview.png](../images/elody-functional-documentation/overviewpage_listview.png)
-
-On **entity detail pages**, all metadata attributes are accessible, with **full customization** options.
-Users can define the **order** in which metadata fields appear and **group related attributes** together for a more intuitive and organized presentation.
-This ensures that users can efficiently navigate and interact with entity data in a way that best suits their needs.
-
-3. **Seamless Semantic Linking for Enriched Data Relationships**
-
-One of Elody’s core functionalities is the ability to establish **meaningful relationships** between entities, enhancing data quality and context through semantic linking.
-Entities can be **connected** to other entities, mediafiles, or even themselves, with no restrictions on the number or type of relationships that can be created.
-
-Users have **full control** over defining how entities relate to one another by providing this information in their **data model**.
-Based on these definitions, we configure the **user interface** to support the addition of relevant relationships easily.
-
-4. **Intuitive Interface for Effortless Entity Linking**
-
-Elody’s user-friendly interface simplifies the process of **linking entities**.
-While viewing an entity’s metadata, users can easily access a menu to establish new connections directly.
-
-Dedicated UI components within an entity’s detail page display related entities that are seperated by type.
-From here, users can either **link existing** entities or **create new ones** and immediately establish their relationship—all within a streamlined workflow.
-
-5. **Comprehensive Media Integration for Visual Content Enrichment**
-
-In addition to entities, Elody supports the integration of **images and other mediafiles**, offering the same **extensive metadata and relationship capabilities**.
-By incorporating mediafiles, Elody enhances data with **rich visual content**, providing deeper context.
-
-Mediafiles can come in various formats, including images, videos, PDFs, and text files for example.
-These files are displayed using Elody’s **Media Viewer** component, which allows users to zoom, toggle full page, navigate through multi-page documents, and **interact** with media intuitively.
-
-For entities linked to mediafiles, a **thumbnail preview** can be displayed on overview pages, offering users a quick visual reference.
-This feature is particularly effective in grid view mode, where media-rich content can be presented in an engaging layout.
-
-![overviewpage_gridview.png](../images/elody-functional-documentation/overviewpage_gridview.png)
-
-&nbsp;
-
-&nbsp;
+- Define an unlimited number of entity types, each with unique attributes.
+  - Preserve and manage physical and digital assets and bringing your collection to a digital environment.
+- Customize metadata fields for each entity to enhance organization and retrieval.
+- Establish meaningful relationships between different entities, enriching the meaning and quality of data through semantic linking.
+- Integrate images or mediafiles with extensive metadata support, unlocking the power of visual content enrichment.
+- Manage, share, and distribute data efficiently through a user-friendly, fully customizable interface.
 
 ### Data Manipulation
 
-Elody provides flexible options for **managing data**, whether by **migrating** existing records or **adding new** ones.
-Users can **edit** or **remove** incomplete or incorrect data based on **custom validation rules** and restrictions.
-Additionally, relationships can be established between entities and mediafiles, ensuring structured and meaningful data connections.
-
-1. **Flexible Data Import Options**
-
-Elody offers multiple ways to import data into the system. Users can link **an external filesystem** hosted on the customers side and place their data in a structured format within a specified directory.
-This storage location can be configured to be **accessible directly** from Elody’s user interface.
-
-With just a few clicks, users can initiate a **full import** of the selected folder through Elody's UI.
-Once the process is complete, the data appears in the UI, including all specified metadata and relationships.
-
-2. **Creating and Editing Entities in Elody**
-
-   Create entities
-
-Elody supports **multiple ways to create entities** through the **user interface**. A **shortcut** in the menu allows quick access to create any available entity type.
-Additionally, on overview pages, users can initiate entity creation through an **action button**.
-When working within the detail page of a related entity, a new entity can be created and linked instantly.
-
-For **bulk creation**, entities can be created using a **CSV file**, where each row represents an entity.
-Once uploaded, the system **automatically generates entities** along with their **metadata and relationships**, making it easy to populate **large datasets** efficiently.
-
-    Edit entities
-
-Entities can be edited **individually** on their detail pages, where **clear validation rules** on each metadata field guide users to ensure data accuracy.
-For **bulk editing**, **CSV uploads** enable modifications across **multiple entities at once**, significantly reducing manual effort and improving workflow efficiency.
-
-    Add or remove relations
-
-In addition to editing metadata through the UI or bulk uploads, Elody offers an efficient process for **establishing relationships between entities**.
-Certain predefined relationships can also be **created in bulk** using **CSV uploads**, allowing for large-scale data connections with minimal effort.
-
-The standard way to add relationships **through the user interface**, is either during **entity creation** or when **editing an existing entity**.
-Elody’s UI provides clearly **visible buttons and intuitive screens**, ensuring that linking (or unlinking) entities is a straightforward and user-friendly process.
-
-![create_remove_relations.png](../images/elody-functional-documentation/create_remove_relations.png)
-
-3. **Uploading Mediafiles**
-
-   Direct Upload on Entity Detail Pages
+- **Data Migration** – Seamlessly transfer existing data into Elody, ensuring minimal disruption.
+- **Data Creation** – Easily create new entities either manually or through bulk uploads.
+- **Bulk Editing** – Modify multiple entities at once, saving time and reducing errors.
+- **Relations Management** – Create and manage complex relationships between different data entities using a highly intuitive UI.
+- **Deletion** – Remove single or multiple entities efficiently, with safeguards to prevent data loss.
 
 Users can **upload mediafiles** directly from an entity’s detail page. Simply **drag and drop** files into the designated drop zone, click save, and the mediafiles will be inserted into to the system.
 
@@ -487,12 +398,11 @@ Roles can be assigned to **user groups**, allowing multiple users to **inherit t
 
 Policies in Elody also **shape the user interface**, to provide a streamlined experience.
 
-- **Menu Restrictions**: When users log in, Elody **automatically adjusts the menu**, displaying only the sections they have the permission to access. If a user attempts to access a restricted page via URL, they will be redirected to the unauthorized page.
-- **Button and Action Validation**: Action buttons are validated against the user’s role. If a user lacks permission for a specific function, the button will be **hidden**.
+### Sorting and Pagination
 
 With **customizable access control**, Elody guarantees **data security, role-based efficiency, and a user experience tailored to each role’s needs**.
 
-&nbsp;
+### OCR (Optical Character Recognition)
 
 #### Data-Level Access Control
 
@@ -566,28 +476,11 @@ For example, after a bulk upload:
 
 The job system **increases transparency and efficiency**, ensuring users stay informed about all major actions in the system.
 
-&nbsp;
+### Maps Integration
 
 &nbsp;
 
-### Geospatial Data Visualization
-
-Elody offers built-in support for **displaying spatial data on a map**, allowing users to manage and interact with geospatial information effectively.
-
-The platform supports **multiple mapping formats** and **various layers**, including heatmaps, polygons, markers, and more to represent spatial relationships visually.
-
-This feature enhances geospatial analysis and enables users to gain deeper insights through these visualization capabilities within the platform.
-
-![map_component.png](../images/elody-functional-documentation/map_component.png)
-
-&nbsp;
-
-&nbsp;
-
-### CSV-Based Data Management
-
-Elody extensively utilizes CSV files for **importing, exporting, and modifying** data.
-The backend processes CSVs to create or edit entities and manage relationships efficiently.
+### CSV's
 
 #### CSV Export
 
@@ -605,9 +498,10 @@ This ensures a smooth transition when onboarding new data into the system.
 Users can **modify metadata** for a selected set of entities using CSV files.
 This functionality streamlines bulk updates, ensuring efficient data management across large datasets.
 
-&nbsp;
+### Data Migration
 
-&nbsp;
+- Easily let your business existing datasets be migrated from other applications into Elody with minimal manual effort.
+- Provide automated data validation to ensure integrity during migration.
 
 ### External API Integration
 
