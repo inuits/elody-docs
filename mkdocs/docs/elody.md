@@ -316,7 +316,84 @@ This entity contains a **link to a ZIP** file with the selected mediafiles and a
 
 Since the download process runs in the background and may take time to complete, **each download entity is assigned a status**, such as:
 - Approved
-  Clients can define an **unlimited number of roles**, each with its own set of permissions, ensuring users have access only to the **data and actions** relevant to their responsibilities.
+- In Progress
+- Finished
+- Failed
+
+On the **download entities overview page**, users can quickly **filter by status** using a **selection filter**, ensuring they can easily track the progress of their download requests.
+
+&nbsp;
+
+#### Saving and Reusing Filters
+
+Filters are a core part of daily operations in Elody, allowing users to efficiently navigate and retrieve relevant data.
+Beyond manual filtering, **saved searches** provide a way to automate and streamline **recurring search tasks**.
+
+*Saving and Managing Filters*
+
+To enhance efficiency, users can **save search filters** for quick access later.
+- Each saved search can be **named** for easy identification.
+- Users can choose to keep saved searches **private** or make them **publicly available** to other users in the system.
+- Saved searches remain **editable**, allowing users to refine search parameters as needed.
+
+*Use Cases for Saved Searches*
+
+Filtered saved search results can be leveraged for **automated workflows**.
+For example, users can set up saved searches to:
+- Track **newly added** (f.e.) books, paintings, or other entities within an Elody-powered application.
+- Monitor **recently updated** records that require further action or review.
+
+By enabling **persistent, shareable, and editable searches**, Elody ensures that users can **quickly reapply relevant filters**, making data retrieval faster and more efficient.
+
+&nbsp;
+
+#### Simple Search
+
+To ensure **fast and efficient data retrieval**, Elody provides a **simple search** function that is available on every page.
+This allows users to quickly search through collections of entities at any time.
+
+*How Simple Search Works*
+
+- A **search button** is always accessible, enabling users to perform quick lookups across all entity types that are included in the search configuration.
+- Users can enter **text-based queries** to filter results based on **predefined metadata fields** in the simple search.
+
+This functionality provides an easy way to locate relevant data without **knowing the exact filtering options**, making it ideal for **everyday searches** and **immediate data access**.
+
+&nbsp;
+
+&nbsp;
+
+### Navigation, Sorting, and Pagination
+
+Elody ensures a **smooth browsing experience** through an intuitive navigation system, allowing users to efficiently explore and manage data.
+
+**Sorting for Better Organization**
+
+- Users can **define sorting preferences** for each entity type, ensuring data is displayed in the most relevant order.
+- Sorting options can be based on **metadata fields**, such as name, creation date, or other metadata attributes.
+
+**Customizable Pagination**
+
+- Users can **adjust pagination limits** to control how many entities are displayed per page.
+- This flexibility helps optimize data viewing and retrieval, especially when working with large datasets.
+
+With these features, Elody provides a **structured and efficient** way to navigate and organize complex data collections.
+
+&nbsp;
+
+&nbsp;
+
+### Access Control
+
+Access control is a **key component** of any data management system, ensuring that users have the appropriate permissions based on their roles.
+Elody provides a **flexible and configurable permissions system**, allowing organizations to manage data access effectively.
+
+&nbsp;
+
+#### User-role authorization
+
+Elody's access control system is designed to **restrict or grant access** based on predefined user roles.
+Clients can define an **unlimited number of roles**, each with its own set of permissions, ensuring users have access only to the **data and actions** relevant to their responsibilities.
 
 *Example Use Case: Library Management*
 
@@ -473,83 +550,6 @@ This means Elody enables **relationships** between internal entities and data co
 
 
 
-- In Progress
-- Finished
-- Failed
-
-On the **download entities overview page**, users can quickly **filter by status** using a **selection filter**, ensuring they can easily track the progress of their download requests.
-
-&nbsp;
-
-#### Saving and Reusing Filters
-
-Filters are a core part of daily operations in Elody, allowing users to efficiently navigate and retrieve relevant data.
-Beyond manual filtering, **saved searches** provide a way to automate and streamline **recurring search tasks**.
-
-*Saving and Managing Filters*
-
-To enhance efficiency, users can **save search filters** for quick access later.
-- Each saved search can be **named** for easy identification.
-- Users can choose to keep saved searches **private** or make them **publicly available** to other users in the system.
-- Saved searches remain **editable**, allowing users to refine search parameters as needed.
-
-*Use Cases for Saved Searches*
-
-Filtered saved search results can be leveraged for **automated workflows**.
-For example, users can set up saved searches to:
-- Track **newly added** (f.e.) books, paintings, or other entities within an Elody-powered application.
-- Monitor **recently updated** records that require further action or review.
-
-By enabling **persistent, shareable, and editable searches**, Elody ensures that users can **quickly reapply relevant filters**, making data retrieval faster and more efficient.
-
-&nbsp;
-
-#### Simple Search
-
-To ensure **fast and efficient data retrieval**, Elody provides a **simple search** function that is available on every page.
-This allows users to quickly search through collections of entities at any time.
-
-*How Simple Search Works*
-
-- A **search button** is always accessible, enabling users to perform quick lookups across all entity types that are included in the search configuration.
-- Users can enter **text-based queries** to filter results based on **predefined metadata fields** in the simple search.
-
-This functionality provides an easy way to locate relevant data without **knowing the exact filtering options**, making it ideal for **everyday searches** and **immediate data access**.
-
-&nbsp;
-
-&nbsp;
-
-### Navigation, Sorting, and Pagination
-
-Elody ensures a **smooth browsing experience** through an intuitive navigation system, allowing users to efficiently explore and manage data.
-
-**Sorting for Better Organization**
-
-- Users can **define sorting preferences** for each entity type, ensuring data is displayed in the most relevant order.
-- Sorting options can be based on **metadata fields**, such as name, creation date, or other metadata attributes.
-
-**Customizable Pagination**
-
-- Users can **adjust pagination limits** to control how many entities are displayed per page.
-- This flexibility helps optimize data viewing and retrieval, especially when working with large datasets.
-
-With these features, Elody provides a **structured and efficient** way to navigate and organize complex data collections.
-
-&nbsp;
-
-&nbsp;
-
-### Access Control
-
-Access control is a **key component** of any data management system, ensuring that users have the appropriate permissions based on their roles.
-Elody provides a **flexible and configurable permissions system**, allowing organizations to manage data access effectively.
-
-&nbsp;
-
-#### User-role authorization
-
-Elody's access control system is designed to **restrict or grant access** based on predefined user roles.
 
 
 ### Open Linked Data
