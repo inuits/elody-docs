@@ -31,6 +31,8 @@
     2. [Frontend](#frontend)
         1. [Progressive Web Application](#progressive-web-application)
         2. [Graphql](#graphql)
+            1. [GraphQL-Driven UI Customization](#graphql-driven-ui-customization)
+            2. [Optimized Data Communication](#optimized-data-communication)
     3. [Backend](#backend)
 
 &nbsp;
@@ -558,9 +560,6 @@ This means Elody enables **relationships** between internal entities and data co
 - Enable semantic web integrations for richer data connectivity.
 - Facilitate seamless data sharing across platforms using open standards.
 
-
-
-
 &nbsp;
 
 &nbsp;
@@ -583,28 +582,102 @@ This means Elody enables **relationships** between internal entities and data co
 
 ## Architecture
 
-(duurzaam gebruiken)
-
-
 ### Modular Microservices
 
-- **Generic Modules & Services** – Core functionality available to all Elody clients ensures a strong foundation.
-- **Client-Specific Modules** – Tailor functionalities to meet the unique needs of each client, providing a personalized experience.
-- **Scalability & Performance** – The modular nature ensures easy scaling and optimized performance.
+Elody is built with a **modular architecture**, allowing flexibility in both the frontend and backend.
+This modularity enables seamless inclusion or exclusion of specific features based on client needs, ensuring a durable foundation for long-term scalability.
 
+**Frontend Modularity**
 
+Elody’s frontend consists of **interchangeable modules** that can be enabled or disabled per client.
+This ensures a tailored user experience while maintaining a consistent and durable core system across all implementations.
 
+**Backend Microservices**
+
+Elody’s backend is designed as a **microservice architecture**, where each service operates in its own environment.
+These services communicate and interact with each other, ensuring scalability and maintainability.
+These can also be enabled or disabled per client ensuring easy scalability.
+
+**Core and Custom Components**
+
+All Elody clients benefit from a **core set** of frontend modules and backend services that form the **foundation of Elody**.
+On top of this, Elody allows **deep customization** through customer-specific **frontend modules** or **backend services**.
+
+Customer-specific frontend modules enable a **tailored UI experience** based on client needs.
+Every visible UI component can be customized, ensuring an interface that aligns with specific workflows and businesses preferences.
+
+In the backend, customer-specific services allow for the addition of **business logic** and integration with **external APIs** or the logic for **migration scripts** for example.
+
+&nbsp;
+
+This modular approach allows for **optimized performance**, **easy scalability**, and **personalized functionality** while maintaining a strong and reliable base system.
+
+&nbsp;
+
+&nbsp;
 
 ### Frontend
 
+Elody’s frontend is structured into two main components, ensuring a modular, scalable, and highly customizable user interface:
+
+1. **Progressive Web Application** (PWA)
+   - Built using **Vue 3** and **TypeScript**, the PWA is the core of Elody’s UI.
+   - It includes all UI components and composables, making it the **standard frontend module** for every Elody application.
+   - This ensures a unified and consistent user experience across all clients.
+
+2. **GraphQL** acting as a Backend for Frontend (BFF)
+   - The BFF acts as an **intermediary** between the frontend and backend services.
+   - It contains **schemas, queries, resolvers, endpoints, parsers**, and more to optimize data retrieval and management.
+   - Built with **modular GraphQL architecture**, it consists of:
+        - **Base modules**: Included in every Elody application to provide **core frontend functionalities**.
+        - **Customer-specific modules**: Allow customization of the **UI structure**, including menu items, overview pages, and entity detail layouts.
+   - This modular approach ensures that each client can have a **uniquely structured UI** while maintaining a solid foundation.
+
+&nbsp;
+
 #### Progressive Web Application
-- Provides a structured and generic frontend that can be generated through different graphql implementations.
-- **Progressive Web Application (PWA)** for easy access across devices.
+
+Elody’s **Progressive Web Application (PWA)** is responsible for managing and displaying UI components, handling user interactions, and ensuring the data gets handled accordingly.
+
+*Key Responsibilities of the PWA*:
+- **UI Component Management**: The PWA contains all the necessary code and logic to **display UI components and manage their behavior**.
+- **User Interaction Handling**: When users **interact** with components (e.g., clicking buttons, applying filters, navigating), the PWA processes these actions accordingly.
+- **Data Fetching & Display**: The PWA **fetches data** through **GraphQL**, executing queries and making API requests to retrieve data. The fetched data is then **displayed** according to the defined UI structure.
+- **Data Parsing & Modification**: Before modifying or uploading data, the PWA **validates, parses and processes** the input to ensure it meets the required format before sending it to the backend through Graphql.
+- **Generic Component Library**: Component library includes **reusable UI elements** such as buttons, menu items, list/grid/media viewers, entity detail page components, upload components, ...
+- **Error Handling & Notifications**: **Displays** error messages, warnings, and success notifications to users.
+
+&nbsp;
 
 #### Graphql
-- Facilitates dynamic UI configurations tailored to client-specific needs, ensuring a highly customizable user experience.
-- Enhances performance and development efficiency by streamlining communication between frontend and backend systems.
-- Simplifies data integration from multiple sources, internal or external, making it easy to fetch data from external APIs.
+
+GraphQL is a core component of Elody’s architecture, enabling efficient **data communication** and **dynamic UI customization**.
+It acts as the bridge between the **frontend and backend**, ensuring seamless data retrieval, modification, and structuring.
+GraphQL serves two primary functions:
+- **Dynamic UI Customization** – Structuring the frontend dynamically to provide a tailored user experience for each client.
+- **Optimized Data Communication** – Facilitating efficient data retrieval, mutation, and integration from multiple sources.
+
+##### *GraphQL-Driven UI Customization*
+GraphQL plays a vital role in **structuring and customizing the frontend dynamically**, ensuring a tailored user experience for each client:
+- **Component Control**: Determines which **UI components** are displayed and what data they receive.
+- **Client-Specific Adaptability**: Each client’s frontend structure is dynamically configured based on their **unique GraphQL setup**, allowing seamless adjustments to various business needs and use cases.
+- **Modular & Scalable**: This flexible, modular approach ensures that different clients can maintain **highly personalized UI experiences** while benefiting from a consistent, maintainable, and scalable underlying framework.
+
+##### *Optimized Data Communication*
+
+Beyond UI customization, GraphQL **manages the flow of data** between the frontend and backend, ensuring that only the necessary data is retrieved, preventing inefficiencies such as over-fetching or under-fetching.
+It streamlines communication and enhances performance through:
+- **Efficient Data Retrieval**: The Progressive Web Application (PWA) executes **GraphQL queries** to fetch data from Elody’s **internal services and external APIs**.
+- **Optimized Data Mutation**: Any **modifications** made within the PWA are transmitted back to the backend **through Graphql**, ensuring accurate data updates and storage.
+- **Seamless Data Integration**: GraphQL aggregates data from **multiple sources**, including third-party APIs, and returns a **structured response** tailored to the frontend’s needs.
+- **Performance Optimization**: By **acting as an intermediary**, GraphQL reduces network load and improves response times by fetching only the **essential data** required for the user interface.
+
+&nbsp;
+
+&nbsp;
+
+
+
 
 
 
@@ -624,3 +697,4 @@ Elody utilizes a microservices architecture with key services including:
 - **Database Support:** Compatible with MongoDB and ArangoDB for scalable, high-performance data storage.
 - **Authentication & Identity Management:** Utilizes **Keycloak** to manage user authentication securely.
 - **API Gateway & Routing:** **Traefik** efficiently handles API requests and network traffic.
+
