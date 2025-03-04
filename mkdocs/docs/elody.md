@@ -123,7 +123,7 @@ This allows organizations to **digitally manage** and preserve their collections
 
 2. **Flexible Viewing Options and Configurable Metadata Display for Enhanced User Experience**
 
-Entities of the same type are displayed as **structured lists** on overview pages, where customers can configure which metadata fields are visible.
+Entities are displayed as **structured lists** on overview pages, where customers can configure which metadata fields are visible for which entity types.
 This ensures that the **most relevant information is highlighted** in this teaser metadata, offering a **quick and informative** snapshot of each entity.
 
 Elody’s user interface offers multiple **viewing options** to accommodate different user preferences and **data presentation** needs.
@@ -137,7 +137,7 @@ This ensures that users can efficiently navigate and interact with entity data i
 3. **Seamless Semantic Linking for Enriched Data Relationships**
 
 One of Elody’s core functionalities is the ability to establish **meaningful relationships** between entities, enhancing data quality and context through semantic linking.
-Entities can be **connected** to other entities, media files, or even themselves, with no restrictions on the number or type of relationships that can be created.
+Entities can be **connected** to other entities, mediafiles, or even themselves, with no restrictions on the number or type of relationships that can be created.
 
 Customers have **full control** over defining how entities relate to one another by providing this information in their **data model**.
 Based on these definitions, we configure the **user interface** to support the addition of relevant relationships seamlessly.
@@ -147,7 +147,7 @@ Based on these definitions, we configure the **user interface** to support the a
 Elody’s user-friendly interface simplifies the process of **linking entities**.
 While viewing an entity’s metadata, users can easily access a menu to establish new connections directly.
 
-Dedicated UI components within an entity’s detail page display related entities of specific types.
+Dedicated UI components within an entity’s detail page display related entities that are seperated by type.
 From here, users can either **link existing** entities or **create new ones** and immediately establish their relationship—all within a streamlined workflow.
 
 5. **Comprehensive Media Integration for Visual Content Enrichment**
@@ -155,7 +155,7 @@ From here, users can either **link existing** entities or **create new ones** an
 In addition to entities, Elody supports the integration of **images and other mediafiles**, offering the same **extensive metadata and relationship capabilities**.
 By incorporating mediafiles, Elody enhances data with **rich visual content**, providing deeper context.
 
-Mediafiles can come in various formats, including images, PDFs, and text files for example.
+Mediafiles can come in various formats, including images, videos, PDFs, and text files for example.
 These files are displayed using Elody’s **Media Viewer** component, which allows users to zoom, toggle full page, navigate through multi-page documents, and **interact** with media intuitively.
 
 For entities linked to mediafiles, a **thumbnail preview** can be displayed on overview pages, offering users a quick visual reference.
@@ -173,7 +173,7 @@ Additionally, relationships can be established between entities and mediafiles, 
 
 1. **Flexible Data Import Options**
 
-Elody offers multiple ways to import data into the system. Clients can designate a **physical or cloud storage device** and place their data in a structured format within a specified folder.
+Elody offers multiple ways to import data into the system. Clients can link **an external filesystem** hosted on the customers side and place their data in a structured format within a specified directory.
 This storage location can be configured to be **accessible directly** from Elody’s user interface.
 
 With just a few clicks, users can initiate a **full import** of the selected folder through Elody's UI.
@@ -194,12 +194,12 @@ Once uploaded, the system **automatically generates entities** along with their 
     Edit entities
 
 Entities can be edited **individually** on their detail pages, where **clear validation rules** on each metadata field guide users to ensure data accuracy.
-For **bulk editing**, **CSV imports** enable modifications across **multiple entities at once**, significantly reducing manual effort and improving workflow efficiency.
+For **bulk editing**, **CSV uploads** enable modifications across **multiple entities at once**, significantly reducing manual effort and improving workflow efficiency.
 
     Add or remove relations
 
 In addition to editing metadata through the UI or bulk uploads, Elody offers an efficient process for **establishing relationships between entities**.
-Certain predefined relationships can also be **created in bulk** using **CSV uploads** or **edits**, allowing for large-scale data connections with minimal effort.
+Certain predefined relationships can also be **created in bulk** using **CSV uploads**, allowing for large-scale data connections with minimal effort.
 
 The standard way to add relationships **through the user interface**, is either during **entity creation** or when **editing an existing entity**. 
 Elody’s UI provides clearly **visible buttons and intuitive screens**, ensuring that linking (or unlinking) entities is a straightforward and user-friendly process.
@@ -209,7 +209,7 @@ Elody’s UI provides clearly **visible buttons and intuitive screens**, ensurin
 
     Direct Upload on Entity Detail Pages
 
-Users can **upload mediafiles** directly from an entity’s detail page. Simply **drag and drop** files into the designated drop zone, click save, and the media files will be inserted into to the system.
+Users can **upload mediafiles** directly from an entity’s detail page. Simply **drag and drop** files into the designated drop zone, click save, and the mediafiles will be inserted into to the system.
 
     CSV-Based Bulk Upload
 
@@ -225,7 +225,7 @@ Entities and mediafiles can be removed in **bulk** from overview screens. Checkb
 Users can also increase the page limit to select and delete all entities displayed on a page at once.
 
 The bulk delete process includes an option to **automatically remove related entities** when necessary, **preventing orphaned data**.
-However, entities with **blocking relationships** —those that are required for other entities to function— will **not be deleted**. This safeguard prevents accidental data loss and ensures system consistency.
+However, entities with **blocking relationships** —those that are required for other entities to exist— will **not be deleted**. This safeguard prevents accidental data loss and ensures system consistency.
 
     Single-Entity Deletion
 
@@ -265,15 +265,18 @@ Elody’s filtering supports:
 Elody allows users to apply **text filters** to any metadata field that contains textual information.
 This can be useful for searching specific details, such as an entity’s **description** or **ID**, to quickly locate the required entity.
 
-Elody offers **multiple ways** to filter on **text-based metadata**:
+*Available Text Filters*
 - **Exact match** – Finds entities where the metadata exactly matches the entered text.
 - **Partial match** – Retrieves results where the entered text appears anywhere within the metadata field.
 - **Empty or non-empty fields** – Filters entities based on whether a text field has a value or is left blank.
 
-Elody’s filtering system extends **beyond individual entities**, allowing searches based on metadata from **related entities**, for example:
-- An entity may have a related mediafile containing OCR-processed text (*[see chapter OCR: Optical Character Recognition](#ocr---optical-character-recognition)*) stored as metadata on the mediafile.
-  OCR is a technology that can extract text from images.
-  Users can apply a text filter on the asset to find mediafiles that contain specific text, enabling more advanced and context-aware searches.
+Elody’s filtering system extends **beyond individual entities**, allowing searches based on metadata from **related entities**.
+
+*Example Use Case*
+
+An entity may have a related mediafile containing OCR-processed text (*[see chapter OCR: Optical Character Recognition](#ocr---optical-character-recognition)*) stored as metadata on the mediafile.
+OCR is a technology that can extract text from images.
+Users can apply a text filter on the asset to find mediafiles that contain specific text, enabling more advanced and context-aware searches.
 
 2. **Number-Based Filtering**
 
@@ -326,7 +329,7 @@ Selection filters can be applied to both **metadata fields** and **entity relati
 A common scenario where the **selection filter** is useful is when users need to manage and track **download requests** for mediafiles.
 
 When a user requests mediafiles for download, Elody creates a download entity.
-This entity contains a **link to a ZIP** file with the selected mediafiles and an accompanying CSV file with metadata.
+This entity contains a **link to a ZIP file** with the selected mediafiles and an accompanying CSV file with metadata.
 
 Since the download process runs in the background and may take time to complete, **each download entity is assigned a status**, such as:
 - Approved
@@ -347,7 +350,7 @@ Beyond manual filtering, **saved searches** provide a way to automate and stream
 
 To enhance efficiency, users can **save search filters** for quick access later.
 - Each saved search can be **named** for easy identification.
-- Users can choose to keep saved searches **private** or make them **publicly available** to other users in the system.
+- Users can choose to keep saved searches **private** or make them **publicly available** for other users in the system.
 - Saved searches remain **editable**, allowing users to refine search parameters as needed.
 
 *Use Cases for Saved Searches*
@@ -413,8 +416,8 @@ Clients can define an **unlimited number of roles**, each with its own set of pe
 
 In a library setting, different roles may have different levels of access:
 
-- **Intern**: Can **only view** assets in Elody but cannot edit, add, or delete data. Restricted menu items and action buttons ensure the intern does not have unauthorized access.
-- **Employee**: Responsible for book check-ins and check-outs. Needs the ability to **edit entities** - in this case a Book Inventory entity - but not modify users or system settings.
+- **Intern**: Can **only view** assets in Elody but cannot edit, add, or delete data. Restricted menu items and action buttons ensure the intern does not have unauthorized access to these actions.
+- **Employee**: Responsible for book check-ins and check-outs. Needs the ability to **edit some entities** -in this case an entity of the type 'Book Inventory'- but not modify other entity types, users, or system settings.
 - **Library Manager**: Has **full access** to the application, including managing users, defining roles, and reviewing entity modifications.
 
 Roles can be assigned to **user groups**, allowing multiple users to **inherit the same permissions**. Additionally, **specific users** can be **assigned individual roles** outside of a group if needed.
@@ -423,9 +426,9 @@ Roles can be assigned to **user groups**, allowing multiple users to **inherit t
 
 #### UI Visibility Restrictions
 
-Policies in Elody not only control data access but also **shape the user interface** to provide a streamlined experience.
+Policies in Elody also **shape the user interface**, to provide a streamlined experience.
 
-- **Menu Restrictions**: When users log in, Elody **automatically adjusts the menu**, displaying only the sections they have permission to access. If a user attempts to access a restricted page via URL, they will be redirected to the unauthorized page.
+- **Menu Restrictions**: When users log in, Elody **automatically adjusts the menu**, displaying only the sections they have the permission to access. If a user attempts to access a restricted page via URL, they will be redirected to the unauthorized page.
 - **Button and Action Validation**: Action buttons are validated against the user’s role. If a user lacks permission for a specific function, the button will be **hidden**.
 
 With **customizable access control**, Elody ensures **data security, role-based efficiency, and a user experience tailored to each role’s needs**.
@@ -441,10 +444,10 @@ Elody ensures that **access control extends beyond just UI restrictions** — it
 Even if a user has access to an **overview page** (e.g., a list of books), not all entities within that list may be visible to them.
 
 - When a user navigates to the **Books** page, Elody retrieves a set number of book entities based on pagination settings.
-- Some books may still be **incomplete** or restricted, meaning only users with the necessary permissions can view them.
+- Some books may still be **incomplete or restricted**, meaning only users with the **necessary permissions** can view them.
 - If an intern or any other restricted user **does not have access** to certain books, Elody **automatically filters out** those entities, ensuring they are not **retrieved and displayed**.
 
-This **dynamic data authorization** ensures that users only interact with **relevant and permitted** data, reinforcing **security and role-based access control** at every level.
+This **dynamic data authorization** ensures that users only interact with **relevant and permitted data**, reinforcing **security and role-based access control** at every level.
 
 &nbsp;
 
@@ -507,7 +510,7 @@ The job system **increases transparency and efficiency**, ensuring users stay in
 
 Elody provides built-in support for **displaying spatial data on a map**, allowing users to manage and interact with geospatial information effectively.
 
-The platform supports **multiple mapping formats** and **various layers**, including heatmaps, polygons, and markers, to represent spatial relationships visually.
+The platform supports **multiple mapping formats** and **various layers**, including heatmaps, polygons, markers, and more to represent spatial relationships visually.
 
 This feature enhances geospatial analysis and enables users to gain deeper insights through these visualization capabilities within the platform.
 
@@ -744,7 +747,7 @@ Elody utilizes Cantaloupe as its **image server**, enabling the **on-demand gene
 This service ensures **optimized image delivery**, allowing users to **view and manipulate images** efficiently within the platform.
 
 Cantaloupe is fully compliant with **IIIF** (International Image Interoperability Framework), a set of **open standards** designed for scalable and high-quality digital object delivery.
-By integrating IIIF, Elody provides **image manipulation capabilities**, allowing users to scale and rotate images directly in the frontend.
+By integrating IIIF with Cantaloupe, Elody provides **image manipulation capabilities**, allowing users to scale and rotate images directly in the frontend.
 
 Additionally, Cantaloupe supports **deep-zoom functionality**, enhancing the viewing experience in Elody’s image viewer.
 **Thumbnails** are also dynamically generated, ensuring **fast and responsive previews** without unnecessary storage consumption.
@@ -754,14 +757,24 @@ As a **core service for image rendering and handling**, Cantaloupe enhances perf
 &nbsp;
 
 #### Filesystem Importer Service
-TODO
-- Facilitates seamless bulk data imports
+
+The Filesystem Importer Service **automates the bulk import of files from a designated filesystem directory**, ensuring a structured and efficient ingestion process.
+It identifies a single CSV file that serves as a reference guide for importing all other files within the same directory.
+Once validated, the service processes and **integrates the files into Elody**, maintaining data consistency and organization.
+
+Beyond simple file imports, the service can **analyze directory structures**, detecting whether subdirectories contain additional nested layers.
+
+This approach enhances scalability, making it easier to manage large-scale imports while reducing manual effort.
 
 &nbsp;
 
-#### Antivirus Software
-TODO
-- Ensures security by scanning uploaded files.
+#### Antivirus Service
+
+Elody integrates **ClamAV**, an open-source antivirus solution, to **safeguard** the platform from **malicious files**.
+Every file uploaded or processed within Elody undergoes an **automated security scan**, ensuring that viruses, malware, or other threats do not compromise the system’s integrity.
+
+This **proactive security measure** is particularly critical for a **data-driven platform** like Elody, where large volumes of external files are regularly imported and shared.
+By preventing the spread of **infected files**, the antivirus service uses ClamAV to reinforce data security, system stability, and user trust, making Elody a secure environment for managing and integrating files and information.
 
 &nbsp;
 
@@ -785,8 +798,15 @@ This integration ensures that only authorized users can access specific parts of
 &nbsp;
 
 #### Traefik
-TODO
-- Traefik is a routing software used by Elody for efficiently handling API requests and network traffic
+
+Traefik is a **modern reverse proxy and load balancer** optimized for **dynamic container environments**, making it an ideal fit for Elody’s microservices architecture.
+It plays a critical role in **efficiently managing internal traffic**, ensuring communication between services without manual configuration.
+
+By **automatically detecting and routing requests** to the correct microservice, Traefik eliminates complexity while maintaining high availability and scalability.
+This means users experience a smooth, uninterrupted workflow, even as the platform dynamically scales to meet demand.
+
+Additionally, Traefik enhances security and performance, providing built-in support for authentication and load balancing.
+By integrating Traefik, Elody ensures a reliable, resilient, and flexible system, allowing us to focus on workflows without worrying about complex network configurations.
 
 &nbsp;
 
