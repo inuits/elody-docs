@@ -28,12 +28,24 @@
    11. [Open Linked Data](#open-linked-data)
 3. [Architecture](#architecture)
     1. [Modular Microservices](#modular-microservices)
-    2. [Frontend](#frontend)
+    2. [Frontend Architecture](#frontend-architecture)
         1. [Progressive Web Application](#progressive-web-application)
         2. [Graphql](#graphql)
             1. [GraphQL-Driven UI Customization](#graphql-driven-ui-customization)
             2. [Optimized Data Communication](#optimized-data-communication)
-    3. [Backend](#backend)
+    3. [Backend Architecture](#backend-architecture)
+       1. [Collection API](#collection-api)
+       2. [Storage API](#storage-api)
+       3. [Client Collection Module](#client-collection-module)
+       4. [OCR Service](#ocr-service)
+       5. [Transcoder Service](#transcoder-service)
+       6. [Cantaloupe & IIIF Server](#cantaloupe--iiif-server)
+       7. [Filesystem Importer Service](#filesystem-importer-service)
+       8. [Antivirus Software](#antivirus-software)
+       9. [Database services](#database-services)
+       10. [Keycloak](#keycloak)
+       11. [Traefik](#traefik)
+       12. [Elody Python SDK](#elody-python-sdk)
 
 &nbsp;
 
@@ -388,7 +400,7 @@ With these features, Elody provides a **structured and efficient** way to naviga
 ### Access Control
 
 Access control is a **key component** of any data management system, ensuring that users have the appropriate permissions based on their roles.
-Elody provides a **flexible and configurable permissions system**, allowing organizations to manage data access effectively.
+Elody provides a **flexible and configurable policies system**, allowing organizations to manage data access effectively.
 
 &nbsp;
 
@@ -411,7 +423,7 @@ Roles can be assigned to **user groups**, allowing multiple users to **inherit t
 
 #### UI Visibility Restrictions
 
-Permissions in Elody not only control data access but also **shape the user interface** to provide a streamlined experience.
+Policies in Elody not only control data access but also **shape the user interface** to provide a streamlined experience.
 
 - **Menu Restrictions**: When users log in, Elody **automatically adjusts the menu**, displaying only the sections they have permission to access. If a user attempts to access a restricted page via URL, they will be redirected to the unauthorized page.
 - **Button and Action Validation**: Action buttons are validated against the user’s role. If a user lacks permission for a specific function, the button will be **hidden**.
@@ -541,21 +553,8 @@ This means Elody enables **relationships** between internal entities and data co
 
 &nbsp;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Open Linked Data
-
+TODO
 - Support for linked data formats enhances interoperability with external systems.
 - Enable semantic web integrations for richer data connectivity.
 - Facilitate seamless data sharing across platforms using open standards.
@@ -563,21 +562,6 @@ This means Elody enables **relationships** between internal entities and data co
 &nbsp;
 
 &nbsp;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ## Architecture
@@ -616,7 +600,7 @@ This modular approach allows for **optimized performance**, **easy scalability**
 
 &nbsp;
 
-### Frontend
+### Frontend Architecture
 
 Elody’s frontend is structured into two main components, ensuring a modular, scalable, and highly customizable user interface:
 
@@ -676,25 +660,139 @@ It streamlines communication and enhances performance through:
 
 &nbsp;
 
+### Backend Architecture
 
+Elody is built on a **microservices architecture**, ensuring a **modular, scalable, durable, and high-performance** system.
+Each microservice is responsible for a **specific core functionality**, allowing for **efficient management, independent scaling, and seamless communication** between services.
+Microservices are able to **delegate tasks to** and **communicate with other services**.
 
+This section provides an overview of **each microservice**, explaining its role, benefits, and how it contributes to Elody’s overall functionality.
 
+&nbsp;
 
+#### Collection API
 
+The Collection API is the **central microservice** of Elody, responsible for **managing and organizing data** across the platform.
+It plays a critical role in **handling data-related requests**, ensuring efficient data retrieval, modification, creation, and deletion.
 
+The Collection API is designed to efficiently **process requests** coming from the frontend via GraphQL.
+It handles all **CRUD** (Create, Read, Update, Delete) operations on entity data and ensures seamless **interactions between the frontend, database and other services**.
+It is able to execute **direct database queries**, allowing it to retrieve large volumes of filtered data quickly and efficiently.
 
-### Backend
+By **optimizing data retrieval processes**, it ensures that user queries are handled with minimal delay, contributing to a highly responsive user experience.
+Instead of operating in isolation, it interacts with other backend services to retrieve additional information when necessary.
 
-Elody utilizes a microservices architecture with key services including:
+By handling **large volumes** of requests efficiently and ensuring **direct, optimized access to stored data**, the Collection API is fundamental to Elody’s reliability and performance.
+ is also able to execute direct queries into our database. That way it is able to query the db to retrieve (filtered) data, modify, create or delete data.
 
-- **Collection API** – Manages and organizes data collection efficiently.
-- **Storage API** – Handles file storage and ensures data security.
-- **OCR Service** – Processes images for text extraction, improving search capabilities.
-- **Transcode Service** – Converts mediafiles into various formats for compatibility.
-- **Cantaloupe & IIIF Server** – Enhances image rendering and handling.
-- **Filesystem Importer Service** – Facilitates seamless bulk data imports.
-- **Antivirus Software** – Ensures security by scanning uploaded files.
-- **Database Support:** Compatible with MongoDB and ArangoDB for scalable, high-performance data storage.
-- **Authentication & Identity Management:** Utilizes **Keycloak** to manage user authentication securely.
-- **API Gateway & Routing:** **Traefik** efficiently handles API requests and network traffic.
+&nbsp;
 
+#### Storage API
+
+The Storage API is responsible for **handling file storage and retrieval** within Elody, ensuring that **mediafiles** such as images, PDFs, and videos are stored and accessed efficiently.
+It plays a crucial role in managing secure file uploads, ensuring that all media is safely stored and easily retrievable when needed.
+
+The Storage API is able to **scale based on file storage demands**, making it suitable for **handling large datasets** and extensive media libraries.
+Whether users are **uploading files in bulk** or **requesting multiple downloads** simultaneously, the Storage API ensures that all operations run smoothly without delays or bottlenecks.
+
+The Storage API optimizes **file retrieval**, ensuring that downloads are processed efficiently and that users can access the required files without latency.
+
+&nbsp;
+
+#### Client Collection Module
+
+The Client Collection Module is the **customizable component** of Elody’s backend, designed to incorporate **client-specific business logic** and features.
+This microservice enables seamless **integration with external APIs**, ensuring smooth data exchange between Elody and third-party systems.
+
+Beyond API integrations, this module plays a crucial role in **data transformation**.
+It includes migration scripts that parse and convert external data into the Elody format, allowing structured and efficient data management.
+
+For clients utilizing **bulk imports**, this service automates the process by monitoring the **physical or cloud storage device** provided by the customer and connecting incoming data for streamlined batch processing.
+Additionally, it handles **business logic-driven validation on metadata fields**, ensuring data accuracy and compliance.
+
+Another key aspect of this module is **access control and role management**.
+It defines policies and permission structures, ensuring that user roles and access levels align with business requirements.
+
+This flexible, client-specific backend component empowers customers with **tailored functionality**, enabling Elody to adapt to diverse workflows and operational needs.
+
+&nbsp;
+
+#### OCR Service
+
+The OCR Service is responsible for **processing images** to extract text, enabling advanced **search and document management** within Elody.
+It provides an API with dedicated endpoints for **text extraction**, as well as the generation of **searchable PDFs** from individual or grouped images.
+
+Once text is extracted, the OCR Service communicates with the Collection API to **store the recognized text** as metadata on the corresponding mediafile entity.
+This ensures that **text within images** becomes **searchable, structured, and integrated** into Elody’s data ecosystem.
+
+By transforming images into **indexed, searchable content**, the OCR Service significantly enhances **retrieval efficiency** and **document accessibility**, making media assets more useful and easier to manage.
+
+&nbsp;
+
+#### Transcoder Service
+
+The Transcode Service ensures that mediafiles are accessible and compatible across different platforms by **converting them into various formats**.
+This microservice processes **audio, video, and image files**, optimizing them for different use cases such as **web display, archival storage, or high-quality downloads**.
+
+By automatically adapting files to the required format, the Transcode Service enhances **usability, performance, and cross-platform compatibility**, ensuring that media assets in Elody are always available in the most suitable format without manual intervention.
+
+&nbsp;
+
+#### Cantaloupe & IIIF Server
+
+Elody utilizes Cantaloupe as its **image server**, enabling the **on-demand generation of derivatives** from high-resolution source images.
+This service ensures **optimized image delivery**, allowing users to **view and manipulate images** efficiently within the platform.
+
+Cantaloupe is fully compliant with **IIIF** (International Image Interoperability Framework), a set of **open standards** designed for scalable and high-quality digital object delivery.
+By integrating IIIF, Elody provides **image manipulation capabilities**, allowing users to scale and rotate images directly in the frontend.
+
+Additionally, Cantaloupe supports **deep-zoom functionality**, enhancing the viewing experience in Elody’s image viewer.
+**Thumbnails** are also dynamically generated, ensuring **fast and responsive previews** without unnecessary storage consumption.
+
+As a **core service for image rendering and handling**, Cantaloupe enhances performance, flexibility, and user experience, making image management in Elody efficient.
+
+&nbsp;
+
+#### Filesystem Importer Service
+TODO
+- Facilitates seamless bulk data imports
+
+&nbsp;
+
+#### Antivirus Software
+TODO
+- Ensures security by scanning uploaded files.
+
+&nbsp;
+
+#### Database services
+
+Elody supports multiple **Database Management Systems (DBMS)**, allowing customers to choose between **MongoDB** or **ArangoDB** based on their specific requirements.
+Depending on the selected DBMS, a dedicated **database service** will be running to ensure data storage and retrieval.
+
+This service includes the database itself and is responsible for maintaining **continuous availability** while delivering **high response times** for all queries.
+As a critical component of Elody’s architecture, it guarantees data integrity, reliability, and optimized performance, ensuring that all operations—from simple lookups to complex queries—run efficiently and without interruption.
+
+&nbsp;
+
+#### Keycloak
+Elody leverages Keycloak as its **access management solution**, providing **robust authentication** and **identity management**.
+Keycloak ensures that user access is handled securely and efficiently, allowing administrators to manage users, roles, and permissions with fine-grained control.
+
+Through **single sign-on (SSO)**, **multi-factor authentication (MFA)**, and **role-based access control (RBAC)**, Keycloak enables a **highly secure** login experience.
+This integration ensures that only authorized users can access specific parts of Elody, reinforcing **data security and compliance** without compromising user convenience.
+
+&nbsp;
+
+#### Traefik
+TODO
+- Traefik is a routing software used by Elody for efficiently handling API requests and network traffic
+
+&nbsp;
+
+#### Elody Python SDK
+
+The Elody Python SDK serves as a **centralized toolkit** containing essential **functionality (such as CSV logic)** used across all microservices.
+Instead of duplicating logic in each service, this **dedicated software development kit** ensures consistency, maintainability, and efficiency.
+
+By providing a **standardized set of reusable utilities**, the Elody Python SDK reduces redundancy and accelerates the implementation of core functionalities across the platform.
