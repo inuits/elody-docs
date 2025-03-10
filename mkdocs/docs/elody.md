@@ -55,9 +55,9 @@
 ## Elody: a modular semantic data platform
 
 Elody is a **modular semantic data platform** designed to revolutionize the way organizations manage, share, and distribute structured data.
-By combining a powerful backend with an intuitive user interface, Elody provides users with a seamless experience for handling data.
+By combining a powerful backend with an intuitive user interface, Elody offers users with a consistent experience for handling data.
 Its flexible architecture enables businesses to define entities, establish meaningful relationships between them, and integrate external services effortlessly.
-Whether working with textual, numerical, or media-based data, Elody ensures consistency, accessibility, and ease of use.
+Whether working with textual, numerical, or media-based data, Elody guarantees consistency, accessibility, and ease of use.
 
 ### Semantic Data Structuring
 
@@ -110,28 +110,30 @@ By leveraging Elody, organizations can achieve **enhanced productivity, improved
 
 ### Entity Management
 
-Elody enables seamless **data management, sharing, and distribution** through a **user-friendly interface** that is fully customizable to meet specific needs.
+Elody enables logical **data management, sharing, and distribution** through a **user-friendly interface** that is fully customizable to meet specific needs.
 With intuitive navigation and metadata configuration options, users can efficiently organize and interact with their data, ensuring a smooth and tailored experience.
 
 1. **Customizable Entity Definition for Tailored Metadata Management**
 
-Elody empowers customers to define a **unique set of entities**, each with specific attributes, to structure their metadata efficiently and to enhance **organization and retrieval of entities**.
-Our highly flexible system enables developers to seamlessly integrate these entity definitions into the customer-specific Elody application, ensuring a **tailored data schema** that meets individual business requirements.
+Elody empowers users to define a **unique set of entities**, each with specific attributes, to structure their metadata efficiently and to enhance **organization and retrieval of entities**.
+Our highly flexible system enables developers to smoothly integrate these entity definitions into the customer-specific Elody application, ensuring a **tailored data schema** that meets individual business requirements.
 
 Entities within Elody can represent a wide range of **real-world and digital objects**, from physical assets to living organisms.
 This allows organizations to **digitally manage** and preserve their collections, bringing both tangible and intangible assets into a **structured digital environment**.
 
 2. **Flexible Viewing Options and Configurable Metadata Display for Enhanced User Experience**
 
-Entities are displayed as **structured lists** on overview pages, where customers can configure which metadata fields are visible for which entity types.
-This ensures that the **most relevant information is highlighted** in this teaser metadata, offering a **quick and informative** snapshot of each entity.
+Entities are displayed as **structured lists** on overview pages, where users can configure which metadata fields are visible for which entity types.
+This makes sure that the **most relevant information is highlighted** in this teaser metadata, offering a **quick and informative** snapshot of each entity.
 
 Elody’s user interface offers multiple **viewing options** to accommodate different user preferences and **data presentation** needs.
 Entities can be displayed as **list items** for a structured, linear view or as **grid items** for a more visual and dynamic layout.
-This flexibility ensures that users can navigate and interact with their data in the most **efficient and intuitive** way.
+This flexibility makes sure that users can navigate and interact with their data in the most **efficient and intuitive** way.
+
+![overviewpage_listview.png](../images/elody-functional-documentation/overviewpage_listview.png)
 
 On **entity detail pages**, all metadata attributes are accessible, with **full customization** options.
-Customers can define the **order** in which metadata fields appear and **group related attributes** together for a more intuitive and organized presentation.
+Users can define the **order** in which metadata fields appear and **group related attributes** together for a more intuitive and organized presentation.
 This ensures that users can efficiently navigate and interact with entity data in a way that best suits their needs.
 
 3. **Seamless Semantic Linking for Enriched Data Relationships**
@@ -139,8 +141,8 @@ This ensures that users can efficiently navigate and interact with entity data i
 One of Elody’s core functionalities is the ability to establish **meaningful relationships** between entities, enhancing data quality and context through semantic linking.
 Entities can be **connected** to other entities, mediafiles, or even themselves, with no restrictions on the number or type of relationships that can be created.
 
-Customers have **full control** over defining how entities relate to one another by providing this information in their **data model**.
-Based on these definitions, we configure the **user interface** to support the addition of relevant relationships seamlessly.
+Users have **full control** over defining how entities relate to one another by providing this information in their **data model**.
+Based on these definitions, we configure the **user interface** to support the addition of relevant relationships easily.
 
 4. **Intuitive Interface for Effortless Entity Linking**
 
@@ -161,6 +163,8 @@ These files are displayed using Elody’s **Media Viewer** component, which allo
 For entities linked to mediafiles, a **thumbnail preview** can be displayed on overview pages, offering users a quick visual reference.
 This feature is particularly effective in grid view mode, where media-rich content can be presented in an engaging layout.
 
+![overviewpage_gridview.png](../images/elody-functional-documentation/overviewpage_gridview.png)
+
 &nbsp;
 
 &nbsp;
@@ -173,7 +177,7 @@ Additionally, relationships can be established between entities and mediafiles, 
 
 1. **Flexible Data Import Options**
 
-Elody offers multiple ways to import data into the system. Clients can link **an external filesystem** hosted on the customers side and place their data in a structured format within a specified directory.
+Elody offers multiple ways to import data into the system. Users can link **an external filesystem** hosted on the customers side and place their data in a structured format within a specified directory.
 This storage location can be configured to be **accessible directly** from Elody’s user interface.
 
 With just a few clicks, users can initiate a **full import** of the selected folder through Elody's UI.
@@ -184,7 +188,7 @@ Once the process is complete, the data appears in the UI, including all specifie
     
     Create entities
 
-Elody provides **multiple ways to create entities** through the **user interface**. A **shortcut** in the menu allows quick access to create any available entity type.
+Elody supports **multiple ways to create entities** through the **user interface**. A **shortcut** in the menu allows quick access to create any available entity type.
 Additionally, on overview pages, users can initiate entity creation through an **action button**.
 When working within the detail page of a related entity, a new entity can be created and linked instantly.
 
@@ -204,6 +208,8 @@ Certain predefined relationships can also be **created in bulk** using **CSV upl
 The standard way to add relationships **through the user interface**, is either during **entity creation** or when **editing an existing entity**. 
 Elody’s UI provides clearly **visible buttons and intuitive screens**, ensuring that linking (or unlinking) entities is a straightforward and user-friendly process.
 
+![create_remove_relations.png](../images/elody-functional-documentation/create_remove_relations.png)
+
 3. **Uploading Mediafiles**
 
 
@@ -216,6 +222,15 @@ Users can **upload mediafiles** directly from an entity’s detail page. Simply 
 For a more **structured approach**, mediafiles can be **uploaded using a CSV file**, allowing users to **specify metadata** for each file.
 This method also supports the **simultaneous creation of entities** and the automatic linking of mediafiles to them, streamlining data creation.
 
+Elody offers an **intuitive and user-friendly interface** for uploading mediafiles, designed to ensure accuracy and clarity throughout the process.
+Before the upload begins, the system **automatically validates files** by comparing them with the entries defined in the accompanying CSV.
+Users are notified if any files referenced in the CSV are missing from the upload selection, or if additional, undefined files have been added.
+
+Once the upload starts, users benefit from real-time feedback through progress indicators—both for the overall upload and for each individual mediafile.
+This provides transparency and control, allowing users to monitor the entire process with confidence and precision.
+
+![upload-csv-functionality.png](../images/elody-functional-documentation/upload-csv-functionality.png)
+
 4. **Deleting Entities in Elody**
 
 
@@ -225,7 +240,7 @@ Entities and mediafiles can be removed in **bulk** from overview screens. Checkb
 Users can also increase the page limit to select and delete all entities displayed on a page at once.
 
 The bulk delete process includes an option to **automatically remove related entities** when necessary, **preventing orphaned data**.
-However, entities with **blocking relationships** —those that are required for other entities to exist— will **not be deleted**. This safeguard prevents accidental data loss and ensures system consistency.
+However, entities with **blocking relationships** —those that are required for other entities to exist— will **not be deleted**. This safeguard prevents accidental data loss and guarantees system consistency.
 
     Single-Entity Deletion
 
@@ -236,7 +251,7 @@ If an entity cannot be deleted due to **blocking relationships**, these dependen
 
 Elody is designed to support data coming from **various sources**, whether it involves **migrating external data and storing it permanently** in Elody, or **continuously fetching and mapping external data** to fit Elody’s structure.
 
-For clients transitioning from an older application or requiring a structured **data migration**, Elody provides a tailored migration process.
+For clients transitioning from an older application or requiring a structured **data migration**, Elody lays out a tailored migration process.
 A **custom migration plan** is created for each client to ensure a smooth and efficient transfer.
 Once the plan is established, our team manages the full migration, minimizing disruptions and preventing data loss.
 
@@ -269,6 +284,8 @@ This can be useful for searching specific details, such as an entity’s **descr
 - **Exact match** – Finds entities where the metadata exactly matches the entered text.
 - **Partial match** – Retrieves results where the entered text appears anywhere within the metadata field.
 - **Empty or non-empty fields** – Filters entities based on whether a text field has a value or is left blank.
+
+![text_filter.png](../images/elody-functional-documentation/text_filter.png)
 
 Elody’s filtering system extends **beyond individual entities**, allowing searches based on metadata from **related entities**.
 
@@ -307,6 +324,8 @@ These filters can be applied to any entity metadata field that contains a date v
 - **Between match** – Filters entities with dates **within a specified range**.
 - **Empty or non-empty fields** – Searches for entities where a date field is either **filled in** or **left blank**.
 
+![date_filter.png](../images/elody-functional-documentation/date_filter.png)
+
 These filtering options help users efficiently narrow down data based on time-related criteria.
 
 4. **Selection-Based Filtering**
@@ -339,6 +358,8 @@ Since the download process runs in the background and may take time to complete,
 
 On the **download entities overview page**, users can quickly **filter by status** using a **selection filter**, ensuring they can easily track the progress of their download requests.
 
+![selection_filter.png](../images/elody-functional-documentation/selection_filter.png)
+
 &nbsp;
 
 #### Saving and Reusing Filters
@@ -353,6 +374,8 @@ To enhance efficiency, users can **save search filters** for quick access later.
 - Users can choose to keep saved searches **private** or make them **publicly available** for other users in the system.
 - Saved searches remain **editable**, allowing users to refine search parameters as needed.
 
+![saved_search.png](../images/elody-functional-documentation/saved_search.png)
+
 *Use Cases for Saved Searches*
 
 Filtered saved search results can be leveraged for **automated workflows**.
@@ -360,13 +383,13 @@ For example, users can set up saved searches to:
 - Track **newly added** (f.e.) books, paintings, or other entities within an Elody-powered application.
 - Monitor **recently updated** records that require further action or review.
 
-By enabling **persistent, shareable, and editable searches**, Elody ensures that users can **quickly reapply relevant filters**, making data retrieval faster and more efficient.
+By enabling **persistent, shareable, and editable searches**, Elody makes sure that users can **quickly reapply relevant filters**, making data retrieval faster and more efficient.
 
 &nbsp;
 
 #### Simple Search
 
-To ensure **fast and efficient data retrieval**, Elody provides a **simple search** function that is available on every page.
+To ensure **fast and efficient data retrieval**, Elody offers a **simple search** function that is available on every page.
 This allows users to quickly search through collections of entities at any time.
 
 *How Simple Search Works*
@@ -374,7 +397,7 @@ This allows users to quickly search through collections of entities at any time.
 - A **search button** is always accessible, enabling users to perform quick lookups across all entity types that are included in the search configuration.
 - Users can enter **text-based queries** to filter results based on **predefined metadata fields** in the simple search.
 
-This functionality provides an easy way to locate relevant data without **knowing the exact filtering options**, making it ideal for **everyday searches** and **immediate data access**.
+This functionality sets out an easy way to locate relevant data without **knowing the exact filtering options**, making it ideal for **everyday searches** and **immediate data access**.
 
 &nbsp;
 
@@ -382,7 +405,7 @@ This functionality provides an easy way to locate relevant data without **knowin
 
 ### Navigation, Sorting, and Pagination
 
-Elody ensures a **smooth browsing experience** through an intuitive navigation system, allowing users to efficiently explore and manage data.
+Elody promises a **smooth browsing experience** through an intuitive navigation system, allowing users to efficiently explore and manage data.
 
 **Sorting for Better Organization**
 
@@ -416,7 +439,7 @@ Clients can define an **unlimited number of roles**, each with its own set of pe
 
 In a library setting, different roles may have different levels of access:
 
-- **Intern**: Can **only view** assets in Elody but cannot edit, add, or delete data. Restricted menu items and action buttons ensure the intern does not have unauthorized access to these actions.
+- **Intern**: Can **only view** assets in Elody but cannot edit, add, or delete data. Restricted menu items and action buttons make sure the intern does not have unauthorized access to these actions.
 - **Employee**: Responsible for book check-ins and check-outs. Needs the ability to **edit some entities** -in this case an entity of the type 'Book Inventory'- but not modify other entity types, users, or system settings.
 - **Library Manager**: Has **full access** to the application, including managing users, defining roles, and reviewing entity modifications.
 
@@ -431,7 +454,7 @@ Policies in Elody also **shape the user interface**, to provide a streamlined ex
 - **Menu Restrictions**: When users log in, Elody **automatically adjusts the menu**, displaying only the sections they have the permission to access. If a user attempts to access a restricted page via URL, they will be redirected to the unauthorized page.
 - **Button and Action Validation**: Action buttons are validated against the user’s role. If a user lacks permission for a specific function, the button will be **hidden**.
 
-With **customizable access control**, Elody ensures **data security, role-based efficiency, and a user experience tailored to each role’s needs**.
+With **customizable access control**, Elody guarantees **data security, role-based efficiency, and a user experience tailored to each role’s needs**.
 
 &nbsp;
 
@@ -447,7 +470,7 @@ Even if a user has access to an **overview page** (e.g., a list of books), not a
 - Some books may still be **incomplete or restricted**, meaning only users with the **necessary permissions** can view them.
 - If an intern or any other restricted user **does not have access** to certain books, Elody **automatically filters out** those entities, ensuring they are not **retrieved and displayed**.
 
-This **dynamic data authorization** ensures that users only interact with **relevant and permitted data**, reinforcing **security and role-based access control** at every level.
+This **dynamic data authorization** guarantees that users only interact with **relevant and permitted data**, reinforcing **security and role-based access control** at every level.
 
 &nbsp;
 
@@ -491,6 +514,8 @@ Each job contains:
 - **Error messages** (if something went wrong).
 - **Subjobs**, when applicable (e.g., a general OCR job with subjobs for each mediafile being processed). This structure allows users to track both high-level and detailed progress of system operations efficiently.
 
+![overviewpage_jobs.png](../images/elody-functional-documentation/overviewpage_jobs.png)
+
 *Job System for Non-Background Processing Tasks*
 
 Even tasks that do **not require background processing**, such as bulk uploads, can **generate jobs**.
@@ -508,11 +533,13 @@ The job system **increases transparency and efficiency**, ensuring users stay in
 
 ### Geospatial Data Visualization
 
-Elody provides built-in support for **displaying spatial data on a map**, allowing users to manage and interact with geospatial information effectively.
+Elody offers built-in support for **displaying spatial data on a map**, allowing users to manage and interact with geospatial information effectively.
 
 The platform supports **multiple mapping formats** and **various layers**, including heatmaps, polygons, markers, and more to represent spatial relationships visually.
 
 This feature enhances geospatial analysis and enables users to gain deeper insights through these visualization capabilities within the platform.
+
+![map_component.png](../images/elody-functional-documentation/map_component.png)
 
 &nbsp;
 
@@ -557,10 +584,11 @@ This means Elody enables **relationships** between internal entities and data co
 &nbsp;
 
 ### Open Linked Data
-TODO
-- Support for linked data formats enhances interoperability with external systems.
-- Enable semantic web integrations for richer data connectivity.
-- Facilitate seamless data sharing across platforms using open standards.
+Elody supports the principles of **open linked data**, enabling data to be structured, connected, and shared across platforms in a meaningful way.
+Open linked data allows information to be interlinked and machine-readable, promoting interoperability between systems and improving discoverability on the web.
+
+Elody is capable of both importing and exporting data using common open linked data formats such as **RDF, JSON-LD, N-Triples, and Turtle**.
+This ensures easy integration with external datasets, such as authority files, knowledge graphs, or other cultural heritage platforms, while allowing clients to maintain control over how their data is shared and reused.
 
 &nbsp;
 
@@ -572,7 +600,7 @@ TODO
 ### Modular Microservices
 
 Elody is built with a **modular architecture**, allowing flexibility in both the frontend and backend.
-This modularity enables seamless inclusion or exclusion of specific features based on client needs, ensuring a durable foundation for long-term scalability.
+This modularity enables seamless inclusion or exclusion of specific features based on user needs, ensuring a durable foundation for long-term scalability.
 
 **Frontend Modularity**
 
@@ -590,7 +618,7 @@ These can also be enabled or disabled per client ensuring easy scalability.
 All Elody clients benefit from a **core set** of frontend modules and backend services that form the **foundation of Elody**.
 On top of this, Elody allows **deep customization** through customer-specific **frontend modules** or **backend services**.
 
-Customer-specific frontend modules enable a **tailored UI experience** based on client needs.
+Customer-specific frontend modules enable a **tailored UI experience** based on user needs.
 Every visible UI component can be customized, ensuring an interface that aligns with specific workflows and businesses preferences.
 
 In the backend, customer-specific services allow for the addition of **business logic** and integration with **external APIs** or the logic for **migration scripts** for example.
@@ -598,6 +626,10 @@ In the backend, customer-specific services allow for the addition of **business 
 &nbsp;
 
 This modular approach allows for **optimized performance**, **easy scalability**, and **personalized functionality** while maintaining a strong and reliable base system.
+
+&nbsp;
+
+![elody_architecture-elody-base.png](../images/elody-functional-documentation/elody_architecture-elody-base.png)
 
 &nbsp;
 
@@ -610,7 +642,7 @@ Elody’s frontend is structured into two main components, ensuring a modular, s
 1. **Progressive Web Application** (PWA)
    - Built using **Vue 3** and **TypeScript**, the PWA is the core of Elody’s UI.
    - It includes all UI components and composables, making it the **standard frontend module** for every Elody application.
-   - This ensures a unified and consistent user experience across all clients.
+   - This certifies a unified and consistent user experience across all clients.
 
 2. **GraphQL** acting as a Backend for Frontend (BFF)
    - The BFF acts as an **intermediary** between the frontend and backend services.
@@ -630,7 +662,7 @@ Elody’s **Progressive Web Application (PWA)** is responsible for managing and 
 - **UI Component Management**: The PWA contains all the necessary code and logic to **display UI components and manage their behavior**.
 - **User Interaction Handling**: When users **interact** with components (e.g., clicking buttons, applying filters, navigating), the PWA processes these actions accordingly.
 - **Data Fetching & Display**: The PWA **fetches data** through **GraphQL**, executing queries and making API requests to retrieve data. The fetched data is then **displayed** according to the defined UI structure.
-- **Data Parsing & Modification**: Before modifying or uploading data, the PWA **validates, parses and processes** the input to ensure it meets the required format before sending it to the backend through Graphql.
+- **Data Parsing & Modification**: Before modifying or uploading data, the PWA **validates, parses and processes** the input to make sure it meets the required format before sending it to the backend through Graphql.
 - **Generic Component Library**: Component library includes **reusable UI elements** such as buttons, menu items, list/grid/media viewers, entity detail page components, upload components, ...
 - **Error Handling & Notifications**: **Displays** error messages, warnings, and success notifications to users.
 
@@ -641,7 +673,7 @@ Elody’s **Progressive Web Application (PWA)** is responsible for managing and 
 GraphQL is a core component of Elody’s architecture, enabling efficient **data communication** and **dynamic UI customization**.
 It acts as the bridge between the **frontend and backend**, ensuring seamless data retrieval, modification, and structuring.
 GraphQL serves two primary functions:
-- **Dynamic UI Customization** – Structuring the frontend dynamically to provide a tailored user experience for each client.
+- **Dynamic UI Customization** – Structuring the frontend dynamically to furnish a tailored user experience for each client.
 - **Optimized Data Communication** – Facilitating efficient data retrieval, mutation, and integration from multiple sources.
 
 ##### *GraphQL-Driven UI Customization*
@@ -682,7 +714,7 @@ The Collection API is designed to efficiently **process requests** coming from t
 It handles all **CRUD** (Create, Read, Update, Delete) operations on entity data and ensures seamless **interactions between the frontend, database and other services**.
 It is able to execute **direct database queries**, allowing it to retrieve large volumes of filtered data quickly and efficiently.
 
-By **optimizing data retrieval processes**, it ensures that user queries are handled with minimal delay, contributing to a highly responsive user experience.
+By **optimizing data retrieval processes**, user queries are handled with minimal delay, contributing to a highly responsive user experience.
 Instead of operating in isolation, it interacts with other backend services to retrieve additional information when necessary.
 
 By handling **large volumes** of requests efficiently and ensuring **direct, optimized access to stored data**, the Collection API is fundamental to Elody’s reliability and performance.
@@ -710,13 +742,13 @@ This microservice enables seamless **integration with external APIs**, ensuring 
 Beyond API integrations, this module plays a crucial role in **data transformation**.
 It includes migration scripts that parse and convert external data into the Elody format, allowing structured and efficient data management.
 
-For clients utilizing **bulk imports**, this service automates the process by monitoring the **physical or cloud storage device** provided by the customer and connecting incoming data for streamlined batch processing.
+For users utilizing **bulk imports**, this service automates the process by monitoring the **designated filesystem directory** given by the customer and connecting incoming data for streamlined batch processing.
 Additionally, it handles **business logic-driven validation on metadata fields**, ensuring data accuracy and compliance.
 
 Another key aspect of this module is **access control and role management**.
 It defines policies and permission structures, ensuring that user roles and access levels align with business requirements.
 
-This flexible, client-specific backend component empowers customers with **tailored functionality**, enabling Elody to adapt to diverse workflows and operational needs.
+This flexible, client-specific backend component empowers users with **tailored functionality**, enabling Elody to adapt to diverse workflows and operational needs.
 
 &nbsp;
 
@@ -726,7 +758,7 @@ The OCR Service is responsible for **processing images** to extract text, enabli
 It provides an API with dedicated endpoints for **text extraction**, as well as the generation of **searchable PDFs** from individual or grouped images.
 
 Once text is extracted, the OCR Service communicates with the Collection API to **store the recognized text** as metadata on the corresponding mediafile entity.
-This ensures that **text within images** becomes **searchable, structured, and integrated** into Elody’s data ecosystem.
+This secures that **text within images** becomes **searchable, structured, and integrated** into Elody’s data ecosystem.
 
 By transforming images into **indexed, searchable content**, the OCR Service significantly enhances **retrieval efficiency** and **document accessibility**, making media assets more useful and easier to manage.
 
@@ -744,7 +776,7 @@ By automatically adapting files to the required format, the Transcode Service en
 #### Cantaloupe & IIIF Server
 
 Elody utilizes Cantaloupe as its **image server**, enabling the **on-demand generation of derivatives** from high-resolution source images.
-This service ensures **optimized image delivery**, allowing users to **view and manipulate images** efficiently within the platform.
+This service promises **optimized image delivery**, allowing users to **view and manipulate images** efficiently within the platform.
 
 Cantaloupe is fully compliant with **IIIF** (International Image Interoperability Framework), a set of **open standards** designed for scalable and high-quality digital object delivery.
 By integrating IIIF with Cantaloupe, Elody provides **image manipulation capabilities**, allowing users to scale and rotate images directly in the frontend.
@@ -793,7 +825,7 @@ Elody leverages Keycloak as its **access management solution**, providing **robu
 Keycloak ensures that user access is handled securely and efficiently, allowing administrators to manage users, roles, and permissions with fine-grained control.
 
 Through **single sign-on (SSO)**, **multi-factor authentication (MFA)**, and **role-based access control (RBAC)**, Keycloak enables a **highly secure** login experience.
-This integration ensures that only authorized users can access specific parts of Elody, reinforcing **data security and compliance** without compromising user convenience.
+This integration promises that only authorized users can access specific parts of Elody, reinforcing **data security and compliance** without compromising user convenience.
 
 &nbsp;
 
@@ -806,7 +838,7 @@ By **automatically detecting and routing requests** to the correct microservice,
 This means users experience a smooth, uninterrupted workflow, even as the platform dynamically scales to meet demand.
 
 Additionally, Traefik enhances security and performance, providing built-in support for authentication and load balancing.
-By integrating Traefik, Elody ensures a reliable, resilient, and flexible system, allowing us to focus on workflows without worrying about complex network configurations.
+By integrating Traefik, Elody guarantees a reliable, resilient, and flexible system, allowing us to focus on workflows without worrying about complex network configurations.
 
 &nbsp;
 
