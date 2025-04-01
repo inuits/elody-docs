@@ -1,4 +1,4 @@
-### Example for Bulk Uploading Files in Elody
+## Example for Bulk Uploading Files in Elody
 
 #### Objective
 
@@ -105,3 +105,54 @@ For more detailed information on working with CSV files in Elody, visit the foll
 
 With this step-by-step guide, you can easily bulk upload files and link them to entities in Elody, as shown in this example of coastal management in Koksijde in 2014.
 
+## Bulk import from shared drive (structured per album)
+
+Elody supports structured bulk imports from a shared drive, using a folder-per-album approach. This method is ideal for handling large volumes of media files and structured metadata.
+
+### Roles and responsibilities
+
+- **VLIZ** provides folders per album, each containing the media files.
+- **Inuits** prepares the required CSV files (`album.csv`, `default_values_for_media.csv`, and `media.csv`) for each folder, based on the shared import structure.
+- VLIZ communicates to Inuits which albums are ready to be imported.
+
+### Folder structure
+
+Each album folder is expected to follow this structure:
+
+- `album.csv`: metadata describing the album entity itself.
+- `default_values_for_media.csv`: a single-row CSV defining default metadata for all media files.
+- `media.csv`: a CSV listing each media file with optional per-file metadata.
+
+The folder should also contain the actual media files listed in `media.csv`.
+
+### Example folder contents
+
+```
+my_album/
+├── album.csv
+├── default_values_for_media.csv
+├── media.csv
+├── img001.jpg
+├── img002.jpg
+└── img003.jpg
+```
+
+### Workflow
+
+1. VLIZ uploads the album folder and media files to the shared drive.
+2. Inuits prepares and adds the CSV files to each folder.
+3. VLIZ reviews the prepared folders and informs Inuits which albums are approved and ready for import.
+4. Once approval is received, Inuits initiates the import process in Elody.
+5. During import, Elody will:
+   - Create the album entity from `album.csv`.
+   - Load default metadata from `default_values_for_media.csv`.
+   - Import media files based on `media.csv`, applying metadata from that file or falling back to the default values when specific fields are missing.
+
+### Notes
+
+- All CSVs must follow the standard Elody format (technical keys as column headers).
+- Only one row is allowed in `default_values_for_media.csv`.
+- Fields defined in `media.csv` will override the defaults.
+- The `filename` field in `media.csv` must match the file names in the folder.
+
+This approach ensures a smooth collaboration, with clear separation between content upload (VLIZ), metadata preparation (Inuits), and import control (via VLIZ approval).
