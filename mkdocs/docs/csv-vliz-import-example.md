@@ -156,3 +156,52 @@ my_album/
 - The `filename` field in `media.csv` must match the file names in the folder.
 
 This approach ensures a smooth collaboration, with clear separation between content upload (VLIZ), metadata preparation (Inuits), and import control (via VLIZ approval).
+
+
+### 🧾 Explanation of Column Types
+
+Each field in the table below is associated with a specific input type. Here’s a brief explanation of each type:
+
+- **`elody`**: A **UUID or title/name** of an entity in the Elody system. Refer to the provided link to find or create the correct entity.
+- **`vocab`**: An **ID from your vocabulary service**. The value must come from a predefined controlled list.
+- **`text`**: A **free text field**, optionally structured according to the specified format.
+- **`date`**: A **date field** that must follow the indicated format (usually `dd/mm/yyyy`).
+
+
+### Column Overview
+
+| Column Name               | Type   | Link / Format                                          | 
+|---------------------------|--------|--------------------------------------------------------|
+| asset_category            | elody  | https://vliz-dams-dev.cloud.inuits.dev/assetCategories |
+| collection_part           | elody  | https://vliz-dams-dev.cloud.inuits.dev/collectionParts |
+| confidentiality           | elody  | https://vliz-dams-dev.cloud.inuits.dev/confidentiality |
+| content_drager            | text   | free                                                   |
+| context                   | elody  | https://vliz-dams-dev.cloud.inuits.dev/contexts        |
+| coordinates               | text   | latitude, longitude (Decimal Degrees - DD)             |
+| creator_partner           | vocab  | person                                                 |
+| creator_person            | vocab  | person                                                 |
+| description               | text   | free                                                   |
+| embargo                   | date   | dd/mm/yyyy                                             |
+| event                     | vocab  | event                                                  |
+| external_link             | text   | hyperlink / ID                                         |
+| filename                  | text   | prefilled / filename format                            |
+| keyword                   | elody  | https://vliz-dams-dev.cloud.inuits.dev/keywords        |
+| language                  | elody  | https://vliz-dams-dev.cloud.inuits.dev/languages       |
+| location_type             | elody  | https://vliz-dams-dev.cloud.inuits.dev/locationTypes   |
+| marine_region             | vocab  | marine region                                          |
+| media_keyword             | elody  | https://vliz-dams-dev.cloud.inuits.dev/keywords        |
+| mediafile_creator_partner | vocab  | partner                                                |
+| mediafile_creator_person  | vocab  | person                                                 |
+| mediafile_keyword         | elody  | https://vliz-dams-dev.cloud.inuits.dev/keywords        |
+| mediafile_owner_partner   | vocab  | partner                                                |
+| mediafile_owner_person    | vocab  | person                                                 |
+| owner_partner             | vocab  | partner                                                |
+| owner_person              | vocab  | person                                                 |
+| partner                   | vocab  | partner                                                |
+| person                    | vocab  | person                                                 |
+| project                   | vocab  | project                                                |
+| qualityRating             | text   | free                                                   |
+| title                     | text   | free                                                   |
+| type                      | elody  | Elody main type, prefilled                             |
+| usage_guidelines          | text   | free                                                   |
+| usage_guidelines_until    | date   | dd/mm/yyyy                                             |
