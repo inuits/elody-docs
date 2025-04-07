@@ -158,7 +158,7 @@ my_album/
 This approach ensures a smooth collaboration, with clear separation between content upload (VLIZ), metadata preparation (Inuits), and import control (via VLIZ approval).
 
 
-### 🧾 Explanation of Column Types
+### Explanation of Column Types
 
 Each field in the table below is associated with a specific input type. Here’s a brief explanation of each type:
 
