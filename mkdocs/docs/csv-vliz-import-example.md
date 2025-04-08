@@ -167,6 +167,10 @@ Each field in the table below is associated with a specific input type. Here’s
 - **`text`**: A **free text field**, optionally structured according to the specified format.
 - **`date`**: A **date field** that must follow the indicated format (usually `dd/mm/yyyy`).
 
+#### Note on multiple values
+
+In both the default_values_for_media.csv and album.csv files, when you want to include multiple values for the same field (for example, multiple keywords or partners), you can simply place them on separate lines in the CSV. The same_entity method is not necessary in these files, since each file is assumed to describe either one album or one set of default values used across multiple media files.
+
 
 ### Column Overview
 
