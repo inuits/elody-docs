@@ -267,7 +267,7 @@ The tagging editor allows users to highlight any portion of text and instantly *
 - **Select existing entity**: Start typing to search and tag an existing item.
 - **Create new entity**: Can’t find what you’re looking for? Just create it on the spot.
 
-![Tagging Interface Screenshot](../images/elody-functional-documentation/tagging_editor.png)
+![Tagging Interface Screenshot](../images/elody-functional-documentation/tag_new_or_existing_entities.png)
 
 This streamlined process makes enriching content with semantic links feel natural and fast.
 
@@ -279,7 +279,7 @@ When tagging an entity, Elody automatically creates a relationship between the *
 - It enhances navigation between related entities.
 - It powers richer queries and visualizations downstream.
 
-![Entity Tagging Relationship](../images/elody-functional-documentation/tag_new_or_existing_entities.png)
+![Entity Tagging Relationship](../images/elody-functional-documentation/tagging_editor.png)
 
 Whether you're annotating reports, modeling processes, or documenting systems, this interface helps you semantically link your content without leaving the editor.
 
