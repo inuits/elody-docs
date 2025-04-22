@@ -1,56 +1,56 @@
 # Table of Contents
 
 1. [Elody: a modular semantic data platform](#elody-a-modular-semantic-data-platform)
-    1. [Semantic Data Structuring](#semantic-data-structuring)
-    2. [The Modular Approach](#the-modular-approach)
-    3. [Data Platform: Software as a Service](#data-platform-software-as-a-service)
-    4. [A Comprehensive Data Solution](#a-comprehensive-data-solution)
+   1. [Semantic Data Structuring](#semantic-data-structuring)
+   2. [The Modular Approach](#the-modular-approach)
+   3. [Data Platform: Software as a Service](#data-platform-software-as-a-service)
+   4. [A Comprehensive Data Solution](#a-comprehensive-data-solution)
 2. [Core Features](#core-features)
-    1. [Entity Management](#entity-management)
-    2. [Data Manipulation](#data-manipulation)
-    3. [Data Filtering and Search](#data-filtering-and-search)
-        1. [Types of Filters in Elody](#types-of-filters-in-elody)
-        2. [Saving and Reusing Filters](#saving-and-reusing-filters)
-        3. [Simple Search](#simple-search)
-   4. [Navigation, Sorting, and Pagination](#navigation-sorting-and-pagination)
-   5. [Access Control](#access-control)
+   1. [Entity Management](#entity-management)
+   2. [Data Manipulation](#data-manipulation)
+   3. [Tagging Interface](#tagging-interface)
+   4. [Data Filtering and Search](#data-filtering-and-search)
+      1. [Types of Filters in Elody](#types-of-filters-in-elody)
+      2. [Saving and Reusing Filters](#saving-and-reusing-filters)
+      3. [Simple Search](#simple-search)
+   5. [Navigation, Sorting, and Pagination](#navigation-sorting-and-pagination)
+   6. [Access Control](#access-control)
       1. [User-role authorization](#user-role-authorization)
       2. [UI Visibility Restrictions](#ui-visibility-restrictions)
       3. [Data-Level Access Control](#data-level-access-control)
-   6. [OCR - Optical Character Recognition](#ocr---optical-character-recognition)
-   7. [Job System](#job-system)
-   8. [Maps Integration](#maps-integration)
-   9. [CSV's](#csvs)
-        1. [CSV Export](#csv-export)
-        2. [CSV Import](#csv-import)
-        3. [CSV Mutations](#csv-mutations)
-   10. [External API Integration](#external-api-integration)
-   11. [Open Linked Data](#open-linked-data)
+   7. [OCR - Optical Character Recognition](#ocr---optical-character-recognition)
+   8. [Job System](#job-system)
+   9. [Maps Integration](#maps-integration)
+   10. [CSV's](#csvs)
+       1. [CSV Export](#csv-export)
+       2. [CSV Import](#csv-import)
+       3. [CSV Mutations](#csv-mutations)
+   11. [External API Integration](#external-api-integration)
+   12. [Open Linked Data](#open-linked-data)
 3. [Architecture](#architecture)
-    1. [Modular Microservices](#modular-microservices)
-    2. [Frontend Architecture](#frontend-architecture)
-        1. [Progressive Web Application](#progressive-web-application)
-        2. [Graphql](#graphql)
-            1. [GraphQL-Driven UI Customization](#graphql-driven-ui-customization)
-            2. [Optimized Data Communication](#optimized-data-communication)
-    3. [Backend Architecture](#backend-architecture)
-       1. [Collection API](#collection-api)
-       2. [Storage API](#storage-api)
-       3. [Client Collection Module](#client-collection-module)
-       4. [OCR Service](#ocr-service)
-       5. [Transcoder Service](#transcoder-service)
-       6. [Cantaloupe & IIIF Server](#cantaloupe--iiif-server)
-       7. [Filesystem Importer Service](#filesystem-importer-service)
-       8. [Antivirus Software](#antivirus-software)
-       9. [Database services](#database-services)
-       10. [Keycloak](#keycloak)
-       11. [Traefik](#traefik)
-       12. [Elody Python SDK](#elody-python-sdk)
+   1. [Modular Microservices](#modular-microservices)
+   2. [Frontend Architecture](#frontend-architecture)
+      1. [Progressive Web Application](#progressive-web-application)
+      2. [Graphql](#graphql)
+         1. [GraphQL-Driven UI Customization](#graphql-driven-ui-customization)
+         2. [Optimized Data Communication](#optimized-data-communication)
+   3. [Backend Architecture](#backend-architecture)
+      1. [Collection API](#collection-api)
+      2. [Storage API](#storage-api)
+      3. [Client Collection Module](#client-collection-module)
+      4. [OCR Service](#ocr-service)
+      5. [Transcoder Service](#transcoder-service)
+      6. [Cantaloupe & IIIF Server](#cantaloupe--iiif-server)
+      7. [Filesystem Importer Service](#filesystem-importer-service)
+      8. [Antivirus Software](#antivirus-software)
+      9. [Database services](#database-services)
+      10. [Keycloak](#keycloak)
+      11. [Traefik](#traefik)
+      12. [Elody Python SDK](#elody-python-sdk)
 
 &nbsp;
 
 # Elody Functional Documentation
-
 
 ## Elody: a modular semantic data platform
 
@@ -185,8 +185,7 @@ Once the process is complete, the data appears in the UI, including all specifie
 
 2. **Creating and Editing Entities in Elody**
 
-    
-    Create entities
+   Create entities
 
 Elody supports **multiple ways to create entities** through the **user interface**. A **shortcut** in the menu allows quick access to create any available entity type.
 Additionally, on overview pages, users can initiate entity creation through an **action button**.
@@ -205,15 +204,14 @@ For **bulk editing**, **CSV uploads** enable modifications across **multiple ent
 In addition to editing metadata through the UI or bulk uploads, Elody offers an efficient process for **establishing relationships between entities**.
 Certain predefined relationships can also be **created in bulk** using **CSV uploads**, allowing for large-scale data connections with minimal effort.
 
-The standard way to add relationships **through the user interface**, is either during **entity creation** or when **editing an existing entity**. 
+The standard way to add relationships **through the user interface**, is either during **entity creation** or when **editing an existing entity**.
 Elody’s UI provides clearly **visible buttons and intuitive screens**, ensuring that linking (or unlinking) entities is a straightforward and user-friendly process.
 
 ![create_remove_relations.png](../images/elody-functional-documentation/create_remove_relations.png)
 
 3. **Uploading Mediafiles**
 
-
-    Direct Upload on Entity Detail Pages
+   Direct Upload on Entity Detail Pages
 
 Users can **upload mediafiles** directly from an entity’s detail page. Simply **drag and drop** files into the designated drop zone, click save, and the mediafiles will be inserted into to the system.
 
@@ -233,8 +231,7 @@ This provides transparency and control, allowing users to monitor the entire pro
 
 4. **Deleting Entities in Elody**
 
-
-    Bulk Deletion
+   Bulk Deletion
 
 Entities and mediafiles can be removed in **bulk** from overview screens. Checkboxes allow users to **select specific items**, and filtering options make it easy to **refine selections**.
 Users can also increase the page limit to select and delete all entities displayed on a page at once.
@@ -311,7 +308,8 @@ Elody’s filtering supports:
 Elody allows users to apply **text filters** to any metadata field that contains textual information.
 This can be useful for searching specific details, such as an entity’s **description** or **ID**, to quickly locate the required entity.
 
-*Available Text Filters*
+_Available Text Filters_
+
 - **Exact match** – Finds entities where the metadata exactly matches the entered text.
 - **Partial match** – Retrieves results where the entered text appears anywhere within the metadata field.
 - **Empty or non-empty fields** – Filters entities based on whether a text field has a value or is left blank.
@@ -320,9 +318,9 @@ This can be useful for searching specific details, such as an entity’s **descr
 
 Elody’s filtering system extends **beyond individual entities**, allowing searches based on metadata from **related entities**.
 
-*Example Use Case*
+_Example Use Case_
 
-An entity may have a related mediafile containing OCR-processed text (*[see chapter OCR: Optical Character Recognition](#ocr---optical-character-recognition)*) stored as metadata on the mediafile.
+An entity may have a related mediafile containing OCR-processed text (_[see chapter OCR: Optical Character Recognition](#ocr---optical-character-recognition)_) stored as metadata on the mediafile.
 OCR is a technology that can extract text from images.
 Users can apply a text filter on the asset to find mediafiles that contain specific text, enabling more advanced and context-aware searches.
 
@@ -331,11 +329,12 @@ Users can apply a text filter on the asset to find mediafiles that contain speci
 Elody also supports **number filters**, allowing users to refine searches based on numerical metadata fields.
 These filters are useful for scenarios where entities need to be retrieved based on specific numeric conditions.
 
-*Example Use Case*
+_Example Use Case_
 
 If a user wants to find all entities that have at least **15 mediafiles related** to them, they can apply a **minimum value filter** of 15.
 
-*Available Number Filters*
+_Available Number Filters_
+
 - **Exact match** – Finds entities where a numerical field matches a **specific value**.
 - **Minimum match** – Retrieves entities where the value is **greater than or equal** to a specified number.
 - **Maximum match** – Retrieves entities where the value is **less than or equal** to a specified number.
@@ -348,7 +347,8 @@ This filtering capability enables more advanced data queries based on numerical 
 Elody provides **date filters** that allow users to refine searches based on date-related metadata.
 These filters can be applied to any entity metadata field that contains a date value.
 
-*Available Date Filters*
+_Available Date Filters_
+
 - **Exact match** – Finds entities with a metadata field that matches a **specific date**.
 - **Minimum match** – Retrieves entities with dates **after** the specified date.
 - **Maximum match** – Retrieves entities with dates **before** the specified date.
@@ -364,17 +364,19 @@ These filtering options help users efficiently narrow down data based on time-re
 One of Elody’s most **powerful and user-friendly** filters is the **selection filter**.
 This filter allows users to **choose values** from a **predefined list** directly within the filtering interface, making it easy to refine searches without needing to manually input values.
 
-*How It Works*
+_How It Works_
 
 Selection filters can be applied to both **metadata fields** and **entity relationships**:
+
 - When filtering **by metadata**, Elody automatically gathers all **unique values** for a given field across all entities of that type and presents them as **selectable options**.
 - When filtering **by relationships**, users can **search** for **entities linked** to another entity by the **name or title** of that entity that will appear as a selection.
 
-*Available Selection Filter Types*
+_Available Selection Filter Types_
+
 - **Checkboxes** – Displays **a list of possible values** as checkboxes, allowing users to select multiple options with simple clicks.
 - **Autocomplete with Dropdown** – If there are more than 10 possible values, an **autocomplete search** is enabled. Users type at least three characters, and **matching values appear in a dropdown**. Multiple selections can be made sequentially.
 
-*Example Use Case: Filtering Download Entities by Status*
+_Example Use Case: Filtering Download Entities by Status_
 
 A common scenario where the **selection filter** is useful is when users need to manage and track **download requests** for mediafiles.
 
@@ -382,6 +384,7 @@ When a user requests mediafiles for download, Elody creates a download entity.
 This entity contains a **link to a ZIP file** with the selected mediafiles and an accompanying CSV file with metadata.
 
 Since the download process runs in the background and may take time to complete, **each download entity is assigned a status**, such as:
+
 - Approved
 - In Progress
 - Finished
@@ -398,19 +401,21 @@ On the **download entities overview page**, users can quickly **filter by status
 Filters are a core part of daily operations in Elody, allowing users to efficiently navigate and retrieve relevant data.
 Beyond manual filtering, **saved searches** provide a way to automate and streamline **recurring search tasks**.
 
-*Saving and Managing Filters*
+_Saving and Managing Filters_
 
 To enhance efficiency, users can **save search filters** for quick access later.
+
 - Each saved search can be **named** for easy identification.
 - Users can choose to keep saved searches **private** or make them **publicly available** for other users in the system.
 - Saved searches remain **editable**, allowing users to refine search parameters as needed.
 
 ![saved_search.png](../images/elody-functional-documentation/saved_search.png)
 
-*Use Cases for Saved Searches*
+_Use Cases for Saved Searches_
 
 Filtered saved search results can be leveraged for **automated workflows**.
 For example, users can set up saved searches to:
+
 - Track **newly added** (f.e.) books, paintings, or other entities within an Elody-powered application.
 - Monitor **recently updated** records that require further action or review.
 
@@ -423,7 +428,7 @@ By enabling **persistent, shareable, and editable searches**, Elody makes sure t
 To ensure **fast and efficient data retrieval**, Elody offers a **simple search** function that is available on every page.
 This allows users to quickly search through collections of entities at any time.
 
-*How Simple Search Works*
+_How Simple Search Works_
 
 - A **search button** is always accessible, enabling users to perform quick lookups across all entity types that are included in the search configuration.
 - Users can enter **text-based queries** to filter results based on **predefined metadata fields** in the simple search.
@@ -466,7 +471,7 @@ Elody provides a **flexible and configurable policies system**, allowing organiz
 Elody's access control system is designed to **restrict or grant access** based on predefined user roles.
 Clients can define an **unlimited number of roles**, each with its own set of permissions, ensuring users have access only to the **data and actions** relevant to their responsibilities.
 
-*Example Use Case: Library Management*
+_Example Use Case: Library Management_
 
 In a library setting, different roles may have different levels of access:
 
@@ -493,7 +498,7 @@ With **customizable access control**, Elody guarantees **data security, role-bas
 
 Elody ensures that **access control extends beyond just UI restrictions** — it also applies at the **data level**, ensuring that users only see the entities they are permitted to access.
 
-*Example: Restricted Entity Visibility in a Library*
+_Example: Restricted Entity Visibility in a Library_
 
 Even if a user has access to an **overview page** (e.g., a list of books), not all entities within that list may be visible to them.
 
@@ -513,14 +518,15 @@ When a mediafile containing text is uploaded, the system **does not automaticall
 This means that users cannot **search or filter** based on that text until **OCR** is applied.
 
 To address this, users can **manually trigger an OCR process**, which:
+
 - **Extracts** text from the image.
 - **Saves** the extracted text as metadata on the mediafile.
 - **Enables search and filtering** based on the extracted text, improving data accessibility.
 
-
-*Generating Searchable PDFs*
+_Generating Searchable PDFs_
 
 Beyond simple text extraction, OCR in Elody provides additional functionality:
+
 - Users can generate **searchable PDFs** from the extracted text.
 - If an entity contains **multiple related mediafiles**, a **single PDF** can be created, compiling all mediafiles along with their extracted text.
 - These PDFs improve **document management, retrieval, and searchability** across large collections of media.
@@ -535,24 +541,26 @@ By leveraging OCR, Elody enhances the ability to **store, search, and manage tex
 
 Elody includes a **job system** to manage and track background processing tasks, ensuring users can monitor the **progress and status** of various **system actions**.
 
-*How the Job System Works*
+_How the Job System Works_
 
 Certain operations, such as OCR processing or mediafile downloads, require **background processing**.
 Instead of forcing users to wait, Elody creates a **job** for each action, allowing users to continue their work while monitoring the task's progress.
 
 Each job contains:
+
 - **Status updates** (e.g., Running, Waiting, Finished, or Failed).
 - **Error messages** (if something went wrong).
 - **Subjobs**, when applicable (e.g., a general OCR job with subjobs for each mediafile being processed). This structure allows users to track both high-level and detailed progress of system operations efficiently.
 
 ![overviewpage_jobs.png](../images/elody-functional-documentation/overviewpage_jobs.png)
 
-*Job System for Non-Background Processing Tasks*
+_Job System for Non-Background Processing Tasks_
 
 Even tasks that do **not require background processing**, such as bulk uploads, can **generate jobs**.
 This ensures users receive a **comprehensive overview** of completed tasks.
 
 For example, after a bulk upload:
+
 - Users can see a **list of successfully created entities** and their details.
 - Any **failed uploads** will be logged, providing clear information about what went wrong and why.
 
@@ -615,6 +623,7 @@ This means Elody enables **relationships** between internal entities and data co
 &nbsp;
 
 ### Open Linked Data
+
 Elody supports the principles of **open linked data**, enabling data to be structured, connected, and shared across platforms in a meaningful way.
 Open linked data allows information to be interlinked and machine-readable, promoting interoperability between systems and improving discoverability on the web.
 
@@ -624,7 +633,6 @@ This ensures easy integration with external datasets, such as authority files, k
 &nbsp;
 
 &nbsp;
-
 
 ## Architecture
 
@@ -671,6 +679,7 @@ This modular approach allows for **optimized performance**, **easy scalability**
 Elody’s frontend is structured into two main components, ensuring a modular, scalable, and highly customizable user interface:
 
 1. **Progressive Web Application** (PWA)
+
    - Built using **Vue 3** and **TypeScript**, the PWA is the core of Elody’s UI.
    - It includes all UI components and composables, making it the **standard frontend module** for every Elody application.
    - This certifies a unified and consistent user experience across all clients.
@@ -679,8 +688,8 @@ Elody’s frontend is structured into two main components, ensuring a modular, s
    - The BFF acts as an **intermediary** between the frontend and backend services.
    - It contains **schemas, queries, resolvers, endpoints, parsers**, and more to optimize data retrieval and management.
    - Built with **modular GraphQL architecture**, it consists of:
-        - **Base modules**: Included in every Elody application to provide **core frontend functionalities**.
-        - **Customer-specific modules**: Allow customization of the **UI structure**, including menu items, overview pages, and entity detail layouts.
+     - **Base modules**: Included in every Elody application to provide **core frontend functionalities**.
+     - **Customer-specific modules**: Allow customization of the **UI structure**, including menu items, overview pages, and entity detail layouts.
    - This modular approach ensures that each client can have a **uniquely structured UI** while maintaining a solid foundation.
 
 &nbsp;
@@ -689,7 +698,8 @@ Elody’s frontend is structured into two main components, ensuring a modular, s
 
 Elody’s **Progressive Web Application (PWA)** is responsible for managing and displaying UI components, handling user interactions, and ensuring the data gets handled accordingly.
 
-*Key Responsibilities of the PWA*:
+_Key Responsibilities of the PWA_:
+
 - **UI Component Management**: The PWA contains all the necessary code and logic to **display UI components and manage their behavior**.
 - **User Interaction Handling**: When users **interact** with components (e.g., clicking buttons, applying filters, navigating), the PWA processes these actions accordingly.
 - **Data Fetching & Display**: The PWA **fetches data** through **GraphQL**, executing queries and making API requests to retrieve data. The fetched data is then **displayed** according to the defined UI structure.
@@ -704,19 +714,23 @@ Elody’s **Progressive Web Application (PWA)** is responsible for managing and 
 GraphQL is a core component of Elody’s architecture, enabling efficient **data communication** and **dynamic UI customization**.
 It acts as the bridge between the **frontend and backend**, ensuring seamless data retrieval, modification, and structuring.
 GraphQL serves two primary functions:
+
 - **Dynamic UI Customization** – Structuring the frontend dynamically to furnish a tailored user experience for each client.
 - **Optimized Data Communication** – Facilitating efficient data retrieval, mutation, and integration from multiple sources.
 
-##### *GraphQL-Driven UI Customization*
+##### _GraphQL-Driven UI Customization_
+
 GraphQL plays a vital role in **structuring and customizing the frontend dynamically**, ensuring a tailored user experience for each client:
+
 - **Component Control**: Determines which **UI components** are displayed and what data they receive.
 - **Client-Specific Adaptability**: Each client’s frontend structure is dynamically configured based on their **unique GraphQL setup**, allowing seamless adjustments to various business needs and use cases.
 - **Modular & Scalable**: This flexible, modular approach ensures that different clients can maintain **highly personalized UI experiences** while benefiting from a consistent, maintainable, and scalable underlying framework.
 
-##### *Optimized Data Communication*
+##### _Optimized Data Communication_
 
 Beyond UI customization, GraphQL **manages the flow of data** between the frontend and backend, ensuring that only the necessary data is retrieved, preventing inefficiencies such as over-fetching or under-fetching.
 It streamlines communication and enhances performance through:
+
 - **Efficient Data Retrieval**: The Progressive Web Application (PWA) executes **GraphQL queries** to fetch data from Elody’s **internal services and external APIs**.
 - **Optimized Data Mutation**: Any **modifications** made within the PWA are transmitted back to the backend **through Graphql**, ensuring accurate data updates and storage.
 - **Seamless Data Integration**: GraphQL aggregates data from **multiple sources**, including third-party APIs, and returns a **structured response** tailored to the frontend’s needs.
@@ -749,7 +763,7 @@ By **optimizing data retrieval processes**, user queries are handled with minima
 Instead of operating in isolation, it interacts with other backend services to retrieve additional information when necessary.
 
 By handling **large volumes** of requests efficiently and ensuring **direct, optimized access to stored data**, the Collection API is fundamental to Elody’s reliability and performance.
- is also able to execute direct queries into our database. That way it is able to query the db to retrieve (filtered) data, modify, create or delete data.
+is also able to execute direct queries into our database. That way it is able to query the db to retrieve (filtered) data, modify, create or delete data.
 
 &nbsp;
 
@@ -852,6 +866,7 @@ As a critical component of Elody’s architecture, it guarantees data integrity,
 &nbsp;
 
 #### Keycloak
+
 Elody leverages Keycloak as its **access management solution**, providing **robust authentication** and **identity management**.
 Keycloak ensures that user access is handled securely and efficiently, allowing administrators to manage users, roles, and permissions with fine-grained control.
 
