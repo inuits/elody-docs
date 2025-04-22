@@ -259,6 +259,37 @@ Once the plan is established, our team manages the full migration, minimizing di
 
 &nbsp;
 
+### Tagging Interface
+
+Understanding and modeling relationships between data entities is at the core of every semantic platform. Elody provides a user-friendly tagging interface that brings semantic linking directly into the editing workflow.
+
+#### Intuitive Tagging with Context
+
+The tagging editor allows users to highlight any portion of text and instantly **tag** it with an entity. Whether referencing an existing item or introducing a new concept, the interface supports both:
+
+- **Select existing entity**: Start typing to search and tag an existing item.
+- **Create new entity**: Can’t find what you’re looking for? Just create it on the spot.
+
+![Tagging Interface Screenshot](../images/elody-functional-documentation/tagging_editor.png)
+
+This streamlined process makes enriching content with semantic links feel natural and fast.
+
+#### Automatic Relationship Creation
+
+When tagging an entity, Elody automatically creates a relationship between the **parent entity** (the current detail page) and the **tagged entity**. This turns raw text into structured knowledge:
+
+- The relationship is stored in the knowledge graph.
+- It enhances navigation between related entities.
+- It powers richer queries and visualizations downstream.
+
+![Entity Tagging Relationship](../images/elody-functional-documentation/tag_new_or_existing_entities.png)
+
+Whether you're annotating reports, modeling processes, or documenting systems, this interface helps you semantically link your content without leaving the editor.
+
+&nbsp;
+
+&nbsp;
+
 ### Data Filtering and Search
 
 A key feature of any semantic data platform is the ability to **filter and search data effectively**.
