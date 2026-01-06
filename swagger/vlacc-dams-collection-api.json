@@ -8,13 +8,18 @@
     },
     "version": "1.0.0"
   },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "externalDocs": {
     "description": "DAMS Collection API Source",
     "url": "https://gitlab.com/inuits/dams/dams-collection-api"
   },
   "servers": [
     {
-      "url": "/"
+      "url": "http://cultuur-connect-vlacc-uat.cloud.inuits.dev/collection/v1"
     }
   ],
   "tags": [
@@ -354,7 +359,31 @@
                 "items": {
                   "$ref": "#/components/schemas/filter"
                 }
-              }
+              },
+              "example": [
+                {
+                  "type": "selection",
+                  "key": "type",
+                  "value": [
+                    "manifestation_map",
+                    "manifestation_music",
+                    "manifestation_serial",
+                    "manifestation_footage",
+                    "manifestation_mixed_material",
+                    "manifestation_word",
+                    "manifestation_computer_file"
+                  ],
+                  "match_exact": true
+                },
+                {
+                  "type": "text",
+                  "key": [
+                    "vlacc:1|properties.isbn.value"
+                  ],
+                  "value": "9789090399546",
+                  "match_exact": true
+                }
+              ]
             }
           }
         },
@@ -621,6 +650,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "config": {
         "type": "object",
@@ -4040,7 +4076,7 @@
                 "type": "string"
               }
             }
-          },
+          }
         }
       },
       "Entities/corporation": {
@@ -4132,7 +4168,7 @@
                   "type": "string",
                   "minLength": 1
                 }
-              },
+              }
             }
           }
         }
@@ -4481,7 +4517,7 @@
                 "minLength": 1
               }
             }
-          },
+          }
         }
       },
       "Entities/time": {
