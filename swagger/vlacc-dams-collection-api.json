@@ -19,7 +19,7 @@
   },
   "servers": [
     {
-      "url": "http://cultuur-connect-vlacc-uat.cloud.inuits.dev/collection/v1"
+      "url": "https://cultuur-connect-vlacc-uat.cloud.inuits.dev/collection/v1"
     }
   ],
   "tags": [
