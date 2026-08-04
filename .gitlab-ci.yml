@@ -17,7 +17,7 @@ variables:
   HARBOR_PROJECT_DEV: elody-dams-dev
   HARBOR_PROJECT_PROD: elody-dams-prod
 
-  VALUES_REPO: "" # TODO
+  VALUES_REPO: "rnd/inuits/dams/elody-docs-helm-values"
   VALUES_FILE: "${ENVIRONMENT_NAME}/elody.yaml"
 
 # --------------------------------------------------------------
