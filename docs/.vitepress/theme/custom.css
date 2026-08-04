@@ -1,0 +1,245 @@
+/**
+ * Elody Custom Theme
+ * Exact match to the Elody application UI
+ */
+
+:root {
+  /* Elody exact palette — extracted from application */
+  --elody-sidebar: #222B45;
+  --elody-nav-bg: #FFFFFF;
+  --elody-bg: #FFFFFF;
+  --elody-bg-soft: #F7F8FA;
+  --elody-bg-muted: #EEF1F5;
+  --elody-border: #E4E9F0;
+  --elody-border-light: #EEF1F5;
+  --elody-text: #2E3A4D;
+  --elody-text-secondary: #8492A6;
+  --elody-text-muted: #A3B1C2;
+  --elody-blue: #3B7DDD;
+  --elody-blue-soft: #EBF2FD;
+  --elody-blue-hover: #326ABF;
+  --elody-yellow: #ffdd00;
+  --elody-green: #059669;
+  --elody-accent: #6dbbde;
+
+  /* VitePress Theme Overrides */
+  --vp-c-brand-1: var(--elody-blue);
+  --vp-c-brand-2: var(--elody-accent);
+  --vp-c-brand-3: var(--elody-sidebar);
+  --vp-c-brand-soft: var(--elody-blue-soft);
+
+  --vp-c-tip-1: var(--elody-green);
+  --vp-c-tip-2: #10B981;
+  --vp-c-tip-3: #34D399;
+  --vp-c-tip-soft: #E8F5EE;
+
+  --vp-c-warning-1: #C99300;
+  --vp-c-warning-2: #DAA520;
+  --vp-c-warning-3: #E8BF40;
+  --vp-c-warning-soft: #FBF5E4;
+
+  --vp-c-bg: var(--elody-bg);
+  --vp-c-bg-soft: var(--elody-bg-soft);
+  --vp-c-bg-elv: var(--elody-bg);
+
+  --vp-c-text-1: var(--elody-text);
+  --vp-c-text-2: var(--elody-text-secondary);
+  --vp-c-text-3: var(--elody-text-muted);
+
+  --vp-c-divider: var(--elody-border);
+  --vp-c-gutter: var(--elody-border);
+
+  --vp-sidebar-bg-color: var(--elody-bg);
+
+  /* Home hero */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, var(--elody-sidebar) 0%, var(--elody-blue) 100%);
+  --vp-home-hero-image-background-image: linear-gradient(135deg, rgba(59, 125, 221, 0.08) 0%, rgba(109, 187, 222, 0.08) 100%);
+  --vp-home-hero-image-filter: blur(44px);
+
+  /* Buttons: match Elody's dark nav feel */
+  --vp-button-brand-bg: var(--elody-sidebar);
+  --vp-button-brand-hover-bg: #2D3A55;
+  --vp-button-brand-active-bg: #1A2238;
+  --vp-button-brand-text: #FFFFFF;
+
+  --vp-button-alt-bg: var(--elody-bg-soft);
+  --vp-button-alt-hover-bg: var(--elody-bg-muted);
+  --vp-button-alt-text: var(--elody-text);
+}
+
+/* Dark mode */
+.dark {
+  --elody-sidebar: #141824;
+  --elody-bg: #1a1f2e;
+  --elody-bg-soft: #222738;
+  --elody-bg-muted: #2A3042;
+  --elody-border: #2E3650;
+  --elody-border-light: #2A3042;
+  --elody-text: #D4DAE5;
+  --elody-text-secondary: #8492A6;
+  --elody-text-muted: #5A6882;
+  --elody-blue-soft: rgba(59, 125, 221, 0.15);
+
+  --vp-c-brand-1: var(--elody-accent);
+  --vp-c-brand-2: #93C5FD;
+  --vp-c-brand-3: #BFDBFE;
+}
+
+/* ===== Navbar: match Elody top bar ===== */
+.VPNav {
+  background: var(--elody-nav-bg) !important;
+  border-bottom: 1px solid var(--elody-border) !important;
+}
+
+.dark .VPNav {
+  background: var(--elody-sidebar) !important;
+  border-bottom: 1px solid var(--elody-border) !important;
+}
+
+/* Nav links: Elody style */
+.VPNavBarMenuLink .text {
+  color: var(--elody-text-secondary) !important;
+  font-weight: 400 !important;
+}
+
+.VPNavBarMenuLink:hover .text,
+.VPNavBarMenuLink.active .text {
+  color: var(--elody-text) !important;
+}
+
+/* ===== Sidebar: clean with subtle border ===== */
+.VPSidebar {
+  border-right: 1px solid var(--elody-border) !important;
+  background: var(--elody-bg) !important;
+}
+
+.dark .VPSidebar {
+  border-right: 1px solid var(--elody-border) !important;
+  background: var(--elody-sidebar) !important;
+}
+
+/* Sidebar items: match Elody nav text style */
+.VPSidebarItem .text {
+  color: var(--elody-text-secondary) !important;
+}
+
+.VPSidebarItem.is-active > .item .link > .text {
+  color: var(--elody-blue) !important;
+  font-weight: 600 !important;
+}
+
+.VPSidebarItem .link:hover .text {
+  color: var(--elody-text) !important;
+}
+
+/* Sidebar group titles */
+.VPSidebarItem.level-0 > .item > .text {
+  color: var(--elody-text) !important;
+  font-weight: 600 !important;
+}
+
+/* ===== Content area ===== */
+.vp-doc a {
+  color: var(--elody-blue);
+}
+
+.vp-doc a:hover {
+  color: var(--elody-blue-hover);
+}
+
+/* ===== Tables: match Elody data tables ===== */
+.vp-doc table {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--elody-border);
+}
+
+.vp-doc th {
+  background: var(--elody-bg-soft) !important;
+  color: var(--elody-text-secondary) !important;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.vp-doc tr {
+  border-color: var(--elody-border-light) !important;
+}
+
+.vp-doc tr:nth-child(even) {
+  background: var(--elody-bg-soft);
+}
+
+.dark .vp-doc th {
+  background: var(--elody-bg-muted) !important;
+}
+
+/* ===== Code blocks ===== */
+.vp-doc [class*='language-'] {
+  border-radius: 6px;
+}
+
+/* ===== Hero section ===== */
+.VPHero .name {
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+}
+
+.VPHero .text {
+  color: var(--elody-text) !important;
+  font-weight: 600 !important;
+}
+
+.VPHero .tagline {
+  color: var(--elody-text-secondary) !important;
+}
+
+/* ===== Feature cards: Elody card style ===== */
+.VPFeature {
+  border: 1px solid var(--elody-border) !important;
+  border-radius: 6px !important;
+  background: var(--elody-bg) !important;
+}
+
+.VPFeature:hover {
+  border-color: var(--elody-blue) !important;
+  box-shadow: 0 1px 4px rgba(59, 125, 221, 0.1) !important;
+}
+
+.dark .VPFeature {
+  background: var(--elody-bg-soft) !important;
+  border-color: var(--elody-border) !important;
+}
+
+.dark .VPFeature:hover {
+  border-color: var(--elody-blue) !important;
+}
+
+/* Feature card text colors */
+.VPFeature .title {
+  color: var(--elody-text) !important;
+}
+
+.VPFeature .details {
+  color: var(--elody-text-secondary) !important;
+}
+
+/* ===== Scrollbar (subtle, matches Elody) ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--elody-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--elody-text-muted);
+}
