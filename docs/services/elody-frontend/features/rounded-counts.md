@@ -17,13 +17,19 @@ completion (see [Count limits](/services/elody-collection/advanced-filtering.md#
 ## Enabling it
 
 The cap is opt-in and only works if it's configured the same way on both
-sides:
+sides. Set the following in the env of **both** collection-api and the
+GraphQL service (baseGraphql):
 
-- **collection-api**: set the `LISTING_COUNT_CAP` environment variable to the
-  desired cap (an integer). Leave it unset (or `0`) to keep counting exact.
-- **GraphQL service (baseGraphql)**: set `LISTING_COUNT_CAP` to the same
-  value. The GraphQL layer exposes it to the frontend through the app-config
-  endpoint.
+```
+LISTING_COUNT_CAP=1000
+```
+
+Leave it unset (or `0`) on collection-api to keep counting exact. The GraphQL
+layer exposes its value to the frontend through the app-config endpoint.
+
+When running via elody-common, both services read from the same root `.env`
+by default, so setting `LISTING_COUNT_CAP` once there is enough — no need to
+duplicate it per service.
 
 The PWA reads the cap from that app-config response at startup and uses it to
 decide when a count is capped and how to format it. If `LISTING_COUNT_CAP` is
