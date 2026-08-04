@@ -1,7 +1,7 @@
 ---
 
 include:
-  - component: $CI_SERVER_FQDN/components/Pipelines/k8s-applicaton-dev-prod@v0.7.0
+  - component: $CI_SERVER_FQDN/components/pipelines/k8s-application-dev-prod@v0.7.0
     inputs:
       image_name: elody-docs
       harbor_project_prefix: elody-dams
