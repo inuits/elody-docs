@@ -12,6 +12,9 @@ hero:
     - theme: brand
       text: Getting Started
       link: /getting-started
+    - theme: alt
+      text: Advanced Filtering
+      link: /advanced-filtering
 
 features:
   - icon: 🗂️
