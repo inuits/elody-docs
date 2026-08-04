@@ -1,31 +1,15 @@
 ---
-# --------------------------------------------------------------
-# Includes
-# --------------------------------------------------------------
+
 include:
-  - project: "inuits/gitlab-ci/pipeline-templates"
-    ref: v4.14.3
-    file:
-      - pipelines/customers/deploy-k8s-no-uat.yml
+  - component: $CI_SERVER_FQDN/components/Pipelines/k8s-applicaton-dev-prod@v0.7.0
+    inputs:
+      image_name: elody-docs
+      harbor_project_prefix: elody-dams
 
-# --------------------------------------------------------------
-# Variables
-# --------------------------------------------------------------
-variables:
-  APPLICATION: elody-docs
+      values_repository: rnd/inuits/dams/elody-docs-helm-values
+      values_file: elody.yaml
+      values_key: .docs.image.tag
 
-  HARBOR_PROJECT_DEV: elody-dams-dev
-  HARBOR_PROJECT_PROD: elody-dams-prod
-
-  VALUES_REPO: "rnd/inuits/dams/elody-docs-helm-values"
-  VALUES_FILE: "${ENVIRONMENT_NAME}/elody.yaml"
-
-# --------------------------------------------------------------
-# Template override
-# --------------------------------------------------------------
-.build:
-  variables:
-    PODMAN_EXTRA_FLAGS: >-
-      --secret id=NPM_CONFIG_REGISTRY
-      --secret id=NPM_CONFIG__AUTH_TOKEN
-      --build-arg IMAGE_TAG=${IMAGE_TAG}
+      build_secrets:
+        - id=NPM_CONFIG_REGISTRY,env=NPM_CONFIG_REGISTRY
+        - id=NPM_CONFIG__AUTH_TOKEN,env=NPM_CONFIG__AUTH_TOKEN
