@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300">
+  <rect width="800" height="300" fill="none" stroke="currentColor" stroke-dasharray="6 6" stroke-width="2"/>
+  <text x="400" y="150" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="20" fill="currentColor">
+    TODO: services architecture diagram
+  </text>
+</svg>

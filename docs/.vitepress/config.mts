@@ -24,6 +24,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started' },
+      { text: 'Services', link: '/services/' },
     ],
 
     sidebar: [
@@ -32,6 +33,27 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Getting Started', link: '/getting-started' },
+        ],
+      },
+      {
+        text: 'Services',
+        link: '/services/',
+        collapsed: true,
+        items: [
+          {
+            text: 'Elody Collection',
+            link: '/services/elody-collection/',
+            items: [
+              { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
+            ],
+          },
+          {
+            text: 'Elody Frontend',
+            link: '/services/elody-frontend/',
+            items: [
+              { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
+            ],
+          },
         ],
       },
     ],

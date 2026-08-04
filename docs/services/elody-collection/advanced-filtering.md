@@ -38,6 +38,7 @@ authorization rules as the rest of the collection API.
 | `field`      | string | Restrict the returned fields. Repeatable, `field[]` also accepted. |
 | `history`    | 0/1    | Query the history collection instead of the current collection.    |
 | `soft`       | 0/1    | Dry run; validates the request without executing the query.        |
+| `exact_count`| 0/1    | Bypass the count cap and return the true total. Default `0`.       |
 
 ## Request body
 
@@ -678,7 +679,13 @@ A normal filter response has the following shape:
 On very large result sets the total `count` may be capped. When the number of
 matches exceeds the configured cap, `count` reports `<cap>+` (for example
 `1000+`), meaning there are more matches than the count shown. The unfiltered
-total of a whole collection is always exact.
+total of a whole collection is always exact. See [Rounded counts](../elody-frontend/features/rounded-counts.md)
+for details.
+
+Pass `?exact_count=1` to bypass the cap and get the true total (for example
+when a user clicks through on a `1000+` count). This runs the count to
+completion instead of stopping early, so it is more expensive on large,
+filtered result sets — use it on demand, not on every request.
 
 ### Response formats
 

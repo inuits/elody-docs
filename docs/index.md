@@ -13,8 +13,8 @@ hero:
       text: Getting Started
       link: /getting-started
     - theme: alt
-      text: Advanced Filtering
-      link: /advanced-filtering
+      text: Services
+      link: /services
 
 features:
   - icon: 🗂️
