@@ -1,6 +1,182 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300">
-  <rect width="800" height="300" fill="none" stroke="currentColor" stroke-dasharray="6 6" stroke-width="2"/>
-  <text x="400" y="150" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="20" fill="currentColor">
-    TODO: services architecture diagram
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1244" viewBox="0 0 1240 1244" role="img" aria-label="Elody services architecture">
+  <title>Elody services architecture</title>
+  <style>
+  .band { stroke-width: 1.5; }
+  .box { stroke-width: 1.5; }
+  .band-title { font: 600 15px system-ui, sans-serif; }
+  .band-sub { font: 12px system-ui, sans-serif; }
+  .box-label { font: 600 14px system-ui, sans-serif; text-anchor: middle; }
+  .box-sub { font: 11.5px system-ui, sans-serif; text-anchor: middle; }
+  .title { font: 700 22px system-ui, sans-serif; }
+  .note { font: 12px system-ui, sans-serif; }
+  .arrow { stroke-width: 2; fill: none; }
+
+  .band-title, .title { fill: #1f2328; }
+  .band-sub, .note { fill: #59636e; }
+  .box-label { fill: #1f2328; }
+  .n-deprecated + .box-label { fill: #8b949e; }
+  .box-sub { fill: #59636e; }
+  .arrow { stroke: #7d8590; }
+  #arrowhead path { fill: #7d8590; }
+
+  .b-core   { fill: #eaf2ff; stroke: #9ec1f5; }
+  .n-core   { fill: #ffffff; stroke: #4f8fe8; }
+  .b-ext    { fill: #eafaef; stroke: #9bd9ae; }
+  .n-ext    { fill: #ffffff; stroke: #45a768; }
+  .b-opt    { fill: #fff7e8; stroke: #ecc98a; }
+  .n-opt    { fill: #ffffff; stroke: #d69e2e; }
+  .b-client { fill: #f5eeff; stroke: #c6acec; }
+  .n-client { fill: #ffffff; stroke: #9a6fd4; }
+  .canvas   { fill: #ffffff; }
+  .b-infra  { fill: #f2f3f5; stroke: #ccd1d8; }
+  .n-infra  { fill: #ffffff; stroke: #8b949e; }
+  .n-deprecated { fill: #ffffff; stroke: #b0b6bd; stroke-dasharray: 5 4; }
+
+  @media (prefers-color-scheme: dark) {
+    .band-title, .title, .box-label { fill: #e6edf3; }
+    .band-sub, .note, .box-sub { fill: #9198a1; }
+    .arrow { stroke: #6e7681; }
+    #arrowhead path { fill: #6e7681; }
+
+    .b-core   { fill: #10203a; stroke: #2f5b96; }
+    .n-core   { fill: #0d1117; stroke: #4f8fe8; }
+    .b-ext    { fill: #0f2418; stroke: #2c6b41; }
+    .n-ext    { fill: #0d1117; stroke: #45a768; }
+    .b-opt    { fill: #2a2010; stroke: #7a5e21; }
+    .n-opt    { fill: #0d1117; stroke: #d69e2e; }
+    .b-client { fill: #1e1630; stroke: #55407e; }
+    .n-client { fill: #0d1117; stroke: #9a6fd4; }
+    .canvas   { fill: #0d1117; }
+    .b-infra  { fill: #161b22; stroke: #30363d; }
+    .n-infra  { fill: #0d1117; stroke: #6e7681; }
+    .n-deprecated { fill: #0d1117; stroke: #565d66; stroke-dasharray: 5 4; }
+  }
+</style>
+  <defs>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z"/>
+    </marker>
+  </defs>
+  <rect class="canvas" x="0" y="0" width="1240" height="1244"/>
+  <text class="title" x="30" y="38">Elody — services architecture</text>
+  <rect class="band b-infra" x="30" y="64" width="1180" height="116" rx="10"/>
+  <text class="band-title" x="48" y="90">Entry point</text>
+  <text class="band-sub" x="48" y="109">Traefik and Keycloak come from the shared infrastructure at the bottom of this diagram</text>
+  <rect class="box n-infra" x="46.0" y="120" width="373.3" height="44" rx="7"/>
+  <text class="box-label" x="232.7" y="143.0">Browser / PWA</text>
+  <rect class="box n-infra" x="433.3" y="120" width="373.3" height="44" rx="7"/>
+  <text class="box-label" x="620.0" y="136.0">Traefik v3  ·  :8000</text>
+  <text class="box-sub" x="620.0" y="153.0">host-based routing to every service below</text>
+  <rect class="box n-infra" x="820.7" y="120" width="373.3" height="44" rx="7"/>
+  <text class="box-label" x="1007.3" y="136.0">Keycloak (OIDC)</text>
+  <text class="box-sub" x="1007.3" y="153.0">auth for user + service tokens</text>
+  <rect class="band b-core" x="30" y="206" width="1180" height="144" rx="10"/>
+  <text class="band-title" x="48" y="232">Per-client core  —  declared in clients/&lt;client&gt;/docker-compose.yml</text>
+  <text class="band-sub" x="48" y="251">Every client ships these itself; they are the platform, not an add-on</text>
+  <rect class="box n-core" x="46.0" y="262" width="373.3" height="72" rx="7"/>
+  <text class="box-label" x="232.7" y="292.0">dashboard</text>
+  <text class="box-sub" x="232.7" y="309.0">one container: Apollo GraphQL on /api</text>
+  <text class="box-sub" x="232.7" y="322.0">+ the Vue 3 PWA on /</text>
+  <rect class="box n-core" x="433.3" y="262" width="373.3" height="72" rx="7"/>
+  <text class="box-label" x="620.0" y="292.0">collection-api</text>
+  <text class="box-sub" x="620.0" y="309.0">Flask REST + GraphQL</text>
+  <text class="box-sub" x="620.0" y="322.0">also answers as job-api</text>
+  <rect class="box n-core" x="820.7" y="262" width="373.3" height="72" rx="7"/>
+  <text class="box-label" x="1007.3" y="292.0">storage-api</text>
+  <text class="box-sub" x="1007.3" y="309.0">uploads, downloads, tickets</text>
+  <text class="box-sub" x="1007.3" y="322.0">(2 clients declare their own)</text>
+  <rect class="band b-ext" x="30" y="376" width="1180" height="134" rx="10"/>
+  <text class="band-title" x="48" y="402">How a client extends the core  —  bind-mounted / built in, no fork</text>
+  <text class="band-sub" x="48" y="421">Same two images for every client; only the mounted code differs</text>
+  <rect class="box n-ext" x="46.0" y="432" width="567.0" height="62" rx="7"/>
+  <text class="box-label" x="329.5" y="457.0">client-frontend  +  modules/</text>
+  <text class="box-sub" x="329.5" y="474.0">inuits-dams-graphql-service (queries, resolvers,</text>
+  <text class="box-sub" x="329.5" y="487.0">translations) + 6 shared GraphQL modules + PWA</text>
+  <rect class="box n-ext" x="627.0" y="432" width="567.0" height="62" rx="7"/>
+  <text class="box-label" x="910.5" y="457.0">client-collection-module</text>
+  <text class="box-sub" x="910.5" y="474.0">mounted over collection-api/api/apps/: app_list.json,</text>
+  <text class="box-sub" x="910.5" y="487.0">mappers.py, permissions.py, roles/, &lt;client&gt;/</text>
+  <path class="arrow" d="M 329.5 432 L 329.5 336" marker-end="url(#arrowhead)"/>
+  <path class="arrow" d="M 910.5 432 L 620.0 336" marker-end="url(#arrowhead)"/>
+  <rect class="band b-opt" x="30" y="536" width="1180" height="212" rx="10"/>
+  <text class="band-title" x="48" y="562">Opt-in add-ons  —  ../../docker-compose-include-*.yml</text>
+  <text class="band-sub" x="48" y="581">A client includes only what it needs; all of them talk over RabbitMQ and the collection-api</text>
+  <rect class="box n-opt" x="46.0" y="592" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="155.2" y="618.0">iiif-manifest</text>
+  <text class="box-sub" x="155.2" y="635.0">IIIF presentation</text>
+  <rect class="box n-opt" x="278.4" y="592" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="387.6" y="618.0">cantaloupe</text>
+  <text class="box-sub" x="387.6" y="635.0">IIIF image server</text>
+  <rect class="box n-opt" x="510.8" y="592" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="620.0" y="618.0">transcode-service</text>
+  <text class="box-sub" x="620.0" y="635.0">derivatives, formats</text>
+  <rect class="box n-opt" x="743.2" y="592" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="852.4" y="618.0">ocr-service</text>
+  <text class="box-sub" x="852.4" y="635.0">tesseract text layer</text>
+  <rect class="box n-opt" x="975.6" y="592" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="1084.8" y="618.0">antivirus-service</text>
+  <text class="box-sub" x="1084.8" y="635.0">clamav on upload</text>
+  <rect class="box n-opt" x="46.0" y="668" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="155.2" y="694.0">filesystem-importer</text>
+  <text class="box-sub" x="155.2" y="711.0">watch folder ingest</text>
+  <rect class="box n-opt" x="278.4" y="668" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="387.6" y="694.0">csv-exporter</text>
+  <text class="box-sub" x="387.6" y="711.0">bulk export jobs</text>
+  <rect class="box n-opt" x="510.8" y="668" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="620.0" y="694.0">canopy-generator</text>
+  <text class="box-sub" x="620.0" y="711.0">static IIIF sites</text>
+  <rect class="box n-opt" x="743.2" y="668" width="218.4" height="64" rx="7"/>
+  <text class="box-label" x="852.4" y="694.0">mailpit</text>
+  <text class="box-sub" x="852.4" y="711.0">dev SMTP catcher</text>
+  <rect class="band b-client" x="30" y="774" width="1180" height="136" rx="10"/>
+  <text class="band-title" x="48" y="800">Client-specific services  —  defined inside the client repo itself</text>
+  <text class="band-sub" x="48" y="819">A client may also add its own compose file (vliz ships docker-compose-include-vocab.yml)</text>
+  <rect class="box n-client" x="46.0" y="830" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="184.2" y="856.0">typesense</text>
+  <text class="box-sub" x="184.2" y="873.0">full-text index</text>
+  <text class="box-sub" x="184.2" y="886.0">(podiumnet, vlacc)</text>
+  <rect class="box n-client" x="336.5" y="830" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="474.8" y="856.0">drupal + apache + mysql</text>
+  <text class="box-sub" x="474.8" y="873.0">public site</text>
+  <text class="box-sub" x="474.8" y="886.0">(amvb)</text>
+  <rect class="box n-client" x="627.0" y="830" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="765.2" y="856.0">csv / ldes / seed importers</text>
+  <text class="box-sub" x="765.2" y="873.0">domain ingest</text>
+  <text class="box-sub" x="765.2" y="886.0">(coghent)</text>
+  <rect class="box n-client" x="917.5" y="830" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="1055.8" y="856.0">vocab, minio-setup</text>
+  <text class="box-sub" x="1055.8" y="873.0">thesaurus + buckets</text>
+  <text class="box-sub" x="1055.8" y="886.0">(vliz)</text>
+  <rect class="band b-infra" x="30" y="936" width="1180" height="212" rx="10"/>
+  <text class="band-title" x="48" y="962">Shared infrastructure  —  root docker-compose.yml</text>
+  <text class="band-sub" x="48" y="981">Started once with `task start-root`, shared by every client on the machine</text>
+  <rect class="box n-infra" x="46.0" y="992" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="184.2" y="1018.0">MongoDB</text>
+  <text class="box-sub" x="184.2" y="1035.0">document store</text>
+  <rect class="box n-deprecated" x="336.5" y="992" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="474.8" y="1018.0">ArangoDB</text>
+  <text class="box-sub" x="474.8" y="1035.0">graph + documents</text>
+  <text class="box-sub" x="474.8" y="1048.0">DEPRECATED — not maintained</text>
+  <rect class="box n-infra" x="627.0" y="992" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="765.2" y="1018.0">RabbitMQ</text>
+  <text class="box-sub" x="765.2" y="1035.0">topic exchange, AMQP</text>
+  <rect class="box n-infra" x="917.5" y="992" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="1055.8" y="1018.0">MinIO</text>
+  <text class="box-sub" x="1055.8" y="1035.0">S3 object storage</text>
+  <rect class="box n-infra" x="46.0" y="1068" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="184.2" y="1094.0">Keycloak + MariaDB</text>
+  <text class="box-sub" x="184.2" y="1111.0">realms, roles, tokens</text>
+  <rect class="box n-infra" x="336.5" y="1068" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="474.8" y="1094.0">Traefik</text>
+  <text class="box-sub" x="474.8" y="1111.0">shared ingress</text>
+  <rect class="box n-infra" x="627.0" y="1068" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="765.2" y="1094.0">Dozzle</text>
+  <text class="box-sub" x="765.2" y="1111.0">container logs</text>
+  <rect class="box n-infra" x="917.5" y="1068" width="276.5" height="64" rx="7"/>
+  <text class="box-label" x="1055.8" y="1094.0">Elody Docs</text>
+  <text class="box-sub" x="1055.8" y="1111.0">this site (VitePress)</text>
+  <text class="note" x="30" y="1178">Request path:  browser → Traefik → dashboard (PWA + Apollo) → collection-api → MongoDB.  Binaries go dashboard → storage-api → MinIO.</text>
+  <text class="note" x="30" y="1197">Events:  collection-api publishes on the RabbitMQ topic exchange (entity_changed, mediafile_changed, file_uploaded, job_created, ocr_request);</text>
+  <text class="note" x="30" y="1216">every add-on consumes those, does its work, and calls back into collection-api / job-api.  All containers share the `elody` docker network.</text>
+  <text class="note" x="30" y="1235">ArangoDB is deprecated: it still runs for existing deployments, but the Arango path is no longer updated.  New work targets MongoDB.</text>
 </svg>

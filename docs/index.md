@@ -19,7 +19,7 @@ hero:
 features:
   - icon: 🗂️
     title: Semantic Data Platform
-    details: Manage digital assets and IoT data with a graph-driven data model built on ArangoDB and MongoDB.
+    details: Manage digital assets and IoT data with a graph-driven data model built on MongoDB.
   - icon: 🧩
     title: GraphQL-Driven UI
     details: Forms, views, and field types are defined in the GraphQL schema and rendered dynamically by the PWA.

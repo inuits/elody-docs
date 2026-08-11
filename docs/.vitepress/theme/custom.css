@@ -28,15 +28,18 @@
   --vp-c-brand-3: var(--elody-sidebar);
   --vp-c-brand-soft: var(--elody-blue-soft);
 
+  --elody-tip-soft: #E8F5EE;
+  --elody-warning-soft: #FBF5E4;
+
   --vp-c-tip-1: var(--elody-green);
   --vp-c-tip-2: #10B981;
   --vp-c-tip-3: #34D399;
-  --vp-c-tip-soft: #E8F5EE;
+  --vp-c-tip-soft: var(--elody-tip-soft);
 
   --vp-c-warning-1: #C99300;
   --vp-c-warning-2: #DAA520;
   --vp-c-warning-3: #E8BF40;
-  --vp-c-warning-soft: #FBF5E4;
+  --vp-c-warning-soft: var(--elody-warning-soft);
 
   --vp-c-bg: var(--elody-bg);
   --vp-c-bg-soft: var(--elody-bg-soft);
@@ -80,6 +83,16 @@
   --elody-text-secondary: #8492A6;
   --elody-text-muted: #5A6882;
   --elody-blue-soft: rgba(59, 125, 221, 0.15);
+
+  /* Custom-block tints: the light hex values above are opaque, so without a
+     dark counterpart a tip or warning block keeps its cream
+     background while the text turns light, and becomes unreadable. */
+  --elody-tip-soft: rgba(16, 185, 129, 0.16);
+  --elody-warning-soft: rgba(218, 165, 32, 0.16);
+
+  --vp-c-warning-1: #E8BF40;
+  --vp-c-warning-2: #DAA520;
+  --vp-c-warning-3: #C99300;
 
   --vp-c-brand-1: var(--elody-accent);
   --vp-c-brand-2: #93C5FD;
@@ -242,4 +255,15 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--elody-text-muted);
+}
+
+/* ===== Zoomed images (medium-zoom) =====
+   medium-zoom ships no z-index, so VitePress's sidebar (z-index 60) and navbar
+   paint over the zoomed image. Lift the overlay and the image above both. */
+.medium-zoom-overlay {
+  z-index: 100;
+}
+
+.medium-zoom-image--opened {
+  z-index: 101;
 }
