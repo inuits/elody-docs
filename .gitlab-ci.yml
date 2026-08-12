@@ -4,11 +4,11 @@ include:
   - component: $CI_SERVER_FQDN/components/pipelines/k8s-application-dev-prod@v0.7.0
     inputs:
       image_name: elody-docs
-      harbor_project_prefix: elody-dams
+      harbor_project_prefix: inuits
 
       values_repository: rnd/inuits/dams/elody-docs-helm-values
-      values_file: elody.yaml
-      values_key: .docs.image.tag
+      values_file: docs.yaml
+      values_key: .image.tag
 
       build_secrets:
         - id=NPM_CONFIG_REGISTRY,env=NPM_CONFIG_REGISTRY
