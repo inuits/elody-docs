@@ -2,6 +2,16 @@
 
 The Vue 3 PWA that renders the GraphQL-driven UI.
 
+## Architecture
+
+- [Production Serving](production-serving.md) — how the PWA is built in the
+  pipeline and served by Express in production.
+
+## Styling
+
+- [Dynamic Tailwind Classes](dynamic-tailwind-classes.md) — why runtime-built
+  class names work locally and break once deployed.
+
 ## Features
 
 - [Comments & Threads](features/comments.md) — threaded discussions on an

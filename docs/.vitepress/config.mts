@@ -51,6 +51,8 @@ export default defineConfig({
             text: 'Elody Frontend',
             link: '/services/elody-frontend/',
             items: [
+              { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
+              { text: 'Dynamic Tailwind Classes', link: '/services/elody-frontend/dynamic-tailwind-classes' },
               { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
               { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
             ],
