@@ -6,6 +6,8 @@ The Vue 3 PWA that renders the GraphQL-driven UI.
 
 - [Production Serving](production-serving.md) — how the PWA is built in the
   pipeline and served by Express in production.
+- [Auth & Session](auth-session.md) — OIDC login/logout, server-side tokens
+  and refresh, cross-tab sync, route guards and whitelisting.
 
 ## Styling
 
