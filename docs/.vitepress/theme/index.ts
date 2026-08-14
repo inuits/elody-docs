@@ -6,9 +6,13 @@ import mediumZoom from 'medium-zoom'
 
 import 'medium-zoom/dist/style.css'
 import './custom.css'
+import StoryEmbed from './components/StoryEmbed.vue'
 
 export default {
   extends: DefaultTheme,
+  enhanceApp({ app }) {
+    app.component('StoryEmbed', StoryEmbed)
+  },
   setup() {
     const route = useRoute()
     const enableZoom = () =>
