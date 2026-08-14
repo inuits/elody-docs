@@ -10,6 +10,10 @@
         {
           "text": "Component manifest",
           "link": "/design-system/manifest"
+        },
+        {
+          "text": "Implementation guide",
+          "link": "/design-system/implementation"
         }
       ]
     },

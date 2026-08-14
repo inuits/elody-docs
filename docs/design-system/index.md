@@ -27,6 +27,12 @@ in STORYBOOK_TODO.md do not exist yet.
 7. **Structural accessibility.** Roles, accessible names, focus order and
    `role="alert"|"status"` are part of the component contract, not a pass after.
 
+## Implementing this in the codebase
+
+Follow `IMPLEMENTATION.md` in the handoff root: phased plan (tokens →
+primitives → fields → lists → filters → viewers → flows → Storybook), with a
+definition of done per component and the list of deprecations to retire.
+
 ## How to read these pages
 
 Each page: definition + implementing Vue component(s) → when (not) to use →
@@ -35,9 +41,10 @@ NL/EN copy → do & don't → related. Copy examples are bilingual; prose is
 English. "Open — see brief" marks gaps deliberately left open (iconography
 final set, empty-state art, data-viz colours, dark mode).
 
-
 ## Source artifacts
 
+- [Implementation guide](./implementation) — the phased build plan with a
+  definition of done per component and the deprecations to retire.
 - [tokens.css](/design-system/tokens.css) — the Tailwind 4 `@theme` block every
   role token resolves to, incl. the canonical `[data-elody-client]` scopes.
 - [Component manifest](./manifest) — design-system component → specimen → docs
