@@ -39,5 +39,14 @@ in their accessible name ("Verwijder 2 records").
 Do keep it visible (not floating over rows). Don't offer more than ~5 bulk
 actions; overflow the rest.
 
+## Round 2 — extras
+The bar may embed compact [pagination](./pagination) right-aligned. A
+"Selecteer pagina" link selects the visible page; with a capped count
+("500+"), clicking the count reveals the exact total (spinner + tooltip
+"telling kan even duren"). **Confirm-selection mode** (picker contexts): the
+bar's commit becomes "Bevestig selectie ({n})". When empty AND the list has
+no selectable context, the bar collapses to nothing rather than rendering
+disabled chrome (collapsed-empty variant).
+
 ## Related
 [Entity list element](./entity-list-element) · [Feedback & undo](./feedback)

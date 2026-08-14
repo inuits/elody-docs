@@ -45,5 +45,15 @@ Matchers: "bevat" / "contains", "begint met" / "starts with", "is exact" /
 Do keep sections in query order. Don't auto-apply on checkbox click; don't
 hide active filters in collapsed sections without the count chip.
 
+## Round 2 — rail chrome & semantics
+Each active section gets a "Wis filter" link (11.5px) that clears AND applies
+immediately (undo via toast) — clearing is consequence-light, unlike applying.
+Rail header chrome: applied saved-search title chip (with modified dot), a
+global "N actief" count chip, an add-filter autocomplete (search across
+available filters; picked filter's section expands), and the saved-searches
+menu (⌄). Option loading uses **option-shaped skeletons** (3 rows), not
+per-option spinners. Section chevrons: **⌄ closed · ⌃ open**. Action copy
+(decision): "Pas toe" / "Wis alles".
+
 ## Related
 [Entity list element](./entity-list-element) · [Entity picker](./entity-picker)

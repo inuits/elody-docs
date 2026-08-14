@@ -69,5 +69,12 @@ both). Sentence case everywhere: "Bewaar" (Save), "Voeg persoon toe" (Add person
 Do derive new colours with oklch from the accent. Don't introduce a fourth
 badge tone; don't shadow a card; don't uppercase labels.
 
+## Round 2 — deprecations & gaps closed
+Legacy button variants **deprecated**: grey "default" → secondary; mint
+"accentNormal" → commit. Empty value placeholder is **"Geen waarde"** ("-"
+deprecated). `::selection` is `#4169E1` background / white text (from the
+PWA). **Environment pill**: LOCAL/DEV/TEST render as an 11px bold pill in the
+top bar — LOCAL grey, DEV info-bg, TEST warning-bg; production shows nothing.
+
 ## Related
 [Primitives](./primitives) · [Client theming](./client-theming)

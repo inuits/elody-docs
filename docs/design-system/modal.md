@@ -40,5 +40,10 @@ Title = the task ("Kies persoon"), commit = the verb ("Voeg toe"), never
 Do keep one commit per modal. Don't stack modals; don't use a modal where a
 toast + undo suffices.
 
+## Round 2 — footerless variant
+Overlays whose only action is choosing (simple-search overlay, saved-search
+pick) may drop the footer: Escape/scrim close, selection commits directly.
+Footerless modals never contain destructive actions.
+
 ## Related
 [Entity picker](./entity-picker) · [Feedback & undo](./feedback)

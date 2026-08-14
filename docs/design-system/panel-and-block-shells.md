@@ -45,5 +45,13 @@ Panel titles are plural nouns ("Titels", "Personen"). Status copy:
 Do reuse this exact chrome for previews and pickers. Don't shadow a panel;
 don't nest a bordered box inside a block.
 
+## Round 2 — expand & quality popover
+Panels that support a wide view get an expand button (⤢, icon button in the
+header actions slot, name "Vergroot paneel") opening the panel as a modal at
+overlay elevation. The quality-status popover lists the failing fields as
+links — clicking one closes the popover and focuses that field row
+(jump-to-field). Empty panels may offer an action menu (labelled overflow) in
+place of content, per the action-discovery ladder.
+
 ## Related
 [Preview panel](./preview-panel) · [Client theming](./client-theming)

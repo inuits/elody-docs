@@ -45,5 +45,18 @@ generic failure: "Opslaan mislukt, probeer opnieuw" / "Saving failed, try again"
 Do preserve the user's input on error. Don't auto-save on blur; don't move the
 commit buttons under the field on wide screens.
 
+## Round 2 — commit model & new inline types
+Commit model everywhere: **pick-then-Bewaar**. Choosing in a select, date
+picker or autocomplete marks the editor dirty; nothing saves until Bewaar.
+The select editor is the custom [dropdown select](./dropdown-select) overlay —
+native `<select>` is deprecated in edit surfaces. Non-required selects open
+with a "—" (Geen waarde) option. Under every open editor a keyboard-hint line
+renders: "Enter bewaart · Esc annuleert" (11px, muted). New inline editors
+(the legacy whole-form path is deprecated): **textarea** (grows to 6 rows,
+Ctrl+Enter commits), **relation picker** (the [autocomplete tag
+input](./autocomplete-tag-input) inline; the modal picker remains reachable
+via a "Blader…" link under the popup), **multilingual** (locale chips above
+one input; each locale keeps its own value; dirty locales marked with a dot).
+
 ## Related
 [Field row](./field-row) · [Group form card](./group-form-card)

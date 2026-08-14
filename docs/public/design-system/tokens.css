@@ -130,3 +130,13 @@
   --scale-press: .97;                                /* active press */
   --scale-press-tight: .92;                          /* 22px stepper icon buttons */
 }
+
+/* ── Client theme scopes (canonical — audit round 2). Apply on <body
+      data-elody-client="…">. Each scope overrides the accent set AND
+      re-declares the accent-derived aliases (var() resolves where defined). ── */
+[data-elody-client="pza"]{--color-accent-light:#DCF4F9;--color-accent-light-strong:#B9E4F1;--color-accent:#2A97E2;--color-accent-hover:#0057B7;--color-accent-ink:#0B5F87;--color-accent-wash:#E9F5FC;--color-accent-tint:#EDF7FD;--color-text-accent-strong:#0B5F87}
+[data-elody-client="podiumnet"]{--color-accent-light:#164C85;--color-accent-light-strong:#164C85;--color-accent:#0057b1;--color-accent-hover:#004690;--color-accent-ink:#FFFFFF;--color-accent-wash:#E8F0F9;--color-accent-tint:#EBF3FA;--color-text-accent-strong:#004690}
+[data-elody-client="damsv2"]{--color-accent-light:#164C85;--color-accent-light-strong:#164C85;--color-accent:#0057b1;--color-accent-hover:#004690;--color-accent-ink:#FFFFFF;--color-accent-wash:#E8F0F9;--color-accent-tint:#EBF3FA;--color-text-accent-strong:#004690}
+[data-elody-client="vliz"]{--color-accent-light:#465DAA;--color-accent-light-strong:#465DAA;--color-accent:#354D9B;--color-accent-hover:#2A3E80;--color-accent-ink:#FFFFFF;--color-accent-wash:#EDF0F8;--color-accent-tint:#F0F2F9;--color-text-accent-strong:#2A3E80}
+[data-elody-client="aicap"]{--color-accent-light:#F2EFEC;--color-accent-light-strong:#E5DECF;--color-accent:#9F8332;--color-accent-hover:#846C28;--color-accent-ink:#6E5A22;--color-accent-wash:#F5F1E8;--color-accent-tint:#F7F4ED;--color-text-accent-strong:#6E5A22;--color-surface-app:#FAF8F4;--color-surface:#FFFEFE;--color-text-body:#343a40;--color-text-field-label:#9F8332;--color-text-link:#C2A169}
+[data-elody-client]{--color-surface-panel-header:var(--color-accent-light);--color-surface-section-header:var(--color-accent);--color-surface-editable-hover:var(--color-accent-wash);--color-surface-group-tint:var(--color-accent-tint);--color-text-panel-header:var(--color-accent-ink);--color-text-link-hover:var(--color-accent);--color-border-panel:var(--color-accent-light-strong)}

@@ -48,5 +48,20 @@ sentence case.
 Do collapse columns rather than truncate the title. Don't show more than one
 primary action per row; don't reshuffle badge tones per view mode.
 
+## Round 2 — modes & row states
+**Grid card**: 300×350 — media area 300×220 (`--color-surface-muted`,
+letterboxed thumb; no-media = muted glyph + "Geen media", never blank), body:
+title (13px bold, 2-line clamp), badges row, one secondary line; card = 8px
+radius, 1px border, no shadow; hover = row-hover fill. **List mode** may run
+multi-line (title + up to 2 secondary lines) and gets a column-header row like
+table mode. **New-relation preview rows** (added but unsaved): dashed 1px
+border, tint background, "nog niet bewaard" hint — they commit with the
+editor's Bewaar. **Seen-items dimming**: rows already visited this session
+render title in secondary ink (history aid, config-flagged). **Selection
+visual (decision)**: the checkbox owns wash + accent shadow; the row whose
+preview is open gets a **3px accent border left** and no wash. **Promoted
+actions**: config may promote 1–2 actions as small pills before the split
+button (pill = safe: navigation/preview only, never mutation).
+
 ## Related
 [Preview panel](./preview-panel) · [Selection action bar](./selection-action-bar) · [Filter panel](./filter-panel)

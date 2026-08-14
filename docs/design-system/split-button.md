@@ -44,5 +44,11 @@ Primary is a verb: "Open record" · "Bewaar". Menu items verb-first:
 Do keep the primary the statistically most-used action. **Never a bare ⋮** —
 the label is the discovery mechanism. Don't exceed ~7 menu items.
 
+## Round 2 — submenus & destructive marker
+Menus may nest **one** submenu level (item with › opens right; ←/→ traverse;
+never deeper). Config-driven menus mark destructive items with a schema flag
+(`"tone": "danger"` on the action definition) — the renderer, not the label,
+decides the danger ink and last-position sorting; never infer from the verb.
+
 ## Related
 [Overflow menu](./overflow-menu) · [Action discovery](./action-discovery)

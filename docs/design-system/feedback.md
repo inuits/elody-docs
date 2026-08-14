@@ -45,5 +45,17 @@ trap focus. Audit trail is a `role="log"`.
 Do pause dismissal on hover/focus. Don't stack more than 3 toasts; don't use
 a toast for validation errors (those belong at the field).
 
+## Round 2 — undo carrier, toast variants, busy overlay
+**Post-save undo is the inline chip** next to the value (until next action) —
+see field-row; the undo-toast remains ONLY for removals (the row is gone).
+**Warn toast**: warning-bg accent bar, `role="status"`, auto-dismiss 8s — for
+partial successes ("3 van 5 geïmporteerd"). **Global/service toasts**
+(version updates): sanctioned as a distinct variant — top-centre, whole-toast
+clickable ("Nieuwe versie — klik om te verversen"), `role="status"`, never
+auto-dismisses; no other toast may sit top or be whole-clickable. **Busy
+overlay**: blocking work (bulk ops) uses a scrim + centred spinner + one
+status line + (where possible) an Annuleer ghost; block the panel, not the
+page, whenever scope allows.
+
 ## Related
 [Selection action bar](./selection-action-bar) · [Repeatable row group](./repeatable-row-group)

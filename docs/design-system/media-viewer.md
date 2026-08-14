@@ -45,5 +45,14 @@ Fullscreen announces via `role="status"`.
 Do keep the toolbar visible (no hover-only chrome on touch). Don't recreate
 the toolbar per surface — one ViewerToolbar everywhere.
 
+## Round 2 — one toolbar, four modes
+**Decision: PdfToolbar is deprecated — one ViewerToolbar** hosts mode-specific
+buttons in the same 26px capsule style: **image** (zoom, home, fullscreen,
+rotate), **PDF** (page ‹ n/m ›, zoom, fullscreen, download), **AV** (play/
+pause, timeline scrubber [slider spec], volume, fullscreen), **text** (zoom,
+download). **IIIF manifest viewer**: the image mode driven by a manifest —
+adds the filmstrip fed by manifest canvases and a manifest-info line;
+no separate chrome.
+
 ## Related
 [Preview panel](./preview-panel) · [Entity list element](./entity-list-element)

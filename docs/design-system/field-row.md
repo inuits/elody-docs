@@ -50,5 +50,21 @@ Empty: "Geen waarde" / "No value". Error pattern: "{Label} is verplicht" /
 Do keep labels under two words where possible. Don't open a modal for one
 field; don't validate other rows on save; don't hide empty required fields.
 
+## Round 2 — label adornments & value types
+Label line adornments, in order after the label: required `*` (danger ink);
+"één van verplicht" group marker (`◦` + tooltip naming the group); help
+tooltip (?); locale selector (11px chip per language, active bold); virtual-
+keyboard trigger ⌨ (fields that need diacritics). Value-type renderings:
+boolean = "Ja"/"Nee" with check/dash glyph (never a bare checkbox as display);
+image values = 48px thumb, click opens viewer; URL = link ink + external
+glyph, HTML values render sanitised; coordinates = text pair + "Toon op
+kaart" link. Values gain a copy affordance (⧉ on hover, "Gekopieerd" status);
+one-line truncation always pairs with the full-value tooltip. After a save an
+**inline undo chip** ("Ongedaan maken", pill, commit-teal outline) sits next
+to the value **until the next action** — it replaces the undo-toast for saves.
+A failed save never renders on the closed row: the editor stays open. Scope
+notes render as 11px muted microcopy in the block/row footer. A panel header
+flashes the saved check for 2s after any row inside saves.
+
 ## Related
 [Inline editor](./inline-editor) · [Group form card](./group-form-card) · [Per-field editing](./per-field-editing)

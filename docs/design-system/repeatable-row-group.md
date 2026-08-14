@@ -44,5 +44,12 @@ Ongedaan maken" / "Author removed — Undo".
 Do keep row content one line. Don't confirm removals; don't hide the add pill
 when rows exist.
 
+## Round 2 — table input merged
+Multi-column editable mini-tables (`tableInputFields/*`) are a **variant of
+this component**, not a separate one: each row = cells per the field-grid
+(text/number inputs, relation autocomplete in a cell), a column-header row
+(11.5px labels), add-row pill below, per-row remove; the row remains the edit/
+save/validation scope. Cells follow [inputs](./inputs-and-tooltips) rules.
+
 ## Related
 [Group form card](./group-form-card) · [Feedback & undo](./feedback)

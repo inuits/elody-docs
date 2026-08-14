@@ -42,5 +42,11 @@ Modal `role="dialog"` named by its title, focus trapped. Results are a
 Do reuse entity badges in rows. Don't nest a second picker; don't clear the
 query on select in multi-select mode.
 
+## Round 2 — library-embedded variant
+Inside library contexts the picker reuses the full [entity list
+element](./entity-list-element) (filters, view modes, pagination) in
+confirm-selection mode instead of the compact result list — same dialog
+chrome, same footer. The compact list remains the default for field editing.
+
 ## Related
 [Modal](./modal) · [Filter panel](./filter-panel) · [Repeatable row group](./repeatable-row-group)

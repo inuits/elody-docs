@@ -35,11 +35,11 @@ NL/EN copy → do & don't → related. Copy examples are bilingual; prose is
 English. "Open — see brief" marks gaps deliberately left open (iconography
 final set, empty-state art, data-viz colours, dark mode).
 
+
 ## Source artifacts
 
 - [tokens.css](/design-system/tokens.css) — the Tailwind 4 `@theme` block every
-  role token resolves to; the single source for colours, type, spacing, radii,
-  elevation, motion and focus.
+  role token resolves to, incl. the canonical `[data-elody-client]` scopes.
 - [Component manifest](./manifest) — design-system component → specimen → docs
   page → Vue component → story ID; the contract the code is audited against.
 - Specimens (self-contained HTML, every state side by side):
@@ -47,5 +47,7 @@ final set, empty-state art, data-viz colours, dark mode).
   [Fields & editing](/design-system/specimens/Components%20-%20Fields%20-%20Editing.dc.html) ·
   [Lists & actions](/design-system/specimens/Components%20-%20Lists%20-%20Actions.dc.html) ·
   [Filters & modals](/design-system/specimens/Components%20-%20Filters%20-%20Modals.dc.html) ·
+  [Forms & inputs](/design-system/specimens/Forms%20-%20Inputs.dc.html) ·
+  [Upload flow](/design-system/specimens/Flows%20-%20Upload.dc.html) ·
   [Viewers](/design-system/specimens/Viewers.dc.html) ·
   [Patterns](/design-system/specimens/Patterns.dc.html)
