@@ -51,6 +51,7 @@ export default defineConfig({
             text: 'Elody Frontend',
             link: '/services/elody-frontend/',
             items: [
+              { text: 'Build Pipeline', link: '/services/elody-frontend/build-pipeline' },
               { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
               { text: 'Auth & Session', link: '/services/elody-frontend/auth-session' },
               { text: 'Dynamic Tailwind Classes', link: '/services/elody-frontend/dynamic-tailwind-classes' },
