@@ -1,0 +1,140 @@
+{
+  "/design-system/": [
+    {
+      "text": "Design system",
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/design-system/"
+        },
+        {
+          "text": "Component manifest",
+          "link": "/design-system/manifest"
+        }
+      ]
+    },
+    {
+      "text": "Foundations",
+      "items": [
+        {
+          "text": "Foundations",
+          "link": "/design-system/foundations"
+        },
+        {
+          "text": "Primitives",
+          "link": "/design-system/primitives"
+        },
+        {
+          "text": "Client theming",
+          "link": "/design-system/client-theming"
+        }
+      ]
+    },
+    {
+      "text": "Fields & editing",
+      "items": [
+        {
+          "text": "Field row",
+          "link": "/design-system/field-row"
+        },
+        {
+          "text": "Inline editor",
+          "link": "/design-system/inline-editor"
+        },
+        {
+          "text": "Group form card",
+          "link": "/design-system/group-form-card"
+        },
+        {
+          "text": "Repeatable row group",
+          "link": "/design-system/repeatable-row-group"
+        }
+      ]
+    },
+    {
+      "text": "Lists & actions",
+      "items": [
+        {
+          "text": "Entity list element",
+          "link": "/design-system/entity-list-element"
+        },
+        {
+          "text": "Preview panel",
+          "link": "/design-system/preview-panel"
+        },
+        {
+          "text": "Split button",
+          "link": "/design-system/split-button"
+        },
+        {
+          "text": "Overflow menu",
+          "link": "/design-system/overflow-menu"
+        },
+        {
+          "text": "Selection action bar",
+          "link": "/design-system/selection-action-bar"
+        },
+        {
+          "text": "Panel & block shells",
+          "link": "/design-system/panel-and-block-shells"
+        }
+      ]
+    },
+    {
+      "text": "Filters & overlays",
+      "items": [
+        {
+          "text": "Filter panel",
+          "link": "/design-system/filter-panel"
+        },
+        {
+          "text": "Entity picker",
+          "link": "/design-system/entity-picker"
+        },
+        {
+          "text": "Modal",
+          "link": "/design-system/modal"
+        }
+      ]
+    },
+    {
+      "text": "Viewers",
+      "items": [
+        {
+          "text": "Media viewer",
+          "link": "/design-system/media-viewer"
+        },
+        {
+          "text": "Map viewer",
+          "link": "/design-system/map-viewer"
+        }
+      ]
+    },
+    {
+      "text": "Navigation",
+      "items": [
+        {
+          "text": "Navigation chrome",
+          "link": "/design-system/navigation"
+        }
+      ]
+    },
+    {
+      "text": "Patterns",
+      "items": [
+        {
+          "text": "Per-field editing",
+          "link": "/design-system/per-field-editing"
+        },
+        {
+          "text": "Action discovery",
+          "link": "/design-system/action-discovery"
+        },
+        {
+          "text": "Feedback & undo",
+          "link": "/design-system/feedback"
+        }
+      ]
+    }
+  ]
+}

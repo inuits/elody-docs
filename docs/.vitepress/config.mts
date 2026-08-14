@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import designSystemSidebar from './design-system-sidebar.json'
 
 export default defineConfig({
   title: 'Elody Docs',
@@ -25,39 +26,49 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started' },
       { text: 'Services', link: '/services/' },
+      { text: 'Design System', link: '/design-system/' },
     ],
 
-    sidebar: [
-      {
-        text: 'Introduction',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/getting-started' },
-        ],
-      },
-      {
-        text: 'Services',
-        link: '/services/',
-        collapsed: true,
-        items: [
-          {
-            text: 'Elody Collection',
-            link: '/services/elody-collection/',
-            items: [
-              { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
-            ],
-          },
-          {
-            text: 'Elody Frontend',
-            link: '/services/elody-frontend/',
-            items: [
-              { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
-              { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
-            ],
-          },
-        ],
-      },
-    ],
+    sidebar: {
+      ...designSystemSidebar,
+      '/': [
+        {
+          text: 'Introduction',
+          collapsed: false,
+          items: [
+            { text: 'Getting Started', link: '/getting-started' },
+          ],
+        },
+        {
+          text: 'Services',
+          link: '/services/',
+          collapsed: true,
+          items: [
+            {
+              text: 'Elody Collection',
+              link: '/services/elody-collection/',
+              items: [
+                { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
+              ],
+            },
+            {
+              text: 'Elody Frontend',
+              link: '/services/elody-frontend/',
+              items: [
+                { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
+                { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
+              ],
+            },
+          ],
+        },
+        {
+          text: 'Design System',
+          link: '/design-system/',
+          collapsed: true,
+          items: [],
+        },
+      ],
+    },
 
     outline: {
       label: 'On this page',
