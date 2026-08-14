@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-import designSystemSidebar from './design-system-sidebar.json'
 
 export default defineConfig({
   title: 'Elody Docs',
@@ -26,53 +25,43 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started' },
       { text: 'Services', link: '/services/' },
-      { text: 'Design System', link: '/design-system/' },
     ],
 
-    sidebar: {
-      ...designSystemSidebar,
-      '/': [
-        {
-          text: 'Introduction',
-          collapsed: false,
-          items: [
-            { text: 'Getting Started', link: '/getting-started' },
-          ],
-        },
-        {
-          text: 'Services',
-          link: '/services/',
-          collapsed: true,
-          items: [
-            {
-              text: 'Elody Collection',
-              link: '/services/elody-collection/',
-              items: [
-                { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
-              ],
-            },
-            {
-              text: 'Elody Frontend',
-              link: '/services/elody-frontend/',
-              items: [
-                { text: 'Build Pipeline', link: '/services/elody-frontend/build-pipeline' },
-                { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
-                { text: 'Auth & Session', link: '/services/elody-frontend/auth-session' },
-                { text: 'Dynamic Tailwind Classes', link: '/services/elody-frontend/dynamic-tailwind-classes' },
-                { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
-                { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
-              ],
-            },
-          ],
-        },
-        {
-          text: 'Design System',
-          link: '/design-system/',
-          collapsed: true,
-          items: [],
-        },
-      ],
-    },
+    sidebar: [
+      {
+        text: 'Introduction',
+        collapsed: false,
+        items: [
+          { text: 'Getting Started', link: '/getting-started' },
+        ],
+      },
+      {
+        text: 'Services',
+        link: '/services/',
+        collapsed: true,
+        items: [
+          {
+            text: 'Elody Collection',
+            link: '/services/elody-collection/',
+            items: [
+              { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
+            ],
+          },
+          {
+            text: 'Elody Frontend',
+            link: '/services/elody-frontend/',
+            items: [
+              { text: 'Build Pipeline', link: '/services/elody-frontend/build-pipeline' },
+              { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
+              { text: 'Auth & Session', link: '/services/elody-frontend/auth-session' },
+              { text: 'Dynamic Tailwind Classes', link: '/services/elody-frontend/dynamic-tailwind-classes' },
+              { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
+              { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
+            ],
+          },
+        ],
+      },
+    ],
 
     outline: {
       label: 'On this page',
