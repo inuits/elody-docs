@@ -57,6 +57,7 @@ export default defineConfig({
               { text: 'Dynamic Tailwind Classes', link: '/services/elody-frontend/dynamic-tailwind-classes' },
               { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
               { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
+              { text: 'Bulk Edit', link: '/services/elody-frontend/features/bulk-edit' },
             ],
           },
         ],
