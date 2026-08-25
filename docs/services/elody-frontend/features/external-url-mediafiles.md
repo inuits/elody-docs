@@ -158,6 +158,12 @@ there is blocked with `frame-src ... violates default-src 'self'` no matter
 what `getEmbeddableUrl` returns. Adding a provider means editing both.
 :::
 
+The frame is not sandboxed, and that is deliberate. A sandboxed frame gets an
+opaque origin, which makes it inherit the app's CSP and send no `Referer` —
+the provider's own inline scripts are then blocked and YouTube refuses with
+`embedder.identity.missing.referrer` (player error 153). Restricting the
+frame to known providers is what keeps it safe, not the `sandbox` attribute.
+
 ## Listings
 
 A mediafile with no file has no thumbnail. Listings already fall back to a
