@@ -149,6 +149,15 @@ Only absolute `http(s)` URLs are used. A scheme-less value such as
 `www.example.org` is rejected rather than resolved against the app's own
 origin.
 
+::: warning Two allowlists, keep them in sync
+The provider list lives in `getEmbeddableUrl`
+(`inuits-dams-pwa/src/utils/embeddableUrl.ts`), but the browser also enforces
+the `frame-src` directive from
+`modules/baseGraphql/helpers/contentSecurityPolicyHelper.ts`. A host missing
+there is blocked with `frame-src ... violates default-src 'self'` no matter
+what `getEmbeddableUrl` returns. Adding a provider means editing both.
+:::
+
 ## Listings
 
 A mediafile with no file has no thumbnail. Listings already fall back to a
