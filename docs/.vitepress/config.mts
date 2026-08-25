@@ -58,6 +58,7 @@ export default defineConfig({
               { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
               { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
               { text: 'Bulk Edit', link: '/services/elody-frontend/features/bulk-edit' },
+              { text: 'External URL Mediafiles', link: '/services/elody-frontend/features/external-url-mediafiles' },
             ],
           },
         ],

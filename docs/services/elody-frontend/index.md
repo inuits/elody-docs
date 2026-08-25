@@ -23,3 +23,5 @@ The Vue 3 PWA that renders the GraphQL-driven UI.
   entity, with `@` user tagging and `#` entity links.
 - [Rounded Counts](features/rounded-counts.md) — how capped result counts are
   displayed to the user.
+- [External URL Mediafiles](features/external-url-mediafiles.md) — a mediafile
+  that stands in for an external link instead of a stored file.
