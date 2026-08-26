@@ -53,6 +53,7 @@ export default defineConfig({
             link: '/services/elody-frontend/',
             items: [
               { text: 'GraphQL-Driven UI', link: '/services/elody-frontend/graphql-driven-ui' },
+              { text: 'Translations', link: '/services/elody-frontend/translations' },
               { text: 'Build Pipeline', link: '/services/elody-frontend/build-pipeline' },
               { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
               { text: 'Auth & Session', link: '/services/elody-frontend/auth-session' },

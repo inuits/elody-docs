@@ -104,39 +104,16 @@ is a translation key, and the frontend resolves it:
 <p data-cy="metadata-label">{{ t(metadata.label) }}</p>
 ```
 
-The keys are dot-notation paths into merged translation JSON. The merge happens
-server-side in `getAvailableTranslations`:
-
-1. `loadTranslationsFromDirectory` reads every `*.json` in
-   `baseGraphql/translations/` — the filename is the locale (`nl.json` → `nl`).
-2. The client's `customTranslations` (passed to `start()`) are merged on top with
-   `json-merger`, so a client can override a base label or add its own.
-3. If `customization.availableLanguages` is set, locales outside it are dropped.
-
-The result ships to the browser as part of `GET /api/app-configs`, and
-`setupI18n` installs it.
-
-Whether a key belongs in `baseGraphql/translations/` or in
-`clients/<client>/client-frontend/inuits-dams-graphql-service/src/translations/`
-comes down to one question: would another client want this label? `metadata.labels.*`
-and UI primitives are base. Domain-specific and branded labels are client.
+The keys are dot-notation paths into translation JSON that baseGraphql merges
+with the client's own and ships alongside the runtime config. Every `label`,
+`tooltip` and `panelHeaderContent` input in a query is a key, never text — see
+[Translations](./translations) for where the files live and how the merge works.
 
 ::: warning A missing translation key renders as the raw key, silently
-`setupI18n` sets `missingWarn: false` and `fallbackWarn: false`:
-
-```ts
-createI18n({
-  locale: applicationLocale,
-  fallbackLocale: "en",
-  messages: translations,
-  missingWarn: false,
-  fallbackWarn: false,
-});
-```
-
-So a label reading `metadata.labels.serial-number` in the UI is not a rendering
-bug — it is a missing key, and there is nothing in the console about it. Check
-the JSON files before checking anything else.
+`setupI18n` sets `missingWarn: false` and `fallbackWarn: false`, so a label
+reading `metadata.labels.serial-number` in the UI is not a rendering bug — it is
+a missing key, and there is nothing in the console about it. See
+[When a label shows as `metadata.labels.something`](./translations#when-a-label-shows-as-metadata-labels-something).
 :::
 
 ## `intialValues`: where the data comes from
@@ -302,12 +279,10 @@ the form is no longer considered modified.
 | --- | --- | --- |
 | [`baseModule/baseSchema.schema.ts`](https://github.com/inuits/elody-base-graphql/blob/master/baseModule/baseSchema.schema.ts) | elody-base-graphql | `IntialValues`, `KeyValueSource`, `ColumnList`, `Column`, `PanelMetaData`, `ValidationFields` |
 | [`resolvers/intialValueResolver.ts`](https://github.com/inuits/elody-base-graphql/blob/master/resolvers/intialValueResolver.ts) | elody-base-graphql | one resolver per `KeyValueSource` |
-| [`endpoints/appConfigEndpoint.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/appConfigEndpoint.ts) | elody-base-graphql | `/api/app-configs`, translation merge |
-| [`translations/loadTranslations.ts`](https://github.com/inuits/elody-base-graphql/blob/master/translations/loadTranslations.ts) | elody-base-graphql | locale-per-filename loading |
 | [`src/components/EntityColumn.vue`](https://github.com/inuits/elody-pwa/blob/master/src/components/EntityColumn.vue) | elody-pwa | renders columns, builds the `panelsFields` map |
 | [`src/components/EntityForm.vue`](https://github.com/inuits/elody-pwa/blob/master/src/components/EntityForm.vue) | elody-pwa | creates the form, submits, re-baselines |
 | [`src/composables/useFormHelper.ts`](https://github.com/inuits/elody-pwa/blob/master/src/composables/useFormHelper.ts) | elody-pwa | `createForm`, `getKeyBasedOnInputField`, `parseFormValuesToFormInput` |
 | [`src/components/metadata/useVeeValidate.ts`](https://github.com/inuits/elody-pwa/blob/master/src/components/metadata/useVeeValidate.ts) | elody-pwa | `getVeeValidateKey` — path routing |
 | [`src/components/metadata/useMetadataWrapper.ts`](https://github.com/inuits/elody-pwa/blob/master/src/components/metadata/useMetadataWrapper.ts) | elody-pwa | `useField`, `fieldValueProxy` |
 | [`src/components/metadata/MetadataTitle.vue`](https://github.com/inuits/elody-pwa/blob/master/src/components/metadata/MetadataTitle.vue) | elody-pwa | `t(metadata.label)` |
-| [`src/helpers.ts`](https://github.com/inuits/elody-pwa/blob/master/src/helpers.ts) | elody-pwa | `setupI18n`, `normalizeEmptyInitialValuesByFieldType`, `convertSizeToTailwind` |
+| [`src/helpers.ts`](https://github.com/inuits/elody-pwa/blob/master/src/helpers.ts) | elody-pwa | `normalizeEmptyInitialValuesByFieldType`, `convertSizeToTailwind` |
