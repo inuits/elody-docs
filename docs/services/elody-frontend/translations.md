@@ -39,8 +39,8 @@ translationFileNames.forEach((fileName: string) => {
 });
 ```
 
-Note the trailing `[translationKey]`: the file is unwrapped by its own name. So
-`nl.json` must have a single top-level `"nl"` key wrapping everything:
+The file is unwrapped by its own name, so `nl.json` must have a single top-level
+`"nl"` key wrapping everything:
 
 ```json
 {
@@ -52,13 +52,10 @@ Note the trailing `[translationKey]`: the file is unwrapped by its own name. So
 }
 ```
 
-::: warning A wrapper key that doesn't match the filename yields `undefined`
-`loadTranslationsFromDirectory` derives the locale from the filename and then
-indexes the parsed JSON with it. Name the file `nl.json` but wrap the contents in
-`"nl-BE"` — or `"NL"`, or nothing — and that locale's entry is `undefined`. No
-exception, no warning; every key for that language then falls through as raw
-dot-notation text.
-:::
+A file whose wrapper key does not match its filename — `nl.json` wrapped in
+`"nl-BE"`, or `"NL"`, or nothing — is skipped with a `console.warn` naming the
+file and the keys it did find. The other locales still load. Watch the GraphQL
+service log if a whole language is missing.
 
 ### 2. A client passes its own into `start()`
 
@@ -221,7 +218,9 @@ network tab, or the GraphQL response. Work down this list:
    mistake.
 3. Is the locale in `availableLanguages`, and does the client ship a file for it?
    See the warning above.
-4. Does the JSON file's top-level wrapper key match its filename?
+4. Does the JSON file's top-level wrapper key match its filename? A mismatch is
+   logged as a warning by the GraphQL service on the first `/api/app-configs`
+   call.
 
 ## The pieces
 
