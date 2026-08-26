@@ -60,6 +60,7 @@ export default defineConfig({
               { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
               { text: 'Bulk Edit', link: '/services/elody-frontend/features/bulk-edit' },
               { text: 'External URL Mediafiles', link: '/services/elody-frontend/features/external-url-mediafiles' },
+              { text: 'Embedded Viewer', link: '/services/elody-frontend/features/embedded-viewer' },
             ],
           },
         ],

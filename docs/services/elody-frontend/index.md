@@ -25,3 +25,5 @@ The Vue 3 PWA that renders the GraphQL-driven UI.
   displayed to the user.
 - [External URL Mediafiles](features/external-url-mediafiles.md) — a mediafile
   that stands in for an external link instead of a stored file.
+- [Embedded Viewer](features/embedded-viewer.md) — a chrome-less IIIF viewer
+  route other websites can put in an `<iframe>`.
