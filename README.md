@@ -2,7 +2,7 @@
   <a href="https://elody.eu"><img src="https://elody.eu/images/logo.svg" alt="Elody" width="96" /></a>
 </p>
 
-<p align="center">Part of <a href="https://elody.eu">Elody</a> — the open semantic data platform.</p>
+<p align="center">Part of <a href="https://elody.eu">Elody</a> — the open semantic data platform.<br /><a href="https://docs.elody.eu">Documentation</a> · <a href="https://elody.eu">Website</a></p>
 
 # Elody Docs
 
