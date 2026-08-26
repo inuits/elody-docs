@@ -23,6 +23,8 @@ features:
   - icon: 🧩
     title: GraphQL-Driven UI
     details: Forms, views, and field types are defined in the GraphQL schema and rendered dynamically by the PWA.
+    link: /services/elody-frontend/graphql-driven-ui
+    linkText: How it works
   - icon: ⚙️
     title: Configurable & Multi-Tenant
     details: Customize entity behavior per tenant through object configurations, without touching code.
