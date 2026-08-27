@@ -24,7 +24,10 @@ in header), footer with "Voeg toe" commit + "Annuleer".
 | selected | accent wash + check on row(s) | click |
 | no results | text line + "Maak nieuw" if config allows | empty |
 
-<StoryEmbed id="modals-entitypicker--default" />
+<!-- EntityPickerComponent needs a live relation context to mount; the
+saved-searches picker is a real instance of the same picker chrome and
+stands in here. -->
+<StoryEmbed id="modals-savedsearches--picker" />
 
 ## Behaviour & keyboard
 Focus lands in the search pill; ↓ enters results, Enter selects, Escape

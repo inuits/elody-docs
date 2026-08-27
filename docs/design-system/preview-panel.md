@@ -26,7 +26,9 @@ rows with optional thumbnail on top; media = viewer; map = map.
 | columnlist | dl rows, em-dash for empty values | type |
 | media | viewer with toolbar | type |
 
-<StoryEmbed id="components-previewwrapper--column-list" />
+<!-- PreviewWrapper resolves its own Apollo preview query and cannot render in
+Storybook; its chrome is the panel shell, whose story stands in here. -->
+<StoryEmbed id="entityelements-entityelementwindow--default" />
 
 ## Behaviour & keyboard
 Opening moves focus to the panel header; Escape closes and returns focus to
