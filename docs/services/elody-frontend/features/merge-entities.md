@@ -146,6 +146,68 @@ scans the entity collections for ids of a given type and reports every
 environment with real data — a type nobody has linked yet passes trivially.
 :::
 
+#### Declaring `sync` blocks on a validator
+
+This is how vlacc does it, and the pattern is worth copying by any client that
+stores references as properties rather than in a `relations` array. A relation
+is declared on the validator of the type that participates in it, next to the
+property itself:
+
+```python
+"ref_authors": {
+    "items": {"minLength": 1, "type": "string"},
+    "type": "array",
+    "_customAttributes": {
+        "sync": {
+            "document_types": [*WORK_TYPES, *EXPRESSION_TYPES, *MANIFESTATION_TYPES],
+            "property": "ref_authors",
+        },
+        "virtual": True,
+    },
+},
+```
+
+Read it as: *documents of these types hold `property`, and that property can
+point at me.* `get_sync_declarations` collects them, and
+`inbound_reference_sources` turns each `document_types` entry into the
+collection its object configuration declares, giving one
+`(collection, "properties.<property>.value")` pair per far collection.
+
+Four rules:
+
+- **Declare it on both sides.** The property name is the same on both ends of
+  a relation by convention (`ref_authors` on the corporation *and* on the
+  work), so each validator mirrors every relation it participates in. Merging
+  a corporation needs the corporation's declaration; merging a work needs the
+  work's.
+- **Use the type-group constants** from `validation/constants.py`
+  (`AUTHORITY_TYPES`, `WORK_TYPES`, `EXPRESSION_TYPES`, `MANIFESTATION_TYPES`)
+  rather than listing types by hand. A type added to a group is then covered
+  everywhere at once.
+- **A one-directional property gets no `sync`.** A corporation has
+  `ref_places`, but a place holds no list of the corporations based there —
+  there is no inbound reference to find, so there is nothing to declare. Say
+  so in a comment; an absent declaration otherwise reads as an oversight.
+- **`sync` is independent of `virtual`.** `virtual` is what makes a property
+  write to the far side instead of being stored; it is read by the
+  configuration's relation sync, which never looks at `sync`. So adding a
+  `sync` block changes no runtime write behaviour — it is purely a
+  declaration, and can be added to an existing type without a migration.
+  Declare it on stored properties too: a stored property's reverse edge is
+  exactly what makes the victim findable.
+
+A type that can reference *anything* has no useful `document_types` list.
+vlacc handles the one case it has — `comment`, via `ref_parent_entity` and
+`ref_tagged_entities` — with a fixed `POLYMORPHIC_REFERENCE_SOURCES` map in
+`apps/vlacc/references.py`, appended to every type's sources.
+
+::: tip
+Write the declarations test-first. `inbound_reference_sources("person")` is a
+pure function of the validators, so the expected `(collection, field)` set is
+a plain unit test — and it is much easier to reason about there than through a
+merge.
+:::
+
 ### 4. Implement relation carry-over
 
 `MergeResource._carry_over_relations` raises `NotImplementedError`, because
