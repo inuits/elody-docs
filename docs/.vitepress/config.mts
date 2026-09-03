@@ -66,6 +66,7 @@ export default defineConfig({
               { text: 'External URL Mediafiles', link: '/services/elody-frontend/features/external-url-mediafiles' },
               { text: 'Embedded Viewer', link: '/services/elody-frontend/features/embedded-viewer' },
               { text: 'Media Viewers', link: '/services/elody-frontend/features/media-viewers' },
+              { text: 'Pipeline View Mode', link: '/services/elody-frontend/features/pipeline-view-mode' },
             ],
           },
         ],
