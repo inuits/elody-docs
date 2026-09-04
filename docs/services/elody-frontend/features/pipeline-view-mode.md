@@ -67,22 +67,24 @@ Producer references and entity identifiers often come from different layers
 compares normalized suffixes rather than exact strings.
 
 None of these key names is hardcoded. They are defaults of a
-`PipelineViewConfig` resolved from the view mode's generic config channel,
-so a client whose metadata uses different names declares that instead of
-renaming its data:
+`PipelineViewConfig` resolved from the view mode's generic config channel.
+Every key below is optional; the values shown ARE the defaults, so a bare
+`{ viewMode: ViewModesPipeline }` behaves exactly like this. A client whose
+metadata uses different names overrides the relevant key instead of
+renaming its data (e.g. `connectionsKey: "wiring"`).
 
 ```graphql
 {
   viewMode: ViewModesPipeline
   config: [
-    { key: "connectionsKey", value: "wiring" }      # default "connections"
-    { key: "contractsKey", value: "io" }            # default "contracts"
-    { key: "consumesField", value: "consumes" }     # default
-    { key: "producesField", value: "produces" }     # default
-    { key: "shapeIriField", value: "iri" }          # default
-    { key: "paginationLimit", value: 250 }          # default 1000
-    { key: "addConsumerBulkOperation", value: "addRelation" } # default
-    { key: "edgeRelations", value: ["refWork"] }    # default []
+    { key: "connectionsKey", value: "connections" }  # wiring metadata prefix
+    { key: "contractsKey", value: "contracts" }      # contract chip prefix
+    { key: "consumesField", value: "consumes" }
+    { key: "producesField", value: "produces" }
+    { key: "shapeIriField", value: "iri" }           # port shape IRIs
+    { key: "paginationLimit", value: 1000 }
+    { key: "addConsumerBulkOperation", value: "addRelation" }
+    { key: "edgeRelations", value: [] }              # see next section
   ]
 }
 ```
