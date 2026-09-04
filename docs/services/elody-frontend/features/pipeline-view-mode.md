@@ -65,31 +65,32 @@ their parent. The only other config key is `paginationLimit` (default
 1000) — a pipeline shows the whole chain, so the mode fetches unpaged
 while active and restores the previous limit when the user switches away.
 
-### The connections and contracts conventions
+### Typed wiring shapes
 
 Plain relations cannot express everything: the same entity may be used
 twice in one flow (so the wiring belongs to the *use*, not the entity),
-inputs may be named ports, and an edge may carry a validation verdict.
-For that richer wiring there are two fixed platform conventions — platform
-vocabulary a client projects its data into, the way metadata projects into
-`teaserMetadata`:
+inputs may be named ports, and an edge may carry a validation verdict. For
+that richer wiring the platform defines two **typed shapes** — structure,
+never metadata key-name conventions:
 
-- **Connections** — relation metadata on the entity's relation to the
-  parent, keyed `connections.<port>.from` with a value of the form
-  `"<producer-id>|<port>"`. Each such entry draws an edge from the
-  producer's output port to this entity's input port. Optional sibling keys
-  `connections.<port>.status` (`valid` / `mismatch`, anything else renders
-  as unknown) and `connections.<port>.label` style the edge and put a badge
-  on it — a `mismatch` renders dashed with its label, so an incompatible
-  wiring is visible at a glance. The status is whatever validation already
-  computed elsewhere; the view never validates anything itself. An entity
-  may also carry the same structure directly as a `connections` object.
-- **Contracts** — plain metadata values `contracts.consumes` and
-  `contracts.produces` (human-readable labels) become the card's chip row
-  and drive the implicit single input/output port when an entity declares
-  no explicit ports. `contracts.produces.iri` may carry one or more
-  space-separated shape IRIs; a port that knows its IRIs gets the
-  "add a consumer" affordance described below.
+- **A `connections` object** — `{ "<port>": { "from": "<producer>|<port>",
+  "status"?, "label"? } }`. It can live directly on the entity
+  (client-computed, entity-level wiring) or as the value of a single
+  relation-metadata entry keyed `connections` on the entity's relation to
+  the parent (per-use wiring). `status` (`valid` / `mismatch`, anything
+  else renders as unknown) and `label` style the edge and put a badge on
+  it — a `mismatch` renders dashed with its label. The status is whatever
+  validation already computed elsewhere; the view never validates anything
+  itself.
+- **A `ports` list on the entity** — `[{ "id"|"name", "direction":
+  "in"|"out", "label"?, "required"?, "shapeIri"? }]` — naming the ports,
+  and for outputs carrying the shape IRIs that power the port-scoped
+  "add a consumer" picker.
+
+How a client fills these shapes is its own business: DiSHACLed's
+collection-api derives both from the pipeline definition it already stores,
+a client could equally compute them in a GraphQL resolver from data it has
+at hand.
 
 All sources combine, and each degrades gracefully when absent. Producer
 references and entity identifiers often come from different layers
@@ -105,15 +106,16 @@ The entity's context menu stays fully functional as a `⋮` in the top-right
 corner, so declared actions (configure, connect, delete, …) remain the way
 to act on a node.
 
-The teaser metadata is rearranged for the purpose: the entity-type pill is
-dropped (in a pipeline everything is the same kind of thing, so it says
-nothing), the contract facts render as a chip row, and bookkeeping under the
-contracts/connections prefixes stays off the card — the edges already draw
-what feeds what.
+The teaser metadata is trimmed for the purpose: the entity-type pill is
+dropped (in a flow every card is the same kind of thing, so it says
+nothing), and fields flagged `hideOnPipelineCard` stay off. That flag is
+structural — set by whoever supplies the field: a `dynamicFormConfig`
+panel can mark its wiring rows as redundant next to the drawn edges.
 
 ## Adding a consumer from a port
 
-An output port whose contract carries shape IRIs shows a **+** on hover.
+An output port whose `ports` entry carries a shape IRI shows a **+** on
+hover.
 Clicking it runs the type's ordinary declared `addRelation` bulk
 operation — the same modal, picker and save path a user gets from the
 actions bar — but scoped: the clicked port's IRIs are handed over as the
