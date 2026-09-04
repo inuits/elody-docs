@@ -82,6 +82,7 @@ renaming its data:
     { key: "shapeIriField", value: "iri" }          # default
     { key: "paginationLimit", value: 250 }          # default 1000
     { key: "addConsumerBulkOperation", value: "addRelation" } # default
+    { key: "edgeRelations", value: ["refWork"] }    # default []
   ]
 }
 ```
@@ -89,6 +90,32 @@ renaming its data:
 This is the same pattern the map view mode already uses for
 `keyToExtractCoordinates` and friends: the query says which metadata keys
 carry the data, the PWA carries no client vocabulary.
+
+### Relation-driven edges
+
+For a plain hierarchy there is a third, even simpler wiring source:
+`edgeRelations` names relation types that *are* the wiring. For every
+relation of such a type on an entity, an edge is drawn from the related
+entity (the producer) to that entity, read straight from the
+`relationValues` the listing already selects — no connection metadata, no
+computed field, no resolver work. A WEMI tree (work → expressions →
+manifestations), where expressions carry `refWork` and manifestations carry
+`refExpressions`, becomes pure declaration:
+
+```graphql
+{
+  viewMode: ViewModesPipeline
+  config: [
+    { key: "edgeRelations", value: ["refWork", "refExpressions"] }
+  ]
+}
+```
+
+The three sources combine: an entity's explicit `connections` object, the
+`connections.<port>.from` relation metadata, and declared edge relations
+all contribute edges. Note the direction: the *related* entity feeds the
+entity carrying the relation, which matches the common pattern of child
+records pointing at their parent.
 
 ## Cards
 
