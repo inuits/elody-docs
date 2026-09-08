@@ -15,6 +15,9 @@ hero:
     - theme: alt
       text: Services
       link: /services
+    - theme: alt
+      text: Changelog
+      link: /changelog
 
 features:
   - icon: 🗂️

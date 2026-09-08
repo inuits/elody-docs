@@ -71,6 +71,13 @@ export default defineConfig({
           },
         ],
       },
+      {
+        text: 'About',
+        collapsed: false,
+        items: [
+          { text: 'Changelog', link: '/changelog' },
+        ],
+      },
     ],
 
     outline: {
