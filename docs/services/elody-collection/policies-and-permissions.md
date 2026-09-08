@@ -20,6 +20,11 @@ semantics, the authentication and authorization policies, the permission
 configuration format and every restriction type, all key-syntax modifiers,
 placeholder substitution, schema versioning, and a set of worked examples.
 
+It covers enforcement only. For how the user interface decides which buttons,
+panels and routes to render — which probes these same restrictions ahead of
+time and omits the config a user may not have — see
+[UI Permissions](/services/elody-frontend/permissions).
+
 ## How authorization works
 
 Every protected endpoint is decorated with `@policy_factory.apply_policies(...)`.

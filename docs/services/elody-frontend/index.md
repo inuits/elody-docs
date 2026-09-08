@@ -11,6 +11,8 @@ The Vue 3 PWA that renders the GraphQL-driven UI.
   compiled PWA and the GraphQL API from a single Express process.
 - [Auth & Session](auth-session.md) — OIDC login/logout, server-side tokens
   and refresh, cross-tab sync, route guards and whitelisting.
+- [UI Permissions](permissions.md) — gating panels, actions and routes on
+  permissions, and how the GraphQL layer omits config a user may not have.
 
 ## Styling
 
