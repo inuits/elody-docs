@@ -25,6 +25,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started' },
       { text: 'Services', link: '/services/' },
+      { text: 'Changelog', link: '/changelog' },
     ],
 
     sidebar: [
