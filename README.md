@@ -8,13 +8,6 @@
 
 General documentation site for the Elody semantic data platform, built with [VitePress](https://vitepress.dev).
 
-## Build
-
-```bash
-npm run build
-npm run preview
-```
-
 ## Docker
 
 The `Dockerfile` uses BuildKit build secrets for the private npm registry, so
