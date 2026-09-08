@@ -215,8 +215,9 @@ configuration at all:
 - **Simple search item types.** The app config only offers the item types the
   user may read, so the frontend builds its search filter from the config it
   was handed.
-- **Menu items and create modals without a `can`.** These fall back to probing
-  create or read on the item's `entityType`.
+- **Menu items and create modals without a `can`.** A menu item declaring an
+  `entityType` falls back to probing create or read on that type. One
+  declaring neither `can` nor `entityType` is unconditionally visible.
 
 ## Module-contributed permissions
 
