@@ -53,7 +53,7 @@ export const pzaIotPermissions: { [key: string]: PermissionRequestInfo } = {
 };
 ```
 
-The map is handed to `start()` in the client's `main.ts` as
+The map is handed to [`start()`](https://github.com/inuits/elody-base-graphql/blob/master/main.ts) in the client's `main.ts` as
 `customPermissions`, and it is merged with whatever the installed modules
 contribute — see [Module-contributed permissions](#module-contributed-permissions).
 
@@ -141,7 +141,7 @@ generated types match the query documents.
 
 Options in the other dropdown-shaped lists — `SortOptions.options`,
 `PaginationLimitOptions.options` and `DropzoneEntityToCreate.options` — accept
-`can` because they share `DropdownOptionInput`, but **nothing evaluates it
+`can` because they share [`DropdownOptionInput`](https://github.com/inuits/elody-base-graphql/blob/master/baseModule/baseSchema.schema.ts), but **nothing evaluates it
 there**. A `can` on a sort option is silently ignored. Only the three rows
 listed above are filtered.
 
@@ -265,7 +265,7 @@ resolves per request:
 The navigation guard then redirects a denied route to the entry in
 `alternativeRoutes` matching the user's role. Two details are load-bearing:
 
-- The guard reads verdicts from the **config object** it is handed, not from
+- The [guard](https://github.com/inuits/elody-pwa/blob/master/src/routerNavigationGuards.ts) reads verdicts from the **config object** it is handed, not from
   router meta. `createRouter` runs before the post-auth config refetch, so
   router meta may still hold the pre-authentication answer.
 - `alternativeRoutes` is still read from router meta. Only the verdict moved
@@ -303,11 +303,22 @@ single call per request through the cache.
 
 ## Where the code lives
 
-| What | Where |
-| --- | --- |
-| Verdict evaluation and the per-surface helpers | `modules/baseGraphql/helpers/permissions.ts` |
-| Verdict cache and its TTLs | `modules/baseGraphql/helpers/permissionCache.ts` |
-| Soft call and placeholder substitution | `modules/baseGraphql/sources/collection.ts` |
-| Route, feature and simple-search resolution | `modules/baseGraphql/endpoints/appConfigEndpoint.ts` |
-| Per-surface wiring | `modules/baseGraphql/baseModule/baseResolver.ts` |
-| Navigation guard | `inuits-dams-pwa/src/routerNavigationGuards.ts` |
+| File | Repo | What is in it |
+| --- | --- | --- |
+| `helpers/permissions.ts` | elody-base-graphql | `evaluateAdvancedPermission` and the per-surface helpers |
+| `helpers/permissionCache.ts` | elody-base-graphql | verdict cache and its TTLs |
+| [`sources/collection.ts`](https://github.com/inuits/elody-base-graphql/blob/master/sources/collection.ts) | elody-base-graphql | `checkAdvancedPermission` — soft call and placeholder substitution |
+| [`endpoints/appConfigEndpoint.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/appConfigEndpoint.ts) | elody-base-graphql | route, feature and simple-search resolution |
+| [`baseModule/baseResolver.ts`](https://github.com/inuits/elody-base-graphql/blob/master/baseModule/baseResolver.ts) | elody-base-graphql | per-surface wiring |
+| [`baseModule/baseSchema.schema.ts`](https://github.com/inuits/elody-base-graphql/blob/master/baseModule/baseSchema.schema.ts) | elody-base-graphql | which fields accept a permission argument |
+| `helpers/moduleContributions.ts` | elody-base-graphql | `elodyPermissions` / `elodyFeatures` collection |
+| [`main.ts`](https://github.com/inuits/elody-base-graphql/blob/master/main.ts) | elody-base-graphql | `customPermissions` merge, request context |
+| [`src/routerNavigationGuards.ts`](https://github.com/inuits/elody-pwa/blob/master/src/routerNavigationGuards.ts) | elody-pwa | reads `meta.permitted`, redirects |
+| [`src/composables/useEditState.ts`](https://github.com/inuits/elody-pwa/blob/master/src/composables/useEditState.ts) | elody-pwa | maps `canUpdate` / `canDelete` to an edit mode |
+| [`src/components/metadata/useMetadataWrapper.ts`](https://github.com/inuits/elody-pwa/blob/master/src/components/metadata/useMetadataWrapper.ts) | elody-pwa | applies `permitted` / `readOnly` to a field |
+| [`src/components/library/useBaseLibrary.ts`](https://github.com/inuits/elody-pwa/blob/master/src/components/library/useBaseLibrary.ts) | elody-pwa | sends `X-Parent-Entity-Id` |
+
+The three unlinked files are new in this refactor and appear in
+[elody-base-graphql](https://github.com/inuits/elody-base-graphql) once it is
+merged. The per-client permission maps and the collection-side role
+configuration live in the client repositories, which are not public.
