@@ -10,6 +10,9 @@ Features that we are working on but are not yet finished. These might come in a 
 Improved visibility of audit of entities, specifically for relations.
 
 ## 2026.Q3
+### Navigation between search results
+After filtering entities on an overview page and opening the detail page of an entity, you will now find navigation arrows to jump to the previous or next entity from the filter result. This allows you to easily go to the previous/next result without first having to open the filter result again.
+
 ### Search highlighting
 When searching for text elody can now highlight the matched word in the search result
 
