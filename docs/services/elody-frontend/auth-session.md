@@ -186,7 +186,7 @@ keeps it).
 
 **Implicitly**, when the server says the session is gone. An Apollo Server
 plugin in
-[`main.ts`](https://github.com/inuits/elody-base-graphql/blob/master/main.ts)
+[`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts)
 tags every GraphQL response that has no `session.auth` with
 `extensions.authStatus = 'UNAUTHENTICATED'`. In the PWA, the `authCheckLink`
 Apollo link watches for that value and, if the frontend still thinks it is

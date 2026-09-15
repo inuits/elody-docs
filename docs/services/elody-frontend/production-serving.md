@@ -38,7 +38,7 @@ Then `pnpm i --prod`, and the container's command is `pnpm start`, which is
 
 ## How Express serves it at runtime
 
-baseGraphql's [`main.ts`](https://github.com/inuits/elody-base-graphql/blob/master/main.ts)
+baseGraphql's [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts)
 builds a single Express app and, near the end of startup, calls
 `configureFrontendForEnvironment(app, viteServer)`. That function, in
 [`endpoints/frontendEndpoint.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/frontendEndpoint.ts),

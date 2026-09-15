@@ -18,8 +18,8 @@ instead — a proxy endpoint is the escape hatch, not the default.
 
 ## Registration order
 
-`start()` in
-[`main.ts`](https://github.com/inuits/elody-base-graphql/blob/master/main.ts)
+`ElodyInstance` in
+[`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts)
 mounts handlers in a fixed order:
 
 1. **`defaultElodyEndpointMapping`** — the base endpoints every client gets:
@@ -56,17 +56,17 @@ Both registration paths use the same signature:
 
 ### As a client endpoint
 
-Write the handler, then pass it to `start()` in your client's
+Write the handler, then pass it to `ElodyInstance` in your client's
 `inuits-dams-graphql-service/src/main.ts`:
 
 ```ts
-start({
+new ElodyInstance({
   customModuleConfig: assetEngineElodyConfig,
   appConfig: assetEngineAppConfig,
   customTranslations: assetEngineTranslations,
   customEndpoints: [redirectEndpoint, genericApiRedirectEndpoint],
   // ...
-});
+}).start();
 ```
 
 ### As a module endpoint
@@ -246,7 +246,7 @@ For how the media viewers consume the first three, see
 
 | File | Repo | Role |
 | --- | --- | --- |
-| [`main.ts`](https://github.com/inuits/elody-base-graphql/blob/master/main.ts) | elody-base-graphql | `start()`, registration order, `applyCustomEndpoints` |
+| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql | `ElodyInstance`, registration order, custom endpoints |
 | [`sources/defaultElodyEndpointMapping.ts`](https://github.com/inuits/elody-base-graphql/blob/master/sources/defaultElodyEndpointMapping.ts) | elody-base-graphql | the base endpoint set |
 | [`endpoints/fetchWithToken.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/fetchWithToken.ts) | elody-base-graphql | `fetchWithTokenRefresh` |
 | [`auth/AuthRESTDataSource.ts`](https://github.com/inuits/elody-base-graphql/blob/master/auth/AuthRESTDataSource.ts) | elody-base-graphql | token, `X-request-id`, `X-tenant-id`, retries |

@@ -57,7 +57,7 @@ A file whose wrapper key does not match its filename — `nl.json` wrapped in
 file and the keys it did find. The other locales still load. Watch the GraphQL
 service log if a whole language is missing.
 
-### 2. A client passes its own into `start()`
+### 2. A client passes its own into `ElodyInstance`
 
 Client translations live in
 `clients/<client>/client-frontend/inuits-dams-graphql-service/src/translations/`,
@@ -71,18 +71,18 @@ const podiumnetTranslations: Record<string, Object> =
   loadTranslationsFromDirectory(path.join(__dirname, "translations"));
 ```
 
-and hand the result to `start()`:
+and hand the result to the `ElodyInstance` constructor:
 
 ```ts
-start({
+new ElodyInstance({
   customModuleConfig: podiumnetElodyConfig,
   appConfig: podiumnetAppConfig,
   customTranslations: podiumnetTranslations,
   // ...
-});
+}).start();
 ```
 
-`start()` forwards `customTranslations` to the app-config endpoint — it is one of
+`ElodyInstance` forwards `customTranslations` to the app-config endpoint — it is one of
 the four arguments in the `configsEndoint` slot of
 `defaultElodyEndpointVariableMapping`. Nothing else in baseGraphql reads them.
 
@@ -229,7 +229,7 @@ network tab, or the GraphQL response. Work down this list:
 | [`translations/loadTranslations.ts`](https://github.com/inuits/elody-base-graphql/blob/master/translations/loadTranslations.ts) | elody-base-graphql | `loadTranslationsFromDirectory`, filename-is-locale |
 | [`translations/*.json`](https://github.com/inuits/elody-base-graphql/tree/master/translations) | elody-base-graphql | the shared set (`en`, `nl`, `ar`) |
 | [`endpoints/appConfigEndpoint.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/appConfigEndpoint.ts) | elody-base-graphql | `getAvailableTranslations`, `/api/app-configs` |
-| [`main.ts`](https://github.com/inuits/elody-base-graphql/blob/master/main.ts) | elody-base-graphql | `customTranslations` → `configsEndoint` |
+| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql | `customTranslations` → `configsEndoint` |
 | `src/translations/*.json` | each client | client overrides and additions |
 | [`src/helpers.ts`](https://github.com/inuits/elody-pwa/blob/master/src/helpers.ts) | elody-pwa | `setupI18n`, `getApplicationDetails` |
 | [`src/main.ts`](https://github.com/inuits/elody-pwa/blob/master/src/main.ts) | elody-pwa | installs i18n and validation messages at startup |
