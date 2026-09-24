@@ -54,6 +54,8 @@ export default defineConfig({
             link: '/services/elody-frontend/',
             items: [
               { text: 'GraphQL-Driven UI', link: '/services/elody-frontend/graphql-driven-ui' },
+              { text: 'Inputs & Teaser Metadata', link: '/services/elody-frontend/inputs-and-teaser-metadata' },
+              { text: 'Formatters', link: '/services/elody-frontend/formatters' },
               { text: 'Translations', link: '/services/elody-frontend/translations' },
               { text: 'Build Pipeline', link: '/services/elody-frontend/build-pipeline' },
               { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
@@ -68,6 +70,7 @@ export default defineConfig({
               { text: 'External URL Mediafiles', link: '/services/elody-frontend/features/external-url-mediafiles' },
               { text: 'Embedded Viewer', link: '/services/elody-frontend/features/embedded-viewer' },
               { text: 'Media Viewers', link: '/services/elody-frontend/features/media-viewers' },
+              { text: 'Relation Pills', link: '/services/elody-frontend/features/relation-pills' },
             ],
           },
         ],
