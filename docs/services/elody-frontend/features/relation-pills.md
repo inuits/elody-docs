@@ -53,8 +53,15 @@ teaserMetadata {
 `valueTranslationKey` applies to the **chips only** — a relation label is a
 name and is never translated.
 
+Each chip carries a `title`, so hovering it says what the value *is*
+(`Functie: Programmator`). The name comes from `metadata.labels.<key>` of the
+metadata key the chip was read from, falling back to the raw key when there is
+no translation for it — so listing a key here is enough, there is nothing extra
+to configure.
+
 Listing several keys merges them into that relation's chips, so
-`nestedMetadataKeys: ["roles", "function"]` shows both per organization.
+`nestedMetadataKeys: ["roles", "function"]` shows both per organization — each
+chip keeps the key it came from, which is what its tooltip names.
 
 Without `nestedMetadataKeys` the value behaves exactly as before: the labels of
 all relations joined into one string.
