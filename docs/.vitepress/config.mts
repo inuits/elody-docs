@@ -71,6 +71,7 @@ export default defineConfig({
               { text: 'Embedded Viewer', link: '/services/elody-frontend/features/embedded-viewer' },
               { text: 'Media Viewers', link: '/services/elody-frontend/features/media-viewers' },
               { text: 'Relation Pills', link: '/services/elody-frontend/features/relation-pills' },
+              { text: 'Pipeline View Mode', link: '/services/elody-frontend/features/pipeline-view-mode' },
             ],
           },
         ],
