@@ -72,6 +72,7 @@ export default defineConfig({
               { text: 'Media Viewers', link: '/services/elody-frontend/features/media-viewers' },
               { text: 'Relation Pills', link: '/services/elody-frontend/features/relation-pills' },
               { text: 'Linked Open Data', link: '/services/elody-frontend/features/linked-open-data' },
+              { text: 'Pipeline View Mode', link: '/services/elody-frontend/features/pipeline-view-mode' },
             ],
           },
         ],
