@@ -21,7 +21,8 @@ curl https://podiumnet-dev.elody.eu/production/PR-6V8VLIHP0 \
     :refBookingAgency <https://podiumnet-dev.elody.eu/ORG-JQGB344X> .
 ```
 
-This works for every client with no configuration and no per-client code.
+This works for every client with no per-client code. Deployed environments do
+need one setting — see [Configuring the base URI](#configuring-the-base-uri).
 
 ## Supported formats
 
@@ -120,16 +121,36 @@ The base is resolved in this order, first one wins:
 | `ELODY_LD_CONTEXT` | The vocabulary base |
 | — | `https://elody.eu/` |
 
-In practice nothing needs setting: `DAMS_FRONTEND_URL` is already defined for
-every client and already passed to collection-api, so each environment
-publishes URIs under its own frontend host — which is exactly the address that
-content-negotiates. Set `ELODY_LD_BASE_URI` only when identifiers should live
-under a host that is not the frontend, for example a stable
-`https://data.example.org/` that stays constant across dev and production.
+Only values that are **absolute** `http://` or `https://` URIs are accepted;
+anything else — empty, or a path like `/` — is skipped as if unset. Without
+that guard an empty value produces relative identifiers, which rdflib then
+resolves against the process working directory, yielding nonsense like
+`<file:///PR-KC6WGSXST> a <file:///app/api/production>`.
 
-`ELODY_LD_CONTEXT` sets the `@vocab` that predicates resolve against and
-defaults to `https://elody.eu/`. Point it at a real published vocabulary when
-one exists.
+Locally nothing needs setting, because `DAMS_FRONTEND_URL` is already defined
+for every client in docker-compose and passed to collection-api.
+
+**On Kubernetes it must be set explicitly.** `DAMS_FRONTEND_URL` is a
+docker-compose variable and does not exist in the Helm chart, so a deployed
+environment falls through to the `https://elody.eu/` placeholder unless you set
+`elody_ld_base_uri` in the collection chart's `config.general`:
+
+```yaml
+collection:
+  config:
+    general:
+      elody_ld_context: https://elody.eu/
+      elody_ld_base_uri: https://podiumnet.be
+```
+
+Point `elody_ld_base_uri` at the public frontend host, since that is the
+address that content-negotiates. Use a different host only when identifiers
+should live somewhere stable across environments, for example
+`https://data.example.org/`.
+
+`ELODY_LD_CONTEXT` sets the `@vocab` that predicates resolve against and falls
+back to `https://elody.eu/`. Point it at a real published vocabulary when one
+exists.
 
 ## Local development
 
