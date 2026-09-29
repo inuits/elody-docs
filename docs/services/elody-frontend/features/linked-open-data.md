@@ -6,7 +6,7 @@ you send. A browser asking for HTML gets the app. A harvester asking for
 `text/turtle` gets the entity as RDF, at the same address.
 
 ```bash
-curl https://podiumnet-dev.elody.eu/production/PR-6V8VLIHP0 \
+curl https://<project>.elody.eu/production/PR-6V8VLIHP0 \
   -H 'Accept: text/turtle' \
   -H 'Authorization: Bearer <token>'
 ```
@@ -14,11 +14,11 @@ curl https://podiumnet-dev.elody.eu/production/PR-6V8VLIHP0 \
 ```turtle
 @prefix : <https://elody.eu/> .
 
-<https://podiumnet-dev.elody.eu/PR-6V8VLIHP0> a :production ;
+<https://<project>.elody.eu/PR-6V8VLIHP0> a :production ;
     :title "Gezelschappen" ;
     :status "archived" ;
     :premiere_date "2026-07-30" ;
-    :refBookingAgency <https://podiumnet-dev.elody.eu/ORG-JQGB344X> .
+    :refBookingAgency <https://<project>.elody.eu/ORG-JQGB344X> .
 ```
 
 This works for every client, with no per-client code and no configuration.
@@ -60,10 +60,6 @@ The negotiation lives in the GraphQL service (baseGraphql), in
 3. **Position.** It is registered *ahead* of the static and Vite middleware.
    Behind them, the SPA fallback only answers html-accepting requests and data
    requests would never arrive.
-
-Client-specific routes registered as `customEndpoints` still take precedence,
-because those are registered earlier — digipolis' `/asset/*` and `/iiif/*`
-handling is untouched.
 
 The request is then proxied to collection-api's `/entities/<id>` with the
 single negotiated mimetype as its `Accept`. That normalisation matters:
@@ -168,10 +164,3 @@ container:
 ```
 http://localhost:4001/<type>/<id>
 ```
-
-## Extension-based formats on digipolis
-
-digipolis additionally serves `/asset/<id>.turtle`, `.json` and `.rdf`, where
-the format comes from the file extension instead of the accept header. Those
-routes stay, and now share the same proxy and format map; the extension style
-is not available on other clients.
