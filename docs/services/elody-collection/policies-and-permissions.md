@@ -503,6 +503,60 @@ with a 403. The response body lists the offending fields:
 }
 ```
 
+### Restricting a key inside a list of objects
+
+A field path may contain the element marker `[]` to restrict a key on **each
+element of a list separately**, instead of deleting the list. Without it, a
+path such as `properties.ref_organizations.roles` would strip the whole
+`properties.ref_organizations` property, because the path is resolved two
+levels deep only.
+
+```python
+"read": {
+    "user": {
+        "podiumnet:1": {
+            "key_restrictions": {
+                "0:properties.ref_organizations[].roles": {
+                    "!properties.ref_organizations[].value": "ORGANIZATION_IDS"
+                },
+            }
+        }
+    }
+}
+```
+
+Given a document like:
+
+```python
+"properties": {
+    "ref_organizations": [
+        {"value": "ORG-1", "roles": ["admin"],  "function": ["technical"]},
+        {"value": "ORG-2", "roles": ["member"], "function": ["technical"]},
+    ]
+}
+```
+
+a caller whose `ORGANIZATION_IDS` contains only `ORG-2` reads back both
+elements with their `value` and `function` intact, but only `ORG-2` keeps its
+`roles`.
+
+**Condition scope.** A condition key carrying the same `<list>[].` prefix is
+evaluated against *the element being considered*, so its value is a scalar
+rather than the flattened list of every element's values. This is what makes
+`!` behave per element. A condition key **without** the marker is evaluated
+against the document as a whole, as usual — the two can be combined.
+
+**Missing keys never raise.** An element the condition cannot be evaluated
+against (the condition key is absent from that element) is restricted rather
+than raised over: a read restriction that blew up on one malformed element
+would take down the whole listing, and leaking the key is the worse failure.
+A document that does not have the list at all is left untouched.
+
+**Read only.** `[]` restrictions are rejected with an explicit error on
+`create`, `update` and `delete` — the write-side check compares flat request
+body keys, which a per-element path cannot address. Do not use `[]` in
+`object_restrictions` either; those keys are compiled into database filters.
+
 ### Optional, negated and relation keys
 
 Both `object_restrictions` and `key_restrictions` (and their condition keys)
@@ -515,6 +569,7 @@ lookups are handled.
 | `!`    | key        | **Negate.** The restriction passes when the field value is *not* in the allowed list. |
 | `!?`   | key        | **Optionally strict.** If the key is present it must match; if absent, access is *denied*. |
 | `@`    | key        | **Relation lookup.** Resolve a related document and check a field on it. |
+| `[]`   | key        | **Per element.** Restrict a key on each element of a list separately (read only). See [Restricting a key inside a list of objects](#restricting-a-key-inside-a-list-of-objects). |
 
 Prefix characters appear between the index colon and the field path:
 
