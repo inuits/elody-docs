@@ -144,6 +144,7 @@ ui:example01
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
+  sh:targetClass schema:Person ;
   sh:property
     ui:example01-honorificPrefix ,
     ui:example01-givenName ,
@@ -162,7 +163,7 @@ ui:example01
   elody:viewMode [ elody:mode elody:ListView ] .
 
 ex:PersonShapeNameGroup
-  a sh:PropertyGroup , sh:PropertyGroup ;
+  a sh:PropertyGroup ;
   rdfs:label "Name" ;
   sh:order 0 ;
   elody:alias "personShapeNameGroup" ;
@@ -496,6 +497,7 @@ ui:example02
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
+  sh:targetClass schema:Person ;
   sh:property
     ui:example02-honorificPrefix ,
     ui:example02-givenName ,
@@ -514,7 +516,7 @@ ui:example02
   elody:viewMode [ elody:mode elody:ListView ] .
 
 ex:PersonShapeNameGroup
-  a sh:PropertyGroup , sh:PropertyGroup ;
+  a sh:PropertyGroup ;
   rdfs:label "Name" ;
   sh:order 0 ;
   elody:alias "personShapeNameGroup" ;
@@ -867,6 +869,7 @@ ui:example03
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
+  sh:targetClass schema:Person ;
   sh:property
     ui:example03-honorificPrefix ,
     ui:example03-givenName ,
@@ -885,7 +888,7 @@ ui:example03
   elody:viewMode [ elody:mode elody:ListView ] .
 
 ex:PersonShapeNameGroup
-  a sh:PropertyGroup , sh:PropertyGroup ;
+  a sh:PropertyGroup ;
   rdfs:label "Name" ;
   sh:order 0 ;
   elody:alias "personShapeNameGroup" ;
@@ -2059,6 +2062,7 @@ ui:example11
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
+  sh:targetClass ex:Person ;
   sh:property ui:example11-employer , ui:example11-firstName ;
   elody:detail
     [ elody:column
@@ -2286,6 +2290,7 @@ ui:example12
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
+  sh:targetClass ex:Book ;
   sh:property ui:example12-creator ;
   elody:detail
     [ elody:column
@@ -2956,6 +2961,7 @@ ui:example15
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
+  sh:targetClass ex:Task ;
   sh:property ui:example15-assignee ;
   elody:detail
     [ elody:column
@@ -3179,6 +3185,7 @@ ui:example16
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
+  sh:targetClass ex:Book ;
   sh:property ui:example16-creator ;
   elody:detail
     [ elody:column
