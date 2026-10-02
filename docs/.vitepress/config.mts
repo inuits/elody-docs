@@ -74,6 +74,13 @@ export default defineConfig({
               { text: 'Linked Open Data', link: '/services/elody-frontend/features/linked-open-data' },
               { text: 'Pipeline View Mode', link: '/services/elody-frontend/features/pipeline-view-mode' },
               { text: 'History Viewer', link: '/services/elody-frontend/features/history-viewer' },
+              {
+                text: 'SHACL UI',
+                link: '/services/elody-frontend/shacl-ui/',
+                items: [
+                  { text: 'Spec Examples', link: '/services/elody-frontend/shacl-ui/examples' },
+                ],
+              },
             ],
           },
         ],
