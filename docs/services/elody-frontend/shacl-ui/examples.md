@@ -1656,7 +1656,7 @@ fragment minimalSpecExample05 on BaseEntity {
 
 **What Elody did with it**
 
-- "Title": alternative path, left out (an Elody field reads one metadata key or one relation)
+- "Title": alternative path, left out: Elody keeps view and edit symmetric (a field it shows, it can edit), as the spec allows; an Elody field reads and writes one metadata key or one relation
 - no property Elody can carry: the declaration has no fields
 
 ::: details SHACL UI shapes (from the spec)
@@ -1946,7 +1946,7 @@ fragment minimalSpecExample07 on BaseEntity {
 
 **What Elody did with it**
 
-- "Title": alternative path, left out (an Elody field reads one metadata key or one relation)
+- "Title": alternative path, left out: Elody keeps view and edit symmetric (a field it shows, it can edit), as the spec allows; an Elody field reads and writes one metadata key or one relation
 - no property Elody can carry: the declaration has no fields
 
 ::: details SHACL UI shapes (from the spec)
@@ -1975,7 +1975,7 @@ ex:book2 a ex:Book ;
 
 **What Elody did with it**
 
-- "All Descendant Parts": complex path, left out (an Elody field reads one metadata key or one relation)
+- "All Descendant Parts": complex path, left out: Elody keeps view and edit symmetric (a field it shows, it can edit), as the spec allows; an Elody field reads and writes one metadata key or one relation
 - no property Elody can carry: the declaration has no fields
 
 ::: details SHACL UI shapes (from the spec)

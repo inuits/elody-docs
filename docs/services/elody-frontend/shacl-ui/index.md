@@ -66,7 +66,7 @@ subset and ignores the rest.
 
 | Spec feature | Why |
 |---|---|
-| Alternative and complex paths (`sh:alternativePath`, sequence paths) | An Elody field reads and writes one metadata key or one relation of one entity. |
+| Alternative and complex paths (sequence, `sh:alternativePath`, `sh:zeroOrMorePath`, `sh:oneOrMorePath`, `sh:zeroOrOnePath`) | A choice for symmetry: every field Elody shows, it can also edit. The specification recommends complex paths in view mode, but allows leaving them out for exactly that reason; editing them is optional, because a change along such a path is ambiguous (see [below](#complex-paths-view-and-edit-symmetry)). |
 | Inverse paths without `sh:class` in a create form | Shown on the detail page; picking a value needs the related type, so the field is left out of the form. |
 | `shui:searchQuery` | It is SPARQL; Elody searches its own index. The relation dropdown is generated, the query is left out. |
 | `sh:in` as a SHACL 1.2 node expression (`sh:in [ sh:select … ]`) | Elody does not evaluate SPARQL; the field becomes a text field and the generator warns. |
@@ -85,8 +85,35 @@ subset and ignores the rest.
 
 Every generated document is valid against the platform schema, and all of them
 execute without errors on baseGraphql. The three examples that are not rendered
-use only alternative or complex paths. See the [spec examples](./examples.md)
+use only alternative or complex paths, which Elody leaves out by choice (see
+[complex paths](#complex-paths-view-and-edit-symmetry)). See the [spec examples](./examples.md)
 for the shapes, the declaration, the GraphQL and a screenshot per example.
+
+## Complex paths: view and edit symmetry
+
+In SHACL, `sh:path` can be a path expression rather than one property: a
+sequence (`( ex:address ex:cityName )`, the city of the person's address), an
+alternative (`[ sh:alternativePath ( dct:title rdfs:label ) ]`, the title under
+either property) or a repetition (`[ sh:zeroOrMorePath ex:hasPart ]`, all parts
+at every level). Following such a path to read values is straightforward;
+writing through it is not: which triple does a change apply to, and what if an
+intermediate node (the address) does not exist yet? SHACL 1.2 UI therefore sets
+its expectations by difficulty:
+
+| Path | View | Edit |
+|---|---|---|
+| Predicate and inverse | MUST | MUST |
+| Complex paths | SHOULD, but may be left out to keep view and edit symmetric | — |
+| Alternative | — | SHOULD (choose which predicate to write) |
+| Sequence, `*`, `+`, `?` | — | MAY (ambiguous, may need intermediate nodes) |
+
+Elody keeps view and edit symmetric: a field it shows on the detail page is a
+field it can edit, and an Elody field reads and writes one metadata key or one
+relation of one entity. Complex paths are therefore left out of a declaration,
+with a note, as the specification allows. In Elody's own model a sequence path
+usually means a field of a related entity, an alternative path one concept
+under several metadata keys, and a repetition a hierarchy — the hierarchy
+element, not a field, is where Elody shows that.
 
 ## Findings for the specification
 

@@ -84,10 +84,10 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 30 | Value preservation | Required | ✅ | Existing values are shown, including unbounded ones, and a save keeps every value it does not change, every language and each value's type (round trip below). Values of an unbounded property are a set: collection-api stores them sorted. |
 | 31 | Predicate and inverse paths — view | Required | ✅ | A predicate path is a metadata key or a relation. An inverse path reads the mirrored relation on the entity (`is<X>For`). collection-api keeps mirrors on its classic storage path; an entity type with an object configuration switches them on with `RelationMirroring` (DiSHACLed's `entity` does). |
 | 32 | Predicate and inverse paths — edit | Required | ✅ | Predicate paths and, with `sh:class`, inverse paths are edited on the detail page and in the create form with a relation dropdown. Adding or removing an inverse-path value updates the mirror on the other entity (round trip below), with the same condition as 31. |
-| 33 | Alternative paths — view | Recommended | ❌ | An Elody field reads one metadata key or one relation. |
-| 34 | Alternative paths — edit | Recommended | ❌ | As 33. |
+| 33 | Alternative paths — view | Recommended | ❌ | Left out by choice: Elody keeps view and edit symmetric, which the specification allows for complex paths in view mode (see [complex paths](./#complex-paths-view-and-edit-symmetry)). |
+| 34 | Alternative paths — edit | Recommended | ❌ | Follows from 33: a field Elody does not show, it does not edit. |
 | 35 | Complex paths — view | Recommended | ❌ | As 33. |
-| 36 | Complex paths — edit | Optional | ❌ | As 33. |
+| 36 | Complex paths — edit | Optional | ❌ | As 33; the specification makes it optional because a change along such a path is ambiguous. |
 
 ✅ supported · ◐ in part · ❌ not supported
 
