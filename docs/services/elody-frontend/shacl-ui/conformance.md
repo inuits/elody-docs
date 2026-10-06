@@ -19,21 +19,23 @@ results below are measured against the Editor's Draft of 2 October 2026.
 Several results depend on platform changes that are not released yet:
 `languageIn` and form sections in baseGraphql and the PWA, the fix that
 keeps the language of metadata items when they are read, and relation
-mirroring in collection-api (with DiSHACLed's opt-in). Until those are
-merged, rows 1, 13 (create forms), 21, 22, 30, 31 and 32 hold on those
-branches only.
+mirroring in collection-api (with DiSHACLed's opt-in), and the label of
+related entities by preference order and language in baseGraphql. Until
+those are merged, rows 1, 4, 13 (create forms), 21, 22, 30, 31 and 32 hold
+on those branches only.
 :::
 
 ## Claim
 
 Elody builds its interface from SHACL 1.2 UI shapes and supports **all
-Required features of the proposed feature set except one in part**: label
-resolution for value nodes (4). Inverse paths (31, 32) need relation
-mirroring, which an entity type switches on in its object configuration.
+Required features of the proposed feature set**. Inverse paths (31, 32) need
+relation mirroring, which an entity type switches on in its object
+configuration; multilingual editing (21, 22) needs the client's
+multilingual feature.
 
 | Level | Supported | In part | Not supported |
 |---|---|---|---|
-| Required (20) | 19 | 1 | 0 |
+| Required (20) | 20 | 0 | 0 |
 | Recommended (13) | 3 | 3 | 7 |
 | Optional (3) | 0 | 1 | 2 |
 
@@ -53,7 +55,7 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 1 | Language preference via `sh:languageIn` | Required | ✅ | Labels: every translation bundle gets the text in the `sh:languageIn` order first. Values: the field carries `languageIn`; the PWA shows the first declared language that has a value, before the interface language, and offers only those languages. |
 | 2 | Application and browser language preference | Recommended | ◐ | The application language (the interface locale) is used after `sh:languageIn`, tags matched by RFC 4647 basic filtering. The browser's languages are not used as a default. |
 | 3 | Cross-language fallback | Optional | ◐ | Labels fall back to the default bundle (English). A value without a text in the selected language shows empty. |
-| 4 | Label resolution | Required | ◐ | Property labels: `sh:name` per language, else the local name of `sh:path`. Value nodes: a related Elody entity is labelled by its metadata (`elody:valueLabelKey`, default `title`, `name`, `label`), not by the spec's chain (`rdfs:label`, `shui:labelPreference`); another IRI is shown as the IRI. |
+| 4 | Label resolution | Required | ✅ | Property labels: the label properties (`shui:labelPreference`, default `sh:name`) on the property shape, then on the predicate in the data graph and in the shapes graph, then the predicate's local name; resolved when generating, every language into the translation bundles. Value nodes: a related entity by the `shui:LabelRole` property of its class's node shape, then the label properties (default `rdfs:label`), then Elody's `title` and `name`, each in the preferred language, then the local name of its IRI; the IRIs of an `sh:in` list by their labels in the shapes graph, else their local name. |
 | 5 | Local name humanization | Recommended | ❌ | The local name is shown as it is (`givenName`). |
 | 6 | Direct role annotation | Required | ✅ | `shui:propertyRole shui:LabelRole` makes the property the card title. |
 | 7 | Qualified role annotation | Recommended | ✅ | Qualified roles set the precedence by `sh:order`; RDF 1.2 triple annotations are read and written in the RDF 1.1 qualified form. |
@@ -108,7 +110,9 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
   relation types to one entity); baseGraphql reads it, the PWA's own form
   code saves it from the detail page with a metadata edit and a relation
   edit, and the stored entity and every related entity must equal the
-  original plus those edits, on both sides of each relation.
+  original plus those edits, on both sides of each relation. The related
+  entities carry a title in two languages; the page must show the one in the
+  reading language.
 
 ## Open points for the specification
 
@@ -121,6 +125,11 @@ Points that came up while measuring, worth raising with the working group:
 - The scoring graph's permissible-datatype scores test `sh:datatype` with
   `sh:hasValue`, so a property whose `sh:datatype` is a list gets no datatype
   score (see [SHACL UI in Elody](./#findings-for-the-specification)).
+- Label property resolution makes `sh:name` the default for property labels
+  in every step, so a predicate's `rdfs:label` in an ontology is only used
+  when `shui:labelPreference` lists it. Most vocabularies label predicates
+  with `rdfs:label`; a default of `sh:name` on the property shape and
+  `rdfs:label` on the predicate may be what is meant. Elody follows the text.
 - Build-time generators such as Elody cannot be tested by rendering the
   shapes in a browser; a conformance test on an abstract rendering model
   ([#1165](https://github.com/w3c/data-shapes/issues/1165)) would cover them.

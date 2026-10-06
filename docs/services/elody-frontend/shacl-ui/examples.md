@@ -1482,7 +1482,7 @@ ui:example05-name
 ````graphql
 fragment minimalSpecExample05 on BaseEntity {
     intialValues {
-      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "title|name|label")
+      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "label|title|name")
       name: keyValue(key: "name", source: metadata)
     }
     relationValues
@@ -1510,7 +1510,7 @@ fragment minimalSpecExample05 on BaseEntity {
 
   fragment fullSpecExample05 on BaseEntity {
     intialValues {
-      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "title|name|label")
+      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "label|title|name")
       name: keyValue(key: "name", source: metadata)
     }
     relationValues
@@ -1740,7 +1740,7 @@ ui:example07-name
 ````graphql
 fragment minimalSpecExample07 on BaseEntity {
     intialValues {
-      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "title|name|label")
+      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "label|title|name")
       name: keyValue(key: "name", source: metadata)
     }
     relationValues
@@ -1768,7 +1768,7 @@ fragment minimalSpecExample07 on BaseEntity {
 
   fragment fullSpecExample07 on BaseEntity {
     intialValues {
-      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "title|name|label")
+      isMemberFor: keyValue(key: "isMemberFor", source: relations, metadataKeyAsLabel: "label|title|name")
       name: keyValue(key: "name", source: metadata)
     }
     relationValues
@@ -2249,7 +2249,7 @@ ui:example11-firstName
 ````graphql
 fragment minimalSpecExample11 on BaseEntity {
     intialValues {
-      employer: keyValue(key: "hasEmployer", source: relations, metadataKeyAsLabel: "title|name|label")
+      employer: keyValue(key: "hasEmployer", source: relations, metadataKeyAsLabel: "label|title|name")
       firstName: keyValue(key: "firstName", source: metadata)
     }
     relationValues
@@ -2277,7 +2277,7 @@ fragment minimalSpecExample11 on BaseEntity {
 
   fragment fullSpecExample11 on BaseEntity {
     intialValues {
-      employer: keyValue(key: "hasEmployer", source: relations, metadataKeyAsLabel: "title|name|label")
+      employer: keyValue(key: "hasEmployer", source: relations, metadataKeyAsLabel: "label|title|name")
       firstName: keyValue(key: "firstName", source: metadata)
     }
     relationValues
@@ -3164,7 +3164,7 @@ ui:example15-details
 ````graphql
 fragment minimalSpecExample15 on BaseEntity {
     intialValues {
-      assignee: keyValue(key: "hasAssignee", source: relations, metadataKeyAsLabel: "title|name|label")
+      assignee: keyValue(key: "hasAssignee", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     allowedViewModes {
@@ -3187,7 +3187,7 @@ fragment minimalSpecExample15 on BaseEntity {
 
   fragment fullSpecExample15 on BaseEntity {
     intialValues {
-      assignee: keyValue(key: "hasAssignee", source: relations, metadataKeyAsLabel: "title|name|label")
+      assignee: keyValue(key: "hasAssignee", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     entityView {
@@ -3434,7 +3434,7 @@ fragment minimalSpecExample16 on BaseEntity {
               creator: metaData {
                 label(input: "Author")
                 key(input: "creator")
-                inputField(type: specExample16CreatorField) {
+                inputField(type: baseTextField) {
                   ...inputfield
                 }
               }
@@ -3471,7 +3471,7 @@ fragment minimalSpecExample16 on BaseEntity {
           creator: metaData {
             label(input: "Author")
             key(input: "creator")
-            inputField(type: specExample16CreatorField) {
+            inputField(type: baseTextField) {
               ...inputfield
             }
           }
@@ -3487,21 +3487,6 @@ fragment minimalSpecExample16 on BaseEntity {
       }
     }
   }
-````
-:::
-::: details Generated custom input fields
-````json
-{
-  "specExample16CreatorField": {
-    "type": "dropdownMultiselectMetadata",
-    "options": [
-      {
-        "label": "n3-4460",
-        "value": "n3-4460"
-      }
-    ]
-  }
-}
 ````
 :::
 
@@ -3590,7 +3575,7 @@ ui:example17-details
 ````graphql
 fragment minimalSpecExample17 on BaseEntity {
     intialValues {
-      bornIn: keyValue(key: "hasBornIn", source: relations, metadataKeyAsLabel: "title|name|label")
+      bornIn: keyValue(key: "hasBornIn", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     allowedViewModes {
@@ -3613,7 +3598,7 @@ fragment minimalSpecExample17 on BaseEntity {
 
   fragment fullSpecExample17 on BaseEntity {
     intialValues {
-      bornIn: keyValue(key: "hasBornIn", source: relations, metadataKeyAsLabel: "title|name|label")
+      bornIn: keyValue(key: "hasBornIn", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     entityView {
@@ -4860,7 +4845,7 @@ ui:example23-details
 ````graphql
 fragment minimalSpecExample23 on BaseEntity {
     intialValues {
-      homeCountry: keyValue(key: "hasHomeCountry", source: relations, metadataKeyAsLabel: "title|name|label")
+      homeCountry: keyValue(key: "hasHomeCountry", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     allowedViewModes {
@@ -4883,7 +4868,7 @@ fragment minimalSpecExample23 on BaseEntity {
 
   fragment fullSpecExample23 on BaseEntity {
     intialValues {
-      homeCountry: keyValue(key: "hasHomeCountry", source: relations, metadataKeyAsLabel: "title|name|label")
+      homeCountry: keyValue(key: "hasHomeCountry", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     entityView {
@@ -6341,7 +6326,7 @@ skos:HierarchicalRelationships
 ````graphql
 fragment minimalSpecExample31 on BaseEntity {
     intialValues {
-      isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "title|name|label")
+      isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     allowedViewModes {
@@ -6364,7 +6349,7 @@ fragment minimalSpecExample31 on BaseEntity {
 
   fragment fullSpecExample31 on BaseEntity {
     intialValues {
-      isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "title|name|label")
+      isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
     entityView {
