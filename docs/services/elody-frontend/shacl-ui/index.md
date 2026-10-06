@@ -43,6 +43,8 @@ and checked in CI.
 |---|---|---|
 | Widget choice | `shui:editor`, `shui:viewer`, the scoring system | The spec's scoring system, run on the W3C working group's own scoring graph. An explicit `shui:editor` wins (score 40); otherwise the widget follows from `sh:datatype`, `sh:in`, `sh:class`, `sh:node`, `sh:nodeKind` and `sh:singleLine`. |
 | Editors | text field, text area, text with language, number, boolean, date, date and time, IRI, enum select, instances select, auto complete, details | Each maps to an Elody input type. `sh:in` and `sh:class` become generated custom input fields: a dropdown with the listed options, or a relation dropdown on the class. |
+| Language-tagged text | `rdf:langString`, `shui:TextFieldWithLangEditor`, `shui:TextAreaWithLangEditor` | One multilingual field (`isMultilingual`): the detail page edits and shows it per language, the create form stores the text in the interface language. The client needs the `supportsMultilingualMetadataEditing` feature. |
+| Nested shapes | `sh:node` with `shui:DetailsEditor` | A field with sub-fields (`inputFieldWithSubFields`): the value is a list of objects under the metadata key, one column per property shape of the nested node shape, in the create form and on the detail page. A related resource (`sh:class`) inside a nested value is entered as its identifier. |
 | Viewers | literal, hyperlink, language string, details | Elody's metadata display and its link formatter. Elody's own pill and regular-expression formatters are `shui:Viewer` instances in the `elody:` ontology. |
 | Labels | `sh:name` per language, `rdfs:label` on groups | Label texts go to the client's translation bundles under an Elody translation key. Without a label, the local name of `sh:path` is shown, as the spec prescribes. |
 | Ordering | `sh:order`, `sh:group`, `shui:defaultOrder` | Groups and ungrouped properties in one sequence, unordered last, ties by label; `shui:defaultOrder` from the global configuration. |
@@ -72,8 +74,8 @@ subset and ignores the rest.
 
 | Result | Examples |
 |---|---|
-| Rendered | 21 |
-| Rendered in part | 9 |
+| Rendered | 22 |
+| Rendered in part | 8 |
 | Not rendered | 4 |
 
 Every generated document is valid against the platform schema, and all of them

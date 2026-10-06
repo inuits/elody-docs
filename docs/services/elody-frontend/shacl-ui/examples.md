@@ -37,7 +37,7 @@ changes.
 | [18](#example-18-booleaneditor) | BooleanEditor | `BooleanEditor` | <Badge type="tip" text="Rendered" /> |
 | [19](#example-19-datepickereditor) | DatePickerEditor | `DatePickerEditor` | <Badge type="tip" text="Rendered" /> |
 | [20](#example-20-datetimepickereditor) | DateTimePickerEditor | `DateTimePickerEditor` | <Badge type="tip" text="Rendered" /> |
-| [21](#example-21-detailseditor) | DetailsEditor | `DetailsEditor` | <Badge type="warning" text="Rendered in part" /> |
+| [21](#example-21-detailseditor) | DetailsEditor | `DetailsEditor` | <Badge type="tip" text="Rendered" /> |
 | [22](#example-22-enumselecteditor) | EnumSelectEditor | `EnumSelectEditor` | <Badge type="tip" text="Rendered" /> |
 | [23](#example-23-instancesselecteditor) | InstancesSelectEditor | `InstancesSelectEditor` | <Badge type="tip" text="Rendered" /> |
 | [24](#example-24-irieditor) | IRIEditor | `IRIEditor` | <Badge type="tip" text="Rendered" /> |
@@ -3335,8 +3335,8 @@ fragment minimalSpecExample16 on BaseEntity {
     "type": "dropdownMultiselectMetadata",
     "options": [
       {
-        "label": "n3-4353",
-        "value": "n3-4353"
+        "label": "n3-4453",
+        "value": "n3-4453"
       }
     ]
   }
@@ -4086,14 +4086,13 @@ fragment minimalSpecExample20 on BaseEntity {
 
 ## 21 · DetailsEditor {#example-21-detailseditor}
 
-<Badge type="warning" text="Rendered in part" /> Spec section [`DetailsEditor`](https://w3c.github.io/data-shapes/shacl12-ui/#DetailsEditor)
+<Badge type="tip" text="Rendered" /> Spec section [`DetailsEditor`](https://w3c.github.io/data-shapes/shacl12-ui/#DetailsEditor)
 
 ![DetailsEditor rendered by Elody](/images/shacl-ui/21-DetailsEditor.png)
 
 **What Elody did with it**
 
 - "weight" is used as the card title (the shapes declare no shui:LabelRole)
-- "weight": shui:DetailsEditor has no create-form field in Elody; left out of the form
 
 ::: details SHACL UI shapes (from the spec)
 ````turtle
@@ -4178,6 +4177,7 @@ ui:example21
         elody:panel ui:example21-details ] ;
       elody:size elody:Width100 ] ] ;
   elody:documentName "SpecExample21" ;
+  elody:form ui:example21-create ;
   elody:viewMode [ elody:mode elody:ListView ] .
 
 ex:Product-weight
@@ -4193,6 +4193,43 @@ ex:Product-weight
   shui:editor shui:DetailsEditor ;
   shui:propertyRole shui:LabelRole ;
   shui:viewer shui:DetailsViewer .
+
+ex:ValueWithWeight
+  a sh:NodeShape ;
+  rdfs:label "Value with weight" ;
+  sh:property ex:ValueWithWeight-numericValue , ex:ValueWithWeight-unit .
+
+ex:ValueWithWeight-numericValue
+  a sh:PropertyShape ;
+  sh:path ex:numericValue ;
+  sh:name "numeric value" ;
+  sh:datatype xsd:decimal ;
+  sh:maxCount 1 ;
+  sh:minCount 1 .
+
+ex:ValueWithWeight-unit
+  a sh:PropertyShape ;
+  sh:path ex:unit ;
+  sh:name "unit" ;
+  sh:class <http://qudt.org/schema/qudt/Unit> ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
+  sh:node
+    [ rdfs:label "Permissible values must have quantity kind Mass." ;
+    sh:property
+      [ sh:path <http://qudt.org/schema/qudt/hasQuantityKind> ;
+      sh:hasValue <http://qudt.org/vocab/quantitykind/Mass> ] ] .
+
+ui:example21-create
+  a elody:Form ;
+  rdfs:label "DetailsEditor" ;
+  elody:queryName "SpecExample21CreateForm" ;
+  elody:shape [ sh:property ex:Product-weight ] ;
+  elody:submit
+    [ rdfs:label "actions.labels.create" ;
+    elody:actionQuery "CreateEntity" ;
+    elody:creationType "BaseEntity" ;
+    elody:icon "Create" ] .
 
 ui:example21-details
   a sh:PropertyGroup ;
@@ -4250,6 +4287,9 @@ fragment minimalSpecExample21 on BaseEntity {
               weight: metaData {
                 label(input: "weight")
                 key(input: "weight")
+                inputField(type: specExample21WeightField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -4275,6 +4315,67 @@ fragment minimalSpecExample21 on BaseEntity {
       }
     }
   }
+
+  query SpecExample21CreateForm {
+    GetDynamicForm {
+      label(input: "DetailsEditor")
+      name: formTab {
+        formFields {
+          weight: metaData {
+            label(input: "weight")
+            key(input: "weight")
+            inputField(type: specExample21WeightField) {
+              ...inputfield
+            }
+          }
+          createAction: action {
+            label(input: "actions.labels.create")
+            icon(input: Create)
+            actionType(input: submit)
+            actionQuery(input: "CreateEntity")
+            creationType(input: BaseEntity)
+            showsFormErrors(input: true)
+          }
+        }
+      }
+    }
+  }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample21WeightField": {
+    "type": "inputFieldWithSubFields",
+    "isMetadataField": true,
+    "subFields": [
+      {
+        "label": "numeric value",
+        "key": "numericValue",
+        "inputField": {
+          "type": "number",
+          "validation": {
+            "value": [
+              "required"
+            ]
+          }
+        }
+      },
+      {
+        "label": "unit",
+        "key": "unit",
+        "inputField": {
+          "type": "text",
+          "validation": {
+            "value": [
+              "required"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
 ````
 :::
 
@@ -5825,6 +5926,7 @@ fragment minimalSpecExample30 on BaseEntity {
       prefLabel: metaData {
         label(input: "prefLabel")
         key(input: "prefLabel")
+        isMultilingual(input: true)
       }
     }
     ...minimalBaseEntity
@@ -5851,6 +5953,7 @@ fragment minimalSpecExample30 on BaseEntity {
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
+                isMultilingual(input: true)
               }
             }
           }
@@ -5885,6 +5988,7 @@ fragment minimalSpecExample30 on BaseEntity {
           prefLabel: metaData {
             label(input: "prefLabel")
             key(input: "prefLabel")
+            isMultilingual(input: true)
             inputField(type: baseTextField) {
               ...inputfield
             }
