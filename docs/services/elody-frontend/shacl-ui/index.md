@@ -48,12 +48,12 @@ and checked in CI.
 | Language-tagged text | `rdf:langString`, `shui:TextFieldWithLangEditor`, `shui:TextAreaWithLangEditor` | One multilingual field (`isMultilingual`): the detail page edits and shows it per language, the create form stores the text in the interface language. The client needs the `supportsMultilingualMetadataEditing` feature. |
 | Nested shapes | `sh:node` with `shui:DetailsEditor` | A field with sub-fields (`inputFieldWithSubFields`): the value is a list of objects under the metadata key, one column per property shape of the nested node shape, in the create form and on the detail page. A related resource (`sh:class`) inside a nested value is entered as its identifier. |
 | Viewers | literal, hyperlink, language string, details | Elody's metadata display and its link formatter. Elody's own pill and regular-expression formatters are `shui:Viewer` instances in the `elody:` ontology. |
-| Labels | `sh:name` per language, `rdfs:label` on groups | Label texts go to the client's translation bundles under an Elody translation key. Without a label, the local name of `sh:path` is shown, as the spec prescribes. |
-| Ordering | `sh:order`, `sh:group`, `shui:defaultOrder` | Groups and ungrouped properties in one sequence, unordered last, ties by label; `shui:defaultOrder` from the global configuration. |
+| Labels | `sh:name`, `shui:labelPreference`, `rdfs:label` on groups and values, `shui:LabelRole` | Property labels follow the spec's chain: the label properties (`shui:labelPreference`, default `sh:name`) on the property shape, then on the predicate in the data and the shapes graph, then the predicate's local name. They are resolved when generating and go, in every language, to the client's translation bundles under an Elody translation key. A related entity is labelled by the `shui:LabelRole` property of its class's node shape, then the label properties (default `rdfs:label`), then Elody's `title` and `name`, in the reading language, else by the local name of its IRI; the IRIs of an `sh:in` list by their labels in the shapes graph. |
+| Ordering | `sh:order`, `sh:group`, `shui:defaultOrder` | Groups and ungrouped properties in one sequence, unordered last, ties by metadata key, then identifier; `shui:defaultOrder` from the global configuration. |
 | Groups | `sh:PropertyGroup` | Each group is a panel on the detail page and a titled section of the create form (`formSection`). Groups and ungrouped properties are one sequence; an ungrouped property stays a plain form field and is shown in a "Details" panel (`elody:showsUngrouped`). |
 | Paths | predicate paths, `sh:inversePath` | A predicate path is a metadata key, or a relation when the values are instances of a class (`sh:class`, relation `has<X>`). An inverse path is the mirrored relation on the entity (`is<X>For`): shown on the detail page, and a relation dropdown when the shape has `sh:class`. collection-api keeps that mirror on its classic storage path; an entity type with an object configuration switches it on with `RelationMirroring` (see [conformance](./conformance.md), rows 31 and 32). `elody:relationType` names the relation when the client uses another name; `elody:valueLabelKey` the related entity's label metadata. |
 | Language preference | `sh:languageIn` | The spec's order: the label and the value in the first language of `sh:languageIn` that has one, then the interface language. Labels are resolved when generating (every translation bundle gets the text in that order); values in the PWA, which also offers only the declared languages in the field's language selector. Tags match by basic filtering (`en-US` for `en`). |
-| Editing and value preservation | `dash:readOnly`, `sh:minCount` | The detail panels are editable: each writable property is edited with the create form's widget, and a save writes back only what changed. Values the form does not show, every language of a multilingual field and the values of an unbounded property are kept, each in its own type. Relation-valued properties are shown through the relation and edited in the create form; `dash:readOnly` keeps a property read-only. |
+| Editing and value preservation | `dash:readOnly`, `sh:minCount` | The detail panels are editable: each writable property is edited with the create form's widget, and a save writes back only what changed. Values the form does not show, every language of a multilingual field and the values of an unbounded property are kept, each in its own type. Relation-valued properties (with `sh:class`, also behind an inverse path) are edited with the same relation dropdown as in the create form, and a change updates the mirrored relation on the other entity; `dash:readOnly` keeps a property read-only. |
 | Cardinality | `sh:minCount`, `sh:maxCount` | Required fields; single or multiple dropdowns. |
 | Property roles | `shui:propertyRole shui:LabelRole`, direct and qualified | The label role is the card title. Qualified roles, also in RDF 1.2 annotation form, set the precedence. |
 
@@ -69,6 +69,7 @@ subset and ignores the rest.
 | Alternative and complex paths (`sh:alternativePath`, sequence paths) | An Elody field reads and writes one metadata key or one relation of one entity. |
 | Inverse paths without `sh:class` in a create form | Shown on the detail page; picking a value needs the related type, so the field is left out of the form. |
 | `shui:searchQuery` | It is SPARQL; Elody searches its own index. The relation dropdown is generated, the query is left out. |
+| `sh:in` as a SHACL 1.2 node expression (`sh:in [ sh:select … ]`) | Elody does not evaluate SPARQL; the field becomes a text field and the generator warns. |
 | `shui:RichTextEditor`, `shui:SubClassEditor`, `shui:BlankNodeEditor` as form fields | Elody has no such create-form field. Rich text exists as a page block, not as a field. |
 | `shui:ValueTableViewer` | Elody renders a table of related entities, not of nested values. |
 | `shui:timeZone`, `shui:defaultNamespace`, `shui:readOnlyGraph` | Elody stores documents, not triples. |
@@ -89,8 +90,9 @@ for the shapes, the declaration, the GraphQL and a screenshot per example.
 
 ## Findings for the specification
 
-Two points came up while running the working group's own scoring graph. They are
-worth raising with the W3C Data Shapes Working Group:
+These points came up while implementing the draft. They are worth raising with
+the W3C Data Shapes Working Group (the [conformance](./conformance.md) page
+lists them too):
 
 - The scoring graph uses a SHACL 1.2 list as the value of `sh:datatype`
   (`( rdf:langString rdf:dirLangString )`). A SHACL Core validator does not
@@ -100,6 +102,13 @@ worth raising with the W3C Data Shapes Working Group:
   datatypes" test `sh:datatype` with `sh:hasValue`. A property whose
   `sh:datatype` is a list, such as the "alt labels" column in the spec's own
   `shui:ValueTableViewer` example, therefore gets no datatype score at all.
+- Language resolution lets `sh:languageIn` win over the application's
+  language, while the specification's own example says the French label is
+  shown "unless the application has been configured to use a different
+  language". Elody follows the normative text.
+- Label property resolution makes `sh:name` the default in every step of a
+  property label, so a predicate's `rdfs:label` in an ontology only counts
+  when `shui:labelPreference` lists it. Elody follows the text.
 
 ## Reproduce
 
@@ -112,9 +121,11 @@ scripts/showcase.sh <pwa checkout on feat/storybook> ../../elody-docs/docs/publi
 npx tsx scripts/showcase-docs.ts showcase-out ../../elody-docs/docs/services/elody-frontend/shacl-ui
 ```
 
-The value-preservation round trip stores an entity, reads it through
-baseGraphql, saves it from the detail page with the PWA's own form code (one
-edit) and compares what collection-api holds afterwards with the original:
+The value-preservation round trip stores an entity and three related ones,
+reads it through baseGraphql, saves it from the detail page with the PWA's own
+form code (a metadata edit and a relation edit) and compares what
+collection-api holds afterwards, on both sides of each relation, with the
+original:
 
 ```bash
 scripts/roundtrip/roundtrip.sh <pwa checkout with node_modules>
@@ -134,3 +145,5 @@ port 6016. The spec's examples and scoring graph are vendored in
 | SHACL UI shapes → Elody declaration | `modules/uiDeclarationModule/src/fromShacl.ts` |
 | Declaration → GraphQL (`elody-ui generate`, `check`, `migrate`) | `modules/uiDeclarationModule/src/` |
 | Spec examples and scoring graph | `modules/uiDeclarationModule/spec/` |
+| Value-preservation round trip | `modules/uiDeclarationModule/scripts/roundtrip/` |
+| Relation mirroring (opt-in) | `collection-api/api/object_configurations/relation_mirroring.py` |
