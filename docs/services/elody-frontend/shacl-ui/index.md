@@ -51,6 +51,7 @@ and checked in CI.
 | Groups | `sh:PropertyGroup` | Each group is a panel on the detail page and a titled section of the create form (`formSection`). Groups and ungrouped properties are one sequence; an ungrouped property stays a plain form field and is shown in a "Details" panel (`elody:showsUngrouped`). |
 | Paths | predicate paths, `sh:inversePath` | A predicate path is a metadata key, or a relation when the values are instances of a class (`sh:class`, relation `has<X>`). An inverse path is the mirrored relation Elody stores on the entity (`is<X>For`): shown on the detail page, and a relation dropdown in the create form when the shape has `sh:class`. `elody:relationType` names the relation when the client uses another name; `elody:valueLabelKey` the related entity's label metadata. |
 | Language preference | `sh:languageIn` | The spec's order: the label and the value in the first language of `sh:languageIn` that has one, then the interface language. Labels are resolved when generating (every translation bundle gets the text in that order); values in the PWA, which also offers only the declared languages in the field's language selector. Tags match by basic filtering (`en-US` for `en`). |
+| Editing and value preservation | `dash:readOnly`, `sh:minCount` | The detail panels are editable: each writable property is edited with the create form's widget, and a save writes back only what changed. Values the form does not show, every language of a multilingual field and the values of an unbounded property are kept, each in its own type. Relation-valued properties are shown through the relation and edited in the create form; `dash:readOnly` keeps a property read-only. |
 | Cardinality | `sh:minCount`, `sh:maxCount` | Required fields; single or multiple dropdowns. |
 | Property roles | `shui:propertyRole shui:LabelRole`, direct and qualified | The label role is the card title. Qualified roles, also in RDF 1.2 annotation form, set the precedence. |
 
@@ -107,6 +108,14 @@ The pipeline and this documentation are generated from
 cd modules/uiDeclarationModule
 scripts/showcase.sh <pwa checkout on feat/storybook> ../../elody-docs/docs/public/images/shacl-ui
 npx tsx scripts/showcase-docs.ts showcase-out ../../elody-docs/docs/services/elody-frontend/shacl-ui
+```
+
+The value-preservation round trip stores an entity, reads it through
+baseGraphql, saves it from the detail page with the PWA's own form code (one
+edit) and compares what collection-api holds afterwards with the original:
+
+```bash
+scripts/roundtrip/roundtrip.sh <pwa checkout with node_modules>
 ```
 
 `showcase.sh` needs a running local Elody stack (it executes the documents in the

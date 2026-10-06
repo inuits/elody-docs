@@ -167,7 +167,6 @@ ex:PersonShapeNameGroup
   rdfs:label "Name" ;
   sh:order 0 ;
   elody:alias "personShapeNameGroup" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel .
 
@@ -205,7 +204,6 @@ ui:example01-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 4 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -301,22 +299,40 @@ fragment minimalSpecExample01 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               honorificPrefix: metaData {
                 label(input: "honorificPrefix")
                 key(input: "honorificPrefix")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               givenName: metaData {
                 label(input: "givenName")
                 key(input: "givenName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               familyName: metaData {
                 label(input: "familyName")
                 key(input: "familyName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
             }
             details: panels {
@@ -325,10 +341,13 @@ fragment minimalSpecExample01 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               birthDate: metaData {
                 label(input: "birthDate")
                 key(input: "birthDate")
+                inputField(type: baseDateField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -525,7 +544,6 @@ ex:PersonShapeNameGroup
   rdfs:label "Name" ;
   sh:order 0 ;
   elody:alias "personShapeNameGroup" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel .
 
@@ -563,7 +581,6 @@ ui:example02-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 4 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -659,22 +676,40 @@ fragment minimalSpecExample02 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               honorificPrefix: metaData {
                 label(input: "honorificPrefix")
                 key(input: "honorificPrefix")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               givenName: metaData {
                 label(input: "givenName")
                 key(input: "givenName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               familyName: metaData {
                 label(input: "familyName")
                 key(input: "familyName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
             }
             details: panels {
@@ -683,10 +718,13 @@ fragment minimalSpecExample02 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               birthDate: metaData {
                 label(input: "birthDate")
                 key(input: "birthDate")
+                inputField(type: baseDateField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -902,7 +940,6 @@ ex:PersonShapeNameGroup
   rdfs:label "Name" ;
   sh:order 0 ;
   elody:alias "personShapeNameGroup" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel .
 
@@ -940,7 +977,6 @@ ui:example03-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 4 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -1036,22 +1072,40 @@ fragment minimalSpecExample03 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               honorificPrefix: metaData {
                 label(input: "honorificPrefix")
                 key(input: "honorificPrefix")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               givenName: metaData {
                 label(input: "givenName")
                 key(input: "givenName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               familyName: metaData {
                 label(input: "familyName")
                 key(input: "familyName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
             }
             details: panels {
@@ -1060,10 +1114,13 @@ fragment minimalSpecExample03 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               birthDate: metaData {
                 label(input: "birthDate")
                 key(input: "birthDate")
+                inputField(type: baseDateField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -1236,7 +1293,6 @@ ui:example04-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -1284,10 +1340,13 @@ fragment minimalSpecExample04 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               name: metaData {
                 label(input: "name")
                 key(input: "name")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -1404,7 +1463,6 @@ ui:example05-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -1468,7 +1526,7 @@ fragment minimalSpecExample05 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               isMemberFor: metaData {
                 label(input: "Department")
                 key(input: "isMemberFor")
@@ -1476,6 +1534,9 @@ fragment minimalSpecExample05 on BaseEntity {
               name: metaData {
                 label(input: "Name")
                 key(input: "name")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -1659,7 +1720,6 @@ ui:example07-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -1724,7 +1784,7 @@ fragment minimalSpecExample07 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               isMemberFor: metaData {
                 label(input: "Department")
                 key(input: "isMemberFor")
@@ -1732,6 +1792,9 @@ fragment minimalSpecExample07 on BaseEntity {
               name: metaData {
                 label(input: "Name")
                 key(input: "name")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -1954,7 +2017,6 @@ ui:example10-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -2010,12 +2072,15 @@ fragment minimalSpecExample10 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               name: metaData {
                 label(input: "ui.specExample10.name")
                 key(input: "name")
                 isMultilingual(input: true)
                 languageIn(input: ["fr", "en"])
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -2162,7 +2227,6 @@ ui:example11-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -2226,7 +2290,7 @@ fragment minimalSpecExample11 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               employer: metaData {
                 label(input: "ui.specExample11.employer")
                 key(input: "employer")
@@ -2234,6 +2298,9 @@ fragment minimalSpecExample11 on BaseEntity {
               firstName: metaData {
                 label(input: "ui.specExample11.firstName")
                 key(input: "firstName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -2393,7 +2460,6 @@ ui:example12-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -2441,10 +2507,13 @@ fragment minimalSpecExample12 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               creator: metaData {
                 label(input: "creator")
                 key(input: "creator")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -2592,7 +2661,6 @@ ui:example13-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order -10 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -2652,18 +2720,27 @@ fragment minimalSpecExample13 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               id: metaData {
                 label(input: "id")
                 key(input: "id")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               description: metaData {
                 label(input: "description")
                 key(input: "description")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               label: metaData {
                 label(input: "label")
                 key(input: "label")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -2833,7 +2910,6 @@ ui:example14-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order -10 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -2893,18 +2969,27 @@ fragment minimalSpecExample14 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               id: metaData {
                 label(input: "id")
                 key(input: "id")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               label: metaData {
                 label(input: "label")
                 key(input: "label")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               description: metaData {
                 label(input: "description")
                 key(input: "description")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -3064,7 +3149,6 @@ ui:example15-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -3112,7 +3196,7 @@ fragment minimalSpecExample15 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               assignee: metaData {
                 label(input: "Assignee")
                 key(input: "assignee")
@@ -3290,7 +3374,6 @@ ui:example16-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -3338,10 +3421,13 @@ fragment minimalSpecExample16 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               creator: metaData {
                 label(input: "Author")
                 key(input: "creator")
+                inputField(type: specExample16CreatorField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -3486,7 +3572,6 @@ ui:example17-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -3534,7 +3619,7 @@ fragment minimalSpecExample17 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               bornIn: metaData {
                 label(input: "bornIn")
                 key(input: "bornIn")
@@ -3683,7 +3768,6 @@ ui:example18-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -3731,10 +3815,13 @@ fragment minimalSpecExample18 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               married: metaData {
                 label(input: "married")
                 key(input: "married")
+                inputField(type: baseCheckbox) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -3864,7 +3951,6 @@ ui:example19-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -3912,10 +3998,13 @@ fragment minimalSpecExample19 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               dateOfBirth: metaData {
                 label(input: "dateOfBirth")
                 key(input: "dateOfBirth")
+                inputField(type: baseDateField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -4045,7 +4134,6 @@ ui:example20-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -4093,10 +4181,13 @@ fragment minimalSpecExample20 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               lastVisitTime: metaData {
                 label(input: "lastVisitTime")
                 key(input: "lastVisitTime")
+                inputField(type: baseDateTimeField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -4301,7 +4392,6 @@ ui:example21-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -4349,7 +4439,7 @@ fragment minimalSpecExample21 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               weight: metaData {
                 label(input: "weight")
                 key(input: "weight")
@@ -4521,7 +4611,6 @@ ui:example22-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -4569,10 +4658,13 @@ fragment minimalSpecExample22 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               addressRegion: metaData {
                 label(input: "addressRegion")
                 key(input: "addressRegion")
+                inputField(type: specExample22AddressRegionField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -4747,7 +4839,6 @@ ui:example23-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -4795,7 +4886,7 @@ fragment minimalSpecExample23 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               homeCountry: metaData {
                 label(input: "homeCountry")
                 key(input: "homeCountry")
@@ -4946,7 +5037,6 @@ ui:example24-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -4994,10 +5084,13 @@ fragment minimalSpecExample24 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               seeAlso: metaData {
                 label(input: "seeAlso")
                 key(input: "seeAlso")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -5129,7 +5222,6 @@ ui:example25-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -5177,10 +5269,13 @@ fragment minimalSpecExample25 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               price: metaData {
                 label(input: "price")
                 key(input: "price")
+                inputField(type: baseNumberField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -5299,7 +5394,6 @@ ui:example26-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -5347,7 +5441,7 @@ fragment minimalSpecExample26 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               definition: metaData {
                 label(input: "definition")
                 key(input: "definition")
@@ -5446,7 +5540,6 @@ ui:example27-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -5494,10 +5587,13 @@ fragment minimalSpecExample27 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               impactedCell: metaData {
                 label(input: "impactedCell")
                 key(input: "impactedCell")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -5604,7 +5700,6 @@ ui:example28-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -5652,10 +5747,13 @@ fragment minimalSpecExample28 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               description: metaData {
                 label(input: "description")
                 key(input: "description")
+                inputField(type: baseTextareaField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -5785,7 +5883,6 @@ ui:example29-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -5833,10 +5930,13 @@ fragment minimalSpecExample29 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               code: metaData {
                 label(input: "code")
                 key(input: "code")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -5966,7 +6066,6 @@ ui:example30-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -6015,11 +6114,14 @@ fragment minimalSpecExample30 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
                 isMultilingual(input: true)
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -6216,7 +6318,6 @@ skos:HierarchicalRelationships
   a sh:PropertyGroup ;
   rdfs:label "HierarchicalRelationships" ;
   elody:alias "hierarchicalRelationships" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel .
 ````
@@ -6263,7 +6364,7 @@ fragment minimalSpecExample31 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               isBroaderFor: metaData {
                 label(input: "narrower (table)")
                 key(input: "isBroaderFor")
@@ -6366,7 +6467,6 @@ ui:example32-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -6414,10 +6514,13 @@ fragment minimalSpecExample32 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -6562,7 +6665,6 @@ ui:example33-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -6616,14 +6718,20 @@ fragment minimalSpecExample33 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               name: metaData {
                 label(input: "name")
                 key(input: "name")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -6773,7 +6881,6 @@ ui:example34-details
   rdfs:label "Details"@en , "Details"@nl ;
   sh:order 0 ;
   elody:alias "details" ;
-  dash:readOnly true ;
   elody:collapsed false ;
   elody:panelKind elody:MetadataPanel ;
   elody:showsUngrouped true .
@@ -6827,14 +6934,20 @@ fragment minimalSpecExample34 on BaseEntity {
               }
               panelType(input: metadata)
               isCollapsed(input: false)
-              isEditable(input: false)
+              isEditable(input: true)
               name: metaData {
                 label(input: "name")
                 key(input: "name")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
             }
           }
