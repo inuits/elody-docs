@@ -25,13 +25,13 @@ merged, rows 1, 13 (create forms), 21, 22 and 30 hold on those branches only.
 ## Claim
 
 Elody builds its interface from SHACL 1.2 UI shapes and supports **all
-Required features of the proposed feature set except two in part**: label
-resolution for value nodes (4) and editing an inverse-path value of an
-existing entity (32).
+Required features of the proposed feature set except three in part**: label
+resolution for value nodes (4), and inverse paths (31, 32), which depend on
+the client storing the mirrored relation.
 
 | Level | Supported | In part | Not supported |
 |---|---|---|---|
-| Required (20) | 18 | 2 | 0 |
+| Required (20) | 17 | 3 | 0 |
 | Recommended (13) | 3 | 3 | 7 |
 | Optional (3) | 0 | 1 | 2 |
 
@@ -78,8 +78,8 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 28 | Declared widgets | Required | ✅ | `shui:editor` and `shui:viewer` score 40 and win; Elody's own widgets are `shui:Editor` and `shui:Viewer` instances. |
 | 29 | Widget switching | Optional | ❌ | The widget is fixed per field. |
 | 30 | Value preservation | Required | ✅ | Existing values are shown, including unbounded ones, and a save keeps every value it does not change, every language and each value's type (round trip below). Values of an unbounded property are a set: collection-api stores them sorted. |
-| 31 | Predicate and inverse paths — view | Required | ✅ | A predicate path is a metadata key or a relation; an inverse path is the relation Elody mirrors onto the entity (`is<X>For`). |
-| 32 | Predicate and inverse paths — edit | Required | ◐ | Predicate paths are edited on the detail page and in the create form. An inverse path is edited in the create form (with `sh:class`); on the detail page relation-valued properties are read-only. |
+| 31 | Predicate and inverse paths — view | Required | ◐ | A predicate path is a metadata key or a relation. An inverse path reads the mirrored relation on the entity (`is<X>For`). collection-api stores that mirror on its classic storage path only; for entity types with an object configuration it is up to the client (vlacc keeps it, DiSHACLed does not), so there the inverse path shows nothing. |
+| 32 | Predicate and inverse paths — edit | Required | ◐ | Predicate paths and, with `sh:class`, inverse paths are edited on the detail page and in the create form with a relation dropdown. Writing an inverse path stores `is<X>For` on the entity; the other entity gets `has<X>` only where the mirror is kept (see 31). |
 | 33 | Alternative paths — view | Recommended | ❌ | An Elody field reads one metadata key or one relation. |
 | 34 | Alternative paths — edit | Recommended | ❌ | As 33. |
 | 35 | Complex paths — view | Recommended | ❌ | As 33. |
