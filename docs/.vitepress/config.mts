@@ -79,6 +79,7 @@ export default defineConfig({
                 link: '/services/elody-frontend/shacl-ui/',
                 items: [
                   { text: 'Spec Examples', link: '/services/elody-frontend/shacl-ui/examples' },
+                  { text: 'Conformance', link: '/services/elody-frontend/shacl-ui/conformance' },
                 ],
               },
             ],

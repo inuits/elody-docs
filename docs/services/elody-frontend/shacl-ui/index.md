@@ -8,7 +8,9 @@ PWA renders them like any hand-written client.
 
 This page explains that pipeline and what it supports. The
 [spec examples](./examples.md) page runs every example of the SHACL 1.2 UI
-specification through it and shows what Elody renders for each one.
+specification through it and shows what Elody renders for each one. The
+[conformance](./conformance.md) page states, feature by feature, which parts
+of SHACL 1.2 UI Elody supports.
 
 ::: info Status
 Developed for the DiSHACLed project (WP3) under epic #165964. The SHACL 1.2 UI
