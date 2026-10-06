@@ -320,7 +320,7 @@ fragment minimalSpecExample01 on BaseEntity {
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
-                inputField(type: baseTextField) {
+                inputField(type: specExample01AdditionalNameField) {
                   ...inputfield
                 }
               }
@@ -402,7 +402,7 @@ fragment minimalSpecExample01 on BaseEntity {
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
-                inputField(type: baseTextField) {
+                inputField(type: specExample01AdditionalNameField) {
                   ...inputfield
                 }
               }
@@ -437,6 +437,18 @@ fragment minimalSpecExample01 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample01AdditionalNameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -697,7 +709,7 @@ fragment minimalSpecExample02 on BaseEntity {
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
-                inputField(type: baseTextField) {
+                inputField(type: specExample02AdditionalNameField) {
                   ...inputfield
                 }
               }
@@ -779,7 +791,7 @@ fragment minimalSpecExample02 on BaseEntity {
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
-                inputField(type: baseTextField) {
+                inputField(type: specExample02AdditionalNameField) {
                   ...inputfield
                 }
               }
@@ -814,6 +826,18 @@ fragment minimalSpecExample02 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample02AdditionalNameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -1093,7 +1117,7 @@ fragment minimalSpecExample03 on BaseEntity {
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
-                inputField(type: baseTextField) {
+                inputField(type: specExample03AdditionalNameField) {
                   ...inputfield
                 }
               }
@@ -1175,7 +1199,7 @@ fragment minimalSpecExample03 on BaseEntity {
               additionalName: metaData {
                 label(input: "additionalName")
                 key(input: "additionalName")
-                inputField(type: baseTextField) {
+                inputField(type: specExample03AdditionalNameField) {
                   ...inputfield
                 }
               }
@@ -1210,6 +1234,18 @@ fragment minimalSpecExample03 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample03AdditionalNameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -1344,7 +1380,7 @@ fragment minimalSpecExample04 on BaseEntity {
               name: metaData {
                 label(input: "name")
                 key(input: "name")
-                inputField(type: baseTextField) {
+                inputField(type: specExample04NameField) {
                   ...inputfield
                 }
               }
@@ -1372,6 +1408,18 @@ fragment minimalSpecExample04 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample04NameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -1534,7 +1582,7 @@ fragment minimalSpecExample05 on BaseEntity {
               name: metaData {
                 label(input: "Name")
                 key(input: "name")
-                inputField(type: baseTextField) {
+                inputField(type: specExample05NameField) {
                   ...inputfield
                 }
               }
@@ -1571,7 +1619,7 @@ fragment minimalSpecExample05 on BaseEntity {
           name: metaData {
             label(input: "Name")
             key(input: "name")
-            inputField(type: baseTextField) {
+            inputField(type: specExample05NameField) {
               ...inputfield
             }
           }
@@ -1587,6 +1635,18 @@ fragment minimalSpecExample05 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample05NameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -1795,7 +1855,7 @@ fragment minimalSpecExample07 on BaseEntity {
               name: metaData {
                 label(input: "Name")
                 key(input: "name")
-                inputField(type: baseTextField) {
+                inputField(type: specExample07NameField) {
                   ...inputfield
                 }
               }
@@ -1839,7 +1899,7 @@ fragment minimalSpecExample07 on BaseEntity {
           name: metaData {
             label(input: "Name")
             key(input: "name")
-            inputField(type: baseTextField) {
+            inputField(type: specExample07NameField) {
               ...inputfield
             }
           }
@@ -1869,6 +1929,12 @@ fragment minimalSpecExample07 on BaseEntity {
         "value": "department"
       }
     ]
+  },
+  "specExample07NameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
   }
 }
 ````
@@ -2304,7 +2370,7 @@ fragment minimalSpecExample11 on BaseEntity {
               firstName: metaData {
                 label(input: "ui.specExample11.firstName")
                 key(input: "firstName")
-                inputField(type: baseTextField) {
+                inputField(type: specExample11FirstNameField) {
                   ...inputfield
                 }
               }
@@ -2348,7 +2414,7 @@ fragment minimalSpecExample11 on BaseEntity {
           firstName: metaData {
             label(input: "ui.specExample11.firstName")
             key(input: "firstName")
-            inputField(type: baseTextField) {
+            inputField(type: specExample11FirstNameField) {
               ...inputfield
             }
           }
@@ -2378,6 +2444,12 @@ fragment minimalSpecExample11 on BaseEntity {
         "value": "organization"
       }
     ]
+  },
+  "specExample11FirstNameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
   }
 }
 ````
@@ -2517,7 +2589,7 @@ fragment minimalSpecExample12 on BaseEntity {
               creator: metaData {
                 label(input: "creator")
                 key(input: "creator")
-                inputField(type: baseTextField) {
+                inputField(type: specExample12CreatorField) {
                   ...inputfield
                 }
               }
@@ -2554,7 +2626,7 @@ fragment minimalSpecExample12 on BaseEntity {
           creator: metaData {
             label(input: "creator")
             key(input: "creator")
-            inputField(type: baseTextField) {
+            inputField(type: specExample12CreatorField) {
               ...inputfield
             }
           }
@@ -2570,6 +2642,18 @@ fragment minimalSpecExample12 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample12CreatorField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -2730,21 +2814,21 @@ fragment minimalSpecExample13 on BaseEntity {
               id: metaData {
                 label(input: "id")
                 key(input: "id")
-                inputField(type: baseTextField) {
+                inputField(type: specExample13IdField) {
                   ...inputfield
                 }
               }
               description: metaData {
                 label(input: "description")
                 key(input: "description")
-                inputField(type: baseTextField) {
+                inputField(type: specExample13DescriptionField) {
                   ...inputfield
                 }
               }
               label: metaData {
                 label(input: "label")
                 key(input: "label")
-                inputField(type: baseTextField) {
+                inputField(type: specExample13LabelField) {
                   ...inputfield
                 }
               }
@@ -2781,21 +2865,21 @@ fragment minimalSpecExample13 on BaseEntity {
           id: metaData {
             label(input: "id")
             key(input: "id")
-            inputField(type: baseTextField) {
+            inputField(type: specExample13IdField) {
               ...inputfield
             }
           }
           description: metaData {
             label(input: "description")
             key(input: "description")
-            inputField(type: baseTextField) {
+            inputField(type: specExample13DescriptionField) {
               ...inputfield
             }
           }
           label: metaData {
             label(input: "label")
             key(input: "label")
-            inputField(type: baseTextField) {
+            inputField(type: specExample13LabelField) {
               ...inputfield
             }
           }
@@ -2811,6 +2895,30 @@ fragment minimalSpecExample13 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample13IdField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  },
+  "specExample13DescriptionField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  },
+  "specExample13LabelField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -2979,21 +3087,21 @@ fragment minimalSpecExample14 on BaseEntity {
               id: metaData {
                 label(input: "id")
                 key(input: "id")
-                inputField(type: baseTextField) {
+                inputField(type: specExample14IdField) {
                   ...inputfield
                 }
               }
               label: metaData {
                 label(input: "label")
                 key(input: "label")
-                inputField(type: baseTextField) {
+                inputField(type: specExample14LabelField) {
                   ...inputfield
                 }
               }
               description: metaData {
                 label(input: "description")
                 key(input: "description")
-                inputField(type: baseTextField) {
+                inputField(type: specExample14DescriptionField) {
                   ...inputfield
                 }
               }
@@ -3030,21 +3138,21 @@ fragment minimalSpecExample14 on BaseEntity {
           id: metaData {
             label(input: "id")
             key(input: "id")
-            inputField(type: baseTextField) {
+            inputField(type: specExample14IdField) {
               ...inputfield
             }
           }
           label: metaData {
             label(input: "label")
             key(input: "label")
-            inputField(type: baseTextField) {
+            inputField(type: specExample14LabelField) {
               ...inputfield
             }
           }
           description: metaData {
             label(input: "description")
             key(input: "description")
-            inputField(type: baseTextField) {
+            inputField(type: specExample14DescriptionField) {
               ...inputfield
             }
           }
@@ -3060,6 +3168,30 @@ fragment minimalSpecExample14 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample14IdField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  },
+  "specExample14LabelField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  },
+  "specExample14DescriptionField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -5591,7 +5723,7 @@ fragment minimalSpecExample27 on BaseEntity {
               impactedCell: metaData {
                 label(input: "impactedCell")
                 key(input: "impactedCell")
-                inputField(type: baseTextField) {
+                inputField(type: specExample27ImpactedCellField) {
                   ...inputfield
                 }
               }
@@ -5619,6 +5751,18 @@ fragment minimalSpecExample27 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample27ImpactedCellField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -5934,7 +6078,7 @@ fragment minimalSpecExample29 on BaseEntity {
               code: metaData {
                 label(input: "code")
                 key(input: "code")
-                inputField(type: baseTextField) {
+                inputField(type: specExample29CodeField) {
                   ...inputfield
                 }
               }
@@ -5971,7 +6115,7 @@ fragment minimalSpecExample29 on BaseEntity {
           code: metaData {
             label(input: "code")
             key(input: "code")
-            inputField(type: baseTextField) {
+            inputField(type: specExample29CodeField) {
               ...inputfield
             }
           }
@@ -5987,6 +6131,18 @@ fragment minimalSpecExample29 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample29CodeField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -6518,7 +6674,7 @@ fragment minimalSpecExample32 on BaseEntity {
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
-                inputField(type: baseTextField) {
+                inputField(type: specExample32PrefLabelField) {
                   ...inputfield
                 }
               }
@@ -6555,7 +6711,7 @@ fragment minimalSpecExample32 on BaseEntity {
           prefLabel: metaData {
             label(input: "prefLabel")
             key(input: "prefLabel")
-            inputField(type: baseTextField) {
+            inputField(type: specExample32PrefLabelField) {
               ...inputfield
             }
           }
@@ -6571,6 +6727,18 @@ fragment minimalSpecExample32 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample32PrefLabelField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -6722,14 +6890,14 @@ fragment minimalSpecExample33 on BaseEntity {
               name: metaData {
                 label(input: "name")
                 key(input: "name")
-                inputField(type: baseTextField) {
+                inputField(type: specExample33NameField) {
                   ...inputfield
                 }
               }
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
-                inputField(type: baseTextField) {
+                inputField(type: specExample33PrefLabelField) {
                   ...inputfield
                 }
               }
@@ -6766,14 +6934,14 @@ fragment minimalSpecExample33 on BaseEntity {
           name: metaData {
             label(input: "name")
             key(input: "name")
-            inputField(type: baseTextField) {
+            inputField(type: specExample33NameField) {
               ...inputfield
             }
           }
           prefLabel: metaData {
             label(input: "prefLabel")
             key(input: "prefLabel")
-            inputField(type: baseTextField) {
+            inputField(type: specExample33PrefLabelField) {
               ...inputfield
             }
           }
@@ -6789,6 +6957,24 @@ fragment minimalSpecExample33 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample33NameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  },
+  "specExample33PrefLabelField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::
 
@@ -6938,14 +7124,14 @@ fragment minimalSpecExample34 on BaseEntity {
               name: metaData {
                 label(input: "name")
                 key(input: "name")
-                inputField(type: baseTextField) {
+                inputField(type: specExample34NameField) {
                   ...inputfield
                 }
               }
               prefLabel: metaData {
                 label(input: "prefLabel")
                 key(input: "prefLabel")
-                inputField(type: baseTextField) {
+                inputField(type: specExample34PrefLabelField) {
                   ...inputfield
                 }
               }
@@ -6982,14 +7168,14 @@ fragment minimalSpecExample34 on BaseEntity {
           name: metaData {
             label(input: "name")
             key(input: "name")
-            inputField(type: baseTextField) {
+            inputField(type: specExample34NameField) {
               ...inputfield
             }
           }
           prefLabel: metaData {
             label(input: "prefLabel")
             key(input: "prefLabel")
-            inputField(type: baseTextField) {
+            inputField(type: specExample34PrefLabelField) {
               ...inputfield
             }
           }
@@ -7005,5 +7191,23 @@ fragment minimalSpecExample34 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample34NameField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  },
+  "specExample34PrefLabelField": {
+    "type": "dropdownMultiselectMetadata",
+    "isMetadataField": true,
+    "canCreateEntityFromOption": true,
+    "multiple": true
+  }
+}
 ````
 :::

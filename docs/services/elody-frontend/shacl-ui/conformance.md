@@ -71,7 +71,7 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 17 | Blank node values — view | Required | ✅ | A blank node with a nested shape (`sh:node`, `shui:DetailsViewer`) as a table, one column per nested property. |
 | 18 | Blank node values — edit | Required | ✅ | `shui:DetailsEditor` as a field with sub-fields (`inputFieldWithSubFields`). A blank node inside a nested value is entered as text. |
 | 19 | Literal values — view | Required | ✅ | `xsd:string`, `boolean`, `integer`, `decimal`, `double`, `float`, `date`, `dateTime`. |
-| 20 | Literal values — edit | Required | ✅ | Text field, check box, number field, date and date-time picker, chosen by the scoring system; all eight types are kept with their type on save (round trip below). |
+| 20 | Literal values — edit | Required | ✅ | Text field, check box, number field, date and date-time picker, chosen by the scoring system; text with several values (no `sh:maxCount 1`) is one field holding the list; all eight types are kept with their type on save (round trip below). |
 | 21 | Language-tagged strings — view | Required | ✅ | One multilingual field: the value per language, with a language selector. |
 | 22 | Language-tagged strings — edit | Required | ✅ | Edited per language; the language is chosen from the `sh:languageIn` list, else from the client's interface languages. |
 | 23 | HTML values — view | Recommended | ❌ | `shui:HTMLViewer` is not implemented. |
