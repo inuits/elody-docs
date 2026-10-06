@@ -181,7 +181,6 @@ ui:example01-birthDate
   sh:path schema:birthDate ;
   sh:order 4 ;
   sh:datatype xsd:date ;
-  sh:group ui:example01-details ;
   sh:maxCount 1 .
 
 ui:example01-create
@@ -208,7 +207,8 @@ ui:example01-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 
 ui:example01-familyName
   sh:path schema:familyName ;
@@ -360,37 +360,42 @@ fragment minimalSpecExample01 on BaseEntity {
       label(input: "Sample Data Graph")
       name: formTab {
         formFields {
-          honorificPrefix: metaData {
-            label(input: "honorificPrefix")
-            key(input: "honorificPrefix")
-            inputField(type: baseTextField) {
-              ...inputfield
-            }
-          }
-          givenName: metaData {
-            label(input: "givenName")
-            key(input: "givenName")
-            inputField(type: baseTextField) {
-              ...inputfield
-              validation(input: { value: required }) {
-                ...validation
+          personShapeNameGroupSection: formSection {
+            label(input: "Name")
+            formFields {
+              honorificPrefix: metaData {
+                label(input: "honorificPrefix")
+                key(input: "honorificPrefix")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
-            }
-          }
-          additionalName: metaData {
-            label(input: "additionalName")
-            key(input: "additionalName")
-            inputField(type: baseTextField) {
-              ...inputfield
-            }
-          }
-          familyName: metaData {
-            label(input: "familyName")
-            key(input: "familyName")
-            inputField(type: baseTextField) {
-              ...inputfield
-              validation(input: { value: required }) {
-                ...validation
+              givenName: metaData {
+                label(input: "givenName")
+                key(input: "givenName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
+              }
+              additionalName: metaData {
+                label(input: "additionalName")
+                key(input: "additionalName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
+              }
+              familyName: metaData {
+                label(input: "familyName")
+                key(input: "familyName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
             }
           }
@@ -534,7 +539,6 @@ ui:example02-birthDate
   sh:path schema:birthDate ;
   sh:order 4 ;
   sh:datatype xsd:date ;
-  sh:group ui:example02-details ;
   sh:maxCount 1 .
 
 ui:example02-create
@@ -561,7 +565,8 @@ ui:example02-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 
 ui:example02-familyName
   sh:path schema:familyName ;
@@ -713,37 +718,42 @@ fragment minimalSpecExample02 on BaseEntity {
       label(input: "Sample Shapes Graph")
       name: formTab {
         formFields {
-          honorificPrefix: metaData {
-            label(input: "honorificPrefix")
-            key(input: "honorificPrefix")
-            inputField(type: baseTextField) {
-              ...inputfield
-            }
-          }
-          givenName: metaData {
-            label(input: "givenName")
-            key(input: "givenName")
-            inputField(type: baseTextField) {
-              ...inputfield
-              validation(input: { value: required }) {
-                ...validation
+          personShapeNameGroupSection: formSection {
+            label(input: "Name")
+            formFields {
+              honorificPrefix: metaData {
+                label(input: "honorificPrefix")
+                key(input: "honorificPrefix")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
-            }
-          }
-          additionalName: metaData {
-            label(input: "additionalName")
-            key(input: "additionalName")
-            inputField(type: baseTextField) {
-              ...inputfield
-            }
-          }
-          familyName: metaData {
-            label(input: "familyName")
-            key(input: "familyName")
-            inputField(type: baseTextField) {
-              ...inputfield
-              validation(input: { value: required }) {
-                ...validation
+              givenName: metaData {
+                label(input: "givenName")
+                key(input: "givenName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
+              }
+              additionalName: metaData {
+                label(input: "additionalName")
+                key(input: "additionalName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
+              }
+              familyName: metaData {
+                label(input: "familyName")
+                key(input: "familyName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
             }
           }
@@ -906,7 +916,6 @@ ui:example03-birthDate
   sh:path schema:birthDate ;
   sh:order 4 ;
   sh:datatype xsd:date ;
-  sh:group ui:example03-details ;
   sh:maxCount 1 .
 
 ui:example03-create
@@ -933,7 +942,8 @@ ui:example03-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 
 ui:example03-familyName
   sh:path schema:familyName ;
@@ -1085,37 +1095,42 @@ fragment minimalSpecExample03 on BaseEntity {
       label(input: "Sample Data Graph with Related Resource")
       name: formTab {
         formFields {
-          honorificPrefix: metaData {
-            label(input: "honorificPrefix")
-            key(input: "honorificPrefix")
-            inputField(type: baseTextField) {
-              ...inputfield
-            }
-          }
-          givenName: metaData {
-            label(input: "givenName")
-            key(input: "givenName")
-            inputField(type: baseTextField) {
-              ...inputfield
-              validation(input: { value: required }) {
-                ...validation
+          personShapeNameGroupSection: formSection {
+            label(input: "Name")
+            formFields {
+              honorificPrefix: metaData {
+                label(input: "honorificPrefix")
+                key(input: "honorificPrefix")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
               }
-            }
-          }
-          additionalName: metaData {
-            label(input: "additionalName")
-            key(input: "additionalName")
-            inputField(type: baseTextField) {
-              ...inputfield
-            }
-          }
-          familyName: metaData {
-            label(input: "familyName")
-            key(input: "familyName")
-            inputField(type: baseTextField) {
-              ...inputfield
-              validation(input: { value: required }) {
-                ...validation
+              givenName: metaData {
+                label(input: "givenName")
+                key(input: "givenName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
+              }
+              additionalName: metaData {
+                label(input: "additionalName")
+                key(input: "additionalName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                }
+              }
+              familyName: metaData {
+                label(input: "familyName")
+                key(input: "familyName")
+                inputField(type: baseTextField) {
+                  ...inputfield
+                  validation(input: { value: required }) {
+                    ...validation
+                  }
+                }
               }
             }
           }
@@ -1207,7 +1222,6 @@ ui:example04
 ex:PersonShapeName
   a sh:PropertyShape ;
   sh:path ex:name ;
-  sh:group ui:example04-details ;
   shui:propertyRole shui:LabelRole .
 
 ex:config
@@ -1224,7 +1238,8 @@ ui:example04-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -1391,19 +1406,18 @@ ui:example05-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 
 ui:example05-isMemberFor
   sh:path [ sh:inversePath ex:member ] ;
   sh:name "Department" ;
-  sh:group ui:example05-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example05-name
   sh:path foaf:name ;
   sh:name "Name" ;
-  sh:datatype xsd:string ;
-  sh:group ui:example05-details .
+  sh:datatype xsd:string .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -1647,20 +1661,19 @@ ui:example07-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 
 ui:example07-isMemberFor
   sh:path [ sh:inversePath ex:member ] ;
   sh:name "Department" ;
   sh:class ex:Department ;
-  sh:group ui:example07-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example07-name
   sh:path foaf:name ;
   sh:name "Name" ;
-  sh:datatype xsd:string ;
-  sh:group ui:example07-details .
+  sh:datatype xsd:string .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -1943,12 +1956,12 @@ ui:example10-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 
 ui:example10-name
   sh:path foaf:name ;
   sh:name "Name"@en , "Nom"@fr ;
-  sh:group ui:example10-details ;
   sh:languageIn ( "fr" "en" ) ;
   shui:propertyRole shui:LabelRole .
 ````
@@ -2151,19 +2164,18 @@ ui:example11-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 
 ui:example11-employer
   sh:path ex:employer ;
   sh:name "Employer"@en ;
   sh:class ex:Organization ;
-  sh:group ui:example11-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example11-firstName
   sh:path foaf:firstName ;
-  sh:name "First Name"@en , "Vorname"@de ;
-  sh:group ui:example11-details .
+  sh:name "First Name"@en , "Vorname"@de .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -2374,7 +2386,6 @@ ui:example12-create
 
 ui:example12-creator
   sh:path dct:creator ;
-  sh:group ui:example12-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example12-details
@@ -2384,7 +2395,8 @@ ui:example12-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -2554,18 +2566,15 @@ ui:example13
 
 ex:description
   sh:path dct:description ;
-  sh:order 5 ;
-  sh:group ui:example13-details .
+  sh:order 5 .
 
 ex:identifier
   sh:path ex:id ;
   sh:order -10 ;
-  sh:group ui:example13-details ;
   shui:propertyRole shui:LabelRole .
 
 ex:name
-  sh:path rdfs:label ;
-  sh:group ui:example13-details .
+  sh:path rdfs:label .
 
 ui:example13-create
   a elody:Form ;
@@ -2585,7 +2594,8 @@ ui:example13-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -2797,18 +2807,15 @@ ex:config
 
 ex:description
   sh:path dct:description ;
-  sh:order 5 ;
-  sh:group ui:example14-details .
+  sh:order 5 .
 
 ex:identifier
   sh:path ex:id ;
   sh:order -10 ;
-  sh:group ui:example14-details ;
   shui:propertyRole shui:LabelRole .
 
 ex:name
-  sh:path rdfs:label ;
-  sh:group ui:example14-details .
+  sh:path rdfs:label .
 
 ui:example14-create
   a elody:Form ;
@@ -2828,7 +2835,8 @@ ui:example14-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -3036,7 +3044,6 @@ ui:example15-assignee
   sh:path ex:assignee ;
   sh:name "Assignee" ;
   sh:class ex:Person ;
-  sh:group ui:example15-details ;
   shui:propertyRole shui:LabelRole ;
   shui:searchQuery
     "\n            PREFIX ex: <http://example.com/>\n            PREFIX text: <http://jena.apache.org/text#>\n            SELECT ?value WHERE {\n                ?value text:query ($searchTerm $uiLanguage) .\n                ?value a ex:Person .\n            }\n        " .
@@ -3059,7 +3066,8 @@ ui:example15-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -3270,7 +3278,6 @@ ui:example16-create
 ui:example16-creator
   sh:path dct:creator ;
   sh:name "Author" ;
-  sh:group ui:example16-details ;
   sh:in
     [ sh:select
       "\n                PREFIX ex: <http://example.com/>\n                SELECT ?value WHERE {\n                    SERVICE <http://example.com/sparql> {\n                        ?value a ex:Person .\n                    }\n                }\n            " ] ;
@@ -3285,7 +3292,8 @@ ui:example16-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -3393,8 +3401,8 @@ fragment minimalSpecExample16 on BaseEntity {
     "type": "dropdownMultiselectMetadata",
     "options": [
       {
-        "label": "n3-4459",
-        "value": "n3-4459"
+        "label": "n3-4460",
+        "value": "n3-4460"
       }
     ]
   }
@@ -3460,7 +3468,6 @@ ex:Person-bornIn
   a sh:PropertyShape ;
   sh:path ex:bornIn ;
   sh:class ex:Country ;
-  sh:group ui:example17-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example17-create
@@ -3481,7 +3488,8 @@ ui:example17-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -3657,7 +3665,6 @@ ex:Person-married
   a sh:PropertyShape ;
   sh:path ex:married ;
   sh:datatype xsd:boolean ;
-  sh:group ui:example18-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example18-create
@@ -3678,7 +3685,8 @@ ui:example18-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -3838,7 +3846,6 @@ ex:Person-dateOfBirth
   a sh:PropertyShape ;
   sh:path ex:dateOfBirth ;
   sh:datatype xsd:date ;
-  sh:group ui:example19-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example19-create
@@ -3859,7 +3866,8 @@ ui:example19-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -4019,7 +4027,6 @@ ex:Customer-lastVisitTime
   a sh:PropertyShape ;
   sh:path ex:lastVisitTime ;
   sh:datatype xsd:dateTime ;
-  sh:group ui:example20-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example20-create
@@ -4040,7 +4047,8 @@ ui:example20-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -4244,7 +4252,6 @@ ex:Product-weight
   sh:name "weight" ;
   sh:description
     "A blank node with a numeric field and a unit which is one of the QUDT mass units." ;
-  sh:group ui:example21-details ;
   sh:maxCount 1 ;
   sh:node ex:ValueWithWeight ;
   sh:nodeKind sh:BlankNode ;
@@ -4296,7 +4303,8 @@ ui:example21-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -4494,7 +4502,6 @@ ui:example22
 ex:AustralianAddressShape-addressRegion
   a sh:PropertyShape ;
   sh:path schema:addressRegion ;
-  sh:group ui:example22-details ;
   sh:in ( "ACT" "NSW" "NT" "QLD" "SA" "TAS" "VIC" "WA" ) ;
   shui:propertyRole shui:LabelRole .
 
@@ -4516,7 +4523,8 @@ ui:example22-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -4720,7 +4728,6 @@ ex:Person-homeCountry
   a sh:PropertyShape ;
   sh:path ex:homeCountry ;
   sh:class ex:Country ;
-  sh:group ui:example23-details ;
   shui:editor shui:InstancesSelectEditor ;
   shui:propertyRole shui:LabelRole .
 
@@ -4742,7 +4749,8 @@ ui:example23-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -4918,7 +4926,6 @@ ui:example24
 ex:Thing-seeAlso
   a sh:PropertyShape ;
   sh:path rdfs:seeAlso ;
-  sh:group ui:example24-details ;
   sh:nodeKind sh:IRI ;
   shui:editor shui:IRIEditor ;
   shui:propertyRole shui:LabelRole .
@@ -4941,7 +4948,8 @@ ui:example24-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -5102,7 +5110,6 @@ ex:Product-price
   a sh:PropertyShape ;
   sh:path ex:price ;
   sh:datatype xsd:decimal ;
-  sh:group ui:example25-details ;
   shui:editor shui:NumberFieldEditor ;
   shui:propertyRole shui:LabelRole .
 
@@ -5124,7 +5131,8 @@ ui:example25-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -5284,7 +5292,6 @@ ex:Concept-definition
   a sh:PropertyShape ;
   sh:path skos:definition ;
   sh:datatype rdf:HTML ;
-  sh:group ui:example26-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example26-details
@@ -5294,7 +5301,8 @@ ui:example26-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -5430,7 +5438,6 @@ ui:example27
 ex:Drug-impactedCell
   a sh:PropertyShape ;
   sh:path ex:impactedCell ;
-  sh:group ui:example27-details ;
   sh:rootClass obo:CL_0000000 ;
   shui:propertyRole shui:LabelRole .
 
@@ -5441,7 +5448,8 @@ ui:example27-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -5577,7 +5585,6 @@ ex:Country-description
   a sh:PropertyShape ;
   sh:path ex:description ;
   sh:datatype xsd:string ;
-  sh:group ui:example28-details ;
   sh:singleLine false ;
   shui:propertyRole shui:LabelRole .
 
@@ -5599,7 +5606,8 @@ ui:example28-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -5759,7 +5767,6 @@ ex:Country-code
   a sh:PropertyShape ;
   sh:path ex:code ;
   sh:datatype xsd:string ;
-  sh:group ui:example29-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example29-create
@@ -5780,7 +5787,8 @@ ui:example29-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -5940,7 +5948,6 @@ ex:Concept-prefLabel
   a sh:PropertyShape ;
   sh:path skos:prefLabel ;
   sh:datatype rdf:langString ;
-  sh:group ui:example30-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example30-create
@@ -5961,7 +5968,8 @@ ui:example30-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -6340,7 +6348,6 @@ ui:example32
 ex:Label
   a sh:PropertyShape ;
   sh:path skos:prefLabel ;
-  sh:group ui:example32-details ;
   shui:propertyRole shui:LabelRole .
 
 ui:example32-create
@@ -6361,7 +6368,8 @@ ui:example32-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -6527,7 +6535,6 @@ ui:example33
 ex:Name
   a sh:PropertyShape ;
   sh:path schema:name ;
-  sh:group ui:example33-details ;
   shui:propertyRole
     [ sh:order 1 ;
     shui:propertyRole shui:LabelRole ] .
@@ -6535,7 +6542,6 @@ ex:Name
 ex:PrefLabel
   a sh:PropertyShape ;
   sh:path skos:prefLabel ;
-  sh:group ui:example33-details ;
   shui:propertyRole
     [ sh:order 0 ;
     shui:propertyRole shui:LabelRole ] .
@@ -6558,7 +6564,8 @@ ui:example33-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
@@ -6739,7 +6746,6 @@ ui:example34
 ex:Name
   a sh:PropertyShape ;
   sh:path schema:name ;
-  sh:group ui:example34-details ;
   shui:propertyRole
     [ sh:order 1 ;
     shui:propertyRole shui:LabelRole ] .
@@ -6747,7 +6753,6 @@ ex:Name
 ex:PrefLabel
   a sh:PropertyShape ;
   sh:path skos:prefLabel ;
-  sh:group ui:example34-details ;
   shui:propertyRole
     [ sh:order 0 ;
     shui:propertyRole shui:LabelRole ] .
@@ -6770,7 +6775,8 @@ ui:example34-details
   elody:alias "details" ;
   dash:readOnly true ;
   elody:collapsed false ;
-  elody:panelKind elody:MetadataPanel .
+  elody:panelKind elody:MetadataPanel ;
+  elody:showsUngrouped true .
 ````
 :::
 ::: details GraphQL (generated by `elody-ui generate`)
