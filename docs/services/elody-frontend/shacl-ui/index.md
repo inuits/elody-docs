@@ -50,6 +50,7 @@ and checked in CI.
 | Ordering | `sh:order`, `sh:group`, `shui:defaultOrder` | Groups and ungrouped properties in one sequence, unordered last, ties by label; `shui:defaultOrder` from the global configuration. |
 | Groups | `sh:PropertyGroup` | Each group is a panel on the detail page. |
 | Paths | predicate paths, `sh:inversePath` | A predicate path is a metadata key, or a relation when the values are instances of a class (`sh:class`, relation `has<X>`). An inverse path is the mirrored relation Elody stores on the entity (`is<X>For`): shown on the detail page, and a relation dropdown in the create form when the shape has `sh:class`. `elody:relationType` names the relation when the client uses another name; `elody:valueLabelKey` the related entity's label metadata. |
+| Language preference | `sh:languageIn` | The spec's order: the label and the value in the first language of `sh:languageIn` that has one, then the interface language. Labels are resolved when generating (every translation bundle gets the text in that order); values in the PWA, which also offers only the declared languages in the field's language selector. Tags match by basic filtering (`en-US` for `en`). |
 | Cardinality | `sh:minCount`, `sh:maxCount` | Required fields; single or multiple dropdowns. |
 | Property roles | `shui:propertyRole shui:LabelRole`, direct and qualified | The label role is the card title. Qualified roles, also in RDF 1.2 annotation form, set the precedence. |
 
@@ -68,15 +69,14 @@ subset and ignores the rest.
 | `shui:RichTextEditor`, `shui:SubClassEditor`, `shui:BlankNodeEditor` as form fields | Elody has no such create-form field. Rich text exists as a page block, not as a field. |
 | `shui:ValueTableViewer` | Elody renders a table of related entities, not of nested values. |
 | `shui:timeZone`, `shui:defaultNamespace`, `shui:readOnlyGraph` | Elody stores documents, not triples. |
-| `sh:languageIn` as display order | Elody shows the user's interface language. The label texts for every language are still carried over. |
 | Third-party widgets | A widget only its author's renderer knows, such as the spec's `ex:MyCustomEditor`, is left to the scoring system. |
 
 ## Results on the spec examples
 
 | Result | Examples |
 |---|---|
-| Rendered | 23 |
-| Rendered in part | 8 |
+| Rendered | 24 |
+| Rendered in part | 7 |
 | Not rendered | 3 |
 
 Every generated document is valid against the platform schema, and all of them

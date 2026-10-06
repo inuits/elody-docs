@@ -26,7 +26,7 @@ changes.
 | [07](#example-07-edit-predicate-paths) | Predicate and inverse paths in edit mode | `edit-predicate-paths` | <Badge type="tip" text="Rendered" /> |
 | [08](#example-08-edit-alternative-paths) | Alternative paths in edit mode | `edit-alternative-paths` | <Badge type="danger" text="Not rendered" /> |
 | [09](#example-09-edit-other-complex-paths) | Ambiguous complex paths in edit mode | `edit-other-complex-paths` | <Badge type="danger" text="Not rendered" /> |
-| [10](#example-10-lang-resolution) | Language selection based on sh:languageIn | `lang-resolution` | <Badge type="warning" text="Rendered in part" /> |
+| [10](#example-10-lang-resolution) | Language selection based on sh:languageIn | `lang-resolution` | <Badge type="tip" text="Rendered" /> |
 | [11](#example-11-label-resolution-local-name) | Label resolution using sh:name and rdfs:label | `label-resolution-local-name` | <Badge type="tip" text="Rendered" /> |
 | [12](#example-12-label-resolution-local-name) | Label resolution fallback to local name | `label-resolution-local-name` | <Badge type="tip" text="Rendered" /> |
 | [13](#example-13-patterns) | Ordering without shui:defaultOrder | `patterns` | <Badge type="tip" text="Rendered" /> |
@@ -1862,13 +1862,12 @@ ex:part-b
 
 ## 10 · Language selection based on sh:languageIn {#example-10-lang-resolution}
 
-<Badge type="warning" text="Rendered in part" /> Spec section [`lang-resolution`](https://w3c.github.io/data-shapes/shacl12-ui/#lang-resolution)
+<Badge type="tip" text="Rendered" /> Spec section [`lang-resolution`](https://w3c.github.io/data-shapes/shacl12-ui/#lang-resolution)
 
 ![Language selection based on sh:languageIn rendered by Elody](/images/shacl-ui/10-lang-resolution.png)
 
 **What Elody did with it**
 
-- sh:languageIn: the label texts per language go to the translation bundles; Elody shows the user's interface language, the shape's language order does not override it
 - "Nom" is used as the card title (the shapes declare no shui:LabelRole)
 
 ::: details SHACL UI shapes (from the spec)
@@ -1974,6 +1973,8 @@ fragment minimalSpecExample10 on BaseEntity {
       name: metaData {
         label(input: "ui.specExample10.name")
         key(input: "name")
+        isMultilingual(input: true)
+        languageIn(input: ["fr", "en"])
       }
     }
     ...minimalBaseEntity
@@ -2000,6 +2001,8 @@ fragment minimalSpecExample10 on BaseEntity {
               name: metaData {
                 label(input: "ui.specExample10.name")
                 key(input: "name")
+                isMultilingual(input: true)
+                languageIn(input: ["fr", "en"])
               }
             }
           }
@@ -2034,6 +2037,8 @@ fragment minimalSpecExample10 on BaseEntity {
           name: metaData {
             label(input: "ui.specExample10.name")
             key(input: "name")
+            isMultilingual(input: true)
+            languageIn(input: ["fr", "en"])
             inputField(type: baseTextField) {
               ...inputfield
             }
