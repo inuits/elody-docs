@@ -22,10 +22,10 @@ changes.
 | [03](#example-03-getting-started) | Sample Data Graph with Related Resource | `getting-started` | <Badge type="tip" text="Rendered" /> |
 | [04](#example-04-global-configuration) | Sample Instance Data | `global-configuration` | <Badge type="warning" text="Rendered in part" /> |
 | [05](#example-05-view-predicate-paths) | Predicate and inverse paths in view mode | `view-predicate-paths` | <Badge type="warning" text="Rendered in part" /> |
-| [06](#example-06-view-complex-paths) | Complex paths in view mode | `view-complex-paths` | <Badge type="danger" text="Not rendered" /> |
+| [06](#example-06-view-complex-paths) | Complex paths in view mode | `view-complex-paths` | <Badge type="info" text="Left out by choice" /> |
 | [07](#example-07-edit-predicate-paths) | Predicate and inverse paths in edit mode | `edit-predicate-paths` | <Badge type="tip" text="Rendered" /> |
-| [08](#example-08-edit-alternative-paths) | Alternative paths in edit mode | `edit-alternative-paths` | <Badge type="danger" text="Not rendered" /> |
-| [09](#example-09-edit-other-complex-paths) | Ambiguous complex paths in edit mode | `edit-other-complex-paths` | <Badge type="danger" text="Not rendered" /> |
+| [08](#example-08-edit-alternative-paths) | Alternative paths in edit mode | `edit-alternative-paths` | <Badge type="info" text="Left out by choice" /> |
+| [09](#example-09-edit-other-complex-paths) | Ambiguous complex paths in edit mode | `edit-other-complex-paths` | <Badge type="info" text="Left out by choice" /> |
 | [10](#example-10-lang-resolution) | Language selection based on sh:languageIn | `lang-resolution` | <Badge type="tip" text="Rendered" /> |
 | [11](#example-11-label-resolution-local-name) | Label resolution using sh:name and rdfs:label | `label-resolution-local-name` | <Badge type="tip" text="Rendered" /> |
 | [12](#example-12-label-resolution-local-name) | Label resolution fallback to local name | `label-resolution-local-name` | <Badge type="tip" text="Rendered" /> |
@@ -1652,7 +1652,7 @@ fragment minimalSpecExample05 on BaseEntity {
 
 ## 06 · Complex paths in view mode {#example-06-view-complex-paths}
 
-<Badge type="danger" text="Not rendered" /> Spec section [`view-complex-paths`](https://w3c.github.io/data-shapes/shacl12-ui/#view-complex-paths)
+<Badge type="info" text="Left out by choice" /> Spec section [`view-complex-paths`](https://w3c.github.io/data-shapes/shacl12-ui/#view-complex-paths)
 
 **What Elody did with it**
 
@@ -1942,7 +1942,7 @@ fragment minimalSpecExample07 on BaseEntity {
 
 ## 08 · Alternative paths in edit mode {#example-08-edit-alternative-paths}
 
-<Badge type="danger" text="Not rendered" /> Spec section [`edit-alternative-paths`](https://w3c.github.io/data-shapes/shacl12-ui/#edit-alternative-paths)
+<Badge type="info" text="Left out by choice" /> Spec section [`edit-alternative-paths`](https://w3c.github.io/data-shapes/shacl12-ui/#edit-alternative-paths)
 
 **What Elody did with it**
 
@@ -1971,7 +1971,7 @@ ex:book2 a ex:Book ;
 
 ## 09 · Ambiguous complex paths in edit mode {#example-09-edit-other-complex-paths}
 
-<Badge type="danger" text="Not rendered" /> Spec section [`edit-other-complex-paths`](https://w3c.github.io/data-shapes/shacl12-ui/#edit-other-complex-paths)
+<Badge type="info" text="Left out by choice" /> Spec section [`edit-other-complex-paths`](https://w3c.github.io/data-shapes/shacl12-ui/#edit-other-complex-paths)
 
 **What Elody did with it**
 

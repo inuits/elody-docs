@@ -81,10 +81,10 @@ subset and ignores the rest.
 |---|---|
 | Rendered | 24 |
 | Rendered in part | 7 |
-| Not rendered | 3 |
+| Left out by choice | 3 |
 
 Every generated document is valid against the platform schema, and all of them
-execute without errors on baseGraphql. The three examples that are not rendered
+execute without errors on baseGraphql. The three examples left out
 use only alternative or complex paths, which Elody leaves out by choice (see
 [complex paths](#complex-paths-view-and-edit-symmetry)). See the [spec examples](./examples.md)
 for the shapes, the declaration, the GraphQL and a screenshot per example.
