@@ -17,21 +17,23 @@ defined ([#1304](https://github.com/w3c/data-shapes/issues/1304)). The
 results below are measured against the Editor's Draft of 2 October 2026.
 
 Several results depend on platform changes that are not released yet:
-`languageIn` and form sections in baseGraphql and the PWA, and the fix that
-keeps the language of metadata items when they are read. Until those are
-merged, rows 1, 13 (create forms), 21, 22 and 30 hold on those branches only.
+`languageIn` and form sections in baseGraphql and the PWA, the fix that
+keeps the language of metadata items when they are read, and relation
+mirroring in collection-api (with DiSHACLed's opt-in). Until those are
+merged, rows 1, 13 (create forms), 21, 22, 30, 31 and 32 hold on those
+branches only.
 :::
 
 ## Claim
 
 Elody builds its interface from SHACL 1.2 UI shapes and supports **all
-Required features of the proposed feature set except three in part**: label
-resolution for value nodes (4), and inverse paths (31, 32), which depend on
-the client storing the mirrored relation.
+Required features of the proposed feature set except one in part**: label
+resolution for value nodes (4). Inverse paths (31, 32) need relation
+mirroring, which an entity type switches on in its object configuration.
 
 | Level | Supported | In part | Not supported |
 |---|---|---|---|
-| Required (20) | 17 | 3 | 0 |
+| Required (20) | 19 | 1 | 0 |
 | Recommended (13) | 3 | 3 | 7 |
 | Optional (3) | 0 | 1 | 2 |
 
@@ -78,8 +80,8 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 28 | Declared widgets | Required | ✅ | `shui:editor` and `shui:viewer` score 40 and win; Elody's own widgets are `shui:Editor` and `shui:Viewer` instances. |
 | 29 | Widget switching | Optional | ❌ | The widget is fixed per field. |
 | 30 | Value preservation | Required | ✅ | Existing values are shown, including unbounded ones, and a save keeps every value it does not change, every language and each value's type (round trip below). Values of an unbounded property are a set: collection-api stores them sorted. |
-| 31 | Predicate and inverse paths — view | Required | ◐ | A predicate path is a metadata key or a relation. An inverse path reads the mirrored relation on the entity (`is<X>For`). collection-api stores that mirror on its classic storage path only; for entity types with an object configuration it is up to the client (vlacc keeps it, DiSHACLed does not), so there the inverse path shows nothing. |
-| 32 | Predicate and inverse paths — edit | Required | ◐ | Predicate paths and, with `sh:class`, inverse paths are edited on the detail page and in the create form with a relation dropdown. Writing an inverse path stores `is<X>For` on the entity; the other entity gets `has<X>` only where the mirror is kept (see 31). |
+| 31 | Predicate and inverse paths — view | Required | ✅ | A predicate path is a metadata key or a relation. An inverse path reads the mirrored relation on the entity (`is<X>For`). collection-api keeps mirrors on its classic storage path; an entity type with an object configuration switches them on with `RelationMirroring` (DiSHACLed's `entity` does). |
+| 32 | Predicate and inverse paths — edit | Required | ✅ | Predicate paths and, with `sh:class`, inverse paths are edited on the detail page and in the create form with a relation dropdown. Adding or removing an inverse-path value updates the mirror on the other entity (round trip below), with the same condition as 31. |
 | 33 | Alternative paths — view | Recommended | ❌ | An Elody field reads one metadata key or one relation. |
 | 34 | Alternative paths — edit | Recommended | ❌ | As 33. |
 | 35 | Complex paths — view | Recommended | ❌ | As 33. |
@@ -101,9 +103,12 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
   nested fields, inverse paths, editable panels.
 - **The value-preservation round trip** (`scripts/roundtrip/roundtrip.sh`):
   collection-api stores an entity with values of all eight literal types, an
-  unbounded property, a text in three languages and a value no form shows;
-  baseGraphql reads it, the PWA's own form code saves it from the detail page
-  with one edit, and the stored entity must equal the original plus that edit.
+  unbounded property, a text in three languages, a value no form shows, and
+  relations to three entities through an inverse and a predicate path (two
+  relation types to one entity); baseGraphql reads it, the PWA's own form
+  code saves it from the detail page with a metadata edit and a relation
+  edit, and the stored entity and every related entity must equal the
+  original plus those edits, on both sides of each relation.
 
 ## Open points for the specification
 

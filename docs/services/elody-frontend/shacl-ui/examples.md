@@ -1788,6 +1788,9 @@ fragment minimalSpecExample07 on BaseEntity {
               isMemberFor: metaData {
                 label(input: "Department")
                 key(input: "isMemberFor")
+                inputField(type: specExample07IsMemberForField) {
+                  ...inputfield
+                }
               }
               name: metaData {
                 label(input: "Name")
@@ -2294,6 +2297,9 @@ fragment minimalSpecExample11 on BaseEntity {
               employer: metaData {
                 label(input: "ui.specExample11.employer")
                 key(input: "employer")
+                inputField(type: specExample11EmployerField) {
+                  ...inputfield
+                }
               }
               firstName: metaData {
                 label(input: "ui.specExample11.firstName")
@@ -3200,6 +3206,9 @@ fragment minimalSpecExample15 on BaseEntity {
               assignee: metaData {
                 label(input: "Assignee")
                 key(input: "assignee")
+                inputField(type: specExample15AssigneeField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -3623,6 +3632,9 @@ fragment minimalSpecExample17 on BaseEntity {
               bornIn: metaData {
                 label(input: "bornIn")
                 key(input: "bornIn")
+                inputField(type: specExample17BornInField) {
+                  ...inputfield
+                }
               }
             }
           }
@@ -4890,6 +4902,9 @@ fragment minimalSpecExample23 on BaseEntity {
               homeCountry: metaData {
                 label(input: "homeCountry")
                 key(input: "homeCountry")
+                inputField(type: specExample23HomeCountryField) {
+                  ...inputfield
+                }
               }
             }
           }
