@@ -68,7 +68,7 @@ subset and ignores the rest.
 |---|---|
 | Alternative and complex paths (sequence, `sh:alternativePath`, `sh:zeroOrMorePath`, `sh:oneOrMorePath`, `sh:zeroOrOnePath`) | A choice for symmetry: every field Elody shows, it can also edit. The specification recommends complex paths in view mode, but allows leaving them out for exactly that reason; editing them is optional, because a change along such a path is ambiguous (see [below](#complex-paths-view-and-edit-symmetry)). |
 | Inverse paths without `sh:class` in a create form | Shown on the detail page; picking a value needs the related type, so the field is left out of the form. |
-| `shui:searchQuery` | It is SPARQL; Elody searches its own index. The relation dropdown is generated, the query is left out. |
+| `shui:searchQuery` against an external SPARQL endpoint (`SERVICE`) | Elody does not query external endpoints from a form. Over a class in Elody's own data the query is not needed: an extension a renderer *may* evaluate, its purpose — a live search of that class — is what Elody's relation dropdown does. |
 | `sh:in` as a SHACL 1.2 node expression (`sh:in [ sh:select … ]`) | Elody does not evaluate SPARQL; the field becomes a text field and the generator warns. |
 | `shui:RichTextEditor`, `shui:SubClassEditor`, `shui:BlankNodeEditor` as form fields | Elody has no such create-form field. Rich text exists as a page block, not as a field. |
 | `shui:ValueTableViewer` | Elody renders a table of related entities, not of nested values. |
@@ -79,8 +79,8 @@ subset and ignores the rest.
 
 | Result | Examples |
 |---|---|
-| Rendered | 25 |
-| Rendered in part | 6 |
+| Rendered | 26 |
+| Rendered in part | 5 |
 | Left out by choice | 3 |
 
 Every generated document is valid against the platform schema, and all of them

@@ -39,7 +39,7 @@ changes.
 | [12](#example-12-label-resolution-local-name) | Label resolution fallback to local name | `label-resolution-local-name` | <Badge type="tip" text="Rendered" /> |
 | [13](#example-13-patterns) | Ordering without shui:defaultOrder | `patterns` | <Badge type="tip" text="Rendered" /> |
 | [14](#example-14-patterns) | Ordering with shui:defaultOrder | `patterns` | <Badge type="tip" text="Rendered" /> |
-| [15](#example-15-search-query) | Full-text search using shui:searchQuery | `search-query` | <Badge type="warning" text="Rendered in part" /> |
+| [15](#example-15-search-query) | Full-text search using shui:searchQuery | `search-query` | <Badge type="tip" text="Rendered" /> |
 | [16](#example-16-search-query) | Federated full-text search using shui:searchQuery | `search-query` | <Badge type="warning" text="Rendered in part" /> |
 | [17](#example-17-autocompleteeditor) | AutoCompleteEditor | `AutoCompleteEditor` | <Badge type="tip" text="Rendered" /> |
 | [18](#example-18-booleaneditor) | BooleanEditor | `BooleanEditor` | <Badge type="tip" text="Rendered" /> |
@@ -3242,13 +3242,13 @@ fragment minimalSpecExample14 on BaseEntity {
 
 ## 15 · Full-text search using shui:searchQuery {#example-15-search-query}
 
-<Badge type="warning" text="Rendered in part" /> Spec section [`search-query`](https://w3c.github.io/data-shapes/shacl12-ui/#search-query)
+<Badge type="tip" text="Rendered" /> Spec section [`search-query`](https://w3c.github.io/data-shapes/shacl12-ui/#search-query)
 
 ![Full-text search using shui:searchQuery rendered by Elody](/images/shacl-ui/15-search-query.png)
 
 **What Elody did with it**
 
-- *Not supported:* "Assignee": shui:searchQuery (SPARQL) left out; the relation dropdown searches Elody's own index
+- *Handled:* "Assignee": shui:searchQuery (SPARQL) left out; the relation dropdown searches Elody's own index of that class live, as the query intends
 - *Note:* "Assignee" is used as the card title (the shapes declare no shui:LabelRole)
 
 ::: details SHACL UI shapes (from the spec)
@@ -3463,7 +3463,7 @@ fragment minimalSpecExample15 on BaseEntity {
 
 **What Elody did with it**
 
-- *Not supported:* "Author": shui:searchQuery (SPARQL) left out; the relation dropdown searches Elody's own index
+- *Not supported:* "Author": shui:searchQuery searches an external SPARQL endpoint (SERVICE); Elody does not query it
 - *Note:* "Author" is used as the card title (the shapes declare no shui:LabelRole)
 
 ::: details SHACL UI shapes (from the spec)

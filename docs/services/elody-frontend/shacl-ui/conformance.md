@@ -98,7 +98,7 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
 - **The specification's examples.** All 34 examples of the Editor's Draft go
   through the whole pipeline; the [spec examples](./examples.md) page shows the
   declaration, the GraphQL, the result of baseGraphql's own resolvers and a
-  screenshot for each. 25 render fully, 6 in part, and 3 are left out by choice (alternative and
+  screenshot for each. 26 render fully, 5 in part, and 3 are left out by choice (alternative and
   complex paths).
 - **Unit tests** for each feature: scoring on the official scoring graph,
   ordering, groups and form sections, roles, `sh:languageIn`, multilingual and
