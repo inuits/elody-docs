@@ -1259,9 +1259,9 @@ fragment minimalSpecExample03 on BaseEntity {
 
 - shui:timeZone has no Elody counterpart (Elody stores documents, not triples) and is ignored
 - shui:defaultNamespace has no Elody counterpart (Elody stores documents, not triples) and is ignored
+- shui:languagePreference is not applied: Elody prefers the interface language, after sh:languageIn
 - "name": Elody has no MyCustomEditor; the declared editor is left out and the spec's scoring picks one
 - "name" is used as the card title (the shapes declare no shui:LabelRole)
-- "name": http://example.org/ns#MyCustomEditor has no create-form field in Elody; left out of the form
 
 ::: details SHACL UI shapes (from the spec)
 ````turtle
@@ -1310,6 +1310,7 @@ ui:example04
         elody:panel ui:example04-details ] ;
       elody:size elody:Width100 ] ] ;
   elody:documentName "SpecExample04" ;
+  elody:form ui:example04-create ;
   elody:viewMode [ elody:mode elody:ListView ] .
 
 ex:PersonShapeName
@@ -1323,6 +1324,17 @@ ex:config
   shui:labelPreference ( skos:prefLabel dct:title rdfs:label ) ;
   shui:languagePreference ( "" "en" "de" ) ;
   shui:timeZone "Europe/Vienna" .
+
+ui:example04-create
+  a elody:Form ;
+  rdfs:label "Sample Instance Data" ;
+  elody:queryName "SpecExample04CreateForm" ;
+  elody:shape [ sh:property ex:PersonShapeName ] ;
+  elody:submit
+    [ rdfs:label "actions.labels.create" ;
+    elody:actionQuery "CreateEntity" ;
+    elody:creationType "BaseEntity" ;
+    elody:icon "Create" ] .
 
 ui:example04-details
   a sh:PropertyGroup ;
@@ -1404,6 +1416,31 @@ fragment minimalSpecExample04 on BaseEntity {
         }
         bulkOperationModal {
           ...bulkOperationModal
+        }
+      }
+    }
+  }
+
+  query SpecExample04CreateForm {
+    GetDynamicForm {
+      label(input: "Sample Instance Data")
+      name: formTab {
+        formFields {
+          name: metaData {
+            label(input: "name")
+            key(input: "name")
+            inputField(type: specExample04NameField) {
+              ...inputfield
+            }
+          }
+          createAction: action {
+            label(input: "actions.labels.create")
+            icon(input: Create)
+            actionType(input: submit)
+            actionQuery(input: "CreateEntity")
+            creationType(input: BaseEntity)
+            showsFormErrors(input: true)
+          }
         }
       }
     }
@@ -5615,7 +5652,6 @@ fragment minimalSpecExample26 on BaseEntity {
 
 - "impactedCell": Elody has no shui:SubClassEditor; the declared editor is left out and the spec's scoring picks one
 - "impactedCell" is used as the card title (the shapes declare no shui:LabelRole)
-- "impactedCell": shui:SubClassEditor has no create-form field in Elody; left out of the form
 
 ::: details SHACL UI shapes (from the spec)
 ````turtle
@@ -5659,6 +5695,7 @@ ui:example27
         elody:panel ui:example27-details ] ;
       elody:size elody:Width100 ] ] ;
   elody:documentName "SpecExample27" ;
+  elody:form ui:example27-create ;
   elody:viewMode [ elody:mode elody:ListView ] .
 
 ex:Drug-impactedCell
@@ -5666,6 +5703,17 @@ ex:Drug-impactedCell
   sh:path ex:impactedCell ;
   sh:rootClass obo:CL_0000000 ;
   shui:propertyRole shui:LabelRole .
+
+ui:example27-create
+  a elody:Form ;
+  rdfs:label "SubClassEditor" ;
+  elody:queryName "SpecExample27CreateForm" ;
+  elody:shape [ sh:property ex:Drug-impactedCell ] ;
+  elody:submit
+    [ rdfs:label "actions.labels.create" ;
+    elody:actionQuery "CreateEntity" ;
+    elody:creationType "BaseEntity" ;
+    elody:icon "Create" ] .
 
 ui:example27-details
   a sh:PropertyGroup ;
@@ -5747,6 +5795,31 @@ fragment minimalSpecExample27 on BaseEntity {
         }
         bulkOperationModal {
           ...bulkOperationModal
+        }
+      }
+    }
+  }
+
+  query SpecExample27CreateForm {
+    GetDynamicForm {
+      label(input: "SubClassEditor")
+      name: formTab {
+        formFields {
+          impactedCell: metaData {
+            label(input: "impactedCell")
+            key(input: "impactedCell")
+            inputField(type: specExample27ImpactedCellField) {
+              ...inputfield
+            }
+          }
+          createAction: action {
+            label(input: "actions.labels.create")
+            icon(input: Create)
+            actionType(input: submit)
+            actionQuery(input: "CreateEntity")
+            creationType(input: BaseEntity)
+            showsFormErrors(input: true)
+          }
         }
       }
     }
