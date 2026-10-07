@@ -104,7 +104,10 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
   complex paths).
 - **Unit tests** for each feature: scoring on the official scoring graph,
   ordering, groups and form sections, roles, `sh:languageIn`, multilingual and
-  nested fields, inverse paths, editable panels.
+  nested fields, inverse paths, editable panels, rich text and related-entity
+  lists in a panel, `shui:SubClassEditor`, and values from a linked-data source.
+  collection-api has its own for the SPARQL engine's query-driven sources and
+  for `SPARQL_SOURCES`.
 - **The value-preservation round trip** (`scripts/roundtrip/roundtrip.sh`):
   collection-api stores an entity with values of all eight literal types, an
   unbounded property, a text in three languages, a value no form shows, and
@@ -125,6 +128,17 @@ lists exactly those two, with the columns of the `sh:node` shape (the type and
 the alternative labels), and each row opens that concept.
 
 ![Example 31 in a running client: the narrower concepts of a concept, as a list in the panel](/images/shacl-ui/31-ValueTableViewer-live.jpg)
+
+### Values from a linked-data source in a running client
+
+`shui:searchQuery` and the live `shui:SubClassEditor` were checked in a running
+DiSHACLed client against Ubergraph: searches through the GraphQL query the
+dropdown sends return the Cell Ontology's and Uberon's classes, and a drug
+linked to them shows them by their label (see
+[linked-data sources](./#linked-data-sources)). Typing in the dropdown in edit
+mode was not exercised in the browser.
+
+![A drug whose impacted cell and target organ were found live in Ubergraph](/images/shacl-ui/live-sparql-source.jpg)
 
 ## Open points for the specification
 

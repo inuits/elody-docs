@@ -112,13 +112,67 @@ unless it sets its own `LIMIT`. A resource keeps its IRI as identifier.
 In declaration terms this is `elody:SparqlSource`, `elody:readsFrom` and
 `elody:optionsFrom`, which can also be written by hand.
 
+### What is searched, and where that is declared
+
+Three things decide a search: **where** the query goes, **what** the
+candidates are and **how** the typed text matches them. The shapes declare
+all three; Elody adds no query of its own except for the live
+`shui:SubClassEditor`.
+
+```turtle
+# shui:searchQuery: the query is the shape author's
+[ sh:path ex:targetOrgan ; sh:name "Target organ"@en ;
+  shui:searchQuery """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?value WHERE {
+  SERVICE <https://ubergraph.apps.renci.org/sparql> {                          # where
+    ?value rdfs:subClassOf <http://purl.obolibrary.org/obo/UBERON_0000062> ;   # what
+           rdfs:label ?label .
+    FILTER(CONTAINS(LCASE(STR(?label)), LCASE($searchTerm)))                    # how
+  }
+}""" ]
+
+# live shui:SubClassEditor: where and what are declared, how is fixed
+[ sh:path ex:impactedCell ; sh:name "Impacted cell"@en ;
+  shui:editor shui:SubClassEditor ;
+  sh:rootClass obo:CL_0000000 ;                                   # what
+  elody:classSource <https://ubergraph.apps.renci.org/sparql> ]   # where
+```
+
+| | `shui:searchQuery` / `sh:in [ sh:select ]` | live `shui:SubClassEditor` |
+|---|---|---|
+| Where | the endpoint of the `SERVICE` block | `elody:classSource` |
+| What | the query's pattern | `sh:rootClass` and its subclasses (`rdfs:subClassOf*`) |
+| How | the query: any pattern with `$searchTerm`, a label filter, a synonym, a full-text index (`text:query`, as example 16) | the label (`rdfs:label`) contains the typed text, ignoring case |
+
+`sh:in [ sh:select … ]` gives the list shown before anything is typed; without
+it, the search query runs with an empty term. The dropdown sends an Elody text
+filter along (`metadata.title.value`); for a linked-data source collection-api
+takes only the typed text from it, and Elody's `*` ("anything") means no term.
+The queries a declaration produces end up in `src/ui/sparqlSources.json`
+(`selectQuery`, `searchQuery`), the place to check what is sent.
+
+### Limits
+
+- A query that joins its `SERVICE` block with patterns of its own is not run:
+  Elody sends a query to one endpoint.
+- A live `shui:SubClassEditor` searches the label only; for anything else,
+  write a `shui:searchQuery`.
+- `rdfs:subClassOf*` is evaluated by the endpoint: below a broad root
+  (Ubergraph's "cell" has some 32,000 subclasses across species) a search
+  takes several seconds.
+- The values are read-only: Elody links to them and never writes back.
+
+### Checked in a running client
+
 ![A drug whose impacted cell and target organ were found live in the Cell Ontology and Uberon (Ubergraph)](/images/shacl-ui/live-sparql-source.jpg)
 
-Checked in a running DiSHACLed client against
-[Ubergraph](https://ubergraph.apps.renci.org): a search for "motor neuron"
-returns the Cell Ontology's motor neurons, "heart" the organs of Uberon, the
-detail page shows the chosen ones by their label, and each opens on a page with
-its label and IRI.
+In a running DiSHACLed client against
+[Ubergraph](https://ubergraph.apps.renci.org), through the GraphQL query the
+dropdown sends: a search for "motor neuron" returns the Cell Ontology's motor
+neurons, "heart" the organs of Uberon. A drug linked to one of each shows them
+by their label, and each item's own page (`/<type>/<id>`) shows its label and
+IRI. Typing in the dropdown in edit mode was not exercised in the browser: the
+test client ran without login.
 
 ## Complex paths: view and edit symmetry
 
@@ -205,3 +259,5 @@ port 6016. The spec's examples and scoring graph are vendored in
 | Spec examples and scoring graph | `modules/uiDeclarationModule/spec/` |
 | Value-preservation round trip | `modules/uiDeclarationModule/scripts/roundtrip/` |
 | Relation mirroring (opt-in) | `collection-api/api/object_configurations/relation_mirroring.py` |
+| Linked-data sources: from the shapes to `sparqlSources.json` | `modules/uiDeclarationModule/src/externalSources.ts` |
+| Linked-data sources: SPARQL engine and `SPARQL_SOURCES` | `collection-api/api/storage/sparqlstore.py`, `collection-api/api/sparql_sources.py` |
