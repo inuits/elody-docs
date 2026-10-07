@@ -51,7 +51,7 @@ changes.
 | [24](#example-24-irieditor) | IRIEditor | `IRIEditor` | <Badge type="tip" text="Rendered" /> |
 | [25](#example-25-numberfieldeditor) | NumberFieldEditor | `NumberFieldEditor` | <Badge type="tip" text="Rendered" /> |
 | [26](#example-26-richtexteditor) | RichTextEditor | `RichTextEditor` | <Badge type="tip" text="Rendered" /> |
-| [27](#example-27-subclasseditor) | SubClassEditor | `SubClassEditor` | <Badge type="warning" text="Rendered in part" /> |
+| [27](#example-27-subclasseditor) | SubClassEditor | `SubClassEditor` | <Badge type="tip" text="Rendered" /> |
 | [28](#example-28-textareaeditor) | TextAreaEditor | `TextAreaEditor` | <Badge type="tip" text="Rendered" /> |
 | [29](#example-29-textfieldeditor) | TextFieldEditor | `TextFieldEditor` | <Badge type="tip" text="Rendered" /> |
 | [30](#example-30-textfieldwithlangeditor) | TextFieldWithLangEditor | `TextFieldWithLangEditor` | <Badge type="tip" text="Rendered" /> |
@@ -5678,14 +5678,14 @@ fragment minimalSpecExample26 on BaseEntity {
 
 ## 27 · SubClassEditor {#example-27-subclasseditor}
 
-<Badge type="warning" text="Rendered in part" /> Spec section [`SubClassEditor`](https://w3c.github.io/data-shapes/shacl12-ui/#SubClassEditor)
+<Badge type="tip" text="Rendered" /> Spec section [`SubClassEditor`](https://w3c.github.io/data-shapes/shacl12-ui/#SubClassEditor)
 
 ![SubClassEditor rendered by Elody](/images/shacl-ui/27-SubClassEditor.png)
 
 **What Elody did with it**
 
-- *Not supported:* "impactedCell": Elody has no shui:SubClassEditor; the declared editor is left out and the spec's scoring picks one
 - *Note:* "impactedCell" is used as the card title (the shapes declare no shui:LabelRole)
+- *Note:* "impactedCell": shui:SubClassEditor offers sh:rootClass and its 0 subclasses found in the shapes and data graph, read when generating (as sh:in): a dropdown in tree order, the value the class IRI
 
 ::: details SHACL UI shapes (from the spec)
 ````turtle
@@ -5736,6 +5736,7 @@ ex:Drug-impactedCell
   a sh:PropertyShape ;
   sh:path ex:impactedCell ;
   sh:rootClass obo:CL_0000000 ;
+  shui:editor shui:SubClassEditor ;
   shui:propertyRole shui:LabelRole .
 
 ui:example27-create
@@ -5865,9 +5866,12 @@ fragment minimalSpecExample27 on BaseEntity {
 {
   "specExample27ImpactedCellField": {
     "type": "dropdownMultiselectMetadata",
-    "isMetadataField": true,
-    "canCreateEntityFromOption": true,
-    "multiple": true
+    "options": [
+      {
+        "label": "CL_0000000",
+        "value": "http://purl.obolibrary.org/obo/CL_0000000"
+      }
+    ]
   }
 }
 ````

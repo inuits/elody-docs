@@ -44,7 +44,7 @@ and checked in CI.
 | Area | Standard terms | In Elody |
 |---|---|---|
 | Widget choice | `shui:editor`, `shui:viewer`, the scoring system | The spec's scoring system, run on the W3C working group's own scoring graph. An explicit `shui:editor` wins (score 40); otherwise the widget follows from `sh:datatype`, `sh:in`, `sh:class`, `sh:node`, `sh:nodeKind` and `sh:singleLine`. |
-| Editors | text field, text area, text with language, number, boolean, date, date and time, IRI, enum select, instances select, auto complete, details | Each maps to an Elody input type. `sh:in` and `sh:class` become generated custom input fields: a dropdown with the listed options, or a relation dropdown on the class. |
+| Editors | text field, text area, text with language, number, boolean, date, date and time, IRI, enum select, instances select, auto complete, details | Each maps to an Elody input type. `sh:in` and `sh:class` become generated custom input fields: a dropdown with the listed options, or a relation dropdown on the class. `shui:SubClassEditor` is a dropdown of `sh:rootClass` and its subclasses (`rdfs:subClassOf*`) found in the shapes and data graph, in tree order with each level indented; the value is the class IRI. Like `sh:in` it is read when generating: a new subclass needs a new generation. |
 | Language-tagged text | `rdf:langString`, `shui:TextFieldWithLangEditor`, `shui:TextAreaWithLangEditor` | One multilingual field (`isMultilingual`): the detail page edits and shows it per language, the create form stores the text in the interface language. The client needs the `supportsMultilingualMetadataEditing` feature. |
 | Nested shapes | `sh:node` with `shui:DetailsEditor` | A field with sub-fields (`inputFieldWithSubFields`): the value is a list of objects under the metadata key, one column per property shape of the nested node shape, in the create form and on the detail page. A related resource (`sh:class`) inside a nested value is entered as its identifier. |
 | Viewers | literal, hyperlink, language string, details | Elody's metadata display and its link formatter. Elody's own pill and regular-expression formatters are `shui:Viewer` instances in the `elody:` ontology. |
@@ -70,7 +70,7 @@ subset and ignores the rest.
 | Alternative and complex paths (sequence, `sh:alternativePath`, `sh:zeroOrMorePath`, `sh:oneOrMorePath`, `sh:zeroOrOnePath`) | A choice for symmetry: every field Elody shows, it can also edit. The specification recommends complex paths in view mode, but allows leaving them out for exactly that reason; editing them is optional, because a change along such a path is ambiguous (see [below](#complex-paths-view-and-edit-symmetry)). |
 | `shui:searchQuery` against an external SPARQL endpoint (`SERVICE`) | Elody does not query external endpoints from a form. Over a class in Elody's own data the query is not needed: an extension a renderer *may* evaluate, its purpose — a live search of that class — is what Elody's relation dropdown does. |
 | `sh:in` as a SHACL 1.2 node expression (`sh:in [ sh:select … ]`) | Elody does not evaluate SPARQL; the field becomes a text field and the generator warns. |
-| `shui:SubClassEditor`, `shui:BlankNodeEditor` | Elody has no class-hierarchy picker and stores no blank nodes outside nested values. |
+| `shui:BlankNodeEditor` | Elody stores no blank nodes outside nested values. |
 | `shui:RichTextEditor` in a create form | Rich text is edited in the detail panel (see above); the create form has no rich-text field. |
 | `shui:timeZone`, `shui:defaultNamespace`, `shui:readOnlyGraph` | Elody stores documents, not triples. |
 | Third-party widgets | A widget only its author's renderer knows, such as the spec's `ex:MyCustomEditor`, is left to the scoring system. |
@@ -79,8 +79,8 @@ subset and ignores the rest.
 
 | Result | Examples |
 |---|---|
-| Rendered | 29 |
-| Rendered in part | 2 |
+| Rendered | 30 |
+| Rendered in part | 1 |
 | Left out by choice | 3 |
 
 Every generated document is valid against the platform schema, and all of them
