@@ -66,7 +66,7 @@ Relations, such as subjects, genres or linked persons, are shown as chips:
 | Green                      | Added in the newer version.                              |
 | Red, struck through        | Present in the older version, removed in the newer one.  |
 | Grey                       | Present in both versions.                                |
-| Marked "renamed"           | The related entity itself got another name in between.   |
+| orange                     | The related entity itself got another name in between.   |
 
 ![Subjects added in version 5 compared with version 4](/images/history-viewer/relations-added.png)
 
@@ -74,7 +74,7 @@ Relations, such as subjects, genres or linked persons, are shown as chips:
 
 A related entity is shown with the name it had **at the time of that
 version**, not with its current name. If a person or subject was renamed
-between the two versions, the chip is marked as renamed: the older side shows
+between the two versions, the chip is marked in orange: the older side shows
 the previous name, the newer side the current one. That way the history shows
 what the record really looked like at the time.
 
