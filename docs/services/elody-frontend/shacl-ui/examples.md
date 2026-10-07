@@ -2,7 +2,16 @@
 outline: [2, 2]
 ---
 
-# SHACL UI spec examples
+# SHACL UI spec examples <Badge type="warning" text="in development" />
+
+::: warning In development
+SHACL UI support and the `elody:` ontology are in development and not part of
+a release yet. The platform changes they rely on are on feature branches of
+baseGraphql, the PWA and collection-api;
+[elody-ontology](https://github.com/inuits/elody-ontology) (0.2.0) and
+[elody-generator](https://github.com/inuits/elody-generator) are new, and no
+client uses them yet. Terms, results and these pages may still change.
+:::
 
 Every example of the [SHACL 1.2 UI specification](https://w3c.github.io/data-shapes/shacl12-ui/) put through the
 Elody pipeline described in [SHACL UI in Elody](./index.md): the spec's shapes

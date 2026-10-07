@@ -75,7 +75,7 @@ export default defineConfig({
               { text: 'Pipeline View Mode', link: '/services/elody-frontend/features/pipeline-view-mode' },
               { text: 'History Viewer', link: '/services/elody-frontend/features/history-viewer' },
               {
-                text: 'SHACL UI',
+                text: 'SHACL UI (in development)',
                 link: '/services/elody-frontend/shacl-ui/',
                 items: [
                   { text: 'Spec Examples', link: '/services/elody-frontend/shacl-ui/examples' },
