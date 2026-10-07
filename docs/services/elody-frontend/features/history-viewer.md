@@ -66,7 +66,7 @@ Relations, such as subjects, genres or linked persons, are shown as chips:
 | Green                      | Added in the newer version.                              |
 | Red, struck through        | Present in the older version, removed in the newer one.  |
 | Grey                       | Present in both versions.                                |
-| orange                     | The related entity itself got another name in between.   |
+| Orange                     | The related entity itself got another name in between.   |
 
 ![Subjects added in version 5 compared with version 4](/images/history-viewer/relations-added.png)
 
