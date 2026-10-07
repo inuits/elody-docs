@@ -83,7 +83,7 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 29 | Widget switching | Optional | ❌ | The widget is fixed per field. |
 | 30 | Value preservation | Required | ✅ | Existing values are shown, including unbounded ones, and a save keeps every value it does not change, every language and each value's type (round trip below). Values of an unbounded property are a set: collection-api stores them sorted. |
 | 31 | Predicate and inverse paths — view | Required | ✅ | A predicate path is a metadata key or a relation. An inverse path reads the mirrored relation on the entity (`is<X>For`). collection-api keeps mirrors on its classic storage path; an entity type with an object configuration switches them on with `RelationMirroring` (DiSHACLed's `entity` does). |
-| 32 | Predicate and inverse paths — edit | Required | ✅ | Predicate paths and, with `sh:class`, inverse paths are edited on the detail page and in the create form with a relation dropdown. Adding or removing an inverse-path value updates the mirror on the other entity (round trip below), with the same condition as 31. |
+| 32 | Predicate and inverse paths — edit | Required | ✅ | Predicate paths and, with `sh:class`, inverse paths are edited on the detail page and in the create form with a relation dropdown. Without `sh:class` Elody has no type to search: the create form takes the IRI typed in (as `shui:IRIEditor`), stored as the relation's key, and the detail page shows the related entity by its label. Adding or removing an inverse-path value updates the mirror on the other entity (round trip below), with the same condition as 31. |
 | 33 | Alternative paths — view | Recommended | ❌ | Left out by choice: Elody keeps view and edit symmetric, which the specification allows for complex paths in view mode (see [complex paths](./#complex-paths-view-and-edit-symmetry)). |
 | 34 | Alternative paths — edit | Recommended | ❌ | Follows from 33: a field Elody does not show, it does not edit. |
 | 35 | Complex paths — view | Recommended | ❌ | As 33. |
@@ -98,7 +98,7 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
 - **The specification's examples.** All 34 examples of the Editor's Draft go
   through the whole pipeline; the [spec examples](./examples.md) page shows the
   declaration, the GraphQL, the result of baseGraphql's own resolvers and a
-  screenshot for each. 26 render fully, 5 in part, and 3 are left out by choice (alternative and
+  screenshot for each. 27 render fully, 4 in part, and 3 are left out by choice (alternative and
   complex paths).
 - **Unit tests** for each feature: scoring on the official scoring graph,
   ordering, groups and form sections, roles, `sh:languageIn`, multilingual and
