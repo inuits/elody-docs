@@ -225,12 +225,12 @@ lists them too):
 ## Reproduce
 
 The pipeline and this documentation are generated from
-`modules/uiDeclarationModule`:
+`elody-generator` (at the root of elody-common):
 
 ```bash
-cd modules/uiDeclarationModule
-scripts/showcase.sh <pwa checkout on feat/storybook> ../../elody-docs/docs/public/images/shacl-ui
-npx tsx scripts/showcase-docs.ts showcase-out ../../elody-docs/docs/services/elody-frontend/shacl-ui
+cd elody-generator
+scripts/showcase.sh <pwa checkout on feat/storybook> ../elody-docs/docs/public/images/shacl-ui
+npx tsx scripts/showcase-docs.ts showcase-out ../elody-docs/docs/services/elody-frontend/shacl-ui
 ```
 
 The value-preservation round trip stores an entity and three related ones,
@@ -243,22 +243,24 @@ original:
 scripts/roundtrip/roundtrip.sh <pwa checkout with node_modules>
 ```
 
-`showcase.sh` needs a running local Elody stack (it executes the documents in the
-dashboard container) and Storybook from the PWA's `feat/storybook` branch on
-port 6016. The spec's examples and scoring graph are vendored in
-`modules/uiDeclarationModule/spec/`; refresh them when the draft changes.
+`showcase.sh` needs a running local Elody stack (it copies the documents into the
+dashboard container and executes them there against baseGraphql) and Storybook
+from the PWA's `feat/storybook` branch on port 6016. Both scripts use the
+baseGraphql the container mounts; `BASEGRAPHQL` names another directory as the
+container sees it, e.g. a worktree of a feature branch under `modules/`. The spec's examples and scoring graph are vendored in
+`elody-generator/spec/`; refresh them when the draft changes.
 
 ## Where the pieces live
 
 | Piece | Location |
 |---|---|
 | `elody:` vocabulary and meta-shapes (what a declaration may say) | `elody-ontology/ui/` (own repository, at the root of elody-common) |
-| Implementation bindings (GraphQL literals, widgets, schema fields) | `modules/uiDeclarationModule/ontology/elody-ui.bindings.ttl` |
-| Scoring system | `modules/uiDeclarationModule/src/score.ts` |
-| SHACL UI shapes → Elody declaration | `modules/uiDeclarationModule/src/fromShacl.ts` |
-| Declaration → GraphQL (`elody-ui generate`, `check`, `migrate`) | `modules/uiDeclarationModule/src/` |
-| Spec examples and scoring graph | `modules/uiDeclarationModule/spec/` |
-| Value-preservation round trip | `modules/uiDeclarationModule/scripts/roundtrip/` |
+| Implementation bindings (GraphQL literals, widgets, schema fields) | `elody-generator/ontology/elody-ui.bindings.ttl` |
+| Scoring system | `elody-generator/src/score.ts` |
+| SHACL UI shapes → Elody declaration | `elody-generator/src/fromShacl.ts` |
+| Declaration → GraphQL (`elody-ui generate`, `check`, `migrate`) | `elody-generator/src/` |
+| Spec examples and scoring graph | `elody-generator/spec/` |
+| Value-preservation round trip | `elody-generator/scripts/roundtrip/` |
 | Relation mirroring (opt-in) | `collection-api/api/object_configurations/relation_mirroring.py` |
-| Linked-data sources: from the shapes to `sparqlSources.json` | `modules/uiDeclarationModule/src/externalSources.ts` |
+| Linked-data sources: from the shapes to `sparqlSources.json` | `elody-generator/src/externalSources.ts` |
 | Linked-data sources: SPARQL engine and `SPARQL_SOURCES` | `collection-api/api/storage/sparqlstore.py`, `collection-api/api/sparql_sources.py` |

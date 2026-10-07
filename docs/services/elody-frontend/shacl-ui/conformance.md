@@ -95,7 +95,7 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 
 ## Evidence
 
-Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
+Every ✅ is backed by a test that runs in `elody-generator`:
 
 - **The specification's examples.** All 34 examples of the Editor's Draft go
   through the whole pipeline; the [spec examples](./examples.md) page shows the
