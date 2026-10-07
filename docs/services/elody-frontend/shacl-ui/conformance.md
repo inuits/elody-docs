@@ -53,7 +53,7 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | # | Feature | Level | Elody | How |
 |---|---|---|---|---|
 | 1 | Language preference via `sh:languageIn` | Required | ✅ | Labels: every translation bundle gets the text in the `sh:languageIn` order first. Values: the field carries `languageIn`; the PWA shows the first declared language that has a value, before the interface language, and offers only those languages. |
-| 2 | Application and browser language preference | Recommended | ◐ | The application language (the interface locale) is used after `sh:languageIn`, tags matched by RFC 4647 basic filtering. The browser's languages are not used as a default. |
+| 2 | Application and browser language preference | Recommended | ◐ | The application language is the language chosen in Elody (the interface language and the field's language selector, a UI feature the specification names), used after `sh:languageIn`, tags matched by RFC 4647 basic filtering; `shui:languagePreference` is the fallback order of the label texts. The browser's languages are not used as a default. |
 | 3 | Cross-language fallback | Optional | ◐ | Labels fall back to the default bundle (English). A value without a text in the selected language shows empty. |
 | 4 | Label resolution | Required | ✅ | Property labels: the label properties (`shui:labelPreference`, default `sh:name`) on the property shape, then on the predicate in the data graph and in the shapes graph, then the predicate's local name; resolved when generating, every language into the translation bundles. Value nodes: a related entity by the `shui:LabelRole` property of its class's node shape, then the label properties (default `rdfs:label`), then Elody's `title` and `name`, each in the preferred language, then the local name of its IRI; the IRIs of an `sh:in` list by their labels in the shapes graph, else their local name. |
 | 5 | Local name humanization | Recommended | ❌ | The local name is shown as it is (`givenName`). |
@@ -98,7 +98,7 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
 - **The specification's examples.** All 34 examples of the Editor's Draft go
   through the whole pipeline; the [spec examples](./examples.md) page shows the
   declaration, the GraphQL, the result of baseGraphql's own resolvers and a
-  screenshot for each. 24 render fully, 7 in part, and 3 are left out by choice (alternative and
+  screenshot for each. 25 render fully, 6 in part, and 3 are left out by choice (alternative and
   complex paths).
 - **Unit tests** for each feature: scoring on the official scoring graph,
   ordering, groups and form sections, roles, `sh:languageIn`, multilingual and

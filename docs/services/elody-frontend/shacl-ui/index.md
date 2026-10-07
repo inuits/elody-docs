@@ -79,8 +79,8 @@ subset and ignores the rest.
 
 | Result | Examples |
 |---|---|
-| Rendered | 24 |
-| Rendered in part | 7 |
+| Rendered | 25 |
+| Rendered in part | 6 |
 | Left out by choice | 3 |
 
 Every generated document is valid against the platform schema, and all of them
