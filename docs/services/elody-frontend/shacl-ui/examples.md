@@ -6545,7 +6545,8 @@ ex:Concept-broader-inverse
   sh:group skos:HierarchicalRelationships ;
   sh:node ex:ConceptTableShape ;
   shui:propertyRole shui:LabelRole ;
-  shui:viewer shui:ValueTableViewer .
+  shui:viewer shui:ValueTableViewer ;
+  elody:teaser false .
 
 ex:ConceptTableShape
   a sh:NodeShape ;
@@ -6606,7 +6607,7 @@ ui:example31-create
 ````graphql
 fragment minimalSpecExample31 on BaseEntity {
     intialValues {
-      type: keyValue(key: "type", source: metadata)
+      type: keyValue(key: "type", source: root)
       altLabel: keyValue(key: "altLabel", source: metadata)
       isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "label|title|name")
     }
@@ -6629,17 +6630,13 @@ fragment minimalSpecExample31 on BaseEntity {
         label(input: "alt labels")
         key(input: "altLabel")
       }
-      isBroaderFor: metaData {
-        label(input: "narrower (table)")
-        key(input: "isBroaderFor")
-      }
     }
     ...minimalBaseEntity
   }
 
   fragment fullSpecExample31 on BaseEntity {
     intialValues {
-      type: keyValue(key: "type", source: metadata)
+      type: keyValue(key: "type", source: root)
       altLabel: keyValue(key: "altLabel", source: metadata)
       isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "label|title|name")
     }

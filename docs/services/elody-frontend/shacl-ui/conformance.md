@@ -114,6 +114,16 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
   entities carry a title in two languages; the page must show the one in the
   reading language.
 
+### A related-entity table in a running client
+
+Storybook has no collection behind it, so example 31's list of related
+entities was also checked in a running DiSHACLed client with real data: three
+concepts, one with an `isBroaderFor` relation to the other two. The detail page
+lists exactly those two, with the columns of the `sh:node` shape (the type and
+the alternative labels), and each row opens that concept.
+
+![Example 31 in a running client: the narrower concepts of a concept, as a list in the panel](/images/shacl-ui/31-ValueTableViewer-live.jpg)
+
 ## Open points for the specification
 
 Points that came up while measuring, worth raising with the working group:
