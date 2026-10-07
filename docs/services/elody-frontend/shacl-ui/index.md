@@ -44,7 +44,7 @@ and checked in CI.
 | Area | Standard terms | In Elody |
 |---|---|---|
 | Widget choice | `shui:editor`, `shui:viewer`, the scoring system | The spec's scoring system, run on the W3C working group's own scoring graph. An explicit `shui:editor` wins (score 40); otherwise the widget follows from `sh:datatype`, `sh:in`, `sh:class`, `sh:node`, `sh:nodeKind` and `sh:singleLine`. |
-| Editors | text field, text area, text with language, number, boolean, date, date and time, IRI, enum select, instances select, auto complete, details | Each maps to an Elody input type. `sh:in` and `sh:class` become generated custom input fields: a dropdown with the listed options, or a relation dropdown on the class. `shui:SubClassEditor` is a dropdown of `sh:rootClass` and its subclasses (`rdfs:subClassOf*`) found in the shapes and data graph, in tree order with each level indented; the value is the class IRI. Like `sh:in` it is read when generating: a new subclass needs a new generation. |
+| Editors | text field, text area, text with language, number, boolean, date, date and time, IRI, enum select, instances select, auto complete, details | Each maps to an Elody input type. `sh:in` and `sh:class` become generated custom input fields: a dropdown with the listed options, or a relation dropdown on the class. `shui:SubClassEditor` is a dropdown of `sh:rootClass` and its subclasses (`rdfs:subClassOf*`) found in the shapes and data graph, in tree order with each level indented; the value is the class IRI. Like `sh:in` it is read when generating: a new subclass needs a new generation. With `elody:classSource <endpoint>` the class tree is read live from that endpoint instead (see [linked-data sources](#linked-data-sources)). |
 | Language-tagged text | `rdf:langString`, `shui:TextFieldWithLangEditor`, `shui:TextAreaWithLangEditor` | One multilingual field (`isMultilingual`): the detail page edits and shows it per language, the create form stores the text in the interface language. The client needs the `supportsMultilingualMetadataEditing` feature. |
 | Nested shapes | `sh:node` with `shui:DetailsEditor` | A field with sub-fields (`inputFieldWithSubFields`): the value is a list of objects under the metadata key, one column per property shape of the nested node shape, in the create form and on the detail page. A related resource (`sh:class`) inside a nested value is entered as its identifier. |
 | Viewers | literal, hyperlink, language string, details | Elody's metadata display and its link formatter. Elody's own pill and regular-expression formatters are `shui:Viewer` instances in the `elody:` ontology. |
@@ -68,8 +68,8 @@ subset and ignores the rest.
 | Spec feature | Why |
 |---|---|
 | Alternative and complex paths (sequence, `sh:alternativePath`, `sh:zeroOrMorePath`, `sh:oneOrMorePath`, `sh:zeroOrOnePath`) | A choice for symmetry: every field Elody shows, it can also edit. The specification recommends complex paths in view mode, but allows leaving them out for exactly that reason; editing them is optional, because a change along such a path is ambiguous (see [below](#complex-paths-view-and-edit-symmetry)). |
-| `shui:searchQuery` against an external SPARQL endpoint (`SERVICE`) | Elody does not query external endpoints from a form. Over a class in Elody's own data the query is not needed: an extension a renderer *may* evaluate, its purpose — a live search of that class — is what Elody's relation dropdown does. |
-| `sh:in` as a SHACL 1.2 node expression (`sh:in [ sh:select … ]`) | Elody does not evaluate SPARQL; the field becomes a text field and the generator warns. |
+| `shui:searchQuery` or `sh:in [ sh:select … ]` that joins an external endpoint (`SERVICE`) with patterns of its own | Elody sends a query to one endpoint. A query whose whole pattern lies in one `SERVICE` block is supported (see [linked-data sources](#linked-data-sources)); over a class in Elody's own data the query is not needed: its purpose, a live search of that class, is what Elody's relation dropdown does. |
+| `sh:in [ sh:select … ]` over the data graph itself | Elody does not evaluate SPARQL over its own data; the field becomes a text field and the generator warns. |
 | `shui:BlankNodeEditor` | Elody stores no blank nodes outside nested values. |
 | `shui:RichTextEditor` in a create form | Rich text is edited in the detail panel (see above); the create form has no rich-text field. |
 | `shui:timeZone`, `shui:defaultNamespace`, `shui:readOnlyGraph` | Elody stores documents, not triples. |
@@ -79,8 +79,8 @@ subset and ignores the rest.
 
 | Result | Examples |
 |---|---|
-| Rendered | 30 |
-| Rendered in part | 1 |
+| Rendered | 31 |
+| Rendered in part | 0 |
 | Left out by choice | 3 |
 
 Every generated document is valid against the platform schema, and all of them
@@ -88,6 +88,37 @@ execute without errors on baseGraphql. The three examples left out
 use only alternative or complex paths, which Elody leaves out by choice (see
 [complex paths](#complex-paths-view-and-edit-symmetry)). See the [spec examples](./examples.md)
 for the shapes, the declaration, the GraphQL and a screenshot per example.
+
+## Linked-data sources
+
+A field can take its values from a SPARQL endpoint, live: nothing is copied
+into Elody. Two kinds of shapes ask for it:
+
+- `shui:searchQuery`, and `sh:in [ sh:select … ]`, whose pattern lies in one
+  `SERVICE <endpoint> { … }` block, as in the specification's example 16;
+- a `shui:SubClassEditor` with `elody:classSource <endpoint>`: the root class and
+  its subclasses (`rdfs:subClassOf*`), searched by label.
+
+The field is then a relation to resources of that endpoint, chosen with a
+dropdown that searches it for what is typed. The generator writes, next to the
+GraphQL documents, a small entity UI for the source's type (its title is the
+resource's label, its IRI links out) and the source description
+`src/ui/sparqlSources.json`. collection-api reads that file (`SPARQL_SOURCES`)
+and serves each source as a read-only collection on its SPARQL engine: the
+queries are sent as the shapes state them, with `$searchTerm` and
+`$uiLanguage` filled in as escaped literals, and at most 500 values per query
+unless it sets its own `LIMIT`. A resource keeps its IRI as identifier.
+
+In declaration terms this is `elody:SparqlSource`, `elody:readsFrom` and
+`elody:optionsFrom`, which can also be written by hand.
+
+![A drug whose impacted cell and target organ were found live in the Cell Ontology and Uberon (Ubergraph)](/images/shacl-ui/live-sparql-source.jpg)
+
+Checked in a running DiSHACLed client against
+[Ubergraph](https://ubergraph.apps.renci.org): a search for "motor neuron"
+returns the Cell Ontology's motor neurons, "heart" the organs of Uberon, the
+detail page shows the chosen ones by their label, and each opens on a page with
+its label and IRI.
 
 ## Complex paths: view and edit symmetry
 

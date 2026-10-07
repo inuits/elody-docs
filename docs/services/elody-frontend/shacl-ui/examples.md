@@ -40,7 +40,7 @@ changes.
 | [13](#example-13-patterns) | Ordering without shui:defaultOrder | `patterns` | <Badge type="tip" text="Rendered" /> |
 | [14](#example-14-patterns) | Ordering with shui:defaultOrder | `patterns` | <Badge type="tip" text="Rendered" /> |
 | [15](#example-15-search-query) | Full-text search using shui:searchQuery | `search-query` | <Badge type="tip" text="Rendered" /> |
-| [16](#example-16-search-query) | Federated full-text search using shui:searchQuery | `search-query` | <Badge type="warning" text="Rendered in part" /> |
+| [16](#example-16-search-query) | Federated full-text search using shui:searchQuery | `search-query` | <Badge type="tip" text="Rendered" /> |
 | [17](#example-17-autocompleteeditor) | AutoCompleteEditor | `AutoCompleteEditor` | <Badge type="tip" text="Rendered" /> |
 | [18](#example-18-booleaneditor) | BooleanEditor | `BooleanEditor` | <Badge type="tip" text="Rendered" /> |
 | [19](#example-19-datepickereditor) | DatePickerEditor | `DatePickerEditor` | <Badge type="tip" text="Rendered" /> |
@@ -1995,7 +1995,18 @@ fragment minimalSpecExample07 on BaseEntity {
         "type": "type",
         "value": "department"
       }
-    ]
+    ],
+    "relationFilter": {
+      "type": "selection",
+      "key": [
+        "elody:1|identifiers"
+      ],
+      "value": "$relationValues.isMemberFor.key",
+      "match_exact": true,
+      "item_types": [
+        "department"
+      ]
+    }
   },
   "specExample07NameField": {
     "type": "dropdownMultiselectMetadata",
@@ -2510,7 +2521,18 @@ fragment minimalSpecExample11 on BaseEntity {
         "type": "type",
         "value": "organization"
       }
-    ]
+    ],
+    "relationFilter": {
+      "type": "selection",
+      "key": [
+        "elody:1|identifiers"
+      ],
+      "value": "$relationValues.hasEmployer.key",
+      "match_exact": true,
+      "item_types": [
+        "organization"
+      ]
+    }
   },
   "specExample11FirstNameField": {
     "type": "dropdownMultiselectMetadata",
@@ -3471,7 +3493,18 @@ fragment minimalSpecExample15 on BaseEntity {
         "type": "type",
         "value": "person"
       }
-    ]
+    ],
+    "relationFilter": {
+      "type": "selection",
+      "key": [
+        "elody:1|identifiers"
+      ],
+      "value": "$relationValues.hasAssignee.key",
+      "match_exact": true,
+      "item_types": [
+        "person"
+      ]
+    }
   }
 }
 ````
@@ -3479,13 +3512,13 @@ fragment minimalSpecExample15 on BaseEntity {
 
 ## 16 · Federated full-text search using shui:searchQuery {#example-16-search-query}
 
-<Badge type="warning" text="Rendered in part" /> Spec section [`search-query`](https://w3c.github.io/data-shapes/shacl12-ui/#search-query)
+<Badge type="tip" text="Rendered" /> Spec section [`search-query`](https://w3c.github.io/data-shapes/shacl12-ui/#search-query)
 
 ![Federated full-text search using shui:searchQuery rendered by Elody](/images/shacl-ui/16-search-query.png)
 
 **What Elody did with it**
 
-- *Not supported:* "Author": shui:searchQuery searches an external SPARQL endpoint (SERVICE); Elody does not query it
+- *Note:* "Author": shui:searchQuery runs against http://example.com/sparql through collection-api's SPARQL engine (a source in SPARQL_SOURCES); the field is a relation dropdown that searches it
 - *Note:* "Author" is used as the card title (the shapes declare no shui:LabelRole)
 
 ::: details SHACL UI shapes (from the spec)
@@ -3591,7 +3624,7 @@ ui:example16-details
 ````graphql
 fragment minimalSpecExample16 on BaseEntity {
     intialValues {
-      creator: keyValue(key: "creator", source: metadata)
+      creator: keyValue(key: "hasCreator", source: relations, metadataKeyAsLabel: "title")
     }
     relationValues
     allowedViewModes {
@@ -3614,7 +3647,7 @@ fragment minimalSpecExample16 on BaseEntity {
 
   fragment fullSpecExample16 on BaseEntity {
     intialValues {
-      creator: keyValue(key: "creator", source: metadata)
+      creator: keyValue(key: "hasCreator", source: relations, metadataKeyAsLabel: "title")
     }
     relationValues
     entityView {
@@ -3633,7 +3666,7 @@ fragment minimalSpecExample16 on BaseEntity {
               creator: metaData {
                 label(input: "Author")
                 key(input: "creator")
-                inputField(type: baseTextField) {
+                inputField(type: specExample16CreatorField) {
                   ...inputfield
                 }
               }
@@ -3670,7 +3703,7 @@ fragment minimalSpecExample16 on BaseEntity {
           creator: metaData {
             label(input: "Author")
             key(input: "creator")
-            inputField(type: baseTextField) {
+            inputField(type: specExample16CreatorField) {
               ...inputfield
             }
           }
@@ -3686,6 +3719,44 @@ fragment minimalSpecExample16 on BaseEntity {
       }
     }
   }
+````
+:::
+::: details Generated custom input fields
+````json
+{
+  "specExample16CreatorField": {
+    "type": "dropdownMultiselectRelations",
+    "relationType": "hasCreator",
+    "advancedFilterInputForRetrievingOptions": [
+      {
+        "type": "type",
+        "value": "specExample16Creator"
+      }
+    ],
+    "relationFilter": {
+      "type": "selection",
+      "key": [
+        "elody:1|identifiers"
+      ],
+      "value": "$relationValues.hasCreator.key",
+      "match_exact": true,
+      "item_types": [
+        "specExample16Creator"
+      ]
+    },
+    "advancedFilterInputForSearchingOptions": {
+      "type": "text",
+      "key": [
+        "elody:1|metadata.title.value"
+      ],
+      "value": "*",
+      "match_exact": false,
+      "item_types": [
+        "specExample16Creator"
+      ]
+    }
+  }
+}
 ````
 :::
 
@@ -3882,7 +3953,18 @@ fragment minimalSpecExample17 on BaseEntity {
         "type": "type",
         "value": "country"
       }
-    ]
+    ],
+    "relationFilter": {
+      "type": "selection",
+      "key": [
+        "elody:1|identifiers"
+      ],
+      "value": "$relationValues.hasBornIn.key",
+      "match_exact": true,
+      "item_types": [
+        "country"
+      ]
+    }
   }
 }
 ````
@@ -5152,7 +5234,18 @@ fragment minimalSpecExample23 on BaseEntity {
         "type": "type",
         "value": "country"
       }
-    ]
+    ],
+    "relationFilter": {
+      "type": "selection",
+      "key": [
+        "elody:1|identifiers"
+      ],
+      "value": "$relationValues.hasHomeCountry.key",
+      "match_exact": true,
+      "item_types": [
+        "country"
+      ]
+    }
   }
 }
 ````

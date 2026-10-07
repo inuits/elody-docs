@@ -22,7 +22,9 @@ keeps the language of metadata items when they are read, and relation
 mirroring in collection-api (with DiSHACLed's opt-in), and the label of
 related entities by preference order and language in baseGraphql. Until
 those are merged, rows 1, 4, 13 (create forms), 21, 22, 30, 31 and 32 hold
-on those branches only.
+on those branches only. Values read live from a SPARQL endpoint
+(`shui:searchQuery`, the live `shui:SubClassEditor`) need the
+query-driven SPARQL sources in collection-api, also not released yet.
 :::
 
 ## Claim
@@ -67,7 +69,7 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 13 | Grouping (`sh:group`) | Required | ✅ | A group is a panel on the detail page and a titled section of the create form; ungrouped properties stay ungrouped. |
 | 14 | Nested groups | Recommended | ❌ | Panels and form sections are one level deep. |
 | 15 | IRI values — view | Required | ✅ | A related Elody entity by its label, `shui:HyperlinkViewer` as a link, any other IRI as text. |
-| 16 | IRI values — edit | Required | ✅ | `shui:IRIEditor` as a text field; `shui:InstancesSelectEditor` and `shui:AutoCompleteEditor` as a relation dropdown on the `sh:class`; `shui:SubClassEditor` as a dropdown of `sh:rootClass` and its subclasses in the shapes and data graph, read when generating. |
+| 16 | IRI values — edit | Required | ✅ | `shui:IRIEditor` as a text field; `shui:InstancesSelectEditor` and `shui:AutoCompleteEditor` as a relation dropdown on the `sh:class`; `shui:SubClassEditor` as a dropdown of `sh:rootClass` and its subclasses in the shapes and data graph, read when generating, or live from an endpoint (`elody:classSource`); `shui:searchQuery` against the endpoint of its `SERVICE` block as a relation dropdown that searches it. |
 | 17 | Blank node values — view | Required | ✅ | A blank node with a nested shape (`sh:node`, `shui:DetailsViewer`) as a table, one column per nested property. |
 | 18 | Blank node values — edit | Required | ✅ | `shui:DetailsEditor` as a field with sub-fields (`inputFieldWithSubFields`). A blank node inside a nested value is entered as text. |
 | 19 | Literal values — view | Required | ✅ | `xsd:string`, `boolean`, `integer`, `decimal`, `double`, `float`, `date`, `dateTime`. |
@@ -98,7 +100,7 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
 - **The specification's examples.** All 34 examples of the Editor's Draft go
   through the whole pipeline; the [spec examples](./examples.md) page shows the
   declaration, the GraphQL, the result of baseGraphql's own resolvers and a
-  screenshot for each. 30 render fully, 1 in part, and 3 are left out by choice (alternative and
+  screenshot for each. 31 render fully, none in part, and 3 are left out by choice (alternative and
   complex paths).
 - **Unit tests** for each feature: scoring on the official scoring graph,
   ordering, groups and form sections, roles, `sh:languageIn`, multilingual and
