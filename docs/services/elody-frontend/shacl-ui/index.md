@@ -48,6 +48,7 @@ and checked in CI.
 | Language-tagged text | `rdf:langString`, `shui:TextFieldWithLangEditor`, `shui:TextAreaWithLangEditor` | One multilingual field (`isMultilingual`): the detail page edits and shows it per language, the create form stores the text in the interface language. The client needs the `supportsMultilingualMetadataEditing` feature. |
 | Nested shapes | `sh:node` with `shui:DetailsEditor` | A field with sub-fields (`inputFieldWithSubFields`): the value is a list of objects under the metadata key, one column per property shape of the nested node shape, in the create form and on the detail page. A related resource (`sh:class`) inside a nested value is entered as its identifier. |
 | Viewers | literal, hyperlink, language string, details | Elody's metadata display and its link formatter. Elody's own pill and regular-expression formatters are `shui:Viewer` instances in the `elody:` ontology. |
+| Rich text and related entities in a panel | `rdf:HTML`, `shui:HTMLViewer`, `shui:RichTextEditor`, `shui:ValueTableViewer` | Widgets Elody implements as an element inside the detail panel, at the property's place among the metadata fields (`elody:panelElement`). HTML is Elody's rich-text editor (tiptap, `wysiwygElement`) on the metadata key: shown in view mode, edited in edit mode; the create form has no rich-text field, so an HTML property is filled in on the detail page. `shui:ValueTableViewer` lists the entities the relation points to (`entityListElement`, with a generated filter on that relation); of the `sh:node` shape's columns, the value itself is the list item and the others are the related type's teaser, `rdf:type` its Elody type. |
 | Labels | `sh:name`, `shui:labelPreference`, `rdfs:label` on groups and values, `shui:LabelRole` | Property labels follow the spec's chain: the label properties (`shui:labelPreference`, default `sh:name`) on the property shape, then on the predicate in the data and the shapes graph, then the predicate's local name. They are resolved when generating and go, in every language, to the client's translation bundles under an Elody translation key. A related entity is labelled by the `shui:LabelRole` property of its class's node shape, then the label properties (default `rdfs:label`), then Elody's `title` and `name`, in the reading language, else by the local name of its IRI; the IRIs of an `sh:in` list by their labels in the shapes graph. |
 | Ordering | `sh:order`, `sh:group`, `shui:defaultOrder` | Groups and ungrouped properties in one sequence, unordered last, ties by metadata key, then identifier; `shui:defaultOrder` from the global configuration. |
 | Groups | `sh:PropertyGroup` | Each group is a panel on the detail page and a titled section of the create form (`formSection`). Groups and ungrouped properties are one sequence; an ungrouped property stays a plain form field and is shown in a "Details" panel (`elody:showsUngrouped`). |
@@ -67,11 +68,10 @@ subset and ignores the rest.
 | Spec feature | Why |
 |---|---|
 | Alternative and complex paths (sequence, `sh:alternativePath`, `sh:zeroOrMorePath`, `sh:oneOrMorePath`, `sh:zeroOrOnePath`) | A choice for symmetry: every field Elody shows, it can also edit. The specification recommends complex paths in view mode, but allows leaving them out for exactly that reason; editing them is optional, because a change along such a path is ambiguous (see [below](#complex-paths-view-and-edit-symmetry)). |
-| Inverse paths without `sh:class` in a create form | Shown on the detail page; picking a value needs the related type, so the field is left out of the form. |
 | `shui:searchQuery` against an external SPARQL endpoint (`SERVICE`) | Elody does not query external endpoints from a form. Over a class in Elody's own data the query is not needed: an extension a renderer *may* evaluate, its purpose — a live search of that class — is what Elody's relation dropdown does. |
 | `sh:in` as a SHACL 1.2 node expression (`sh:in [ sh:select … ]`) | Elody does not evaluate SPARQL; the field becomes a text field and the generator warns. |
-| `shui:RichTextEditor`, `shui:SubClassEditor`, `shui:BlankNodeEditor` as form fields | Elody has no such create-form field. Rich text exists as a page block, not as a field. |
-| `shui:ValueTableViewer` | Elody renders a table of related entities, not of nested values. |
+| `shui:SubClassEditor`, `shui:BlankNodeEditor` | Elody has no class-hierarchy picker and stores no blank nodes outside nested values. |
+| `shui:RichTextEditor` in a create form | Rich text is edited in the detail panel (see above); the create form has no rich-text field. |
 | `shui:timeZone`, `shui:defaultNamespace`, `shui:readOnlyGraph` | Elody stores documents, not triples. |
 | Third-party widgets | A widget only its author's renderer knows, such as the spec's `ex:MyCustomEditor`, is left to the scoring system. |
 
@@ -79,8 +79,8 @@ subset and ignores the rest.
 
 | Result | Examples |
 |---|---|
-| Rendered | 27 |
-| Rendered in part | 4 |
+| Rendered | 29 |
+| Rendered in part | 2 |
 | Left out by choice | 3 |
 
 Every generated document is valid against the platform schema, and all of them

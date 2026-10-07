@@ -36,7 +36,7 @@ multilingual feature.
 | Level | Supported | In part | Not supported |
 |---|---|---|---|
 | Required (20) | 20 | 0 | 0 |
-| Recommended (13) | 3 | 3 | 7 |
+| Recommended (13) | 5 | 3 | 5 |
 | Optional (3) | 0 | 1 | 2 |
 
 ## How Elody renders SHACL UI
@@ -74,8 +74,8 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 20 | Literal values — edit | Required | ✅ | Text field, check box, number field, date and date-time picker, chosen by the scoring system; text with several values (no `sh:maxCount 1`) is one field holding the list; all eight types are kept with their type on save (round trip below). |
 | 21 | Language-tagged strings — view | Required | ✅ | One multilingual field: the value per language, with a language selector. |
 | 22 | Language-tagged strings — edit | Required | ✅ | Edited per language; the language is chosen from the `sh:languageIn` list, else from the client's interface languages. |
-| 23 | HTML values — view | Recommended | ❌ | `shui:HTMLViewer` is not implemented. |
-| 24 | HTML values — edit | Recommended | ❌ | `shui:RichTextEditor` has no create-form field; rich text exists only as a page element. |
+| 23 | HTML values — view | Recommended | ✅ | `rdf:HTML` and `shui:HTMLViewer` are Elody's rich-text element (tiptap) inside the detail panel, at the property's place, on its metadata key. |
+| 24 | HTML values — edit | Recommended | ✅ | `shui:RichTextEditor`: the same element, edited in the detail page's edit mode. The create form has no rich-text field: an HTML property is filled in on the detail page after creating the entity. |
 | 25 | Image values — view | Recommended | ◐ | Images that are Elody media files; not arbitrary image IRIs. |
 | 26 | Widget scoring | Required | ✅ | The specification's scoring system on the working group's own scoring graph. |
 | 27 | Default widget selection | Recommended | ✅ | The highest-scoring widget Elody implements. |
@@ -98,7 +98,7 @@ Every ✅ is backed by a test that runs in `modules/uiDeclarationModule`:
 - **The specification's examples.** All 34 examples of the Editor's Draft go
   through the whole pipeline; the [spec examples](./examples.md) page shows the
   declaration, the GraphQL, the result of baseGraphql's own resolvers and a
-  screenshot for each. 27 render fully, 4 in part, and 3 are left out by choice (alternative and
+  screenshot for each. 29 render fully, 2 in part, and 3 are left out by choice (alternative and
   complex paths).
 - **Unit tests** for each feature: scoring on the official scoring graph,
   ordering, groups and form sections, roles, `sh:languageIn`, multilingual and

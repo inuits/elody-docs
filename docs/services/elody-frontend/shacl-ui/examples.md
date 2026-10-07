@@ -50,12 +50,12 @@ changes.
 | [23](#example-23-instancesselecteditor) | InstancesSelectEditor | `InstancesSelectEditor` | <Badge type="tip" text="Rendered" /> |
 | [24](#example-24-irieditor) | IRIEditor | `IRIEditor` | <Badge type="tip" text="Rendered" /> |
 | [25](#example-25-numberfieldeditor) | NumberFieldEditor | `NumberFieldEditor` | <Badge type="tip" text="Rendered" /> |
-| [26](#example-26-richtexteditor) | RichTextEditor | `RichTextEditor` | <Badge type="warning" text="Rendered in part" /> |
+| [26](#example-26-richtexteditor) | RichTextEditor | `RichTextEditor` | <Badge type="tip" text="Rendered" /> |
 | [27](#example-27-subclasseditor) | SubClassEditor | `SubClassEditor` | <Badge type="warning" text="Rendered in part" /> |
 | [28](#example-28-textareaeditor) | TextAreaEditor | `TextAreaEditor` | <Badge type="tip" text="Rendered" /> |
 | [29](#example-29-textfieldeditor) | TextFieldEditor | `TextFieldEditor` | <Badge type="tip" text="Rendered" /> |
 | [30](#example-30-textfieldwithlangeditor) | TextFieldWithLangEditor | `TextFieldWithLangEditor` | <Badge type="tip" text="Rendered" /> |
-| [31](#example-31-valuetableviewer) | ValueTableViewer | `ValueTableViewer` | <Badge type="warning" text="Rendered in part" /> |
+| [31](#example-31-valuetableviewer) | ValueTableViewer | `ValueTableViewer` | <Badge type="tip" text="Rendered" /> |
 | [32](#example-32-property-roles) | Direct role annotation | `property-roles` | <Badge type="tip" text="Rendered" /> |
 | [33](#example-33-property-roles) | Qualified role annotation | `property-roles` | <Badge type="tip" text="Rendered" /> |
 | [34](#example-34-property-roles) | Qualified role annotation using triple annotations | `property-roles` | <Badge type="tip" text="Rendered" /> |
@@ -5530,14 +5530,14 @@ fragment minimalSpecExample25 on BaseEntity {
 
 ## 26 · RichTextEditor {#example-26-richtexteditor}
 
-<Badge type="warning" text="Rendered in part" /> Spec section [`RichTextEditor`](https://w3c.github.io/data-shapes/shacl12-ui/#RichTextEditor)
+<Badge type="tip" text="Rendered" /> Spec section [`RichTextEditor`](https://w3c.github.io/data-shapes/shacl12-ui/#RichTextEditor)
 
 ![RichTextEditor rendered by Elody](/images/shacl-ui/26-RichTextEditor.png)
 
 **What Elody did with it**
 
-- *Not supported:* "definition": shui:RichTextEditor has no create-form field in Elody; left out of the form
 - *Note:* "definition" is used as the card title (the shapes declare no shui:LabelRole)
+- *Note:* "definition": shui:RichTextEditor is Elody's rich-text editor in the detail panel, edited there; the create form has no rich-text field, so it is left out of the form
 
 ::: details SHACL UI shapes (from the spec)
 ````turtle
@@ -5641,9 +5641,13 @@ fragment minimalSpecExample26 on BaseEntity {
               panelType(input: metadata)
               isCollapsed(input: false)
               isEditable(input: true)
-              definition: metaData {
+              definition: wysiwygElement {
                 label(input: "definition")
-                key(input: "definition")
+                metadataKey(input: "definition")
+                extensions(input: [starterKit])
+                wysiwygElementConfiguration {
+                  showLineNumbers(input: false)
+                }
               }
             }
           }
@@ -6437,13 +6441,13 @@ fragment minimalSpecExample30 on BaseEntity {
 
 ## 31 · ValueTableViewer {#example-31-valuetableviewer}
 
-<Badge type="warning" text="Rendered in part" /> Spec section [`ValueTableViewer`](https://w3c.github.io/data-shapes/shacl12-ui/#ValueTableViewer)
+<Badge type="tip" text="Rendered" /> Spec section [`ValueTableViewer`](https://w3c.github.io/data-shapes/shacl12-ui/#ValueTableViewer)
 
 ![ValueTableViewer rendered by Elody](/images/shacl-ui/31-ValueTableViewer.png)
 
 **What Elody did with it**
 
-- *Not supported:* "narrower (table)": Elody has no shui:ValueTableViewer; shown as plain text
+- *Note:* "narrower (table)": shui:ValueTableViewer is Elody's list of the related entities in the panel; columns: "narrower concept" is the list item, "type" its teaser (the entity's type), "alt labels" its teaser
 - *Note:* "narrower (table)" is used as the card title (the shapes declare no shui:LabelRole)
 - *Note:* "narrower (table)": inverse path without sh:class: the IRI is typed in (as shui:IRIEditor) and stored as the relation's key
 
@@ -6519,7 +6523,10 @@ ui:example31
   a elody:EntityUi ;
   elody:graphqlType "BaseEntity" ;
   elody:emit "file" ;
-  sh:property ex:Concept-broader-inverse ;
+  sh:property
+    ex:ConceptTableShape-type ,
+    ex:ConceptTableShape-altLabel ,
+    ex:Concept-broader-inverse ;
   elody:detail
     [ elody:column
       [ elody:element
@@ -6537,7 +6544,8 @@ ex:Concept-broader-inverse
   sh:name "narrower (table)" ;
   sh:group skos:HierarchicalRelationships ;
   sh:node ex:ConceptTableShape ;
-  shui:propertyRole shui:LabelRole .
+  shui:propertyRole shui:LabelRole ;
+  shui:viewer shui:ValueTableViewer .
 
 ex:ConceptTableShape
   a sh:NodeShape ;
@@ -6572,7 +6580,8 @@ ex:ConceptTableShape-type
   sh:name "type" ;
   sh:order 1 ;
   sh:description "The second column shows the type of each value." ;
-  sh:nodeKind sh:IRI .
+  sh:nodeKind sh:IRI ;
+  elody:source elody:RootSource .
 
 skos:HierarchicalRelationships
   a sh:PropertyGroup ;
@@ -6597,6 +6606,8 @@ ui:example31-create
 ````graphql
 fragment minimalSpecExample31 on BaseEntity {
     intialValues {
+      type: keyValue(key: "type", source: metadata)
+      altLabel: keyValue(key: "altLabel", source: metadata)
       isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
@@ -6610,6 +6621,14 @@ fragment minimalSpecExample31 on BaseEntity {
       }
     }
     teaserMetadata {
+      type: metaData {
+        label(input: "type")
+        key(input: "type")
+      }
+      altLabel: metaData {
+        label(input: "alt labels")
+        key(input: "altLabel")
+      }
       isBroaderFor: metaData {
         label(input: "narrower (table)")
         key(input: "isBroaderFor")
@@ -6620,6 +6639,8 @@ fragment minimalSpecExample31 on BaseEntity {
 
   fragment fullSpecExample31 on BaseEntity {
     intialValues {
+      type: keyValue(key: "type", source: metadata)
+      altLabel: keyValue(key: "altLabel", source: metadata)
       isBroaderFor: keyValue(key: "isBroaderFor", source: relations, metadataKeyAsLabel: "label|title|name")
     }
     relationValues
@@ -6636,9 +6657,14 @@ fragment minimalSpecExample31 on BaseEntity {
               panelType(input: metadata)
               isCollapsed(input: false)
               isEditable(input: true)
-              isBroaderFor: metaData {
+              isBroaderFor: entityListElement {
                 label(input: "narrower (table)")
-                key(input: "isBroaderFor")
+                isCollapsed(input: false)
+                entityTypes(input: [concept])
+                relationType: label(input: "isBroaderFor")
+                viewMode(input: Library)
+                customQuery(input: "GetEntities")
+                customQueryFilters(input: "SpecExample31IsBroaderForListFilters")
               }
             }
           }
@@ -6690,6 +6716,24 @@ fragment minimalSpecExample31 on BaseEntity {
             creationType(input: BaseEntity)
             showsFormErrors(input: true)
           }
+        }
+      }
+    }
+  }
+
+  query SpecExample31IsBroaderForListFilters($entityType: String!) {
+    EntityTypeFilters(type: $entityType) {
+      advancedFilters {
+        type: advancedFilter(type: type) {
+          type
+          defaultValue(value: ["concept"])
+          hidden(value: true)
+        }
+        relation: advancedFilter(type: selection, key: ["elody:1|identifiers"]) {
+          type
+          key
+          defaultValue(value: "$entity.relationValues.isBroaderFor.key")
+          hidden(value: true)
         }
       }
     }
