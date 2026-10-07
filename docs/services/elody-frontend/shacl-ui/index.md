@@ -252,7 +252,8 @@ port 6016. The spec's examples and scoring graph are vendored in
 
 | Piece | Location |
 |---|---|
-| `elody:` ontology and profile shapes | `modules/uiDeclarationModule/ontology/` |
+| `elody:` vocabulary and meta-shapes (what a declaration may say) | `modules/elody-ui-ontology/` (own repository) |
+| Implementation bindings (GraphQL literals, widgets, schema fields) | `modules/uiDeclarationModule/ontology/elody-ui.bindings.ttl` |
 | Scoring system | `modules/uiDeclarationModule/src/score.ts` |
 | SHACL UI shapes → Elody declaration | `modules/uiDeclarationModule/src/fromShacl.ts` |
 | Declaration → GraphQL (`elody-ui generate`, `check`, `migrate`) | `modules/uiDeclarationModule/src/` |
