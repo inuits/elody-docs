@@ -6,8 +6,10 @@ _Please note that not all of these features might be automatically available for
 
 ## Upcoming
 Features that we are working on but are not yet finished. These might come in a future version when they are ready.
-### Improved history service
-Improved visibility of audit of entities, specifically for relations.
+
+## 2026.Q4
+### History viewer
+Entities can now show their history: a "View history" button on the detail page opens two versions side by side. Changed fields are marked, relations that were added, removed or renamed show as coloured chips, and each version shows who edited it and when. Related entities appear with the name they had at that time. See [History Viewer](/services/elody-frontend/features/history-viewer) for the configuration.
 
 ## 2026.Q3
 ### Navigation between search results
