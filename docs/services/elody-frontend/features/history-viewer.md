@@ -1,16 +1,108 @@
 # History Viewer
 
-The history viewer shows how an entity changed over time. From the detail
-page of an entity, a **View history** button opens a comparison page with two
-versions of the entity side by side. Fields that differ are marked, relations
-that were added, removed or renamed are shown as coloured chips, and every
-version shows who edited it and when.
+The history viewer answers the question every cataloguer asks sooner or
+later: *what happened to this record, and who did it?* Every time an entity
+is saved, Elody keeps a snapshot of it. The history viewer puts two of those
+snapshots side by side and marks what changed between them: edited fields,
+relations that were added or removed, and related entities that were renamed
+in the meantime.
 
-The viewer is read-only. Edit mode is switched off while the page is open and
-restored when the user leaves it. Restoring an older version is not part of
-the feature.
+The viewer is for looking, not for editing. Edit mode is switched off while
+it is open, and there is no button to restore an older version: to undo a
+change, open the entity and edit it back.
 
-It builds on three parts:
+The screenshots on this page come from a Dutch-language client; the names of
+the editors have been replaced.
+
+## Using the history viewer
+
+### Opening it
+
+Entity types that have history show a **View history** button (*Geschiedenis
+bekijken*) in the header of the detail page, next to the edit and delete
+buttons.
+
+![The View history button in the header of a detail page](/images/history-viewer/view-history-button.png)
+
+The button opens the comparison page. The breadcrumb at the top leads back
+to the entity.
+
+### Comparing two versions
+
+The comparison page shows the entity twice, in the same layout as its detail
+page. On the left is the **current version**, on the right the **last version
+before it**: the page opens on "what changed last".
+
+![Comparing the current version with the previous one](/images/history-viewer/comparison.png)
+
+Above each column, a line says who made that version and when. Differences
+are highlighted on both sides:
+
+- on the **newer** version, in **green**: the value as it became;
+- on the **older** version, in **red**: the value as it was.
+
+Fields without highlighting are the same in both versions. In the example
+above, the work title and the original language were changed, and the genre
+*Prentenboeken* was removed.
+
+### Choosing other versions
+
+Each column has a dropdown to pick a version. Versions are numbered from the
+first save (version 1) upwards and show the date, the time and the editor.
+The left dropdown also offers the current version.
+
+![The version dropdown](/images/history-viewer/version-dropdown.png)
+
+Any two versions can be compared, and in either order: the viewer always
+works out which of the two is older, so green and red stay on the correct
+side.
+
+### Relations
+
+Relations, such as subjects, genres or linked persons, are shown as chips:
+
+| Chip                       | Meaning                                                  |
+| -------------------------- | -------------------------------------------------------- |
+| Green                      | Added in the newer version.                              |
+| Red, struck through        | Present in the older version, removed in the newer one.  |
+| Grey                       | Present in both versions.                                |
+| Marked "renamed"           | The related entity itself got another name in between.   |
+
+![Subjects added in version 5 compared with version 4](/images/history-viewer/relations-added.png)
+
+![Subjects and a genre removed since version 9](/images/history-viewer/relations-removed.png)
+
+A related entity is shown with the name it had **at the time of that
+version**, not with its current name. If a person or subject was renamed
+between the two versions, the chip is marked as renamed: the older side shows
+the previous name, the newer side the current one. That way the history shows
+what the record really looked like at the time.
+
+### Version overview on the detail page
+
+An entity can also show a **History** panel on its detail page: a list of
+all versions with the version number, the editor and the date of the change.
+It gives a quick view of how often and by whom a record was edited. To see
+what changed, use the View history button.
+
+![The History panel with the list of versions](/images/history-viewer/version-list-panel.png)
+
+### What is not shown
+
+- Technical fields, such as the identifier and the audit panel, are left out
+  of the comparison.
+- Fields that are empty in a version can be hidden, so the comparison only
+  shows what is filled in.
+- Long formatted texts (WYSIWYG fields) only show *that* they changed, not
+  what changed.
+- Changes to media files are not part of the history.
+- An entity that was not edited since its creation has nothing to compare
+  yet ("There are no earlier versions yet"). Entities that were last saved
+  before history was switched on have no history at all.
+
+### How it works
+
+Three parts work together:
 
 - the **collection** writes a snapshot of a document into a history
   collection on every change;
@@ -19,59 +111,16 @@ It builds on three parts:
 - **baseGraphql** queries the history service and exposes the versions to
   the PWA, which renders the comparison.
 
-## What the user sees
-
-### The comparison page
-
-The page has two columns, each with a version dropdown.
-
-- The **left** dropdown offers the current version (the live entity) and all
-  historical versions. It starts on the current version.
-- The **right** dropdown offers the historical versions only. It starts on
-  the most recent one, so the page opens on "what changed last".
-
-Versions are numbered from oldest (1) upwards and labelled
-`Version {number} ({date})`, followed by the author when one is known. Below
-each dropdown an "Edited by {author} on {date}" line repeats who made that
-version.
-
-The newest snapshot is left out of the historical list, because it holds the
-same content as the live entity.
-
-The diff is always computed from the older to the newer version, whichever
-side the user puts them on, so the markers land on the correct side.
-
-### How differences are shown
-
-| Kind of field                      | How a difference is shown                                                      |
-| ---------------------------------- | ------------------------------------------------------------------------------ |
-| Scalar metadata                    | The value is marked as modified or added. Repeatable (table) fields are included. |
-| Relations in an `entityListElement` | Chips: added (green), removed (red), unchanged (grey).                         |
-| Renamed related entity             | The chip shows the name the related entity had in that version, marked "renamed". |
-| WYSIWYG fields                     | Only a changed / unchanged flag, no inline diff.                               |
-
-Related entities are labelled with the name they had **at that version**, not
-their current name. When the name differs between the two versions, the chip
-is marked as renamed: the older side shows the previous name, the newer side
-the current one.
-
-Panels are expanded by default. The `id` metadata field is never shown, and
-neither is any element declared with `hideInHistory` (see below).
-
-### Empty and error states
+The newest snapshot is left out of the version list, because it holds the
+same content as the current version. When a version or the whole history
+cannot be loaded, the page says so instead of showing an empty column:
 
 | Situation                          | Message                                                  |
 | ---------------------------------- | -------------------------------------------------------- |
 | The entity has no history          | This item has no history yet.                            |
-| Only the live version exists       | There are no earlier versions yet.                       |
+| Only the current version exists    | There are no earlier versions yet.                       |
 | The version list cannot be loaded  | The history could not be loaded. Please try again later. |
 | One version cannot be loaded       | This version could not be loaded. (in that column)       |
-
-### Version list on the detail page
-
-Besides the comparison page, an entity can show a **History** panel on its
-normal detail page: a list of versions with version number, author and date
-of the change. The rows are informational and do not navigate.
 
 ## Enabling it for a client
 
