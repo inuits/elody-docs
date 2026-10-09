@@ -31,7 +31,7 @@ intialValues {
   organization: keyValue(
     key: "refOrganizations"          # the relation type
     source: relations
-    metadataKeyAsLabel: "name"       # which metadata of the related entity is the pill label
+    keyAsLabel: { origin: metadata, key: "name" } # which metadata of the related entity is the pill label
     nestedMetadataKeys: ["function"] # which relation-edge metadata becomes the chips
     formatter: "pill|organization"   # "organization" is the colour lookup key
   )
@@ -121,7 +121,7 @@ leaving the rest alone is fine.
 
 ## Gotchas
 
-- **`metadataKeyAsLabel` (or `rootKeyAsLabel`) is required.** It is what makes
+- **`keyAsLabel` is required.** It is what makes
   the resolver fetch the related entity; without it the pill label falls back
   to the relation key.
 - **A relation whose entity cannot be fetched is skipped**, exactly as the

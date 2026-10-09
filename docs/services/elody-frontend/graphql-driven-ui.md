@@ -148,7 +148,7 @@ next section.
 | `metadata` | the `metadata` array, by `key`; multiple or `lang`-tagged entries come back as a list |
 | `repeatableMetadata` | a metadata value that is itself a list of objects, optionally projected to one `repeatableMetadataKey` |
 | `technicalMetadata` | the `technical_metadata` array |
-| `relations` | relations of type `key`; labelled via `metadataKeyAsLabel` / `rootKeyAsLabel`, optionally filtered by a relation property |
+| `relations` | relations of type `key`; labelled via `keyAsLabel: { origin, key }` (origin `metadata` or `root`; a metadata `key` may list `a\|b` fallbacks), optionally filtered by a relation property |
 | `relationMetadata` | metadata stored *on* a relation edge |
 | `relationRootdata` | a plain property on a relation edge |
 | `metadataOrRelation` | tries metadata first, falls back to a relation |
