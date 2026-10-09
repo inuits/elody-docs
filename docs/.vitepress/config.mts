@@ -47,6 +47,7 @@ export default defineConfig({
             items: [
               { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
               { text: 'Policies & Permissions', link: '/services/elody-collection/policies-and-permissions' },
+              { text: 'Emails', link: '/services/elody-collection/emails' },
             ],
           },
           {
