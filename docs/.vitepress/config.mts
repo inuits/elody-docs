@@ -81,6 +81,7 @@ export default defineConfig({
                 items: [
                   { text: 'Spec Examples', link: '/services/elody-frontend/shacl-ui/examples' },
                   { text: 'Conformance', link: '/services/elody-frontend/shacl-ui/conformance' },
+                  { text: 'From GraphQL to TTL', link: '/services/elody-frontend/shacl-ui/from-graphql-to-ttl' },
                 ],
               },
             ],

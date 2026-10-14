@@ -20,6 +20,10 @@ This page explains that pipeline and what it supports. The
 specification through it and shows what Elody renders for each one. The
 [conformance](./conformance.md) page states, feature by feature, which parts
 of SHACL 1.2 UI Elody supports.
+The [from GraphQL to TTL](./from-graphql-to-ttl.md) guide is for developers
+who know a client's GraphQL and want to write the same thing as a
+declaration: what you write today next to what you write in Turtle, with real
+pairs, the workflow and how to find a term.
 
 ::: info Status
 Developed for the DiSHACLed project (WP3) under epic #165964. The SHACL 1.2 UI
