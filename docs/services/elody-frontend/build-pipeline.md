@@ -49,7 +49,6 @@ different strings — see [A note on naming](#a-note-on-naming).
 | --- | --- | --- |
 | `inuits-dams-pwa/` | — (not published) | [inuits/elody-pwa](https://github.com/inuits/elody-pwa) |
 | `modules/baseGraphql/` | `base-graphql` | [inuits/elody-base-graphql](https://github.com/inuits/elody-base-graphql) |
-| `modules/advancedFiltersModule/` | `advanced-filter-module` | [inuits/elody-advanced-filter-module](https://github.com/inuits/elody-advanced-filter-module) |
 | `modules/advancedSearchModule/` | `advanced-search-module` | [inuits/elody-advanced-search-module](https://github.com/inuits/elody-advanced-search-module) |
 | `modules/importModule/` | `import-module` | [inuits/elody-import-module](https://github.com/inuits/elody-import-module) |
 | `modules/mediafileModule/` | `mediafile-module` | [inuits/elody-mediafile-module](https://github.com/inuits/elody-mediafile-module) |
@@ -83,7 +82,6 @@ client directories (`<client>-dams`) keep the old name too.
 Every GraphQL module — [`baseGraphql`](https://github.com/inuits/elody-base-graphql),
 [`importModule`](https://github.com/inuits/elody-import-module),
 [`mediafileModule`](https://github.com/inuits/elody-mediafile-module),
-[`advancedFiltersModule`](https://github.com/inuits/elody-advanced-filter-module),
 [`savedSearchModule`](https://github.com/inuits/elody-saved-search-module),
 [`advancedSearchModule`](https://github.com/inuits/elody-advanced-search-module)
 — is its own repo and its own npm package, published to the private Nexus

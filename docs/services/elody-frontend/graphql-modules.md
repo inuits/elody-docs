@@ -224,14 +224,6 @@ falls under the warning above. Filtering is part of baseGraphql now; see
 [Advanced Filtering](/services/elody-collection/advanced-filtering) for the
 backend side.
 
-::: info advancedFiltersModule is gone
-Older clients and lockfiles may still reference `advanced-filter-module`
-([inuits/elody-advanced-filter-module](https://github.com/inuits/elody-advanced-filter-module)).
-It was a copy of baseGraphql's filter schema that had drifted, and because it
-loaded after `baseModule` it overrode the newer filters. It has been removed:
-filters live in baseGraphql only. Don't add it back.
-:::
-
 ## Writing your own module
 
 A client's own module, such as `garageModule`, is built the same way as the
