@@ -596,9 +596,11 @@ Three more things the compact form leaves out, each stated in the ontology:
   for the values the listing reads, `elody:detailFields` for the detail page,
   `elody:cardFields` for the card. Left out, every property is read everywhere
   and shown on the card; an explicit flag on a property wins. The extractor
-  writes the lists when they are shorter than the flags. Two shapes of one key read
-  differently (an alias twin) keep their flags: a list by path cannot tell
-  them apart.
+  writes the lists when they are shorter than the flags. Two shapes of one key
+  (an alias twin: the listing reads `name` as `title`, the detail reads `name`
+  as itself) are declared by name, `sh:property ui:TenantUi-field-title`, and a
+  list names that node; a list item that is a path matches the shapes declared
+  inline.
 - **The platform's contexts as presets.** A bulk operation's context is one of
   four named nodes of the vocabulary when it is the platform's:
   `elody:ReadModeNoneSelectedContext`, `elody:NoneSelectedContext`,
