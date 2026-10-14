@@ -229,7 +229,9 @@ whether the failure came from a `RESTDataSource` (`extensions`) or a bare
 
 ## Existing endpoints
 
-Verified while writing this page; the list is not exhaustive.
+The full list, with request and response examples, is in the
+[GraphQL Service API Reference](api-reference.md). The ones below show the
+patterns above.
 
 | Path | Module | Pattern | Purpose |
 | --- | --- | --- | --- |

@@ -95,6 +95,8 @@ Each feature page says what the feature does, and then how a client turns it on.
 
 | Page | What it covers |
 | --- | --- |
+| [GraphQL Modules](graphql-modules.md) | How base-graphql and the shared modules combine into a client's service, and what each module adds |
+| [GraphQL Service API Reference](api-reference.md) | Every HTTP endpoint of the GraphQL service, with request and response examples |
 | [Proxy Endpoints](proxy-endpoints.md) | `/api/...` endpoints for files, streams and exports that don't fit in GraphQL |
 
 ## Build & deploy

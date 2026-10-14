@@ -25,12 +25,54 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started' },
-      { text: 'Services', link: '/services/', activeMatch: '^/services/(?!elody-frontend/)' },
-      { text: 'Frontend', link: '/services/elody-frontend/', activeMatch: '/services/elody-frontend/' },
+      { text: 'Services', link: '/services/', activeMatch: '^/services/(?!.*api-reference)' },
+      {
+        text: 'API Reference',
+        items: [
+          { text: 'Collection API', link: '/services/elody-collection/api-reference' },
+          { text: 'GraphQL Service API', link: '/services/elody-frontend/api-reference' },
+        ],
+      },
       { text: 'Changelog', link: '/changelog' },
     ],
 
     sidebar: {
+      '/services/elody-collection/': [
+        {
+          text: 'Introduction',
+          items: [
+            { text: 'Overview', link: '/services/elody-collection/' },
+            { text: 'The Running Example', link: '/example-domain' },
+          ],
+        },
+        {
+          text: 'Reference',
+          items: [
+            { text: 'Collection API Reference', link: '/services/elody-collection/api-reference' },
+          ],
+        },
+        {
+          text: 'Querying',
+          collapsed: false,
+          items: [
+            { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
+          ],
+        },
+        {
+          text: 'Security',
+          collapsed: false,
+          items: [
+            { text: 'Policies & Permissions', link: '/services/elody-collection/policies-and-permissions' },
+          ],
+        },
+        {
+          text: 'Services',
+          collapsed: false,
+          items: [
+            { text: 'Emails', link: '/services/elody-collection/emails' },
+          ],
+        },
+      ],
       '/services/elody-frontend/': [
         {
           text: 'Introduction',
@@ -96,6 +138,8 @@ export default defineConfig({
           text: 'GraphQL Service',
           collapsed: false,
           items: [
+            { text: 'GraphQL Modules', link: '/services/elody-frontend/graphql-modules' },
+            { text: 'GraphQL Service API Reference', link: '/services/elody-frontend/api-reference' },
             { text: 'Proxy Endpoints', link: '/services/elody-frontend/proxy-endpoints' },
           ],
         },
@@ -139,16 +183,17 @@ export default defineConfig({
           link: '/services/',
           collapsed: false,
           items: [
-            {
-              text: 'Elody Collection',
-              link: '/services/elody-collection/',
-              items: [
-                { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
-                { text: 'Policies & Permissions', link: '/services/elody-collection/policies-and-permissions' },
-                { text: 'Emails', link: '/services/elody-collection/emails' },
-              ],
-            },
+            { text: 'Elody Collection', link: '/services/elody-collection/' },
             { text: 'Elody Frontend', link: '/services/elody-frontend/' },
+            { text: 'Elody Storage', link: '/services/elody-storage/' },
+            { text: 'Elody Transcode Service', link: '/services/elody-transcode-service/' },
+            { text: 'Elody OCR Service', link: '/services/elody-ocr-service/' },
+            { text: 'Elody Antivirus Service', link: '/services/elody-antivirus-service/' },
+            { text: 'Elody Filesystem Importer Service', link: '/services/elody-filesystem-importer-service/' },
+            { text: 'Elody Cantaloupe', link: '/services/elody-cantaloupe/' },
+            { text: 'Elody IIIF Manifest Mapper', link: '/services/elody-iiif-manifest-mapper/' },
+            { text: 'Elody CSV Exporter', link: '/services/elody-csv-exporter/' },
+            { text: 'Elody Canopy Generator', link: '/services/elody-canopy-generator/' },
           ],
         },
         {

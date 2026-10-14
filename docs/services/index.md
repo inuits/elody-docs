@@ -10,6 +10,18 @@ and the features it exposes.
 - [Elody Frontend](/services/elody-frontend/) — the Vue 3 PWA that renders the
   GraphQL-driven UI.
 
+The add-on services, which a client includes when it needs them:
+
+- [Elody Storage](/services/elody-storage/)
+- [Elody Transcode Service](/services/elody-transcode-service/)
+- [Elody OCR Service](/services/elody-ocr-service/)
+- [Elody Antivirus Service](/services/elody-antivirus-service/)
+- [Elody Filesystem Importer Service](/services/elody-filesystem-importer-service/)
+- [Elody Cantaloupe](/services/elody-cantaloupe/)
+- [Elody IIIF Manifest Mapper](/services/elody-iiif-manifest-mapper/)
+- [Elody CSV Exporter](/services/elody-csv-exporter/)
+- [Elody Canopy Generator](/services/elody-canopy-generator/)
+
 ## How a deployment is composed
 
 A running Elody environment is assembled from four layers.
@@ -54,10 +66,9 @@ there is no fork of `collection-api` or the PWA.
   validators.
 - **Frontend** — `clients/<client>/client-frontend` supplies the
   `inuits-dams-graphql-service` (queries, resolvers, translations, schema). It
-  is combined at build time with the six shared GraphQL modules in `modules/`
-  (`baseGraphql`, `advancedFiltersModule`, `advancedSearchModule`,
-  `importModule`, `mediafileModule`, `savedSearchModule`) and the
-  `inuits-dams-pwa` source.
+  is combined at build time with the shared
+  [GraphQL modules](/services/elody-frontend/graphql-modules) in `modules/`
+  and the `inuits-dams-pwa` source.
 
 ## Picking the services
 
