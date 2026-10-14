@@ -28,6 +28,17 @@ Enumeration of the platform actions a context menu can trigger (ContextMenuElody
 | `elody:DownloadQueryResultAction` |  |  | `DownloadQueryResult` |
 | `elody:CreateEntityFromExternalSourceAction` |  |  | `CreateEntityFromExternalSource` |
 
+### elody:BulkOperationContext
+
+When a bulk operation is enabled: the interaction mode, the selection state, and the tooltip explaining it.
+
+| Value | Label | Meaning |
+|---|---|---|
+| `elody:ReadModeNoneSelectedContext` | read mode, nothing selected | Offered in read mode while nothing is selected (a create operation), with the platform's tooltip. |
+| `elody:NoneSelectedContext` | nothing selected | Offered in every mode while nothing is selected, with the platform's read-mode tooltip. |
+| `elody:ReadModeSomeSelectedContext` | read mode, some selected | Offered in read mode once something is selected (an operation on the selection), with the platform's tooltip. |
+| `elody:SomeSelectedContext` | some selected | Offered in read mode once something is selected, with the platform's shorter tooltip. |
+
 ### elody:BulkOperationKind
 
 Enumeration of platform bulk operations (BulkOperationTypes).

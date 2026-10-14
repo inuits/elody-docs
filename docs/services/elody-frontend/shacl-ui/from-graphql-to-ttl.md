@@ -574,7 +574,7 @@ Default column. What is left out:
   translation bundles instead of a key.
 
 The extractor writes this form: a short node on one line, the defaults left
-out. Across the eight clients that is a fifth fewer lines than the explicit
+out. Across the eight clients that is a quarter fewer lines than the explicit
 form, with every document still comparing equal. When a tool outside the
 generator needs the explicit graph, `elody-ui expand <file or directory>`
 writes every default back, as the meta-shapes state them:
@@ -585,6 +585,26 @@ node ../elody-generator/bin/elody-ui.js expand clients/<client>/ui --out /tmp/<c
 
 An explicit declaration stays valid and renders the same documents; a default
 never overrides what a declaration says.
+
+Three more things the compact form leaves out, each stated in the ontology:
+
+- **What is read and shown, as lists.** Instead of a flag on every property
+  (`elody:detailOnly`, `elody:listingOnly`, `elody:readsValue`,
+  `elody:teaser`), the type says it once: `elody:listingFields ( em:a em:b )`
+  for the values the listing reads, `elody:detailFields` for the detail page,
+  `elody:cardFields` for the card. Left out, every property is read everywhere
+  and shown on the card; an explicit flag on a property wins. The extractor
+  writes the lists when they are shorter than the flags.
+- **The platform's contexts as presets.** A bulk operation's context is one of
+  four named nodes of the vocabulary when it is the platform's:
+  `elody:ReadModeNoneSelectedContext`, `elody:NoneSelectedContext`,
+  `elody:ReadModeSomeSelectedContext`, `elody:SomeSelectedContext`. A context
+  with other settings stays a node of its own.
+- **Operations several types share, once.** An operation two types declare
+  identically is a named node, `ui:DeleteSelectedOperation`, in
+  `_shared.ui.ttl`, and each type says `elody:bulkOperation ui:DeleteSelectedOperation`.
+  RDF lets any node be referenced from anywhere; the extractor finds the
+  identical ones.
 
 ## Things that trip people up
 

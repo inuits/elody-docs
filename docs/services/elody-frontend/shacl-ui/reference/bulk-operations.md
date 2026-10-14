@@ -38,9 +38,9 @@ Declared under `elody:context` of [Bulk Operation](#bulk-operation).
 
 | Term | Type | How many | Meaning | Used by |
 |---|---|---|---|---|
-| `elody:activeViewMode` | an [elody:InteractionMode](./enumerations.md#elody-interactionmode) value | at most one | Read or edit mode. *no active view mode: the operation is offered in every mode* | 8 of 8 |
-| `elody:selection` | an [elody:SelectionState](./enumerations.md#elody-selectionstate) value | exactly one | Required selection state. | 8 of 8 |
-| `elody:tooltipLabel` | `xsd:string` | exactly one | Translation key of the tooltip explaining why the operation is enabled or not. Replaces the string use of the retired elody:tooltip. | 8 of 8 |
+| `elody:activeViewMode` | an [elody:InteractionMode](./enumerations.md#elody-interactionmode) value | at most one | Read or edit mode. *no active view mode: the operation is offered in every mode* | 5 of 8 |
+| `elody:selection` | an [elody:SelectionState](./enumerations.md#elody-selectionstate) value | exactly one | Required selection state. | 5 of 8 |
+| `elody:tooltipLabel` | `xsd:string` | exactly one | Translation key of the tooltip explaining why the operation is enabled or not. Replaces the string use of the retired elody:tooltip. | 5 of 8 |
 | `elody:requiresSameType` | `xsd:boolean` | at most one | true offers the bulk operation only when the selected items share a type (requiresSameType). | 1 of 8 |
 | `elody:minSelectedItems` | `xsd:integer` | at most one | The least items that must be selected for the bulk operation (minSelectedItems). | 1 of 8 |
 | `elody:maxSelectedItems` | `xsd:integer` | at most one | The most items that may be selected for the bulk operation (maxSelectedItems). | 1 of 8 |
