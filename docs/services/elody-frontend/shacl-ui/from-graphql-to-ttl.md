@@ -66,6 +66,7 @@ Labels are the same i18n keys as in GraphQL (`metadata.labels.title`).
 |---|---|
 | `fragment minimalWork on Work { ... }` | `ui:WorkUi a elody:EntityUi ; elody:graphqlType "Work"` with `sh:property` entries |
 | `title: keyValue(key: "title", source: metadata)` | `[ sh:path em:title ; sh:order 1 ]` |
+| `label(input: "metadata.labels.title")` on the field | nothing: the conventional key `metadata.labels.&lt;key&gt;` is the default; `elody:labelKey` only when it differs |
 | `refAuthors: keyValue(key: "refAuthors", source: relations, metadataKeyAsLabel: "name")` | `[ sh:path em:refAuthors ; elody:relationType "refAuthors" ; elody:valueLabelKey "name" ]` |
 | `slug: keyValue(key: "id", source: root)` | `[ sh:path em:id ; elody:alias "slug" ; elody:source elody:RootSource ]` |
 | a value read on the detail page but not in the listing | `elody:detailOnly true` on the property |
@@ -553,6 +554,37 @@ you never write their bodies.
   is a listing rendered inside another document's results.
 - English only, in comments and labels alike; the i18n keys resolve the
   languages.
+
+## Defaults and the compact form
+
+A declaration says what differs from the norm. The norm is in the meta-shapes:
+a constant default is `sh:defaultValue` on the term's entry, a derived one is
+`elody:defaultRule`, and the [reference](./reference/) shows both in its
+Default column. What is left out:
+
+- **The label key.** A property shape without `elody:labelKey` and without a
+  label text (`sh:name`) is labelled `metadata.labels.<key>`, the key in
+  kebab-case (`defaultBranch`, `default_branch` and the v2 schema's
+  `properties.default_branch.value` all give `default-branch`). Write the key
+  only when the client's convention differs.
+- **Open panels and elements.** `elody:collapsed` defaults to `false`: write
+  it only for a panel or element that starts collapsed.
+- **No `sh:name`.** It is documentation derived from the key; the extractor
+  no longer writes it. Write it when you want a label text generated into the
+  translation bundles instead of a key.
+
+The extractor writes this form: a short node on one line, the defaults left
+out. Across the eight clients that is a fifth fewer lines than the explicit
+form, with every document still comparing equal. When a tool outside the
+generator needs the explicit graph, `elody-ui expand <file or directory>`
+writes every default back, as the meta-shapes state them:
+
+```bash
+node ../elody-generator/bin/elody-ui.js expand clients/<client>/ui --out /tmp/<client>-explicit.ui.ttl
+```
+
+An explicit declaration stays valid and renders the same documents; a default
+never overrides what a declaration says.
 
 ## Things that trip people up
 
