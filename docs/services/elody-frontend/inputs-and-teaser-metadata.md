@@ -16,25 +16,26 @@ this page is about the other two and about the input fields they hang off.
 
 ## Teaser metadata
 
-A teaser item pairs a value with how to present it. **The alias is the join**:
-the frontend walks `teaserMetadata` and looks each alias up in `intialValues`,
-so `organization: metaData { … }` displays `intialValues.organization`.
+A teaser item pairs a value with how to present it. **The key is the join**:
+the frontend walks `teaserMetadata` and looks each item's `key` up in
+`intialValues`. The key defaults to the item's alias, so
+`organization: metaData { … }` displays `intialValues.organization`. Set
+`key(input:)` only to read a property under another alias (see
+[`key` defaults to the alias](/services/elody-frontend/graphql-driven-ui.md#key-defaults-to-the-alias)).
 
 ```graphql
 fragment minimalUser on User {
   id
   intialValues {
-    email: keyValue(key: "email", source: metadata)
-    last_name: keyValue(key: "last_name", source: metadata)
+    email: keyValue(source: metadata)
+    last_name: keyValue(source: metadata)
   }
   teaserMetadata {
     email: metaData {
       label(input: "metadata.labels.email")
-      key(input: "email")
     }
     last_name: metaData {
       label(input: "metadata.labels.last-name")
-      key(input: "last_name")
     }
   }
 }
@@ -72,7 +73,6 @@ instead — see [Relation Pills](/services/elody-frontend/features/relation-pill
 ```graphql
 status: metaData {
   label(input: "metadata.labels.status")
-  key(input: "status")
   unit(input: DATE_DEFAULT)                                  # render as a date
   valueTranslationKey(input: "metadata.labels.status.$value") # translate the value
   lineClamp(input: "2")                                       # truncate + tooltip
@@ -96,7 +96,6 @@ item is read-only without one and an input with one:
 ```graphql
 name: metaData {
   label(input: "metadata.labels.name")
-  key(input: "name")
   inputField(type: baseTextField) {
     ...inputfield
     validation(input: { value: required }) {
@@ -135,7 +134,6 @@ query GetUserCreateForm {
       formFields {
         name: metaData {
           label(input: "metadata.labels.name")
-          key(input: "name")
           inputField(type: baseTextField) { ...inputfield }
         }
         createAction: action {

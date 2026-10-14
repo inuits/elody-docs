@@ -7,7 +7,7 @@ because the same formatted value feeds a listing column and a detail panel
 alike:
 
 ```graphql
-status: keyValue(key: "status", source: metadata, formatter: "pill|status")
+status: keyValue(source: metadata, formatter: "pill|status")
 ```
 
 Without a formatter the resolver returns a bare string. With one it returns a

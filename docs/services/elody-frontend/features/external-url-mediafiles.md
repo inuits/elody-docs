@@ -15,8 +15,8 @@ The PWA's media viewer reads a fixed set of reserved keys off a mediafile's
 `height`, `width` and so on. `external_url` is one of these.
 
 A client does not have to name its own property `external_url`: the GraphQL
-alias in `intialValues` is what the viewer reads, and `key(input:)` names the
-source property. So a client whose property is called `trailer_link` writes:
+alias in `intialValues` is what the viewer reads, and the `key` argument of
+`keyValue` names the source property. So a client whose property is called `trailer_link` writes:
 
 ```graphql
 intialValues {
@@ -77,7 +77,6 @@ uploadContainer {
 }
 external_url: metaData {
   label(input: "metadata.labels.url")
-  key(input: "external_url")
   inputField(type: baseTextField) {
     ...inputfield
     validation(input: { value: [url] }) { ...validation }
@@ -103,12 +102,11 @@ detail panel and any completeness overview:
 
 ```graphql
 intialValues {
-  external_url: keyValue(key: "external_url", source: metadata)
+  external_url: keyValue(source: metadata)
 }
 teaserMetadata {
   external_url: metaData {
     label(input: "metadata.labels.url")
-    key(input: "external_url")
     linkText(input: "metadata.labels.open-url")
   }
 }

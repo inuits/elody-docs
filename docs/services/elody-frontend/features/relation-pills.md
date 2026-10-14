@@ -44,7 +44,6 @@ and point a teaser or panel item at that alias:
 teaserMetadata {
   organization: metaData {
     label(input: "metadata.labels.organization")
-    key(input: "organization")
     valueTranslationKey(input: "metadata.labels.user-function.$value")
   }
 }

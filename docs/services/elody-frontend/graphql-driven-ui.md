@@ -122,7 +122,7 @@ a missing key, and there is nothing in the console about it. See
 laid out *around*. It is a single parameterised field:
 
 ```graphql
-keyValue(key: String!, source: KeyValueSource!, ...): JSON
+keyValue(key: String, source: KeyValueSource!, ...): JSON
 ```
 
 One field, so **the only way to ask for more than one value is to alias it** —
@@ -130,15 +130,20 @@ which is why every client query looks like this:
 
 ```graphql
 intialValues {
-  identifiers:       keyValue(key: "identifiers",       source: root)
-  serial_number:     keyValue(key: "serial_number",     source: metadata)
-  software_version:  keyValue(key: "software_version",  source: metadata)
+  identifiers:      keyValue(source: root)
+  serial_number:    keyValue(source: metadata)
+  software_version: keyValue(source: metadata)
+  slug:             keyValue(key: "id", source: root)
 }
 ```
 
 The aliases become the property names on the returned object. That object is the
 form's initial values, so **the alias is the field path**. This matters in the
 next section.
+
+`key` names the property to read and **defaults to the alias**, so it is only
+written when the two differ, like `slug` above. See
+[`key` defaults to the alias](#key-defaults-to-the-alias).
 
 `source` picks which resolver reads the value off the collection-api document:
 
@@ -158,6 +163,57 @@ next section.
 Most take a `formatter` too, which wraps the raw value in a display shape
 (`pill`, `link|...`) instead of returning a bare string. That has a consequence
 for the form path — see the warning at the end of the next section.
+
+### `key` defaults to the alias
+
+Both `keyValue(key:)` and a panel item's `key(input:)` are optional. Left out,
+they take the field's alias:
+
+```graphql
+intialValues {
+  premiere_date: keyValue(source: metadata)
+}
+# ...
+premiere_date: metaData {
+  label(input: "metadata.labels.premiere-date")
+  inputField(type: baseDateField) { ...inputfield }
+}
+```
+
+is the same as writing `key: "premiere_date"` and `key(input: "premiere_date")`.
+
+An explicit `key` always wins. Keep it whenever the name you read differs from
+the alias you want:
+
+- the property has another name than the alias: a relation type, a dotted
+  path, or `key: "id"` behind `slug`;
+- two siblings read the same property, since GraphQL aliases must be unique
+  within a selection;
+- a consumer expects a fixed alias (the mediafile viewer reads
+  `intialValues.external_url`, see
+  [External URL Mediafiles](/services/elody-frontend/features/external-url-mediafiles.md)).
+
+**How it works.** The PWA registers an Apollo `DocumentTransform`
+(`inuits-dams-pwa/src/aliasAsKeyTransform.ts`) that writes the alias in as the
+`key` before a query reaches the cache or the network. Doing this on the client
+is not optional. Apollo stores fields by name and arguments, not by alias, so
+two keyless `keyValue(source: metadata)` siblings would share one cache entry
+and overwrite each other. baseGraphql also accepts a missing `key` and falls back
+to the alias (`info.path.key`). The transform result is cached per document, so
+it costs nothing per request.
+
+Two limits:
+
+- **The field needs an alias.** A bare `keyValue(source: metadata)` or
+  `metaData { }` has no name to default to and still needs its `key`.
+- **Matching is by field name** (`keyValue`, `metaData`, `uploadMetadata`): the
+  transform has no schema to check types against.
+
+::: warning Base version
+The optional `keyValue(key:)` needs baseGraphql 0.10.35 or later. A client
+pinned to an older base-graphql (pza pins 0.8.3) fails codegen without the
+`key`, so keep writing it there.
+:::
 
 ## From `intialValues` to a vee-validate field
 
@@ -226,22 +282,23 @@ when a field `isMultilingual`, and unwraps formatter objects on write. Every
 input component in `components/metadata/` binds to that proxy, so read mode and
 edit mode share one source of truth and edits land straight in the form state.
 
-::: warning The alias, the panel key and the field path must all agree
-Three places in a query name the same thing, and nothing errors if they don't:
+::: warning The `intialValues` alias and the panel key must agree
+Two places in a query name the same thing, and nothing errors if they don't:
 
 ```graphql
 intialValues {
-  serial_number: keyValue(key: "serial_number", source: metadata)  # alias
+  serial_number: keyValue(source: metadata)       # intialValues alias
 }
 # ...
-serial_number: metaData {
-  key(input: "serial_number")                                      # panel key
+serial_number: metaData {                         # panel key, from the alias
   label(input: "metadata.labels.serial-number")
 }
 ```
 
-The alias becomes the property on `intialValues`. The panel key becomes the
-vee-validate path `intialValues.serial_number`. If they differ, `useField`
+The `intialValues` alias becomes the property on `intialValues`. The panel key
+(the panel item's alias, unless it sets `key(input:)`) becomes the vee-validate
+path `intialValues.serial_number`. Giving both the same alias and leaving out
+`key` is the simplest way to keep them in step. If they differ, `useField`
 resolves a path that does not exist, the field renders empty, and there is no
 error in the console, in the network tab, or in the GraphQL response. An empty
 field on an entity you know has data is nearly always this.
