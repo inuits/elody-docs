@@ -91,7 +91,7 @@ Labels are the same i18n keys as in GraphQL (`metadata.labels.title`).
 | `query GetWorkEntities`, `GetWorkFilters`, `GetWorkSortOptions`, `GetWorkBulkOperations` | `elody:documents "entities" , "filters" , "sortOptions" , "bulkOperations"` |
 | a list element's own `query GetManifestations { Entities { results { ... on Manifestation { ...minimalManifestation } } } }` | `ui:GetManifestations a elody:ListQuery ; elody:queryName ; elody:result [ elody:graphqlType "Manifestation" ; elody:fragment "minimalManifestation" ]` |
 | `query GetEntityPickerListFor...` + its filters | `ui:GetEntityPickerListFor... a elody:Picker ; elody:result [...] ; elody:filter [...]` |
-| `query GetWorkCreateForm { GetDynamicForm { label formTab { formFields { ... } } } }` | `ui:GetWorkCreateForm a elody:Form ; elody:shape [ sh:property [...] ] ; elody:submit [...]` |
+| `query GetWorkCreateForm { GetDynamicForm { label formTab { formFields { ... } } } }` | `ui:GetWorkCreateForm a elody:Form ; elody:fieldsFrom ui:WorkUi ; elody:fields ( em:title [ sh:path em:isbn ; sh:minCount 1 ] ) ; elody:submit [...]` (or its own `elody:shape`) |
 | `query GetRepetitiveFormForX { GetRepetitiveForm { steps ... } }` | `ui:GetRepetitiveFormForX a elody:GuidedFlow ; elody:step [...] ; elody:finalize [...]` |
 | `queries/<client>.queries.ts` (`fullEntity`, `getEntities`, the menu, the constants) | `ui:<client>App a elody:App ; elody:platformDocument ... ; elody:menuItem [...]` |
 
@@ -606,6 +606,15 @@ Three more things the compact form leaves out, each stated in the ontology:
   `elody:ReadModeNoneSelectedContext`, `elody:NoneSelectedContext`,
   `elody:ReadModeSomeSelectedContext`, `elody:SomeSelectedContext`. A context
   with other settings stays a node of its own.
+- **A form's fields from the type's properties.** Instead of repeating a
+  property shape in the form, the form lists the type's properties:
+  `elody:fieldsFrom ui:BookUi ; elody:fields ( em:title [ sh:path em:isbn ;
+  sh:minCount 1 ] )`. An item takes its input (`sh:datatype`, `shui:editor`,
+  `elody:clientInputField`, `sh:class`, as a group) and its label, unit and
+  relation from the type's shape unless it says its own; `sh:minCount` and
+  validations never flow in, a form decides those. The order is the position
+  in the list. The extractor writes the list where inheriting gives the field
+  back exactly, and keeps the shape where it does not.
 - **Operations several types share, once.** An operation two types declare
   identically is a named node, `ui:DeleteSelectedOperation`, in
   `_shared.ui.ttl`, and each type says `elody:bulkOperation ui:DeleteSelectedOperation`.
