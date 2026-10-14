@@ -4,7 +4,7 @@
 SHACL UI support and the `elody:` ontology are in development and not part of
 a release yet. The platform changes they rely on are on feature branches of
 baseGraphql, the PWA and collection-api;
-[elody-ontology](https://github.com/inuits/elody-ontology) (0.2.0) and
+[elody-ontology](https://github.com/inuits/elody-ontology) (0.5.0) and
 [elody-generator](https://github.com/inuits/elody-generator) are new, and no
 client uses them yet. Terms, results and these pages may still change.
 :::
@@ -27,7 +27,9 @@ pairs, the workflow and how to find a term.
 The [reference](./reference/) is generated from the vocabulary and its
 meta-shapes: every kind of node with the terms it carries, their type,
 cardinality and meaning, the enumerations with Elody's binding for each value,
-and the retired terms.
+and the retired terms. A declaration is written in its compact form: what the
+meta-shapes state as a default is left out, and the guide's section on
+defaults says what that is.
 
 ::: info Status
 Developed for the DiSHACLed project (WP3) under epic #165964. The SHACL 1.2 UI

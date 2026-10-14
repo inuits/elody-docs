@@ -8,7 +8,7 @@ outline: [2, 2]
 SHACL UI support and the `elody:` ontology are in development and not part of
 a release yet. The platform changes they rely on are on feature branches of
 baseGraphql, the PWA and collection-api;
-[elody-ontology](https://github.com/inuits/elody-ontology) (0.2.0) and
+[elody-ontology](https://github.com/inuits/elody-ontology) (0.5.0) and
 [elody-generator](https://github.com/inuits/elody-generator) are new, and no
 client uses them yet. Terms, results and these pages may still change.
 :::
