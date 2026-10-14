@@ -25,86 +25,141 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started' },
-      { text: 'Services', link: '/services/' },
+      { text: 'Services', link: '/services/', activeMatch: '^/services/(?!elody-frontend/)' },
+      { text: 'Frontend', link: '/services/elody-frontend/', activeMatch: '/services/elody-frontend/' },
       { text: 'Changelog', link: '/changelog' },
     ],
 
-    sidebar: [
-      {
-        text: 'Introduction',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/getting-started' },
-          { text: 'The Running Example', link: '/example-domain' },
-        ],
-      },
-      {
-        text: 'Services',
-        link: '/services/',
-        collapsed: true,
-        items: [
-          {
-            text: 'Elody Collection',
-            link: '/services/elody-collection/',
-            items: [
-              { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
-              { text: 'Policies & Permissions', link: '/services/elody-collection/policies-and-permissions' },
-              { text: 'Emails', link: '/services/elody-collection/emails' },
-            ],
-          },
-          {
-            text: 'Elody Frontend',
-            link: '/services/elody-frontend/',
-            items: [
-              { text: 'GraphQL-Driven UI', link: '/services/elody-frontend/graphql-driven-ui' },
-              { text: 'Inputs & Teaser Metadata', link: '/services/elody-frontend/inputs-and-teaser-metadata' },
-              { text: 'Formatters', link: '/services/elody-frontend/formatters' },
-              { text: 'Translations', link: '/services/elody-frontend/translations' },
-              { text: 'Build Pipeline', link: '/services/elody-frontend/build-pipeline' },
-              { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
-              { text: 'Auth & Session', link: '/services/elody-frontend/auth-session' },
-              { text: 'UI Permissions', link: '/services/elody-frontend/permissions' },
-              { text: 'Proxy Endpoints', link: '/services/elody-frontend/proxy-endpoints' },
-              { text: 'Dynamic Tailwind Classes', link: '/services/elody-frontend/dynamic-tailwind-classes' },
-              { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
-              { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
-              { text: 'Bulk Edit', link: '/services/elody-frontend/features/bulk-edit' },
-              { text: 'Merge Entities', link: '/services/elody-frontend/features/merge-entities' },
-              { text: 'External URL Mediafiles', link: '/services/elody-frontend/features/external-url-mediafiles' },
-              { text: 'Embedded Viewer', link: '/services/elody-frontend/features/embedded-viewer' },
-              { text: 'Media Viewers', link: '/services/elody-frontend/features/media-viewers' },
-              { text: 'Relation Pills', link: '/services/elody-frontend/features/relation-pills' },
-              { text: 'Linked Open Data', link: '/services/elody-frontend/features/linked-open-data' },
-              { text: 'Pipeline View Mode', link: '/services/elody-frontend/features/pipeline-view-mode' },
-              { text: 'History Viewer', link: '/services/elody-frontend/features/history-viewer' },
-              { text: 'List Item Click Actions', link: '/services/elody-frontend/features/list-item-click-actions' },
-              {
-                text: 'SHACL UI (in development)',
-                link: '/services/elody-frontend/shacl-ui/',
-                items: [
-                  { text: 'Spec Examples', link: '/services/elody-frontend/shacl-ui/examples' },
-                  { text: 'Conformance', link: '/services/elody-frontend/shacl-ui/conformance' },
-                  { text: 'From GraphQL to TTL', link: '/services/elody-frontend/shacl-ui/from-graphql-to-ttl' },
-                  {
-                    text: 'Reference',
-                    link: '/services/elody-frontend/shacl-ui/reference/',
-                    collapsed: true,
-                    items: referenceSidebar.slice(1),
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        text: 'About',
-        collapsed: false,
-        items: [
-          { text: 'Changelog', link: '/changelog' },
-        ],
-      },
-    ],
+    sidebar: {
+      '/services/elody-frontend/': [
+        {
+          text: 'Introduction',
+          items: [
+            { text: 'Overview', link: '/services/elody-frontend/' },
+            { text: 'The Running Example', link: '/example-domain' },
+          ],
+        },
+        {
+          text: 'Core Concepts',
+          items: [
+            { text: 'GraphQL-Driven UI', link: '/services/elody-frontend/graphql-driven-ui' },
+            { text: 'Inputs & Teaser Metadata', link: '/services/elody-frontend/inputs-and-teaser-metadata' },
+            { text: 'Formatters', link: '/services/elody-frontend/formatters' },
+            { text: 'Translations', link: '/services/elody-frontend/translations' },
+          ],
+        },
+        {
+          text: 'Lists & Views',
+          collapsed: false,
+          items: [
+            { text: 'List Item Click Actions', link: '/services/elody-frontend/features/list-item-click-actions' },
+            { text: 'Pipeline View Mode', link: '/services/elody-frontend/features/pipeline-view-mode' },
+            { text: 'Rounded Counts', link: '/services/elody-frontend/features/rounded-counts' },
+            { text: 'Bulk Edit', link: '/services/elody-frontend/features/bulk-edit' },
+            { text: 'Merge Entities', link: '/services/elody-frontend/features/merge-entities' },
+          ],
+        },
+        {
+          text: 'Detail Pages',
+          collapsed: false,
+          items: [
+            { text: 'Relation Pills', link: '/services/elody-frontend/features/relation-pills' },
+            { text: 'Comments & Threads', link: '/services/elody-frontend/features/comments' },
+            { text: 'History Viewer', link: '/services/elody-frontend/features/history-viewer' },
+          ],
+        },
+        {
+          text: 'Media',
+          collapsed: false,
+          items: [
+            { text: 'Media Viewers', link: '/services/elody-frontend/features/media-viewers' },
+            { text: 'External URL Mediafiles', link: '/services/elody-frontend/features/external-url-mediafiles' },
+            { text: 'Embedded Viewer', link: '/services/elody-frontend/features/embedded-viewer' },
+          ],
+        },
+        {
+          text: 'Data Exchange',
+          collapsed: false,
+          items: [
+            { text: 'Linked Open Data', link: '/services/elody-frontend/features/linked-open-data' },
+          ],
+        },
+        {
+          text: 'Security',
+          collapsed: false,
+          items: [
+            { text: 'Auth & Session', link: '/services/elody-frontend/auth-session' },
+            { text: 'UI Permissions', link: '/services/elody-frontend/permissions' },
+          ],
+        },
+        {
+          text: 'GraphQL Service',
+          collapsed: false,
+          items: [
+            { text: 'Proxy Endpoints', link: '/services/elody-frontend/proxy-endpoints' },
+          ],
+        },
+        {
+          text: 'Build & Deploy',
+          collapsed: false,
+          items: [
+            { text: 'Build Pipeline', link: '/services/elody-frontend/build-pipeline' },
+            { text: 'Production Serving', link: '/services/elody-frontend/production-serving' },
+            { text: 'Dynamic Tailwind Classes', link: '/services/elody-frontend/dynamic-tailwind-classes' },
+          ],
+        },
+        {
+          text: 'SHACL UI (in development)',
+          link: '/services/elody-frontend/shacl-ui/',
+          collapsed: true,
+          items: [
+            { text: 'Spec Examples', link: '/services/elody-frontend/shacl-ui/examples' },
+            { text: 'Conformance', link: '/services/elody-frontend/shacl-ui/conformance' },
+            { text: 'From GraphQL to TTL', link: '/services/elody-frontend/shacl-ui/from-graphql-to-ttl' },
+            {
+              text: 'Reference',
+              link: '/services/elody-frontend/shacl-ui/reference/',
+              collapsed: true,
+              items: referenceSidebar.slice(1),
+            },
+          ],
+        },
+      ],
+      '/': [
+        {
+          text: 'Introduction',
+          collapsed: false,
+          items: [
+            { text: 'Getting Started', link: '/getting-started' },
+            { text: 'The Running Example', link: '/example-domain' },
+          ],
+        },
+        {
+          text: 'Services',
+          link: '/services/',
+          collapsed: false,
+          items: [
+            {
+              text: 'Elody Collection',
+              link: '/services/elody-collection/',
+              items: [
+                { text: 'Advanced Filtering', link: '/services/elody-collection/advanced-filtering' },
+                { text: 'Policies & Permissions', link: '/services/elody-collection/policies-and-permissions' },
+                { text: 'Emails', link: '/services/elody-collection/emails' },
+              ],
+            },
+            { text: 'Elody Frontend', link: '/services/elody-frontend/' },
+          ],
+        },
+        {
+          text: 'About',
+          collapsed: false,
+          items: [
+            { text: 'Changelog', link: '/changelog' },
+          ],
+        },
+      ],
+    },
 
     outline: {
       label: 'On this page',
