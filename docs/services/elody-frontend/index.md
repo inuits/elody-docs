@@ -29,5 +29,5 @@ The Vue 3 PWA that renders the GraphQL-driven UI.
   that stands in for an external link instead of a stored file.
 - [Embedded Viewer](features/embedded-viewer.md) — a chrome-less IIIF viewer
   route other websites can put in an `<iframe>`.
-- [Preview on Click](features/preview-on-click.md) — a route flag that makes a
-  list item click open the preview instead of the detail page.
+- [List Item Click Actions](features/list-item-click-actions.md) — `actionOnClick`:
+  navigate, open the preview, open a modal or do nothing.
