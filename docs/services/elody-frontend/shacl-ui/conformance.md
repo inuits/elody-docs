@@ -28,7 +28,7 @@ results below are measured against the Editor's Draft of 2 October 2026.
 Several results depend on platform changes that are not released yet:
 `languageIn` and form sections in baseGraphql and the PWA, the fix that
 keeps the language of metadata items when they are read, and relation
-mirroring in collection-api (with DiSHACLed's opt-in), and the label of
+mirroring in collection-api (with a client's opt-in), and the label of
 related entities by preference order and language in baseGraphql. Until
 those are merged, rows 1, 4, 13 (create forms), 21, 22, 30, 31 and 32 hold
 on those branches only. Values read live from a SPARQL endpoint
@@ -95,7 +95,7 @@ resolved at run time. See [SHACL UI in Elody](./) for the pipeline.
 | 28 | Declared widgets | Required | ✅ | `shui:editor` and `shui:viewer` score 40 and win; Elody's own widgets are `shui:Editor` and `shui:Viewer` instances. |
 | 29 | Widget switching | Optional | ❌ | The widget is fixed per field. |
 | 30 | Value preservation | Required | ✅ | Existing values are shown, including unbounded ones, and a save keeps every value it does not change, every language and each value's type (round trip below). Values of an unbounded property are a set: collection-api stores them sorted. |
-| 31 | Predicate and inverse paths — view | Required | ✅ | A predicate path is a metadata key or a relation. An inverse path reads the mirrored relation on the entity (`is<X>For`). collection-api keeps mirrors on its classic storage path; an entity type with an object configuration switches them on with `RelationMirroring` (DiSHACLed's `entity` does). |
+| 31 | Predicate and inverse paths — view | Required | ✅ | A predicate path is a metadata key or a relation. An inverse path reads the mirrored relation on the entity (`is<X>For`). collection-api keeps mirrors on its classic storage path; an entity type with an object configuration switches them on with `RelationMirroring`. |
 | 32 | Predicate and inverse paths — edit | Required | ✅ | Predicate paths and, with `sh:class`, inverse paths are edited on the detail page and in the create form with a relation dropdown. Without `sh:class` Elody has no type to search: the create form takes the IRI typed in (as `shui:IRIEditor`), stored as the relation's key, and the detail page shows the related entity by its label. Adding or removing an inverse-path value updates the mirror on the other entity (round trip below), with the same condition as 31. |
 | 33 | Alternative paths — view | Recommended | ❌ | Left out by choice: Elody keeps view and edit symmetric, which the specification allows for complex paths in view mode (see [complex paths](./#complex-paths-view-and-edit-symmetry)). |
 | 34 | Alternative paths — edit | Recommended | ❌ | Follows from 33: a field Elody does not show, it does not edit. |
@@ -133,7 +133,7 @@ Every ✅ is backed by a test that runs in `elody-generator`:
 ### A related-entity table in a running client
 
 Storybook has no collection behind it, so example 31's list of related
-entities was also checked in a running DiSHACLed client with real data: three
+entities was also checked in a running client with real data: three
 concepts, one with an `isBroaderFor` relation to the other two. The detail page
 lists exactly those two, with the columns of the `sh:node` shape (the type and
 the alternative labels), and each row opens that concept.
@@ -143,7 +143,7 @@ the alternative labels), and each row opens that concept.
 ### Values from a linked-data source in a running client
 
 `shui:searchQuery` and the live `shui:SubClassEditor` were checked in a running
-DiSHACLed client against Ubergraph: searches through the GraphQL query the
+client against Ubergraph: searches through the GraphQL query the
 dropdown sends return the Cell Ontology's and Uberon's classes, and a drug
 linked to them shows them by their label (see
 [linked-data sources](./#linked-data-sources)). Typing in the dropdown in edit

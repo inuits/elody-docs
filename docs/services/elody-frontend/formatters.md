@@ -33,14 +33,14 @@ config**, exported from the client's GraphQL service and passed as
 // clients/<client>/client-frontend/inuits-dams-graphql-service/src/<client>FormattersConfig.ts
 export const clientFormattersConfig: FormattersConfig = {
   [CustomFormatterTypes.Pill]: {
-    concept: { background: "#e6e6e6", text: "#4a4a4a" },
-    queued: { background: "#eee", text: "#444", icon: DamsIcons.Process, spin: true },
+    planned: { background: "#e6e6e6", text: "#4a4a4a" },
+    in_progress: { background: "#eee", text: "#444", icon: DamsIcons.Process, spin: true },
   },
   [CustomFormatterTypes.Link]: {
-    production: {
-      link: "/production/$value",
+    car: {
+      link: "/car/$value",
       value: "id",
-      label: "title",
+      label: "licence_plate",
       icon: DamsIcons.Link,
       background: "#d4edda",
       text: "#2d7a4f",
@@ -57,11 +57,11 @@ to change a colour** — no frontend rebuild.
 `formatter: "pill"` with no type looks the config up by the **value itself**,
 lowercased — which is why a status pill needs one entry per status. Colours are
 always keyed on the raw value, never on the translated text, so a Dutch UI
-still finds `member` and not `medewerker`.
+still finds `mechanic` and not `monteur`.
 
 ```ts
 [CustomFormatterTypes.Pill]: {
-  member: { background: "#daecdd", text: "#0b8319" },
+  mechanic: { background: "#daecdd", text: "#0b8319" },
 }
 ```
 
@@ -104,7 +104,7 @@ to scrape:
 
 ```ts
 [CustomFormatterTypes.RegexpMatch]: {
-  wears: { value: "@value" },
+  part_number: { value: "@value" },
 }
 ```
 
@@ -115,8 +115,8 @@ unpredictable depths.
 
 `source: relations` with `nestedMetadataKeys` renders one pill per related
 entity with that relation's **edge metadata** as chips inside it, instead of
-joining the labels into one string. That is the way to keep "which function in
-which organization" visible in a single column — see
+joining the labels into one string. That is the way to keep "which role at
+which garage" visible in a single column — see
 [Relation Pills](/services/elody-frontend/features/relation-pills.md).
 
 ## Gotcha: formatters and editable fields

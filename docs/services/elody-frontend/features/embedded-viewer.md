@@ -11,26 +11,26 @@ navigation, no header, no modals. Only the
 [`ViewerToolbar`](https://github.com/inuits/elody-pwa/blob/master/src/components/ViewerToolbar.vue)
 zoom/fullscreen controls and an optional clickable logo.
 
-This is used in production by the Digipolis DAMS (Antwerp), where
-`https://dams.antwerpen.be/assets/<id>/embed/viewer` is embedded by city
-websites.
+For example, a garage network can publish
+`https://garage.example.com/cars/<id>/embed/viewer` and let each garage embed
+it on its own website.
 
 ## Embedding it (for the consuming application)
 
 ```html
 <iframe
-  src="https://dams.antwerpen.be/assets/813ef4f8-.../embed/viewer"
+  src="https://garage.example.com/cars/813ef4f8-.../embed/viewer"
   width="100%"
   height="600"
   style="border: 0"
   allowfullscreen
   loading="lazy"
-  title="Asset viewer"
+  title="Car photo viewer"
 ></iframe>
 ```
 
 The URL shape is `/<type>/<id>/embed/viewer`, where `<type>` is the overview
-segment of the asset page (e.g. `assets`) and `<id>` the entity id. In other
+segment of the asset page (e.g. `cars`) and `<id>` the entity id. In other
 words: take the asset's normal detail URL and append `/embed/viewer`.
 
 Notes for the embedding side:
@@ -55,7 +55,7 @@ client only gets it by registering a route.
 and is already mapped to its component in the PWA's
 [`views/router.ts`](https://github.com/inuits/elody-pwa/blob/master/src/views/router.ts),
 so there is nothing to add to your schema or to the PWA. Add the route to your
-client's router config — for Digipolis that is `assetEngineRoutes.ts`:
+client's router config:
 
 ```ts
 {
@@ -65,8 +65,8 @@ client's router config — for Digipolis that is `assetEngineRoutes.ts`:
   meta: {
     requiresAuth: false,
     logo: {
-      src: "/a-logo.svg",
-      alt: "Antwerpen",
+      src: "/garage-logo.svg",
+      alt: "Garage",
     },
   },
 },
@@ -103,7 +103,7 @@ So registering the route is enough. You do not touch the CSP helper.
 
 ::: tip
 If you serve the embed through a custom endpoint rather than the PWA router
-(Digipolis proxies `/asset/*` and `/assets/*` through its own
+(for instance by proxying `/car/*` and `/cars/*` through a custom
 `redirectEndpoint`), that endpoint needs the relaxed policy itself. Use the
 exported
 [`createCspMiddleware`](https://github.com/inuits/elody-base-graphql/blob/master/helpers/contentSecurityPolicyHelper.ts)
@@ -111,7 +111,7 @@ helper:
 
 ```ts
 const embedCsp = createCspMiddleware({ "frame-ancestors": ["*"] });
-app.get(["/asset/*", "/assets/*"], cors(), embedCsp, handler);
+app.get(["/car/*", "/cars/*"], cors(), embedCsp, handler);
 ```
 
 `createCspMiddleware` merges array directives with the base policy instead of
@@ -133,7 +133,7 @@ In order of precedence:
 4. `ALLOW_ANONYMOUS_USERS=True` in the client's `.env`, which sends no token
    at all and leaves the decision to collection-api
 
-Digipolis uses option 4. Without one of these, the query answers
+Without one of these, the query answers
 `AUTH | NO VALID TOKEN` (401) and the iframe shows an error, not the image.
 
 ::: warning

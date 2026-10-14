@@ -69,7 +69,7 @@ Declared under `elody:scopeToRelationOf` of [Flow Step](#flow-step).
 | Term | Type | How many | Meaning | Used by |
 |---|---|---|---|---|
 | `elody:fromStep` | `xsd:string` | exactly one | The key of the step whose result is attached (on elody:Finalize) or whose relation scopes the search (on elody:StepScope, GraphQL step). | 4 of 8 |
-| `elody:relationType` | `xsd:string` | exactly one | An Elody relation type name (hasProcessor, isRunnerFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
+| `elody:relationType` | `xsd:string` | exactly one | An Elody relation type name (hasPart, isPartFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
 | `elody:filterKey` | `xsd:string` | at most one | The key the scoped search filters on (filterKey). | 1 of 8 |
 
 ### Step Relation
@@ -83,7 +83,7 @@ Declared under `elody:stepRelation` of [Flow Step](#flow-step).
 | `sh:order` |  | at most one | The position among its siblings; order never comes from the position in the file. | 8 of 8 |
 | `elody:to` | `xsd:string` | at most one | The key of the step the relation goes to (to). | 1 of 8 |
 | `elody:toAllOf` | a list | at most one | The keys of the steps the relation goes to, all of them (toAllOf: an RDF list of strings), instead of one elody:to. | 1 of 8 |
-| `elody:relationType` | `xsd:string` | exactly one | An Elody relation type name (hasProcessor, isRunnerFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
+| `elody:relationType` | `xsd:string` | exactly one | An Elody relation type name (hasPart, isPartFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
 | `elody:createWhen` | `xsd:string` | at most one | When the relation is created (createWhen: always), a platform enum value. | 1 of 8 |
 | `elody:metadataField` | a [Relation Metadata Field](#relation-metadata-field) node | any number | A field of the step's form copied onto the relation, in sh:order: elody:formMetadataKey names the form field, elody:relationMetadataKey the relation metadata key, elody:asArray stores it as a list. | 1 of 8 |
 

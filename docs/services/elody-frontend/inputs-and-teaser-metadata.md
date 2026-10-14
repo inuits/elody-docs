@@ -19,7 +19,7 @@ this page is about the other two and about the input fields they hang off.
 A teaser item pairs a value with how to present it. **The key is the join**:
 the frontend walks `teaserMetadata` and looks each item's `key` up in
 `intialValues`. The key defaults to the item's alias, so
-`organization: metaData { … }` displays `intialValues.organization`. Set
+`email: metaData { … }` displays `intialValues.email`. Set
 `key(input:)` only to read a property under another alias (see
 [`key` defaults to the alias](/services/elody-frontend/graphql-driven-ui.md#key-defaults-to-the-alias)).
 
@@ -112,7 +112,7 @@ The base types are `baseTextField`, `baseTextareaField`,
 `baseCsvUploadField`, `baseXmlUploadField`, `baseExcelUploadField`, …).
 
 **The enum is extensible per client.** A client schema can add its own member —
-podiumnet has `userRoleField` and `userFunctionTypeField` — which is how a
+a garage client could add an `employeeRoleField` — which is how a
 field gets a fixed option list without repeating the options in every query.
 
 `InputField` itself carries the behaviour: `validation`, `options`,

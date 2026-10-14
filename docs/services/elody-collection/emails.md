@@ -89,8 +89,8 @@ Because it is a class method, you can render a template without an instance,
 for example to build a body once and send it to many recipients:
 
 ```python
-html_body = MyClientEmailService.render_html_template(
-    MyClientHtmlTemplateName.DIGEST, {"items": items}
+html_body = GarageEmailService.render_html_template(
+    GarageHtmlTemplateName.DIGEST, {"items": items}
 )
 ```
 
@@ -124,18 +124,18 @@ subclass.
 ## Writing a client email service
 
 A client service is a subclass of `BaseEmailService` that lives in the client's
-collection module, for example `api/apps/<client>/services/emails/`. Keep the
+collection module, for example `api/apps/garage/services/emails/`. Keep the
 base class free of client knowledge: the subclass declares its sender, its
 templates, and one method per kind of email.
 
 ### 1. List the templates
 
 ```python
-# api/apps/<client>/services/emails/constants.py
+# api/apps/garage/services/emails/constants.py
 from enum import StrEnum
 
 
-class MyClientHtmlTemplateName(StrEnum):
+class GarageHtmlTemplateName(StrEnum):
     WELCOME = "welcome_mail.html"
     DIGEST = "digest_mail.html"
 ```
@@ -153,22 +153,22 @@ Then add one public method per email. Each method decides the subject, the
 template, and the template variables, and delegates the rest to the base class:
 
 ```python
-# api/apps/<client>/services/emails/email_service.py
+# api/apps/garage/services/emails/email_service.py
 from services.emails import BaseEmailService
 
-from .constants import MyClientHtmlTemplateName
+from .constants import GarageHtmlTemplateName
 
 
-class MyClientEmailService(BaseEmailService):
-    default_sender_email = "my-client-dev@elody.eu"
+class GarageEmailService(BaseEmailService):
+    default_sender_email = "no-reply@garage.example.com"
 
     def send_welcome_email(
         self, recipient_email: str, recipient_name: str, link: str
     ) -> bool:
         return self.send_template_email(
             recipient_email,
-            f"Welcome to My Client, {recipient_name}",
-            MyClientHtmlTemplateName.WELCOME,
+            f"Welcome to the garage, {recipient_name}",
+            GarageHtmlTemplateName.WELCOME,
             {"link": link},
         )
 
@@ -177,10 +177,10 @@ class MyClientEmailService(BaseEmailService):
 ```
 
 ```python
-# api/apps/<client>/services/emails/__init__.py
-from .email_service import MyClientEmailService
+# api/apps/garage/services/emails/__init__.py
+from .email_service import GarageEmailService
 
-__all__ = ["MyClientEmailService"]
+__all__ = ["GarageEmailService"]
 ```
 
 ### 3. Send emails
@@ -189,9 +189,9 @@ Instantiate the service where you need it. Without arguments, the service picks
 up the SMTP configuration from the environment:
 
 ```python
-from apps.my_client.services.emails import MyClientEmailService
+from apps.garage.services.emails import GarageEmailService
 
-email_service = MyClientEmailService()
+email_service = GarageEmailService()
 if not email_service.send_welcome_email(user_email, user_name, redirect_uri):
     log.warning(f"Welcome email to {user_email} was not sent")
 ```
@@ -202,12 +202,11 @@ When the body depends only on the email type, render it inside the service
 method with `send_template_email`, as in `send_welcome_email` above.
 
 When the caller already knows more about the body than the service does, let
-the caller render it and pass the HTML in. Podiumnet does this for update
-notifications: a RabbitMQ queue handler chooses between a manual message, an
-immediate update, and a daily or weekly digest, renders the matching template
-once with `render_html_template`, and then calls
-`send_update_notification(recipient_email, html_body, subject=...)` for each
-recipient.
+the caller render it and pass the HTML in. A "your car is ready for pickup"
+notification is a typical case: a RabbitMQ queue handler sees a work order move
+to `ready_for_pickup`, renders the template once with `render_html_template`,
+and passes the HTML to a service method of its own, such as
+`send_ready_for_pickup(recipient_email, html_body, subject=...)`.
 
 If the caller builds HTML from user input without a template, escape it first,
 for example with `html.escape`.
@@ -246,7 +245,7 @@ The SMTP class is used as a context manager, so the server object is the
 from unittest.mock import patch
 
 import pytest
-from apps.my_client.services.emails import MyClientEmailService
+from apps.garage.services.emails import GarageEmailService
 
 
 @pytest.fixture
@@ -259,22 +258,23 @@ def smtp_server():
 def local_templates(monkeypatch):
     # Templates live at /app/assets/html only inside the container
     monkeypatch.setattr(
-        MyClientEmailService, "template_dir", "<path to client>/assets/html"
+        GarageEmailService, "template_dir", "<path to client>/assets/html"
     )
 
 
 def test_send_welcome_email(smtp_server):
-    assert MyClientEmailService().send_welcome_email(
+    assert GarageEmailService().send_welcome_email(
         "to@example.com", "Ann", "https://example.com"
     )
 
     message = smtp_server.send_message.call_args.args[0]
-    assert message["Subject"] == "Welcome to My Client, Ann"
+    assert message["Subject"] == "Welcome to the garage, Ann"
     assert 'href="https://example.com"' in message.get_body(("html",)).get_content()
 ```
 
 Clear the `SMTP_*` environment variables in tests (for example with
 `monkeypatch.delenv`) so a developer's local environment does not change the
 outcome. The base service tests live in
-`collection-api/api/tests/unit/services/test_email_service.py`, and Podiumnet's
-in `api/apps/podiumnet/tests/test_email_service.py` in its collection module.
+`collection-api/api/tests/unit/services/test_email_service.py`, and a client's
+own tests in its collection module, for example
+`api/apps/garage/tests/test_email_service.py`.

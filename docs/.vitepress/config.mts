@@ -35,6 +35,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Getting Started', link: '/getting-started' },
+          { text: 'The Running Example', link: '/example-domain' },
         ],
       },
       {

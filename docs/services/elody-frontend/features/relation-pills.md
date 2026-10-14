@@ -3,15 +3,15 @@
 A relation pill shows a related entity as a coloured pill with the metadata
 stored *on that relation edge* rendered as small chips inside it.
 
-The case it solves: a user belongs to several organizations, and their
-*function* is stored on the `refOrganizations` edge rather than on either
-entity. Listing the organizations gives `Org A, Org B`, and listing the
-functions gives `programmer, technician` — with no way to tell which function
-belongs to which organization. One pill per relation, carrying its own
+The case it solves: a part fits several car models, and its mounting
+*position* is stored on the `fits_model` edge rather than on either entity.
+Listing the car models gives `Golf, Polo`, and listing the positions gives
+`front, rear` — with no way to tell which position belongs to which car
+model. One pill per relation, carrying its own
 metadata, keeps the pairing visible:
 
 ```
-[ Bruges Arts Centre  (communicatie) (technieker) ]  [ Kantoor  (programmator) ]
+[ Golf  (front) ]  [ Polo  (front) (rear) ]
 ```
 
 It is a [formatter](/services/elody-frontend/formatters.md) — a display shape,
@@ -28,12 +28,12 @@ for the surrounding query shape:
 
 ```graphql
 intialValues {
-  organization: keyValue(
-    key: "refOrganizations"          # the relation type
+  carModel: keyValue(
+    key: "fits_model"                # the relation type
     source: relations
-    keyAsLabel: { origin: metadata, key: "name" } # which metadata of the related entity is the pill label
-    nestedMetadataKeys: ["function"] # which relation-edge metadata becomes the chips
-    formatter: "pill|organization"   # "organization" is the colour lookup key
+    keyAsLabel: { origin: metadata, key: "model" } # which metadata of the related entity is the pill label
+    nestedMetadataKeys: ["position"] # which relation-edge metadata becomes the chips
+    formatter: "pill|carModel"       # "carModel" is the colour lookup key
   )
 }
 ```
@@ -42,9 +42,9 @@ and point a teaser or panel item at that alias:
 
 ```graphql
 teaserMetadata {
-  organization: metaData {
-    label(input: "metadata.labels.organization")
-    valueTranslationKey(input: "metadata.labels.user-function.$value")
+  carModel: metaData {
+    label(input: "metadata.labels.car-model")
+    valueTranslationKey(input: "metadata.labels.part-position.$value")
   }
 }
 ```
@@ -53,13 +53,13 @@ teaserMetadata {
 name and is never translated.
 
 Each chip carries a `title`, so hovering it says what the value *is*
-(`Functie: Programmator`). The name comes from `metadata.labels.<key>` of the
+(`Position: Front`). The name comes from `metadata.labels.<key>` of the
 metadata key the chip was read from, falling back to the raw key when there is
 no translation for it — so listing a key here is enough, there is nothing extra
 to configure.
 
 Listing several keys merges them into that relation's chips, so
-`nestedMetadataKeys: ["roles", "function"]` shows both per organization — each
+`nestedMetadataKeys: ["position", "remark"]` shows both per car model — each
 chip keeps the key it came from, which is what its tooltip names.
 
 Without `nestedMetadataKeys` the value behaves exactly as before: the labels of
@@ -74,15 +74,15 @@ GraphQL service restart is enough, no frontend rebuild.
 ### The relation pill
 
 The lookup key is the part after the `|` in the formatter. With
-`formatter: "pill|organization"`, add an `organization` entry:
+`formatter: "pill|carModel"`, add a `carModel` entry:
 
 ```ts
 export const clientFormattersConfig: FormattersConfig = {
   [CustomFormatterTypes.Pill]: {
-    organization: {
+    carModel: {
       background: "#d6e2f0",
       text: "#1f3a5f",
-      icon: DamsIcons.Building,   // optional, rendered left of the label
+      icon: DamsIcons.Tag,        // optional, rendered left of the label
     },
   },
 };
@@ -92,12 +92,12 @@ Leave it out and the pill falls back to a built-in default, so a relation pill
 is always visible without any client config.
 
 Since the key is arbitrary, one entity can carry differently coloured relation
-pills — `pill|contactOrganization` next to `pill|organization`, each with its
+pills — `pill|workOrder` next to `pill|carModel`, each with its
 own entry.
 
 **Per relation, not per type:** drop the `|type` (`formatter: "pill"`) and the
 lookup key becomes each relation's own lowercased label, so an entry named
-after an organization colours only that organization. Relations without a
+after a car model colours only that model. Relations without a
 matching entry keep the default. Useful for a small fixed set of relations;
 fragile if the labels are user-editable, since renaming the entity silently
 drops its colour.
@@ -110,12 +110,12 @@ entry named after **its own value**, never by the relation's pill type:
 
 ```ts
 [CustomFormatterTypes.Pill]: {
-  programmer:    { background: "#e3f0d6", text: "#2d5a1f" },
-  technician:    { background: "#f2e0cc", text: "#b35200" },
+  front:         { background: "#e3f0d6", text: "#2d5a1f" },
+  rear:          { background: "#f2e0cc", text: "#b35200" },
 },
 ```
 
-Values without an entry keep the white default, so colouring one function and
+Values without an entry keep the white default, so colouring one position and
 leaving the rest alone is fine.
 
 ## Gotchas

@@ -136,7 +136,7 @@ Declared under `elody:hiddenValueFrom` of [Form Field](./forms.md#form-field).
 | Term | Type | How many | Meaning | Used by |
 |---|---|---|---|---|
 | `elody:entityType` | `xsd:string` | at most one | The Elody entity type the step creates or picks; on a taggable, the type tagged. | 8 of 8 |
-| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasProcessor, isRunnerFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
+| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasPart, isPartFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
 | `elody:key` | `xsd:string` | at most one | A platform key: a config entry's name, a filter's document key, a step's key, a card field's value key when it differs from sh:name. | 8 of 8 |
 | `elody:inherited` | `xsd:boolean` | at most one | The hidden field's value is inherited from the related entity (inherited: true). | 1 of 8 |
 
@@ -150,7 +150,7 @@ Declared under `elody:copyValueFromParent` of [Form Field](./forms.md#form-field
 |---|---|---|---|---|
 | `elody:labelKey` | `xsd:string` | at most one | The Elody translation key under which the label is shown. The label text itself is sh:name (property shapes) or rdfs:label (property groups), language-tagged; `generate` writes those texts into the client's translation bundles under this key. Without elody:labelKey the generator mints ui.&lt;type&gt;.&lt;key&gt;. No standard term: SHACL carries label texts, not an application's translation keys. Left out on a property shape that carries no label text: the label key the key itself carries (em:x elody:labelKey, once per client), else metadata.labels.&lt;key&gt;, the key in kebab-case (elody:defaultRule in the meta-shapes). | 8 of 8 |
 | `elody:key` | `xsd:string` | exactly one | A platform key: a config entry's name, a filter's document key, a step's key, a card field's value key when it differs from sh:name. | 8 of 8 |
-| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasProcessor, isRunnerFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
+| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasPart, isPartFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
 
 ### Property Group
 
@@ -174,7 +174,7 @@ Declared under `elody:taggable` of [Property Shape](#property-shape), `elody:tag
 | `sh:order` |  | at most one | The position among its siblings; order never comes from the position in the file. | 8 of 8 |
 | `elody:tag` | `xsd:string` | at most one | The name of the tag (tag: user, group, entity). | 1 of 8 |
 | `elody:entityType` | `xsd:string` | exactly one | The Elody entity type the step creates or picks; on a taggable, the type tagged. | 8 of 8 |
-| `elody:relationType` | `xsd:string` | exactly one | An Elody relation type name (hasProcessor, isRunnerFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
+| `elody:relationType` | `xsd:string` | exactly one | An Elody relation type name (hasPart, isPartFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
 | `elody:tagFilterKey` | `xsd:string` | at most one | The metadata key the typed tag content is searched in (metadataFilterForTagContent). | 2 of 8 |
 | `elody:triggerCharacter` | `xsd:string` | at most one | The character that opens tagging inline (inlineTrigger character: @). | 1 of 8 |
 | `elody:triggerMinCharacters` | `xsd:integer` | at most one | How many characters are typed before suggestions appear (inlineTrigger minCharacters). | 1 of 8 |
@@ -229,7 +229,7 @@ Declared under `elody:tagConfigurationByEntity` of [Taggable](#taggable).
 | Term | Type | How many | Meaning | Used by |
 |---|---|---|---|---|
 | `elody:entityType` | `xsd:string` | at most one | The Elody entity type the step creates or picks; on a taggable, the type tagged. | 8 of 8 |
-| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasProcessor, isRunnerFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
+| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasPart, isPartFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
 | `elody:tagKey` | `xsd:string` | at most one | The configuration entity's metadata key holding the tag (tagMetadataKey). | 1 of 8 |
 | `elody:colorKey` | `xsd:string` | at most one | The configuration entity's metadata key holding the tag's colour (colorMetadataKey). | 1 of 8 |
 | `elody:attributeKeys` |  | at most one | The metadata keys set as attributes of the tag (metadataKeysToSetAsAttribute), an RDF list. | 1 of 8 |

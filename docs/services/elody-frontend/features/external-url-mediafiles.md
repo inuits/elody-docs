@@ -1,8 +1,8 @@
 # External URL Mediafiles
 
 Some material a client wants to attach to an entity does not live in storage:
-a trailer on YouTube, a music fragment on Spotify, a review on a newspaper
-site. A mediafile can stand in for such a link instead of a stored file, by
+a repair video on YouTube, a service bulletin on a manufacturer's site, a
+recall notice on a news site. A mediafile can stand in for such a link instead of a stored file, by
 carrying a reserved `external_url` property and no `filename`.
 
 This is opt-in per client and per mediafile type. Nothing changes for
@@ -16,11 +16,11 @@ The PWA's media viewer reads a fixed set of reserved keys off a mediafile's
 
 A client does not have to name its own property `external_url`: the GraphQL
 alias in `intialValues` is what the viewer reads, and the `key` argument of
-`keyValue` names the source property. So a client whose property is called `trailer_link` writes:
+`keyValue` names the source property. So a client whose property is called `video_link` writes:
 
 ```graphql
 intialValues {
-  external_url: keyValue(key: "trailer_link", source: metadata)
+  external_url: keyValue(key: "video_link", source: metadata)
 }
 ```
 
@@ -122,7 +122,7 @@ with `visibleIf`:
 ```graphql
 visibleIf(input: {
   dependsOn: "mediafile_type"
-  values: ["trailer", "music_fragments", "review"]
+  values: ["repair_video", "service_bulletin", "recall_notice"]
 })
 ```
 

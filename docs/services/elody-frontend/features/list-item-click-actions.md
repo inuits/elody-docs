@@ -66,17 +66,17 @@ is set, because they normally only show for lists inside a parent entity.
 
 ## On an entity list element
 
-`entityListElement` takes the same field. Podiumnet's notification preview
-lists the related production and opens it in a modal:
+`entityListElement` takes the same field. A notification preview can list the
+related work order and open it in a modal:
 
 ```graphql
 entityListElement {
-  label(input: "element-labels.production")
+  label(input: "element-labels.work-order")
   isCollapsed(input: false)
-  entityTypes(input: [production])
+  entityTypes(input: [workOrder])
   baseLibraryMode(input: previewBaseLibrary)
   actionOnClick(input: openInModal)
-  customQuery(input: "GetProductionForNotification")
+  customQuery(input: "GetWorkOrderForNotification")
 }
 ```
 

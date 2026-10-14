@@ -1,7 +1,8 @@
 # Merge Entities
 
-Cataloguers end up with duplicate records — two `person` entities for the same
-author, two manifestations for the same book. Merge turns the pair into one
+Garages end up with duplicate records — the same customer entered once at the
+counter and once over the phone, the same car under two spellings of its
+licence plate. Merge turns the pair into one
 record in a single step: the user selects exactly two entities of the same type
 on any overview, picks which value survives per differing field, and confirms.
 
@@ -15,7 +16,7 @@ survivor.
   side by side and renders a row per field only where the values differ —
   identical values are not worth a decision.
 - **Relations are unioned**, server-side, with no choice offered. Two lists of
-  authors cannot be reconciled by picking one, and a link from the victim to
+  cars cannot be reconciled by picking one, and a link from the victim to
   the survivor is dropped, since duplicates often reference each other.
 - **Inbound references are repointed** automatically. The modal shows only a
   count, fetched after it opens, so it never blocks on the number.
@@ -82,13 +83,13 @@ supplying policies and parsers:
 ```python
 from resources.base.merge import InboundReferenceCountResource, MergeResource
 
-class ElodyMerge(VlaccBaseResource, MergeResource):
+class ElodyMerge(GarageBaseResource, MergeResource):
     @apply_policies(RequestContext(request))
     def post(self, id, spec):
         g.enable_parsers = True
         return self.merge(id, spec)
 
-class ElodyInboundReferenceCount(VlaccBaseResource, InboundReferenceCountResource):
+class ElodyInboundReferenceCount(GarageBaseResource, InboundReferenceCountResource):
     @apply_policies(RequestContext(request))
     def get(self, id, spec):
         return self.inbound_reference_count(id)
@@ -139,28 +140,26 @@ victim, so an inbound reference no declaration covers becomes a dangling id
 that nothing will ever repair — and it fails silently, with a successful
 response.
 
-vlacc derives them from the `_customAttributes.sync` blocks on its validators
-and checks them with `apps/reindexer/verify_reference_declarations.py`, which
-scans the entity collections for ids of a given type and reports every
+One way is to derive them from the `_customAttributes.sync` blocks on the
+client's validators and check them with a script that scans the entity collections for ids of a given type and reports every
 `(collection, property)` that no declaration names. Run that against an
 environment with real data — a type nobody has linked yet passes trivially.
 :::
 
 #### Declaring `sync` blocks on a validator
 
-This is how vlacc does it, and the pattern is worth copying by any client that
-stores references as properties rather than in a `relations` array. A relation
+This pattern is worth copying by any client that stores references as properties rather than in a `relations` array. A relation
 is declared on the validator of the type that participates in it, next to the
 property itself:
 
 ```python
-"ref_authors": {
+"ref_owners": {
     "items": {"minLength": 1, "type": "string"},
     "type": "array",
     "_customAttributes": {
         "sync": {
-            "document_types": [*WORK_TYPES, *EXPRESSION_TYPES, *MANIFESTATION_TYPES],
-            "property": "ref_authors",
+            "document_types": [*CAR_TYPES],
+            "property": "ref_owners",
         },
         "virtual": True,
     },
@@ -176,16 +175,16 @@ collection its object configuration declares, giving one
 Four rules:
 
 - **Declare it on both sides.** The property name is the same on both ends of
-  a relation by convention (`ref_authors` on the corporation *and* on the
-  work), so each validator mirrors every relation it participates in. Merging
-  a corporation needs the corporation's declaration; merging a work needs the
-  work's.
+  a relation by convention (`ref_owners` on the customer *and* on the
+  car), so each validator mirrors every relation it participates in. Merging
+  a customer needs the customer's declaration; merging a car needs the
+  car's.
 - **Use the type-group constants** from `validation/constants.py`
-  (`AUTHORITY_TYPES`, `WORK_TYPES`, `EXPRESSION_TYPES`, `MANIFESTATION_TYPES`)
+  (`PERSON_TYPES`, `CAR_TYPES`, `PART_TYPES`, `WORK_ORDER_TYPES`)
   rather than listing types by hand. A type added to a group is then covered
   everywhere at once.
-- **A one-directional property gets no `sync`.** A corporation has
-  `ref_places`, but a place holds no list of the corporations based there —
+- **A one-directional property gets no `sync`.** A car has
+  `ref_car_model`, but a car model holds no list of the cars of that model —
   there is no inbound reference to find, so there is nothing to declare. Say
   so in a comment; an absent declaration otherwise reads as an oversight.
 - **`sync` is independent of `virtual`.** `virtual` is what makes a property
@@ -197,12 +196,13 @@ Four rules:
   exactly what makes the victim findable.
 
 A type that can reference *anything* has no useful `document_types` list.
-vlacc handles the one case it has — `comment`, via `ref_parent_entity` and
-`ref_tagged_entities` — with a fixed `POLYMORPHIC_REFERENCE_SOURCES` map in
-`apps/vlacc/references.py`, appended to every type's sources.
+The usual case is `comment`, via `ref_parent_entity` and
+`ref_tagged_entities`. Handle it with a fixed `POLYMORPHIC_REFERENCE_SOURCES`
+map, for example in `apps/garage/references.py`, appended to every type's
+sources.
 
 ::: tip
-Write the declarations test-first. `inbound_reference_sources("person")` is a
+Write the declarations test-first. `inbound_reference_sources("customer")` is a
 pure function of the validators, so the expected `(collection, field)` set is
 a plain unit test — and it is much easier to reason about there than through a
 merge.

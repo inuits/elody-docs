@@ -32,9 +32,8 @@ meta-shapes state as a default is left out, and the guide's section on
 defaults says what that is.
 
 ::: info Status
-Developed for the DiSHACLed project (WP3) under epic #165964. The SHACL 1.2 UI
-specification is a W3C Editor's Draft; the results here were measured against
-the draft of 2 October 2026.
+The SHACL 1.2 UI specification is a W3C Editor's Draft; the results here were
+measured against the draft of 2 October 2026.
 :::
 
 ## The pipeline
@@ -185,7 +184,7 @@ The queries a declaration produces end up in `src/ui/sparqlSources.json`
 
 ![A drug whose impacted cell and target organ were found live in the Cell Ontology and Uberon (Ubergraph)](/images/shacl-ui/live-sparql-source.jpg)
 
-In a running DiSHACLed client against
+In a running client against
 [Ubergraph](https://ubergraph.apps.renci.org), through the GraphQL query the
 dropdown sends: a search for "motor neuron" returns the Cell Ontology's motor
 neurons, "heart" the organs of Uberon. A drug linked to one of each shows them

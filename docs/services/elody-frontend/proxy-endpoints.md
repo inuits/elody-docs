@@ -61,9 +61,9 @@ Write the handler, then pass it to `ElodyInstance` in your client's
 
 ```ts
 new ElodyInstance({
-  customModuleConfig: assetEngineElodyConfig,
-  appConfig: assetEngineAppConfig,
-  customTranslations: assetEngineTranslations,
+  customModuleConfig: garageElodyConfig,
+  appConfig: garageAppConfig,
+  customTranslations: garageTranslations,
   customEndpoints: [redirectEndpoint, genericApiRedirectEndpoint],
   // ...
 }).start();
@@ -88,7 +88,7 @@ export const mediafileElodyConfig: ElodyModuleConfig = {
 ```
 
 A client that composes the module gets the endpoints along with it — but only
-if it forwards them. Digipolis, for instance, builds its own module config and
+if it forwards them. A client that builds its own module config, for instance,
 has to pass `endpoints: mediafileElodyConfig.endpoints` through explicitly.
 
 ## Three patterns — pick by response type
@@ -125,8 +125,8 @@ You must pass `session` — that is where the token lives. `clientIp` and
 `clientOrigin` are what make IP and domain whitelisting work, so pass them
 too unless you know the endpoint is session-only.
 
-Subclass it when you want a fixed `baseURL` and named methods, as Digipolis's
-`genericApiRedirectEndpoint` does to forward `/api/entities/*` straight to
+Subclass it when you want a fixed `baseURL` and named methods, as the
+`genericApiRedirectEndpoint` above does to forward `/api/entities/*` straight to
 collection-api:
 
 ```ts
@@ -237,7 +237,7 @@ Verified while writing this page; the list is not exhaustive.
 | `/api/iiif*.json` | elody-mediafile-module | `createProxyMiddleware` | IIIF `info.json` with rewritten `id` |
 | `/api/iiif/*` | elody-mediafile-module | `fetchWithTokenRefresh` + stream | tiles, crops, scaled downloads |
 | `/api/download/csv` | elody-base-graphql | `AuthRESTDataSource` | ordered CSV of an entity's children |
-| `/api/entities/*` | digipolis-dams (client) | `AuthRESTDataSource` subclass | generic method-preserving collection-api passthrough |
+| `/api/entities/*` | client-specific | `AuthRESTDataSource` subclass | generic method-preserving collection-api passthrough |
 
 For how the media viewers consume the first three, see
 [Media Viewers](./features/media-viewers).

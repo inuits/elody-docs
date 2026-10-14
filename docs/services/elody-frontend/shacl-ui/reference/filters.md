@@ -52,7 +52,7 @@ a hidden filter carries a sh:defaultValue, elody:defaultValueAsList true for an 
 | `elody:option` | a [Filter Option](#filter-option) node | any number | A fixed option of a selection filter, offered as declared instead of fetched (elody:optionsType). Its label is elody:labelKey, its value elody:value. | 2 of 8 |
 | `elody:selectionSpread` | `xsd:string` | at most one | The name of a shared fragment that is the filter's selection set (...advancedFilter) in place of the fields asked back one by one; fields with arguments (defaultValue, hidden, tooltip) are still emitted. | 3 of 8 |
 | `elody:keys` | a reference by name | at most one | An ordered RDF list of the keys a filter searches (key: ["a", "b"]) when there are several; elody:key holds one. | 2 of 8 |
-| `elody:optionsKey` | `xsd:string` | at most one | The key searched for the options of a selection filter ("vliz:1\|properties.title.value"). | 7 of 8 |
+| `elody:optionsKey` | `xsd:string` | at most one | The key searched for the options of a selection filter ("pim:1\|properties.name.value"). | 7 of 8 |
 | `elody:optionsMatchExact` | `xsd:boolean` | at most one | Whether the option search matches exactly (match_exact). Default false. | 7 of 8 |
 | `elody:optionsDistinctBy` | `xsd:string` | at most one | The key the option search is made distinct by (distinct_by). | 5 of 8 |
 | `elody:optionsOperator` | `xsd:string` | at most one | The operator of the option search on elody:optionsKey (advancedFilterInputForRetrievingOptions[].operator: or, and). | 1 of 8 |
@@ -151,7 +151,7 @@ Declared under `elody:optionsInput` of [Filter](#filter), `elody:staticFilter` o
 | `elody:inputDistinctBy` | `xsd:string` | at most one | The key the input's matches are made distinct by (distinct_by). | 1 of 8 |
 | `elody:inputResolveDefaultValueToOptionIds` | `xsd:boolean` | at most one | true resolves the input's value (session-$id) to the ids of the options it matches, which become the filter's default (resolveDefaultValueToOptionIds). | 1 of 8 |
 | `elody:inputOperator` | `xsd:string` | at most one | The input's operator (operator: or, and). | 1 of 8 |
-| `elody:bareValues` | `xsd:boolean` | at most one | true writes the input's values as enum values (value: [asset, institution]) rather than strings. | — |
+| `elody:bareValues` | `xsd:boolean` | at most one | true writes the input's values as enum values (value: [car, part]) rather than strings. | — |
 | `elody:valueMapping` | a [Value Mapping](#value-mapping) node | any number | A mapping of the default value, in sh:order: elody:value lists the values, elody:mapping what they become. | 1 of 8 |
 | `elody:lookup` | a [Lookup](#lookup) node | at most one | The join the filter needs before it can match. | 3 of 8 |
 | `sh:order` |  | at most one | The position among its siblings; order never comes from the position in the file. | 8 of 8 |

@@ -3,8 +3,8 @@
 `ViewModesPipeline` renders an entity list as a directed flow, next to the
 list, grid and map view modes: the same entities, laid out left to right as
 cards with lines between them. It suits entity types whose instances build
-on each other — a work and its expressions and manifestations, stages in a
-workflow — where a flat list hides the one thing a user wants to see: what
+on each other — a customer, their cars and each car's work orders, stages
+in a workflow — where a flat list hides the one thing a user wants to see: what
 follows from what.
 
 The entities are the nodes. The edges are relations the entities already
@@ -27,7 +27,7 @@ allowedViewModes {
     input: [
       {
         viewMode: ViewModesPipeline
-        config: [{ key: "edgeRelations", value: ["refWork", "refExpressions"] }]
+        config: [{ key: "edgeRelations", value: ["owned_by", "for_car"] }]
       }
       { viewMode: ViewModesList }
     ]
@@ -56,9 +56,9 @@ view-mode declaration.
 
 For every relation of a listed type on an entity, an edge is drawn **from
 the related entity to the entity carrying the relation**. That matches the
-common pattern of child records pointing at their parent. In the WEMI
-example above, expressions carry `refWork` and manifestations carry
-`refExpressions`, which gives work → expressions → manifestations.
+common pattern of child records pointing at their parent. In the example
+above, cars carry `owned_by` and work orders carry `for_car`, which gives
+customer → cars → work orders.
 
 The edges are read from `relationValues`, so the listing query must select
 it for every type in the flow:
@@ -68,9 +68,9 @@ results {
   id
   uuid
   type
-  ... on Expression {
+  ... on WorkOrder {
     relationValues
-    ...expressionTeaser
+    ...workOrderTeaser
   }
 }
 ```
@@ -103,8 +103,8 @@ Card heights are measured, not guessed, so edges attach to the actual port
 dots. An input port is drawn per relation type a card receives edges on;
 an output port when the card feeds another one.
 
-When the whole flow fits the panel it is centred. When it does not (a work
-with over a hundred manifestations), the first card of the first column is
+When the whole flow fits the panel it is centred. When it does not (a fleet
+customer with over a hundred cars), the first card of the first column is
 brought into view so the reader starts at the beginning of the flow.
 
 ## Cards

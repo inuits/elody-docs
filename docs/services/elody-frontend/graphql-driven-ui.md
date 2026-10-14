@@ -1,6 +1,6 @@
 # GraphQL-Driven UI
 
-The PWA has no hardcoded entity pages. There is no `SensorDetail.vue`, no
+The PWA has no hardcoded entity pages. There is no `CarDetail.vue`, no
 per-client form component, no list of fields in TypeScript. A client describes
 what an entity page looks like *in its GraphQL query*, and the PWA renders it.
 
@@ -58,8 +58,8 @@ entityView {
   column {
     size(size: seventy)
     elements {
-      Vehicles: entityListElement { ... }
-      SensorDetections: entityListElement { ... }
+      Cars: entityListElement { ... }
+      WorkOrders: entityListElement { ... }
     }
   }
   column2: column {
@@ -97,7 +97,7 @@ just a key, not something the PWA looks up.
 
 ## Labels are i18n keys
 
-No label in a query is display text. `label(input: "metadata.labels.serial-number")`
+No label in a query is display text. `label(input: "metadata.labels.licence-plate")`
 is a translation key, and the frontend resolves it:
 
 ```vue
@@ -111,7 +111,7 @@ with the client's own and ships alongside the runtime config. Every `label`,
 
 ::: warning A missing translation key renders as the raw key, silently
 `setupI18n` sets `missingWarn: false` and `fallbackWarn: false`, so a label
-reading `metadata.labels.serial-number` in the UI is not a rendering bug — it is
+reading `metadata.labels.licence-plate` in the UI is not a rendering bug — it is
 a missing key, and there is nothing in the console about it. See
 [When a label shows as `metadata.labels.something`](./translations#when-a-label-shows-as-metadata-labels-something).
 :::
@@ -131,8 +131,8 @@ which is why every client query looks like this:
 ```graphql
 intialValues {
   identifiers:      keyValue(source: root)
-  serial_number:    keyValue(source: metadata)
-  software_version: keyValue(source: metadata)
+  licence_plate:    keyValue(source: metadata)
+  mileage:          keyValue(source: metadata)
   slug:             keyValue(key: "id", source: root)
 }
 ```
@@ -171,16 +171,16 @@ they take the field's alias:
 
 ```graphql
 intialValues {
-  premiere_date: keyValue(source: metadata)
+  planned_date: keyValue(source: metadata)
 }
 # ...
-premiere_date: metaData {
-  label(input: "metadata.labels.premiere-date")
+planned_date: metaData {
+  label(input: "metadata.labels.planned-date")
   inputField(type: baseDateField) { ...inputfield }
 }
 ```
 
-is the same as writing `key: "premiere_date"` and `key(input: "premiere_date")`.
+is the same as writing `key: "planned_date"` and `key(input: "planned_date")`.
 
 An explicit `key` always wins. Keep it whenever the name you read differs from
 the alias you want:
@@ -211,7 +211,7 @@ Two limits:
 
 ::: warning Base version
 The optional `keyValue(key:)` needs baseGraphql 0.10.35 or later. A client
-pinned to an older base-graphql (pza pins 0.8.3) fails codegen without the
+pinned to an older base-graphql fails codegen without the
 `key`, so keep writing it there.
 :::
 
@@ -287,17 +287,17 @@ Two places in a query name the same thing, and nothing errors if they don't:
 
 ```graphql
 intialValues {
-  serial_number: keyValue(source: metadata)       # intialValues alias
+  licence_plate: keyValue(source: metadata)       # intialValues alias
 }
 # ...
-serial_number: metaData {                         # panel key, from the alias
-  label(input: "metadata.labels.serial-number")
+licence_plate: metaData {                         # panel key, from the alias
+  label(input: "metadata.labels.licence-plate")
 }
 ```
 
 The `intialValues` alias becomes the property on `intialValues`. The panel key
 (the panel item's alias, unless it sets `key(input:)`) becomes the vee-validate
-path `intialValues.serial_number`. Giving both the same alias and leaving out
+path `intialValues.licence_plate`. Giving both the same alias and leaving out
 `key` is the simplest way to keep them in step. If they differ, `useField`
 resolves a path that does not exist, the field renders empty, and there is no
 error in the console, in the network tab, or in the GraphQL response. An empty

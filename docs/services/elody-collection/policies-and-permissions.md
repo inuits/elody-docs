@@ -265,14 +265,14 @@ arrays — `authentication` and `authorization`:
 
 ```json
 {
-  "vlacc": {
-    "name": "VLACC",
-    "description": "VLACC specific extensions",
+  "garage": {
+    "name": "Garage",
+    "description": "Garage specific extensions",
     "version": 0.1,
     "author": "Inuits",
     "author_email": "developers@inuits.eu",
     "license": "Proprietary",
-    "resources": ["vlacc", "elody", "mediafile", "marc21", "label"],
+    "resources": ["garage", "elody", "mediafile", "label"],
     "policies": {
       "authentication": [
         "external_api_key_policy",
@@ -334,15 +334,15 @@ The full permission dictionary has the following nested structure:
 ```
 
 - **`<role-name>`** — the role string as it appears in the JWT (e.g. `"admin"`,
-  `"tt-manager"`, `"onderzoeker"`).
+  `"manager"`, `"mechanic"`).
 - **CRUD operations** — `create`, `read`, `update`, `delete`. A role that has
   no key under an operation cannot perform that operation at all.
-- **`<entity-type>`** — the document `type` field (e.g. `"asset"`,
-  `"IotDevice"`, `"mediafile"`). An entity type present but mapping to an
+- **`<entity-type>`** — the document `type` field (e.g. `"car"`,
+  `"workOrder"`, `"mediafile"`). An entity type present but mapping to an
   empty dict `{}` means the role has **unrestricted access** to that type for
   that operation.
 - **`<schema>:<version>`** — a schema identifier such as `"elody:1"`,
-  `"iot:1"`, `"dams:1"`, `"vliz:1"`. The permission handler resolves the
+  `"iot:1"`, `"dams:1"`, `"pim:1"`. The permission handler resolves the
   correct schema block for each document (see
   [Schemas and version resolution](#schemas-and-version-resolution)).
 
@@ -352,22 +352,22 @@ A simple unrestricted admin role looks like this:
 ADMIN = {
     "admin": {
         "create": {
-            "asset":     {},
+            "car":       {},
             "mediafile": {},
             "user":      {},
         },
         "read": {
-            "asset":     {},
+            "car":       {},
             "mediafile": {},
             "user":      {},
         },
         "update": {
-            "asset":     {},
+            "car":       {},
             "mediafile": {},
             "user":      {},
         },
         "delete": {
-            "asset":     {},
+            "car":       {},
             "mediafile": {},
             "user":      {},
         },
@@ -375,7 +375,7 @@ ADMIN = {
 }
 ```
 
-This grants the `admin` role full, unrestricted access to `asset`, `mediafile`,
+This grants the `admin` role full, unrestricted access to `car`, `mediafile`,
 and `user` entities across all four CRUD operations.
 
 ### Object restrictions
@@ -386,39 +386,40 @@ restriction entry follows the format `"<index>:<field-path>"`.
 
 ```python
 "read": {
-    "IotDevice": {
-        "iot:1": {
+    "workOrder": {
+        "pim:1": {
             "object_restrictions": {
-                "0:properties.category.value": ["track&trace"],
-                "1:tenants":                   ["ZONE_ID"],
+                "0:properties.status.value":      ["planned", "in_progress"],
+                "1:properties.assigned_to.value": ["EMPLOYEE_ID"],
             }
         }
     }
 }
 ```
 
-The tt-manager role above may only read `IotDevice` documents whose
-`properties.category.value` is `"track&trace"` **and** whose `tenants` field
-contains the runtime value of `ZONE_ID` (a placeholder; see
+The mechanic role above may only read `workOrder` documents whose
+`properties.status.value` is `"planned"` or `"in_progress"` **and** whose
+`properties.assigned_to.value` field contains the runtime value of
+`EMPLOYEE_ID` (a placeholder; see
 [Placeholders](#placeholders)).
 
 **Index semantics.** The integer prefix (e.g. `0:`, `1:`) is an index that
 groups restriction entries across schemas. Two entries with the same index but
 in different schema blocks are combined with **OR** at query time: either the
-`elody:1` version of the field matches, or the `iot:1` version does. Entries
+`elody:1` version of the field matches, or the `pim:1` version does. Entries
 with different indices are combined with **AND**.
 
 ```python
 "read": {
-    "IotDevice": {
+    "workOrder": {
         "elody:1": {
             "object_restrictions": {
-                "0:properties.category.value": ["track&trace"],
+                "0:properties.assigned_to.value": ["EMPLOYEE_ID"],
             }
         },
-        "iot:1": {
+        "pim:1": {
             "object_restrictions": {
-                "0:properties.category.value": ["track&trace"],
+                "0:properties.assigned_to.value": ["EMPLOYEE_ID"],
             }
         },
     }
@@ -426,7 +427,7 @@ with different indices are combined with **AND**.
 ```
 
 This emits a single filter criterion with key
-`["elody:1|properties.category.value", "iot:1|properties.category.value"]`,
+`["elody:1|properties.assigned_to.value", "pim:1|properties.assigned_to.value"]`,
 matched with OR. See [Advanced Filtering](advanced-filtering.md) for the
 schema-prefixed key format.
 
@@ -452,19 +453,19 @@ document; instead they control which individual fields a role may read or write.
 
 ```python
 "update": {
-    "AssetGroup": {
-        "iot:1": {
+    "part": {
+        "pim:1": {
             "object_restrictions": {
-                "0:properties.area_served.value": ["ZONE_ID"]
+                "0:tenants": ["X_TENANT_ID"]
             },
             "key_restrictions": {
-                "0:id":                          {},
-                "1:properties.area_served.value": {},
-                "2:properties.category.value":    {},
-                "3:properties.date_created.value": {},
-                "4:properties.zones_served.value": {
-                    "properties.zones_served.value": [
-                        "properties.area_served.value"
+                "0:id":                             {},
+                "1:properties.part_number.value":   {},
+                "2:properties.category.value":      {},
+                "3:properties.date_created.value":  {},
+                "4:properties.stock_quantity.value": {
+                    "properties.stock_quantity.value": [
+                        "properties.reorder_level.value"
                     ]
                 },
             },
@@ -481,9 +482,9 @@ role can never modify that field.
 **Non-empty condition** specifies when the restriction applies. The condition
 is a dict of `{ condition_key: [allowed_values] }`. The restriction fires only
 when the document's `condition_key` field matches one of the `allowed_values`.
-In the example above, `properties.zones_served.value` is protected only when
-`properties.zones_served.value` is currently equal to
-`properties.area_served.value` (a self-referencing value lookup; see
+In the example above, `properties.stock_quantity.value` is protected only when
+`properties.stock_quantity.value` is currently equal to
+`properties.reorder_level.value` (a self-referencing value lookup; see
 [Placeholders](#placeholders) for the value-reference mechanism).
 
 **Read behaviour.** When a `key_restriction` fires on a `read` request, the
@@ -498,8 +499,8 @@ with a 403. The response body lists the offending fields:
 ```json
 {
   "message": "...[INSUFFICIENT_PERMISSIONS]... You don't have the permission
-    to create/update/delete the following fields: ['properties.category.value'].",
-  "restricted_keys": ["properties.category.value"]
+    to create/update/delete the following fields: ['properties.part_number.value'].",
+  "restricted_keys": ["properties.part_number.value"]
 }
 ```
 
@@ -507,17 +508,17 @@ with a 403. The response body lists the offending fields:
 
 A field path may contain the element marker `[]` to restrict a key on **each
 element of a list separately**, instead of deleting the list. Without it, a
-path such as `properties.ref_organizations.roles` would strip the whole
-`properties.ref_organizations` property, because the path is resolved two
+path such as `properties.ref_garages.roles` would strip the whole
+`properties.ref_garages` property, because the path is resolved two
 levels deep only.
 
 ```python
 "read": {
     "user": {
-        "podiumnet:1": {
+        "pim:1": {
             "key_restrictions": {
-                "0:properties.ref_organizations[].roles": {
-                    "!properties.ref_organizations[].value": "ORGANIZATION_IDS"
+                "0:properties.ref_garages[].roles": {
+                    "!properties.ref_garages[].value": "GARAGE_IDS"
                 },
             }
         }
@@ -529,15 +530,15 @@ Given a document like:
 
 ```python
 "properties": {
-    "ref_organizations": [
-        {"value": "ORG-1", "roles": ["admin"],  "function": ["technical"]},
-        {"value": "ORG-2", "roles": ["member"], "function": ["technical"]},
+    "ref_garages": [
+        {"value": "garage-1", "roles": ["manager"],  "department": ["workshop"]},
+        {"value": "garage-2", "roles": ["mechanic"], "department": ["workshop"]},
     ]
 }
 ```
 
-a caller whose `ORGANIZATION_IDS` contains only `ORG-2` reads back both
-elements with their `value` and `function` intact, but only `ORG-2` keeps its
+a caller whose `GARAGE_IDS` contains only `garage-2` reads back both
+elements with their `value` and `department` intact, but only `garage-2` keeps its
 `roles`.
 
 **Condition scope.** A condition key carrying the same `<list>[].` prefix is
@@ -574,10 +575,10 @@ lookups are handled.
 Prefix characters appear between the index colon and the field path:
 
 ```
-"0:?properties.alternate_name.value"
+"0:?properties.colour.value"
 "0:!properties.visibility.value"
-"0:!?properties.serial_number.value"
-"0:?relations.isMediafileFor.key@asset-?metadata.closed_deposit.value"
+"0:!?properties.vin.value"
+"0:?relations.isMediafileFor.key@car-?properties.archived.value"
 ```
 
 **`?` — optional key.** The most common prefix. Use it whenever a field may
@@ -585,11 +586,11 @@ legitimately be absent on older or partially migrated documents:
 
 ```python
 "object_restrictions": {
-    "0:?metadata.closed_deposit.value": [False],
+    "0:?properties.archived.value": [False],
 }
 ```
 
-This denies access to closed deposits when the `metadata.closed_deposit.value`
+This denies access to archived documents when the `properties.archived.value`
 field is present and set to a truthy value, but allows access when the field is
 missing entirely.
 
@@ -597,12 +598,12 @@ missing entirely.
 
 ```python
 "key_restrictions": {
-    "0:!properties.category.value": ["track&trace"],
+    "0:!properties.category.value": ["brakes"],
 }
 ```
 
 This protects `properties.category.value` for every document whose category is
-not `"track&trace"`.
+not `"brakes"`.
 
 **`!?` — optionally strict.** The field is optional to exist, but if it does
 exist it must match. If it is absent, access is denied. This is the inverse of
@@ -628,27 +629,27 @@ source document; `!` or `?` before `<remote-key>` modifies how the remote key
 is evaluated.
 
 ```python
-# onderzoeker.py — read asset_part
+# service_advisor.py — read workOrder
 "object_restrictions": {
-    "0:relations.hasAsset.key@asset-?metadata.closed_deposit.value": [False],
+    "0:relations.for_car.key@car-?properties.archived.value": [False],
 }
 ```
 
-This reads the `asset_part`'s `relations.hasAsset.key` field (the id of the
-parent asset), fetches that asset, and checks whether its
-`metadata.closed_deposit.value` is `False`. The `?` before `metadata…` makes
-the remote key optional (allows access if the asset has no `closed_deposit`
+This reads the `workOrder`'s `relations.for_car.key` field (the id of the
+car), fetches that car, and checks whether its
+`properties.archived.value` is `False`. The `?` before `properties…` makes
+the remote key optional (allows access if the car has no `archived`
 field).
 
 ```python
-# iot_device_configuration.py — key_restrictions condition
-"?properties.ref_device_channel.value@IotDeviceChannel-!properties.category.value": [
+# part_configuration.py — key_restrictions condition
+"?properties.ref_superseded_by.value@part-!properties.category.value": [
     "properties.category.value"
 ]
 ```
 
-The restriction condition on `ref_device_channel` fires only when the linked
-`IotDeviceChannel`'s category is *not* the current device's category (the `!`
+The restriction condition on `ref_superseded_by` fires only when the linked
+replacement `part`'s category is *not* the current part's category (the `!`
 on the remote key).
 
 ### Combined restriction values
@@ -659,15 +660,15 @@ condition: the restriction passes if the field value matches **and** an
 additional condition on a different field also matches.
 
 ```python
-# onderzoeker.py — read set
+# service_advisor.py — read mediafile
 "object_restrictions": {
-    "0:metadata.visibility.value": [
+    "0:properties.visibility.value": [
         "public",
-        "not_public",
+        "internal",
         [
             {
                 "private": {
-                    "relations.hasUser.key": "USER_IDS"
+                    "relations.uploaded_by.key": "USER_IDS"
                 }
             }
         ],
@@ -675,9 +676,9 @@ additional condition on a different field also matches.
 }
 ```
 
-This grants access to a `set` document when its `metadata.visibility.value` is
-`"public"` or `"not_public"` (straightforward values in the list), **or** when
-it is `"private"` *and* its `relations.hasUser.key` contains the user's id
+This grants access to a `mediafile` document when its `properties.visibility.value` is
+`"public"` or `"internal"` (straightforward values in the list), **or** when
+it is `"private"` *and* its `relations.uploaded_by.key` contains the user's id
 (the `USER_IDS` placeholder; see [Placeholders](#placeholders)). The nested
 list is the combined branch; plain string entries in the same list are
 independent alternatives.
@@ -702,19 +703,19 @@ The following placeholders are available without any additional configuration:
 Clients register additional placeholders in `apps/permissions.py`:
 
 ```python
-# pza-iot permissions.py
-PLACEHOLDERS = ["ZONE_ID"]
+# permissions.py
+PLACEHOLDERS = ["EMPLOYEE_ID", "GARAGE_IDS"]
 ```
 
 ```python
-# vliz edit_dams_objects.py
+# manager.py
 "object_restrictions": {
-    "0:relations.hasContext.key": "CONTEXT_IDS"
+    "0:relations.works_at.key": "GARAGE_IDS"
 }
 ```
 
-At runtime `CONTEXT_IDS` is replaced with the list of context ids stored in
-`user_context.bag["context_ids"]`.
+At runtime `GARAGE_IDS` is replaced with the list of garage ids stored in
+`user_context.bag["garage_ids"]`.
 
 **String-replace vs. list substitution.** When the placeholder value is a
 string, it replaces the placeholder wherever it appears inside another string.
@@ -724,12 +725,12 @@ string is replaced with the list:
 
 ```python
 # restriction value before substitution
-"CONTEXT_IDS"
+"GARAGE_IDS"
 
-# user_context.bag["context_ids"] = ["ctx-1", "ctx-2"]
+# user_context.bag["garage_ids"] = ["garage-1", "garage-2"]
 
 # restriction value after substitution
-["ctx-1", "ctx-2"]
+["garage-1", "garage-2"]
 ```
 
 **Value references.** A restriction value may also be the dotted path of
@@ -738,16 +739,16 @@ at check time:
 
 ```python
 "key_restrictions": {
-    "6:properties.zones_served.value": {
-        "properties.zones_served.value": [
-            "properties.area_served.value"
+    "6:properties.stock_quantity.value": {
+        "properties.stock_quantity.value": [
+            "properties.reorder_level.value"
         ]
     }
 }
 ```
 
-Here `"properties.area_served.value"` is not a literal string to match; the
-handler looks up `flat_item["properties.area_served.value"]` and uses that as
+Here `"properties.reorder_level.value"` is not a literal string to match; the
+handler looks up `flat_item["properties.reorder_level.value"]` and uses that as
 the expected value. This makes it possible to express cross-field equality
 rules without hard-coding tenant-specific values.
 
@@ -756,7 +757,7 @@ rules without hard-coding tenant-specific values.
 Each entity document carries a `schema.type` and `schema.version` field. The
 permission handler uses these to select the correct restriction block:
 
-1. It builds the key `"<schema.type>:<schema.version>"` (e.g. `"iot:1"`).
+1. It builds the key `"<schema.type>:<schema.version>"` (e.g. `"pim:1"`).
 2. It looks up that key directly in the entity-type's schema dict.
 3. If not found, it walks backwards through the registered schema keys looking
    for one matching `^<schema.type>:[0-9]{1,3}?$` and uses the last match.
@@ -789,17 +790,17 @@ restriction dicts from their `document_info()` method. This keeps shared rules
 in one place and lets multiple roles reference them without duplication.
 
 ```python
-# iot_device_configuration.py (excerpt)
+# part_configuration.py (excerpt)
 def document_info(self):
     return {
         "create_object_restrictions": {
-            "100:?properties.ref_device_channel.value@IotDeviceChannel-properties.category.value": [
+            "100:?properties.ref_superseded_by.value@part-properties.category.value": [
                 "properties.category.value"
             ],
         },
         "crud_key_restrictions": {
             "100:id":                                {},
-            "101:properties.alternate_name.value":   {},
+            "101:properties.part_number.value":      {},
             ...
         },
     }
@@ -808,25 +809,25 @@ def document_info(self):
 A role file imports the configuration mapper and spreads the shared dict:
 
 ```python
-# tt_manager.py (excerpt)
+# mechanic.py (excerpt)
 from configuration import get_object_configuration_mapper
 
-iot_device_crud_key_restrictions = (
+part_crud_key_restrictions = (
     get_object_configuration_mapper()
-    .get("IotDevice")
+    .get("part")
     .document_info()["crud_key_restrictions"]
 )
 
-TT_MANAGER = {
-    "tt-manager": {
+MECHANIC = {
+    "mechanic": {
         "update": {
-            "IotDevice": {
-                "iot:1": {
+            "part": {
+                "pim:1": {
                     "object_restrictions": {
-                        "0:properties.area_served.value": ["ZONE_ID"],
-                        "1:properties.category.value":    ["track&trace"],
+                        "0:tenants":                   ["X_TENANT_ID"],
+                        "1:properties.category.value": ["brakes", "filters", "tyres"],
                     },
-                    "key_restrictions": iot_device_crud_key_restrictions,
+                    "key_restrictions": part_crud_key_restrictions,
                 },
             }
         }
@@ -852,8 +853,8 @@ entry becomes a `selection` filter:
 {
     "lookup":          { ... },        # present for @ relation keys
     "type":            "selection",
-    "key":             ["iot:1|properties.category.value"],
-    "value":           ["track&trace"],
+    "key":             ["pim:1|properties.category.value"],
+    "value":           ["brakes"],
     "match_exact":     True,
     "or":              [],
     "policy_signature": "<STATIC_JWT>",
@@ -985,8 +986,8 @@ and permissions.
   ```json
   {
     "message": "...[INSUFFICIENT_PERMISSIONS]... You don't have the permission
-      to create/update/delete the following fields: ['properties.category.value'].",
-    "restricted_keys": ["properties.category.value"]
+      to create/update/delete the following fields: ['properties.part_number.value'].",
+    "restricted_keys": ["properties.part_number.value"]
   }
   ```
 
@@ -1023,9 +1024,9 @@ ANONYMOUS = {
     "anonymous": {
         "create": {},
         "read": {
-            "asset":     {},
+            "carModel":  {},
+            "part":      {},
             "mediafile": {},
-            "license":   {},
         },
         "update": {},
         "delete": {},
@@ -1033,26 +1034,26 @@ ANONYMOUS = {
 }
 ```
 
-This grants the `anonymous` role read access to `asset`, `mediafile`, and
-`license` documents. The empty `create`, `update`, and `delete` dicts mean
+This grants the `anonymous` role read access to `carModel`, `part`, and
+`mediafile` documents. The empty `create`, `update`, and `delete` dicts mean
 those operations are not available at all. Because each entity-type value is an
 empty dict, no further restrictions apply; every document of those types is
 readable.
 
 ### Object-restricted read with a placeholder
 
-A role that may only read `IotDevice` documents belonging to the user's zone:
+A role that may only read the `workOrder` documents assigned to the user:
 
 ```python
-TT_MONITOR = {
-    "tt-monitor": {
+MECHANIC = {
+    "mechanic": {
         "create": {},
         "read": {
-            "IotDevice": {
-                "iot:1": {
+            "workOrder": {
+                "pim:1": {
                     "object_restrictions": {
-                        "0:properties.category.value": ["track&trace"],
-                        "1:tenants":                   ["ZONE_ID"],
+                        "0:properties.status.value":      ["planned", "in_progress"],
+                        "1:properties.assigned_to.value": ["EMPLOYEE_ID"],
                     }
                 }
             }
@@ -1062,39 +1063,40 @@ TT_MONITOR = {
     }
 }
 
-PLACEHOLDERS = ["ZONE_ID"]
+PLACEHOLDERS = ["EMPLOYEE_ID"]
 ```
 
-The `ZONE_ID` placeholder is replaced at runtime with the zone id stored in
-`user_context.bag["zone_id"]`. A tt-monitor user in zone `"zone:Antwerp"` will
-only ever see `IotDevice` documents whose `tenants` list contains
-`"zone:Antwerp"` **and** whose `properties.category.value` is `"track&trace"`.
+The `EMPLOYEE_ID` placeholder is replaced at runtime with the employee id stored
+in `user_context.bag["employee_id"]`. A mechanic with employee id
+`"employee-42"` will only ever see `workOrder` documents whose
+`properties.assigned_to.value` contains `"employee-42"` **and** whose
+`properties.status.value` is `"planned"` or `"in_progress"`.
 This is enforced both at query time (via the injected filter) and at single-item
 fetch time (via `handle_single_item_request`).
 
 ### Key-restricted update with a conditional
 
-A role that may update `MobileAsset` documents in its zone but cannot modify
-certain fields, except when a cross-field condition applies:
+A role that may update the `workOrder` documents assigned to it but cannot
+modify certain fields, except when a cross-field condition applies:
 
 ```python
-TT_MANAGER = {
-    "tt-manager": {
+MECHANIC = {
+    "mechanic": {
         "update": {
-            "MobileAsset": {
-                "iot:1": {
+            "workOrder": {
+                "pim:1": {
                     "object_restrictions": {
-                        "0:properties.area_served.value": ["ZONE_ID"]
+                        "0:properties.assigned_to.value": ["EMPLOYEE_ID"]
                     },
                     "key_restrictions": {
                         "0:id":                               {},
-                        "1:properties.alternate_name.value":  {},
-                        "2:properties.area_served.value":     {},
+                        "1:properties.title.value":           {},
+                        "2:properties.assigned_to.value":     {},
                         "3:properties.date_created.value":    {},
                         "4:properties.date_modified.value":   {},
-                        "5:properties.zones_served.value": {
-                            "properties.zones_served.value": [
-                                "properties.area_served.value"
+                        "5:properties.labour_hours.value": {
+                            "properties.labour_hours.value": [
+                                "properties.planned_labour_hours.value"
                             ]
                         },
                     },
@@ -1105,41 +1107,41 @@ TT_MANAGER = {
 }
 ```
 
-`id`, `alternate_name`, `area_served`, `date_created`, and `date_modified` are
-unconditionally protected — the tt-manager can never change them. The
-`zones_served` field is protected only when its current value equals
-`properties.area_served.value` on the same document (a cross-field equality
+`id`, `title`, `assigned_to`, `date_created`, and `date_modified` are
+unconditionally protected — the mechanic can never change them. The
+`labour_hours` field is protected only when its current value equals
+`properties.planned_labour_hours.value` on the same document (a cross-field equality
 guard). If a request body attempts to change any of these fields, the response
 is 403 with `restricted_keys` listing the offending fields.
 
 ### Relation lookup with combined values
 
-A role that may read `set` documents based on visibility, with special handling
-for private sets where ownership is checked via a relation:
+A role that may read `mediafile` documents based on visibility, with special
+handling for private mediafiles where ownership is checked via a relation:
 
 ```python
-ONDERZOEKER = {
-    "onderzoeker": {
+SERVICE_ADVISOR = {
+    "service_advisor": {
         "read": {
-            "asset_part": {
-                "dams:1": {
+            "workOrder": {
+                "pim:1": {
                     "object_restrictions": {
-                        "0:relations.hasAsset.key@asset-?metadata.closed_deposit.value": [
+                        "0:relations.for_car.key@car-?properties.archived.value": [
                             False
                         ],
                     }
                 }
             },
-            "set": {
-                "dams:1": {
+            "mediafile": {
+                "pim:1": {
                     "object_restrictions": {
-                        "0:metadata.visibility.value": [
+                        "0:properties.visibility.value": [
                             "public",
-                            "not_public",
+                            "internal",
                             [
                                 {
                                     "private": {
-                                        "relations.hasUser.key": "USER_IDS"
+                                        "relations.uploaded_by.key": "USER_IDS"
                                     }
                                 }
                             ],
@@ -1152,13 +1154,14 @@ ONDERZOEKER = {
 }
 ```
 
-For `asset_part`: the permission handler fetches the parent `asset` via
-`relations.hasAsset.key` and checks `metadata.closed_deposit.value` on it.
-The `?` before `metadata…` allows access when the field is absent on the
-parent. Access is denied only when the parent asset explicitly has
-`closed_deposit` set to `True`.
+For `workOrder`: the permission handler fetches the `car` via
+`relations.for_car.key` and checks `properties.archived.value` on it.
+The `?` before `properties…` allows access when the field is absent on the
+car. Access is denied only when the car explicitly has
+`archived` set to `True`.
 
-For `set`: plain values `"public"` and `"not_public"` are checked first. If the
-set's visibility is `"private"`, the combined branch fires: access is granted
-only when `relations.hasUser.key` contains one of the user's ids (the `USER_IDS`
-placeholder). Private sets owned by someone else are not visible.
+For `mediafile`: plain values `"public"` and `"internal"` are checked first. If
+the mediafile's visibility is `"private"`, the combined branch fires: access is
+granted only when `relations.uploaded_by.key` contains one of the user's ids
+(the `USER_IDS` placeholder). Private mediafiles uploaded by someone else are
+not visible.

@@ -34,20 +34,20 @@ The TypeScript file is a plain map from a permission name you invent to the
 request that would be attempted:
 
 ```ts
-export const pzaIotPermissions: { [key: string]: PermissionRequestInfo } = {
-  "create:zone": {
+export const garagePermissions: { [key: string]: PermissionRequestInfo } = {
+  "create:part": {
     datasource: "CollectionAPI",
     crud: "post",
     uri: `/entities`,
-    body: { type: Entitytyping.Zone },
+    body: { type: Entitytyping.Part },
   },
-  "read:iot-device-anpr:overview": {
+  "read:part-brakes:overview": {
     datasource: "CollectionAPI",
     crud: "post",
     uri: `/entities/filter`,
     body: [
-      { type: "type", value: Entitytyping.IotDevice },
-      { type: "text", key: ["iot:1|properties.category.value"], value: "anpr" },
+      { type: "type", value: Entitytyping.Part },
+      { type: "text", key: ["elody:1|metadata.category.value"], value: "brakes" },
     ],
   },
 };
@@ -58,9 +58,9 @@ The map is handed to [`ElodyInstance`](https://github.com/inuits/elody-base-grap
 contribute — see [Module-contributed permissions](#module-contributed-permissions).
 
 The names are free-form strings. The convention in every existing client is
-`<action>:<subject>[:<qualifier>]`, e.g. `create:zone`,
-`read:asset-group:overview`, `update:asset:field:access`,
-`update:asset-group:remove-ref-assets`. Nothing parses them, so pick a name
+`<action>:<subject>[:<qualifier>]`, e.g. `create:part`,
+`read:work-order:overview`, `update:part:field:price`,
+`update:work-order:remove-used-part`. Nothing parses them, so pick a name
 that says what the gate protects.
 
 ## How a verdict is reached
@@ -107,12 +107,12 @@ query documents. Which argument depends on the surface — see
 [Where a permission can be attached](#where-a-permission-can-be-attached):
 
 ```graphql
-info: panel(panelType: metadata, can: "read:asset:panel:rights") {
-  access: metaData(
-    key: "access"
-    label: "asset.access"
-    readOnly(input: ["update:asset:field:access"])
-    permitted(input: ["read:asset-mediafile:field:deferred_access"])
+info: panel(panelType: metadata, can: "read:part:panel:pricing") {
+  price: metaData(
+    key: "price"
+    label: "part.price"
+    readOnly(input: ["update:part:field:price"])
+    permitted(input: ["read:part:field:price"])
   )
 }
 ```
@@ -163,17 +163,17 @@ in full, so `meta.can` is consumed server-side and replaced with a resolved
 
 ## Entity-scoped permissions
 
-Permissions on a specific record — "may this user edit *this* asset group" —
+Permissions on a specific record — "may this user edit *this* work order" —
 use placeholders in the probe. `$parentEntityId` and `$childEntityId` are
 substituted across the whole config, in the `uri` **and** anywhere in the
 `body`:
 
 ```ts
-"update:asset-group:remove-ref-assets": {
+"update:work-order:remove-used-part": {
   datasource: "CollectionAPI",
   crud: "patch",
   uri: `/entities/$parentEntityId`,
-  body: { relations: [{ key: "$childEntityId", type: "assets" }], type: Entitytyping.AssetGroup },
+  body: { relations: [{ key: "$childEntityId", type: "uses_part" }], type: Entitytyping.WorkOrder },
 },
 ```
 
@@ -253,11 +253,11 @@ resolves per request:
 
 ```ts
 {
-  name: RouteNames.IotDevicesAnpr,
-  path: "/devices-anpr",
+  name: RouteNames.BrakeParts,
+  path: "/parts-brakes",
   meta: {
-    can: ["read:iot-device-anpr:overview"],
-    alternativeRoutes: { operator: "/devices-tt" },
+    can: ["read:part-brakes:overview"],
+    alternativeRoutes: { mechanic: "/work-orders" },
   },
 }
 ```

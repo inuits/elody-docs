@@ -8,8 +8,8 @@ encoded in which function you call rather than in flag combinations you
 have to remember and look up.
 
     filter_json = [
-        type_exact("asset"),
-        text_regex("properties.serial_number.value", r"^lpa1:"),
+        type_exact("car"),
+        text_regex("properties.vin.value", r"^WVW"),
     ]
 
 This is deliberately just structural typing for editor autocomplete and

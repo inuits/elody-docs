@@ -6,7 +6,7 @@ you send. A browser asking for HTML gets the app. A harvester asking for
 `text/turtle` gets the entity as RDF, at the same address.
 
 ```bash
-curl https://<project>.elody.eu/production/PR-6V8VLIHP0 \
+curl https://garage.example.com/workOrder/WO-6V8VLIHP0 \
   -H 'Accept: text/turtle' \
   -H 'Authorization: Bearer <token>'
 ```
@@ -14,11 +14,11 @@ curl https://<project>.elody.eu/production/PR-6V8VLIHP0 \
 ```turtle
 @prefix : <https://elody.eu/> .
 
-<https://<project>.elody.eu/PR-6V8VLIHP0> a :production ;
-    :title "Gezelschappen" ;
-    :status "archived" ;
-    :premiere_date "2026-07-30" ;
-    :refBookingAgency <https://<project>.elody.eu/ORG-JQGB344X> .
+<https://garage.example.com/WO-6V8VLIHP0> a :workOrder ;
+    :title "Annual service" ;
+    :status "done" ;
+    :planned_date "2026-07-30" ;
+    :for_car <https://garage.example.com/CAR-JQGB344X> .
 ```
 
 This works for every client, with no per-client code and no configuration.
@@ -67,7 +67,7 @@ collection-api matches the accept header with an exact string comparison and
 does not parse q-values, so forwarding the client's raw header would fall
 through to JSON.
 
-Entities resolve by **either** identifier — the human id (`PR-6V8VLIHP0`) or
+Entities resolve by **either** identifier — the human id (`WO-6V8VLIHP0`) or
 the uuid — because collection-api matches both against the document's
 `identifiers`.
 
@@ -86,12 +86,12 @@ the entity JSON:
 
 - **Entities are URIs, not blank nodes.** Each subject is `<base>/<id>`, so it
   can be linked to and looked up.
-- **`type` is an RDF class.** `production` becomes `rdf:type :production`
-  instead of an `:type "production"` literal.
+- **`type` is an RDF class.** `workOrder` becomes `rdf:type :workOrder`
+  instead of an `:type "workOrder"` literal.
 - **Metadata are direct predicates.** `{"key": "title", "value": "x"}` becomes
   `:title "x"` instead of an anonymous node with `:key` and `:value`.
 - **Relations point at the related entity's URI**, so the graph can actually be
-  followed: dereferencing `:refBookingAgency` returns the organization whose
+  followed: dereferencing `:for_car` returns the car whose
   subject URI is exactly that reference.
 
 `audit` and `schema` are not published.
@@ -120,7 +120,7 @@ Only values that are **absolute** `http://` or `https://` URIs are accepted;
 anything else — empty, or a path like `/` — is skipped as if unset. Without
 that guard an empty value produces relative identifiers, which rdflib then
 resolves against the process working directory, yielding nonsense like
-`<file:///PR-KC6WGSXST> a <file:///app/api/production>`.
+`<file:///WO-KC6WGSXST> a <file:///app/api/workOrder>`.
 
 In practice none of these need setting.
 

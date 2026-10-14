@@ -1,6 +1,6 @@
 # History Viewer
 
-The history viewer answers the question every cataloguer asks sooner or
+The history viewer answers the question every user asks sooner or
 later: *what happened to this record, and who did it?* Every time an entity
 is saved, Elody keeps a snapshot of it. The history viewer puts two of those
 snapshots side by side and marks what changed between them: edited fields,
@@ -11,7 +11,7 @@ The viewer is for looking, not for editing. Edit mode is switched off while
 it is open, and there is no button to restore an older version: to undo a
 change, open the entity and edit it back.
 
-The screenshots on this page come from a Dutch-language client; the names of
+The screenshots on this page show the Dutch-language interface; the names of
 the editors have been replaced.
 
 ## Using the history viewer
@@ -42,8 +42,7 @@ are highlighted on both sides:
 - on the **older** version, in **red**: the value as it was.
 
 Fields without highlighting are the same in both versions. In the example
-above, the work title and the original language were changed, and the genre
-*Prentenboeken* was removed.
+above, two fields were changed and one relation was removed.
 
 ### Choosing other versions
 
@@ -59,7 +58,8 @@ side.
 
 ### Relations
 
-Relations, such as subjects, genres or linked persons, are shown as chips:
+Relations, such as the car, the assigned mechanic or the parts used, are shown
+as chips:
 
 | Chip                       | Meaning                                                  |
 | -------------------------- | -------------------------------------------------------- |
@@ -68,12 +68,12 @@ Relations, such as subjects, genres or linked persons, are shown as chips:
 | Grey                       | Present in both versions.                                |
 | Orange                     | The related entity itself got another name in between.   |
 
-![Subjects added in version 5 compared with version 4](/images/history-viewer/relations-added.png)
+![Relations added in version 5 compared with version 4](/images/history-viewer/relations-added.png)
 
-![Subjects and a genre removed since version 9](/images/history-viewer/relations-removed.png)
+![Relations removed since version 9](/images/history-viewer/relations-removed.png)
 
 A related entity is shown with the name it had **at the time of that
-version**, not with its current name. If a person or subject was renamed
+version**, not with its current name. If a customer or part was renamed
 between the two versions, the chip is marked in orange: the older side shows
 the previous name, the newer side the current one. That way the history shows
 what the record really looked like at the time.

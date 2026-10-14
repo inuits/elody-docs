@@ -31,7 +31,7 @@ Declared under `elody:fieldsFragment` of [Entity Ui](./entity-ui.md#entity-ui).
 
 ### Window Fragment
 
-`elody:WindowFragment`: A named fragment on WindowElement holding panels several types spread into a window (elody:panelSpread): vlacc's identifier panels of the manifestation family.
+`elody:WindowFragment`: A named fragment on WindowElement holding panels several types spread into a window (elody:panelSpread): e.g. the identifier panels shared by car and carModel.
 
 Declared under `elody:windowFragment` of [Entity Ui](./entity-ui.md#entity-ui).
 
@@ -112,5 +112,5 @@ Declared under `elody:copyKey` of [Copy From Parent](#copy-from-parent).
 |---|---|---|---|---|
 | `elody:key` | `xsd:string` | exactly one | A platform key: a config entry's name, a filter's document key, a step's key, a card field's value key when it differs from sh:name. | 8 of 8 |
 | `elody:fromKey` | `xsd:string` | exactly one | The parent's key a copied field is filled from (keyMap.fromKey). | 1 of 8 |
-| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasProcessor, isRunnerFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
+| `elody:relationType` | `xsd:string` | at most one | An Elody relation type name (hasPart, isPartFor). Open string: client-defined, convention has&lt;X&gt; / is&lt;X&gt;For. On a property shape it names the relation the property reads and writes; without it, sh:path ex:x with sh:class is has&lt;X&gt; and sh:path [ sh:inversePath ex:x ] is is&lt;X&gt;For, the mirror collection-api stores on the other entity. | 8 of 8 |
 | `sh:order` |  | at most one | The position among its siblings; order never comes from the position in the file. | 8 of 8 |

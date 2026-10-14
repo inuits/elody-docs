@@ -340,7 +340,7 @@ Entries support the same anchored glob as the IP list, so `*.example.com`
 whitelists every subdomain in one entry. Two things follow from `*` meaning
 "any characters":
 
-- `*.example.com` matches `a.b.example.com` as well as `museum.example.com`,
+- `*.example.com` matches `a.b.example.com` as well as `garage.example.com`,
   but **not** the apex `example.com` — list that separately if you need it.
 - Keep the dot in the pattern. `*example.com` matches `notexample.com` too,
   which is almost certainly not what you want.

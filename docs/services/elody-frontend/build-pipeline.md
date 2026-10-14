@@ -76,7 +76,7 @@ refer to the same code:
 
 Where this page writes `inuits-dams-pwa` or `dams-frontend:latest` it means the
 literal path or image name you will type — those are not stale prose. Several
-client directories (`vliz-dams`, `coghent-dams`, …) keep the old name too.
+client directories (`<client>-dams`) keep the old name too.
 
 ## 1. Modules publish to Nexus
 

@@ -72,7 +72,7 @@ Declared under `elody:element` of [Elements Fragment](./fragments.md#elements-fr
 | `elody:mediaKind` | an [elody:MediaElementKind](./enumerations.md#elody-mediaelementkind) value | at most one |  | Whether the media element shows the mediafiles or their locations; on a list element, that the list is one of media files (type(input: media)). | 5 of 8 |
 | `elody:windowStatus` | a [Window Status](#window-status) node | at most one |  | The window's status (windowElementStatus(windowElementStatusInput: ...)). | 1 of 8 |
 | `elody:contextMenu` | a [Context Menu](./entity-ui.md#context-menu) node | at most one |  | The card's context menu; on an elody:WindowElement, the window's (contextMenuActions); on an elody:ValuesFragment, the menu of its card twin. | 7 of 8 |
-| `elody:panelSpread` | `xsd:string` | any number |  | A hand-written fragment on WindowElement spread among the window's panels (...manifestationEanGroupPanel). | 1 of 8 |
+| `elody:panelSpread` | `xsd:string` | any number |  | A hand-written fragment on WindowElement spread among the window's panels (...carIdentifierPanel). | 1 of 8 |
 | `elody:actionsOnResult` | a [Actions On Result](#actions-on-result) node | at most one |  | The list's actions on its result, with elody:operation nodes in sh:order. | 1 of 8 |
 | `elody:addEntitiesToForms` | `xsd:boolean` | at most one |  | true passes the list's entities to the forms opened from it (addEntitiesToForms). | 1 of 8 |
 | `elody:cropCoordinatesKey` | `xsd:string` | at most one |  | The metadata key the crop coordinates are saved under: on a modal keyToSaveCropCoordinates, on a media list cropMediafileCoordinatesKey. | 1 of 8 |
@@ -104,7 +104,7 @@ Declared under `elody:panel` of [Element](#element).
 | `elody:field` | a reference by name | any number |  | A field shown in a panel or an overview, referenced by the sh:path IRI of the EntityUi's property shape (R3). On a form source: the resolver field, as a string (see elody:formSourceField). | 8 of 8 |
 | `dash:readOnly` | `xsd:boolean` | at most one |  | The panel or field cannot be edited. | 8 of 8 |
 | `elody:multipleColumns` | `xsd:boolean` | at most one |  | The panel (or property group) may lay its fields out in several columns (canBeMultipleColumns). | 4 of 8 |
-| `elody:can` | `xsd:string` | at most one |  | A fine-grained permission string ("update:pipeline:has-runner"). On a bulk operation or a list element: the permissions it needs; on a panel: the permission editing it needs (can(input: "update:feedback")). Open string: permissions are client-defined. | 5 of 8 |
+| `elody:can` | `xsd:string` | at most one |  | A fine-grained permission string ("update:workOrder:assigned-to"). On a bulk operation or a list element: the permissions it needs; on a panel: the permission editing it needs (can(input: "update:part")). Open string: permissions are client-defined. | 5 of 8 |
 | `elody:spread` | `xsd:string` | any number |  | A hand-written fragment on WindowElementPanel spread into the panel, after its fields (...entityAuditMetadata). | 4 of 8 |
 | `elody:element` | a [Element](#element) node | any number |  | An element in the column; on an elody:Panel, a list element shown among the panel's fields (a panel holding a filtered list of related entities): its sh:order is its position among the panel's items, fields and elements together, counting from 1. *a panel may hold list elements next to its fields* | 8 of 8 |
 | `elody:panelType` | retired | — |  | elody:panelType is retired: use elody:panelKind | — |
@@ -211,7 +211,7 @@ a parent relation names a relation type or an entity type
 | `elody:hierarchyLevel` | a [Hierarchy Level](#hierarchy-level) node | one or more | One level of the tree: elody:key is the relation, elody:entityType the type at that level; ordered by sh:order. | 1 of 8 |
 | `elody:centerEntityType` | `xsd:string` | at most one | The entity type the tree is centred on. | 1 of 8 |
 | `elody:centerCoordinatesKey` | `xsd:string` | exactly one | The metadata key holding the centre point's coordinates. | 1 of 8 |
-| `elody:can` | `xsd:string` | any number | A fine-grained permission string ("update:pipeline:has-runner"). On a bulk operation or a list element: the permissions it needs; on a panel: the permission editing it needs (can(input: "update:feedback")). Open string: permissions are client-defined. | 5 of 8 |
+| `elody:can` | `xsd:string` | any number | A fine-grained permission string ("update:workOrder:assigned-to"). On a bulk operation or a list element: the permissions it needs; on a panel: the permission editing it needs (can(input: "update:part")). Open string: permissions are client-defined. | 5 of 8 |
 
 ### Manifest Viewer Element
 
@@ -355,6 +355,6 @@ Declared under `elody:createField` of [Comments Element](#comments-element).
 | `elody:editButton` | `xsd:boolean` | unchecked | The window offers the edit-metadata button (editMetadataButton). | 3 of 8 |
 | `elody:expandButton` | `xsd:boolean` | unchecked | Offer the expand-to-full-screen button. | 7 of 8 |
 | `elody:panel` | `<n3-36>` | unchecked | A panel in the window. Preferably a sh:PropertyGroup: its fields are then the property shapes whose sh:group is that group, in their own sh:order (SHACL 1.2 UI grouping). An elody:Panel with an explicit elody:field list remains for a panel whose order differs from the properties' sh:order. | 8 of 8 |
-| `elody:panelSpread` | `xsd:string` | unchecked | A hand-written fragment on WindowElement spread among the window's panels (...manifestationEanGroupPanel). | 1 of 8 |
+| `elody:panelSpread` | `xsd:string` | unchecked | A hand-written fragment on WindowElement spread among the window's panels (...carIdentifierPanel). | 1 of 8 |
 | `elody:windowLayout` | an [elody:WindowLayout](./enumerations.md#elody-windowlayout) value | unchecked | How the window lays out its panels (layout). | 4 of 8 |
 | `elody:windowStatus` | a [Window Status](#window-status) node | unchecked | The window's status (windowElementStatus(windowElementStatusInput: ...)). | 1 of 8 |

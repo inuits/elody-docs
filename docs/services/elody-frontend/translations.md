@@ -1,7 +1,7 @@
 # Translations
 
 Almost no user-facing string in Elody is written where it is displayed. GraphQL
-queries carry translation *keys* — `label(input: "metadata.labels.serial-number")` —
+queries carry translation *keys* — `label(input: "metadata.labels.licence-plate")` —
 and the PWA resolves them at render time with `t()`. Adding a label therefore
 always has two halves: the key in the query, and the key in a translation file.
 
@@ -46,7 +46,7 @@ The file is unwrapped by its own name, so `nl.json` must have a single top-level
 {
   "nl": {
     "metadata": {
-      "labels": { "serial-number": "Serienummer" }
+      "labels": { "licence-plate": "Nummerplaat" }
     }
   }
 }
@@ -67,7 +67,7 @@ exported helper:
 ```ts
 import { loadTranslationsFromDirectory } from "base-graphql";
 
-const podiumnetTranslations: Record<string, Object> =
+const garageTranslations: Record<string, Object> =
   loadTranslationsFromDirectory(path.join(__dirname, "translations"));
 ```
 
@@ -75,9 +75,9 @@ and hand the result to the `ElodyInstance` constructor:
 
 ```ts
 new ElodyInstance({
-  customModuleConfig: podiumnetElodyConfig,
-  appConfig: podiumnetAppConfig,
-  customTranslations: podiumnetTranslations,
+  customModuleConfig: garageElodyConfig,
+  appConfig: garageAppConfig,
+  customTranslations: garageTranslations,
   // ...
 }).start();
 ```
@@ -104,7 +104,7 @@ const fullTranslations = mergeObjects([baseTranslations, translations]);
 - everything else in base is kept
 
 That is what lets a client rename a shared concept — `metadata.labels.title`
-becoming "Productietitel" for one tenant — without touching baseGraphql, and it
+becoming "Werkordertitel" for one client — without touching baseGraphql, and it
 is also why a client file only needs the keys it actually changes or adds.
 
 The filter step is `customization.availableLanguages` from the client's app
@@ -135,8 +135,7 @@ translation for it exists.
 
 The fix is to add an `ar.json` to the client's own translations directory. It can
 be nearly empty; it only has to exist so the locale is present in
-`customTranslations`, and the merge then fills in everything from base. UGent
-AICAP, the one client that lists `ar`, does exactly that.
+`customTranslations`, and the merge then fills in everything from base.
 :::
 
 ### 4. Shipped with the app config
@@ -210,8 +209,8 @@ could not resolve and says nothing about it. Nothing appears in the console, the
 network tab, or the GraphQL response. Work down this list:
 
 1. Is the key spelled the same in the query and in the JSON? Keys are
-   kebab-case inside dot-separated namespaces — `metadata.labels.serial-number`,
-   not `serial_number`.
+   kebab-case inside dot-separated namespaces — `metadata.labels.licence-plate`,
+   not `licence_plate`.
 2. Is it in the right file for the locale you are viewing? A key present in
    `en.json` but missing from `nl.json` falls back to `en`, so it renders in the
    wrong language rather than as a raw key — a different symptom of the same

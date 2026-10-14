@@ -28,14 +28,13 @@ service. The whole configuration is the list of form queries:
 ```graphql
 {
   icon: Edit
-  label: "bulk-operations.bulk-edit-works"
+  label: "bulk-operations.bulk-edit-people"
   value: "bulkUpdateMetadata"
   bulkOperationModal: {
     typeModal: BulkOperationsEdit
     formQueries: [
-      "GetFullWorkMapCreateForm"
-      "GetFullWorkWordCreateForm"
-      "GetFullWorkSerialCreateForm"
+      "GetFullCustomerCreateForm"
+      "GetFullEmployeeCreateForm"
     ]
     askForCloseConfirmation: true
     neededPermission: canupdate
@@ -75,7 +74,7 @@ Three steps:
    elody spec resources get this from
    `resources/base/documents.py`, gated on the `edit` bulk operation feature
    in `apps/mappers.py`'s `FEATURES`. A client with its own entities resource
-   does it like vlacc's `ElodyDocuments.put`:
+   does it in that resource's `put`:
 
    ```python
    def put(self, spec):
@@ -91,8 +90,8 @@ Three steps:
    ```python
    from serialization.json_batch import serialize_json_batch
 
-   class MyClientSerializer:
-       def from_applicationjson_to_myclient(self, data, **kwargs):
+   class GarageSerializer:
+       def from_applicationjson_to_garage(self, data, **kwargs):
            return serialize_json_batch(data, **kwargs)
    ```
 

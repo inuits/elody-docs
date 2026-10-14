@@ -445,7 +445,7 @@ Enumeration of the ways Elody can render a listing.
 | `elody:MapView` | map |  | `ViewModesMap` |
 | `elody:MediaView` | media |  | `ViewModesMedia` |
 | `elody:PipelineView` | pipeline |  | `ViewModesPipeline` |
-| `elody:CalendarView` | calendar | Ahead of master: the enum value lives on branch feat/calendar-view-mode (#166680). | `ViewModesCalendar` |
+| `elody:CalendarView` | calendar | Ahead of master: the enum value lives on branch feat/calendar-view-mode. | `ViewModesCalendar` |
 | `elody:TableView` | table |  | `Table` |
 
 ### elody:WindowLayout

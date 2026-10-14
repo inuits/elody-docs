@@ -27,10 +27,10 @@ exactly the same things, once, in Turtle (TTL), and the generator renders the
 GraphQL from it. Nothing about the PWA or baseGraphql changes: the generated
 documents are the documents you would have written.
 
-This guide maps what you write in GraphQL to what you write in TTL, with real
-pairs side by side. Every pair below is taken from the dishacled example in
-`elody-generator/tests/golden/dishacled-example`, and the generator proves in
-its tests that the TTL renders exactly that GraphQL.
+This guide maps what you write in GraphQL to what you write in TTL, with
+pairs side by side. The pairs below are adapted from a golden example in
+elody-generator's tests, where the generator proves that the TTL
+renders exactly that GraphQL.
 
 ## In one sentence
 
@@ -43,55 +43,55 @@ A type's GraphQL file becomes one `elody:EntityUi` node: its properties are the
 
 ```turtle
 @prefix elody: <https://elody.eu/ns/ui#> .        # the vocabulary: what a declaration may say
-@prefix ui:    <https://elody.eu/clients/vlacc/ui#> .   # your client's own names
-@prefix em:    <https://elody.io/ns/metadata#> .   # your metadata keys (em:title = the key "title")
+@prefix ui:    <https://elody.eu/clients/garage/ui#> .   # your client's own names
+@prefix em:    <https://elody.io/ns/metadata#> .   # your metadata keys (em:vin = the key "vin")
 
-ui:WorkUi                        # a subject: a thing with a name
+ui:CarUi                         # a subject: a thing with a name
   a elody:EntityUi ;             # "a" = is of type; ";" = same subject, next predicate
-  elody:graphqlType "Work" ;     # a string value
+  elody:graphqlType "Car" ;      # a string value
   elody:relationValues true ;    # a boolean
   sh:property                    # a predicate with two values, separated by ","
-    [ sh:path em:title ; sh:order 1 ] ,     # "[ ... ]" = an anonymous node, like an object literal
-    [ sh:path em:isbn ; sh:order 2 ] ;
+    [ sh:path em:licence_plate ; sh:order 1 ] ,   # "[ ... ]" = an anonymous node, like an object literal
+    [ sh:path em:vin ; sh:order 2 ] ;
   elody:paginationLimit ( 25 50 100 ) .    # "( ... )" = an ordered list; "." ends the subject
 ```
 
-Names are global: `ui:WorkUi` declared in one file is referenced from any other
+Names are global: `ui:CarUi` declared in one file is referenced from any other
 file. Order never comes from position in the file; it comes from `sh:order`.
-Labels are the same i18n keys as in GraphQL (`metadata.labels.title`).
+Labels are the same i18n keys as in GraphQL (`metadata.labels.vin`).
 
 ## The Rosetta table
 
 | You write in GraphQL | You write in TTL |
 |---|---|
-| `fragment minimalWork on Work { ... }` | `ui:WorkUi a elody:EntityUi ; elody:graphqlType "Work"` with `sh:property` entries |
-| `title: keyValue(key: "title", source: metadata)` | `[ sh:path em:title ; sh:order 1 ]` |
-| `label(input: "metadata.labels.title")` on the field | nothing: the conventional key `metadata.labels.&lt;key&gt;` is the default; `elody:labelKey` only when it differs |
-| `refAuthors: keyValue(key: "refAuthors", source: relations, metadataKeyAsLabel: "name")` | `[ sh:path em:refAuthors ; elody:relationType "refAuthors" ; elody:valueLabelKey "name" ]` |
+| `fragment minimalCar on Car { ... }` | `ui:CarUi a elody:EntityUi ; elody:graphqlType "Car"` with `sh:property` entries |
+| `vin: keyValue(key: "vin", source: metadata)` | `[ sh:path em:vin ; sh:order 1 ]` |
+| `label(input: "metadata.labels.vin")` on the field | nothing: the conventional key `metadata.labels.&lt;key&gt;` is the default; `elody:labelKey` only when it differs |
+| `owned_by: keyValue(key: "owned_by", source: relations, metadataKeyAsLabel: "last_name")` | `[ sh:path em:owned_by ; elody:relationType "owned_by" ; elody:valueLabelKey "last_name" ]` |
 | `slug: keyValue(key: "id", source: root)` | `[ sh:path em:id ; elody:alias "slug" ; elody:source elody:RootSource ]` |
 | a value read on the detail page but not in the listing | `elody:detailOnly true` on the property |
 | `teaserMetadata { title: metaData { label key } }` | the property is on the card unless `elody:teaser false` |
 | `formatter: "pill"` | `shui:viewer elody:PillViewer` |
 | `allowedViewModes { viewModes(input: [...]) }` | `elody:viewMode [ sh:order 1 ; elody:mode elody:ListView ]` |
 | `contextMenuActions { ... }` | `elody:contextMenu [ elody:action [...] ]` |
-| `fragment fullWork on Work { entityView { column { ... } } }` | `elody:detail [ elody:column [ sh:order ; elody:size ; elody:element ... ] ]` |
-| `windowElement { label panels { ... } }` | `[ a elody:WindowElement ; rdfs:label ; elody:panel ui:WorkUi-info ]` |
-| `info: panels { panelHeaderContent ... name: metaData {...} }` | `ui:WorkUi-info a elody:Panel ; elody:alias "info" ; elody:field em:name , em:repository` |
+| `fragment fullCar on Car { entityView { column { ... } } }` | `elody:detail [ elody:column [ sh:order ; elody:size ; elody:element ... ] ]` |
+| `windowElement { label panels { ... } }` | `[ a elody:WindowElement ; rdfs:label ; elody:panel ui:CarUi-info ]` |
+| `info: panels { panelHeaderContent ... vin: metaData {...} }` | `ui:CarUi-info a elody:Panel ; elody:alias "info" ; elody:field em:licence_plate , em:vin` |
 | `inputField(type: baseTextField)` on a panel field or form field | `sh:datatype xsd:string` (a standard SHACL type picks the widget) |
 | `inputField(type: baseDateField)` | `shui:editor shui:DatePickerEditor` |
-| `inputField(type: refAuthorsTypeField)` (a client input field) | `elody:clientInputField "refAuthorsTypeField"` |
+| `inputField(type: ownedByTypeField)` (a client input field) | `elody:clientInputField "ownedByTypeField"` |
 | `validation(input: { value: required })` | `sh:minCount 1` |
 | `validation(input: { value: has_required_relation, ... })` | `elody:validationRule "has_required_relation" ; elody:validationRelationType ; elody:validationAmount` |
 | `entityListElement { ... customQuery customQueryFilters }` | `[ a elody:ListElement ; elody:entityTypes ; elody:relationType ; elody:customQuery ; elody:customQueryFilters ]` |
-| `fragment filtersForWork on Work { advancedFilters { ... } }` | `elody:filter [ sh:order ; elody:alias ; elody:key ; elody:filterKind elody:TextFilter ]` |
-| `type: advancedFilter(type: type) { defaultValue hidden }` | `[ elody:alias "type" ; dash:hidden true ; sh:defaultValue "work" ; elody:filterKind elody:TypeFilter ]` |
-| `fragment workSortOptions on Work { sortOptions { ... } }` | `elody:sortable true` on the property (its label and key become the option) |
-| `fragment workBulkOperations on Work { bulkOperationOptions { ... } }` | `elody:bulkOperation [ elody:operationKind ; elody:context ; elody:modal ]`, or `elody:bulkOperations true` for the empty set |
+| `fragment filtersForCar on Car { advancedFilters { ... } }` | `elody:filter [ sh:order ; elody:alias ; elody:key ; elody:filterKind elody:TextFilter ]` |
+| `type: advancedFilter(type: type) { defaultValue hidden }` | `[ elody:alias "type" ; dash:hidden true ; sh:defaultValue "car" ; elody:filterKind elody:TypeFilter ]` |
+| `fragment carSortOptions on Car { sortOptions { ... } }` | `elody:sortable true` on the property (its label and key become the option) |
+| `fragment carBulkOperations on Car { bulkOperationOptions { ... } }` | `elody:bulkOperation [ elody:operationKind ; elody:context ; elody:modal ]`, or `elody:bulkOperations true` for the empty set |
 | `query GetBulkOperationsForX { CustomBulkOperations { ... } }` | `ui:GetBulkOperationsForX elody:queryName ; elody:operation [...]`, referenced by `elody:customBulkOperations` |
-| `query GetWorkEntities`, `GetWorkFilters`, `GetWorkSortOptions`, `GetWorkBulkOperations` | `elody:documents "entities" , "filters" , "sortOptions" , "bulkOperations"` |
-| a list element's own `query GetManifestations { Entities { results { ... on Manifestation { ...minimalManifestation } } } }` | `ui:GetManifestations a elody:ListQuery ; elody:queryName ; elody:result [ elody:graphqlType "Manifestation" ; elody:fragment "minimalManifestation" ]` |
+| `query GetCarEntities`, `GetCarFilters`, `GetCarSortOptions`, `GetCarBulkOperations` | `elody:documents "entities" , "filters" , "sortOptions" , "bulkOperations"` |
+| a list element's own `query GetWorkOrders { Entities { results { ... on WorkOrder { ...minimalWorkOrder } } } }` | `ui:GetWorkOrders a elody:ListQuery ; elody:queryName ; elody:result [ elody:graphqlType "WorkOrder" ; elody:fragment "minimalWorkOrder" ]` |
 | `query GetEntityPickerListFor...` + its filters | `ui:GetEntityPickerListFor... a elody:Picker ; elody:result [...] ; elody:filter [...]` |
-| `query GetWorkCreateForm { GetDynamicForm { label formTab { formFields { ... } } } }` | `ui:GetWorkCreateForm a elody:Form ; elody:fieldsFrom ui:WorkUi ; elody:fields ( em:title [ sh:path em:isbn ; sh:minCount 1 ] ) ; elody:submit [...]` (or its own `elody:shape`) |
+| `query GetCarCreateForm { GetDynamicForm { label formTab { formFields { ... } } } }` | `ui:GetCarCreateForm a elody:Form ; elody:fieldsFrom ui:CarUi ; elody:fields ( em:licence_plate [ sh:path em:vin ; sh:minCount 1 ] ) ; elody:submit [...]` (or its own `elody:shape`) |
 | `query GetRepetitiveFormForX { GetRepetitiveForm { steps ... } }` | `ui:GetRepetitiveFormForX a elody:GuidedFlow ; elody:step [...] ; elody:finalize [...]` |
 | `queries/<client>.queries.ts` (`fullEntity`, `getEntities`, the menu, the constants) | `ui:<client>App a elody:App ; elody:platformDocument ... ; elody:menuItem [...]` |
 
@@ -103,18 +103,16 @@ generator's README lists the detail elements and the type-wide documents.
 
 ### The listing: `minimal<Type>` becomes the properties
 
-GraphQL (`githubProcessor.queries.ts`):
+GraphQL (`workOrder.queries.ts`):
 
 ```graphql
-fragment minimalGithubProcessor on GithubProcessor {
-  dynamicFormConfig: processorConfig
-  ports
+fragment minimalWorkOrder on WorkOrder {
   intialValues {
     ...typePillsIntialValues
-    name: keyValue(key: "name", source: metadata)
-    repository: keyValue(key: "repository", source: metadata)
+    title: keyValue(key: "title", source: metadata)
+    planned_date: keyValue(key: "planned_date", source: metadata)
     description: keyValue(key: "description", source: metadata)
-    runtime: keyValue(key: "runtime", source: metadata, formatter: "pill|auto")
+    status: keyValue(key: "status", source: metadata, formatter: "pill|auto")
   }
   relationValues
   allowedViewModes {
@@ -128,40 +126,38 @@ fragment minimalGithubProcessor on GithubProcessor {
     forceShowContextMenuActions(input: true)
     contextMenuActions {
       ...basicContextMenuActions
-      configure: doElodyAction {
+      changeStatus: doElodyAction {
         action(input: UpdateMetadata)
-        formQuery(input: "ProcessorRelationConfig")
+        formQuery(input: "WorkOrderStatusForm")
         formFlow(input: Update)
-        formTitle(input: "modals.configureProcessor.title")
-        label(input: "contextMenu.contextMenuElodyAction.configureProcessor")
+        formTitle(input: "modals.changeStatus.title")
+        label(input: "contextMenu.contextMenuElodyAction.changeStatus")
         icon(input: "Settings")
       }
     }
-    name: metaData { label(input: "metadata.labels.name") key(input: "name") colSpan(input: "2") }
+    title: metaData { label(input: "metadata.labels.title") key(input: "title") colSpan(input: "2") }
     description: metaData { label(input: "metadata.labels.description") key(input: "description") colSpan(input: "3") }
   }
   ...minimalBaseEntity
 }
 ```
 
-TTL (`entities/githubProcessor.ui.ttl`):
+TTL (`entities/workOrder.ui.ttl`):
 
 ```turtle
-ui:GithubProcessorUi
+ui:WorkOrderUi
   a elody:EntityUi ;
-  elody:graphqlType "GithubProcessor" ;
+  elody:graphqlType "WorkOrder" ;
   elody:emit "file" ;
   elody:documents "entities" , "filters" , "sortOptions" , "bulkOperations" ;
   elody:typePills true ;
   elody:relationValues true ;
-  elody:dynamicFormConfig "processorConfig" ;
-  elody:ports "ports" ;
   sh:property
-    [ sh:path em:name ; sh:name "name"@en ; sh:order 1 ;
-      shui:propertyRole shui:LabelRole ; elody:labelKey "metadata.labels.name" ; elody:colSpan 2 ; elody:sortable true ] ,
+    [ sh:path em:title ; sh:name "title"@en ; sh:order 1 ;
+      shui:propertyRole shui:LabelRole ; elody:labelKey "metadata.labels.title" ; elody:colSpan 2 ; elody:sortable true ] ,
     [ sh:path em:description ; sh:order 2 ; elody:labelKey "metadata.labels.description" ; elody:colSpan 3 ] ,
-    [ sh:path em:repository ; sh:order 3 ; elody:labelKey "metadata.labels.repository" ; elody:teaser false ] ,
-    [ sh:path em:runtime ; sh:order 4 ; elody:labelKey "metadata.labels.runtime" ;
+    [ sh:path em:planned_date ; sh:order 3 ; elody:labelKey "metadata.labels.planned_date" ; elody:teaser false ] ,
+    [ sh:path em:status ; sh:order 4 ; elody:labelKey "metadata.labels.status" ;
       shui:viewer elody:PillViewer ; elody:viewerArgument "auto" ; elody:detailFormatter false ; elody:teaser false ] ;
   elody:viewMode
     [ sh:order 1 ; elody:mode elody:ListView ; elody:config [ elody:key "multiLine" ; elody:value true ] , [ elody:key "multiLineColumns" ; elody:value 3 ] ] ,
@@ -170,17 +166,17 @@ ui:GithubProcessorUi
     [ elody:forceShow true ;
     elody:includeBasicActions true ;
     elody:action
-      [ sh:order 1 ; elody:alias "configure" ;
-      rdfs:label "contextMenu.contextMenuElodyAction.configureProcessor" ;
+      [ sh:order 1 ; elody:alias "changeStatus" ;
+      rdfs:label "contextMenu.contextMenuElodyAction.changeStatus" ;
       elody:actionKind elody:UpdateMetadataAction ; elody:icon "Settings" ;
-      elody:formFlow "Update" ; elody:formTitle "modals.configureProcessor.title" ;
-      elody:formSourceRef ui:ProcessorRelationConfig ] ] ;
-  elody:formSource ui:ProcessorRelationConfig .
+      elody:formFlow "Update" ; elody:formTitle "modals.changeStatus.title" ;
+      elody:formSourceRef ui:WorkOrderStatusForm ] ] ;
+  elody:formSource ui:WorkOrderStatusForm .
 ```
 
 What to notice:
 
-- One property shape per value. Its `sh:path em:name` is the `key`; the alias
+- One property shape per value. Its `sh:path em:title` is the `key`; the alias
   is only written when it differs from the key (`elody:alias`).
 - A property is read in the listing and shown on the card by default. Leave
   it off the card with `elody:teaser false`; read it on the detail page only
@@ -199,8 +195,8 @@ What to notice:
 GraphQL:
 
 ```graphql
-fragment fullGithubProcessor on GithubProcessor {
-  intialValues { name: keyValue(key: "name", source: metadata) ... }
+fragment fullWorkOrder on WorkOrder {
+  intialValues { title: keyValue(key: "title", source: metadata) ... }
   relationValues
   entityView {
     column {
@@ -209,20 +205,20 @@ fragment fullGithubProcessor on GithubProcessor {
         windowElement {
           label(input: "window-element-labels.info-window")
           expandButtonOptions { shown(input: true) }
-          repoInfo: panels {
-            panelHeaderContent(panelHeaderContentInput: { label: "panel-labels.repository-info" }) { label }
+          intake: panels {
+            panelHeaderContent(panelHeaderContentInput: { label: "panel-labels.intake" }) { label }
             panelType(input: metadata)
             isCollapsed(input: false)
             isEditable(input: false)
-            name: metaData { label(input: "metadata.labels.name") key(input: "name") }
-            repository: metaData { label(input: "metadata.labels.repository") key(input: "repository") }
+            title: metaData { label(input: "metadata.labels.title") key(input: "title") }
+            planned_date: metaData { label(input: "metadata.labels.planned_date") key(input: "planned_date") }
           }
         }
       }
     }
     column2: column {
       size(size: thirty)
-      elements { windowElement { ... importConfig: panels { ... runtime: metaData { ... } } } }
+      elements { windowElement { ... progress: panels { ... status: metaData { ... } } } }
     }
   }
 }
@@ -231,7 +227,7 @@ fragment fullGithubProcessor on GithubProcessor {
 TTL:
 
 ```turtle
-ui:GithubProcessorUi
+ui:WorkOrderUi
   ...
   elody:detail
     [ elody:column
@@ -239,22 +235,22 @@ ui:GithubProcessorUi
       elody:element
         [ a elody:WindowElement ; rdfs:label "window-element-labels.info-window" ; sh:order 1 ;
         elody:expandButton true ;
-        elody:panel ui:GithubProcessorUi-repoInfo , ui:GithubProcessorUi-shaclInfo ] ] ,
+        elody:panel ui:WorkOrderUi-intake , ui:WorkOrderUi-labour ] ] ,
       [ sh:order 2 ; elody:size elody:Width30 ;
       elody:element
-        [ a elody:WindowElement ; rdfs:label "window-element-labels.import-config" ; sh:order 1 ;
+        [ a elody:WindowElement ; rdfs:label "window-element-labels.progress" ; sh:order 1 ;
         elody:expandButton true ;
-        elody:panel ui:GithubProcessorUi-importConfig ] ] ] .
+        elody:panel ui:WorkOrderUi-progress ] ] ] .
 
-ui:GithubProcessorUi-repoInfo
+ui:WorkOrderUi-intake
   a elody:Panel ;
-  rdfs:label "panel-labels.repository-info" ;
+  rdfs:label "panel-labels.intake" ;
   sh:order 1 ;
-  elody:alias "repoInfo" ;
+  elody:alias "intake" ;
   elody:collapsed false ;
   dash:readOnly true ;
   elody:panelKind elody:MetadataPanel ;
-  elody:field em:name , em:repository , em:description , em:url , em:owner , em:language , em:stars , em:defaultBranch .
+  elody:field em:title , em:planned_date , em:description , em:mileage_at_intake .
 ```
 
 What to notice:
@@ -275,20 +271,20 @@ What to notice:
 
 ### A list inside the detail page, with its own documents
 
-GraphQL (`pipeline.queries.ts`):
+GraphQL (`car.queries.ts`):
 
 ```graphql
-processors: entityListElement {
-  label(input: "element-labels.processor-element")
+workOrders: entityListElement {
+  label(input: "element-labels.work-order-element")
   isCollapsed(input: false)
-  entityTypes(input: [githubProcessor])
-  relationType: label(input: "hasProcessor")
+  entityTypes(input: [workOrder])
+  relationType: label(input: "has_work_order")
   customQuery(input: "GetEntities")
-  customQueryFilters(input: "GetRelatedProcessorFilter")
+  customQueryFilters(input: "GetRelatedWorkOrderFilter")
   searchInputType(input: "AdvancedInputType")
-  customBulkOperations(input: "GetProcessorOnPipelineOperations")
-  customQueryEntityPickerList(input: "GetEntityPickerListForProcessorsInPipeline")
-  customQueryEntityPickerListFilters(input: "GetEntityPickerFiltersForProcessorsInPipeline")
+  customBulkOperations(input: "GetWorkOrderOnCarOperations")
+  customQueryEntityPickerList(input: "GetEntityPickerListForWorkOrdersOnCar")
+  customQueryEntityPickerListFilters(input: "GetEntityPickerFiltersForWorkOrdersOnCar")
 }
 ```
 
@@ -296,17 +292,17 @@ TTL:
 
 ```turtle
 [ a elody:ListElement ;
-  rdfs:label "element-labels.processor-element" ;
+  rdfs:label "element-labels.work-order-element" ;
   sh:order 2 ;
-  elody:alias "processors" ;
+  elody:alias "workOrders" ;
   elody:collapsed false ;
-  elody:entityTypes "githubProcessor" ;
-  elody:relationType "hasProcessor" ;
+  elody:entityTypes "workOrder" ;
+  elody:relationType "has_work_order" ;
   elody:searchInput elody:AdvancedSearchInput ;
   elody:customQuery "GetEntities" ;
-  elody:customQueryFilters "GetRelatedProcessorFilter" ;
-  elody:customBulkOperations ui:GetProcessorOnPipelineOperations ;
-  elody:picker ui:GetEntityPickerListForProcessorsInPipeline ]
+  elody:customQueryFilters "GetRelatedWorkOrderFilter" ;
+  elody:customBulkOperations ui:GetWorkOrderOnCarOperations ;
+  elody:picker ui:GetEntityPickerListForWorkOrdersOnCar ]
 ```
 
 The documents the element names are nodes of their own: the picker's list and
@@ -314,17 +310,17 @@ filters queries (`elody:Picker`, with `elody:result` per type and
 `elody:filter`), and the custom bulk operations set (`elody:operation`). When
 a list element has its own `Get<X>` entities query instead of the platform's
 `GetEntities`, that query is an `elody:ListQuery` node declared on the type
-(`elody:listQuery ui:GetManifestations`) and named by `elody:customQuery`.
+(`elody:listQuery ui:GetWorkOrders`) and named by `elody:customQuery`.
 
 ### Filters
 
 GraphQL:
 
 ```graphql
-fragment filtersForGithubProcessor on GithubProcessor {
+fragment filtersForWorkOrder on WorkOrder {
   advancedFilters {
-    type: advancedFilter(type: type) { type defaultValue(value: "githubProcessor") hidden(value: true) }
-    name: advancedFilter(type: text, key: ["elody:1|metadata.name.value"], label: "metadata.labels.name", isDisplayedByDefault: true) {
+    type: advancedFilter(type: type) { type defaultValue(value: "workOrder") hidden(value: true) }
+    title: advancedFilter(type: text, key: ["elody:1|metadata.title.value"], label: "metadata.labels.title", isDisplayedByDefault: true) {
       type key label isDisplayedByDefault tooltip(value: true)
     }
   }
@@ -335,9 +331,9 @@ TTL:
 
 ```turtle
   elody:filter
-    [ sh:order 1 ; elody:alias "type" ; dash:hidden true ; sh:defaultValue "githubProcessor" ; elody:filterKind elody:TypeFilter ] ,
-    [ sh:order 2 ; elody:alias "name" ; rdfs:label "metadata.labels.name" ;
-      elody:key "elody:1|metadata.name.value" ; elody:displayedByDefault true ;
+    [ sh:order 1 ; elody:alias "type" ; dash:hidden true ; sh:defaultValue "workOrder" ; elody:filterKind elody:TypeFilter ] ,
+    [ sh:order 2 ; elody:alias "title" ; rdfs:label "metadata.labels.title" ;
+      elody:key "elody:1|metadata.title.value" ; elody:displayedByDefault true ;
       elody:filterKind elody:TextFilter ; elody:showTooltip true ] ;
 ```
 
@@ -347,8 +343,8 @@ asked back are derived from the kind.
 
 ### Sort options and bulk operations
 
-`githubProcessorSortOptions` with one option on `name` is
-`elody:sortable true` on the `em:name` property: the option's label and value
+`workOrderSortOptions` with one option on `title` is
+`elody:sortable true` on the `em:title` property: the option's label and value
 come from the property. An option that is not a property, or a sort document
 of the client's own, is `elody:sortOption` on the type.
 
@@ -357,12 +353,12 @@ An empty `bulkOperationOptions { options(input: []) }` is
 
 ```turtle
   elody:bulkOperation
-    [ rdfs:label "bulk-operations.create-pipeline" ; sh:order 1 ; elody:icon "Create" ;
+    [ rdfs:label "bulk-operations.create-work-order" ; sh:order 1 ; elody:icon "Create" ;
     elody:operationKind elody:CreateEntityOperation ; elody:primary true ;
     elody:context [ elody:activeViewMode elody:ReadMode ; elody:selection elody:NoneSelected ;
       elody:tooltipLabel "tooltip.bulkOperationsActionBar.readmode-noneselected" ] ;
-    elody:modal [ elody:modalKind elody:DynamicFormModal ; elody:form ui:GetPipelineCreateForm ;
-      elody:formRelationType "isPipelineFor" ; elody:closeConfirmation true ; elody:permission elody:CanCreate ] ] ;
+    elody:modal [ elody:modalKind elody:DynamicFormModal ; elody:form ui:GetWorkOrderCreateForm ;
+      elody:formRelationType "for_car" ; elody:closeConfirmation true ; elody:permission elody:CanCreate ] ] ;
 ```
 
 ### A form: `GetDynamicForm` becomes a shape
@@ -370,14 +366,14 @@ An empty `bulkOperationOptions { options(input: []) }` is
 GraphQL:
 
 ```graphql
-query GetPipelineCreateForm {
+query GetWorkOrderCreateForm {
   GetDynamicForm {
-    label(input: "navigation.create-pipeline")
-    name: formTab {
+    label(input: "navigation.create-work-order")
+    workOrder: formTab {
       formFields {
-        name: metaData {
-          label(input: "metadata.labels.name")
-          key(input: "name")
+        title: metaData {
+          label(input: "metadata.labels.title")
+          key(input: "title")
           inputField(type: baseTextField) { ...inputfield validation(input: { value: required }) { ...validation } }
         }
         description: metaData {
@@ -390,7 +386,7 @@ query GetPipelineCreateForm {
           icon(input: Create)
           actionType(input: submit)
           actionQuery(input: "CreateEntity")
-          creationType(input: pipeline)
+          creationType(input: workOrder)
           showsFormErrors(input: true)
         }
       }
@@ -402,19 +398,19 @@ query GetPipelineCreateForm {
 TTL:
 
 ```turtle
-ui:GetPipelineCreateForm
+ui:GetWorkOrderCreateForm
   a elody:Form ;
-  rdfs:label "navigation.create-pipeline" ;
-  elody:queryName "GetPipelineCreateForm" ;
+  rdfs:label "navigation.create-work-order" ;
+  elody:queryName "GetWorkOrderCreateForm" ;
   elody:shape
     [ sh:property
-      [ sh:path em:name ; sh:name "name"@en ; sh:order 1 ; sh:datatype xsd:string ; sh:maxCount 1 ; sh:minCount 1 ;
-        elody:labelKey "metadata.labels.name" ] ,
+      [ sh:path em:title ; sh:name "title"@en ; sh:order 1 ; sh:datatype xsd:string ; sh:maxCount 1 ; sh:minCount 1 ;
+        elody:labelKey "metadata.labels.title" ] ,
       [ sh:path em:description ; sh:order 2 ; sh:datatype xsd:string ; sh:maxCount 1 ;
         elody:labelKey "metadata.labels.description" ] ] ;
   elody:submit
     [ rdfs:label "actions.labels.create" ; elody:actionQuery "CreateEntity" ;
-    elody:creationType "pipeline" ; elody:icon "Create" ; elody:showsFormErrors true ] .
+    elody:creationType "workOrder" ; elody:icon "Create" ; elody:showsFormErrors true ] .
 ```
 
 A form is plain SHACL: `sh:datatype xsd:string` is the text field,
@@ -423,26 +419,26 @@ field, `shui:editor shui:EnumSelectEditor` with `elody:option` entries (each a
 `elody:labelKey` and an `elody:value`) is a dropdown, and
 `elody:MetadataSelectEditor` or `elody:RelationSelectEditor` select metadata
 or relations (the bindings file maps every editor to its input field type). The type references the
-form with `elody:form ui:GetPipelineCreateForm`; several tabs are
+form with `elody:form ui:GetWorkOrderCreateForm`; several tabs are
 `elody:tab` entries, each with its own shape.
 
 ### A guided flow: `GetRepetitiveForm`
 
 ```turtle
-ui:GetRepetitiveFormForComponent
+ui:GetRepetitiveFormForWorkOrder
   a elody:GuidedFlow ;
-  rdfs:label "repetitiveForm.add-component-title" ;
-  elody:queryName "GetRepetitiveFormForComponent" ;
+  rdfs:label "repetitiveForm.add-work-order-title" ;
+  elody:queryName "GetRepetitiveFormForWorkOrder" ;
   elody:repeatable true ;
   elody:refetchOnFinish true ;
-  elody:finalize [ elody:fromStep "component" ; elody:relationType "hasProcessor" ] ;
+  elody:finalize [ elody:fromStep "workOrder" ; elody:relationType "has_work_order" ] ;
   elody:step
-    [ sh:order 1 ; elody:key "component" ; rdfs:label "repetitiveForm.step-component" ;
-    elody:entityType "githubProcessor" ;
-    elody:form ui:GetPipelineCreateForm ;
-    elody:picker ui:GetEntityPickerListForProcessorsInPipeline ;
-    elody:acceptedTypes "githubProcessor" ; elody:maxSelection 1 ;
-    elody:overviewField [ sh:order 1 ; elody:key "name" ; rdfs:label "metadata.labels.name" ] ,
+    [ sh:order 1 ; elody:key "workOrder" ; rdfs:label "repetitiveForm.step-work-order" ;
+    elody:entityType "workOrder" ;
+    elody:form ui:GetWorkOrderCreateForm ;
+    elody:picker ui:GetEntityPickerListForWorkOrdersOnCar ;
+    elody:acceptedTypes "workOrder" ; elody:maxSelection 1 ;
+    elody:overviewField [ sh:order 1 ; elody:key "title" ; rdfs:label "metadata.labels.title" ] ,
                         [ sh:order 2 ; elody:key "description" ; rdfs:label "metadata.labels.description" ] ] .
 ```
 
@@ -457,16 +453,16 @@ client (`fullEntity`, `getEntities`, `getEntityById`, the menu, the mutations).
 Its declaration is one `elody:App` node in `<client>.ui.ttl`:
 
 ```turtle
-ui:askforceoneApp
+ui:garageApp
   a elody:App ;
-  elody:documentName "askforceone" ;
-  elody:filePath "queries/askforceone.queries.ts" ;
+  elody:documentName "garage" ;
+  elody:filePath "queries/garage.queries.ts" ;
   elody:platformDocument "fullEntity" , "getEntities" , "getTenants" , "getEntityById" , "getAdvancedFilters" , "getFilterOptions" , ... ;
   elody:paginationLimit ( 25 50 100 ) ;
   elody:preferredLanguage true ;
   elody:menuItem
-    [ sh:order 1 ; elody:alias "schedule" ; elody:labelKey "navigation.schedule" ; elody:entityType "scheduleBlock" ; elody:icon "CalendarAlt" ; elody:requiresAuth true ] ,
-    [ sh:order 2 ; elody:alias "questions" ; elody:labelKey "navigation.questions" ; elody:entityType "question" ; elody:icon "Comments" ; elody:requiresAuth true ] .
+    [ sh:order 1 ; elody:alias "workOrders" ; elody:labelKey "navigation.work-orders" ; elody:entityType "workOrder" ; elody:icon "CalendarAlt" ; elody:requiresAuth true ] ,
+    [ sh:order 2 ; elody:alias "customers" ; elody:labelKey "navigation.customers" ; elody:entityType "customer" ; elody:icon "User" ; elody:requiresAuth true ] .
 ```
 
 The type-wide documents are derived from the types: `fullEntity` spreads
@@ -528,7 +524,7 @@ you never write their bodies.
   `meta:FilterShape`, ...). `pnpm compare` reports a term a node may not carry
   as a validation issue with its path.
 - **Look at a client that does it.** `grep -rn "elody:term" clients/*/ui`
-  shows the term in use; vlacc covers nearly everything.
+  shows the term in use.
 - **Nothing fits?** Do not bend the generator for one client. Record the
   construct in `gaps.md`, put the definition out of scope in `scope.json` with
   the gap id, and resolve gaps in batches, test first (a fixture in
@@ -539,8 +535,8 @@ you never write their bodies.
 ## Conventions
 
 - Node names: `ui:<Type>Ui` for a type, `ui:<Type>Ui-<alias>` for its panels,
-  documents by their query name (`ui:GetWorkCreateForm`,
-  `ui:GetManifestations`). One node is declared in exactly one file.
+  documents by their query name (`ui:GetCarCreateForm`,
+  `ui:GetWorkOrders`). One node is declared in exactly one file.
 - Files: `clients/<client>/ui/entities/<type>.ui.ttl` mirrors
   `src/queries/entities/<type>.queries.ts`, including subdirectories;
   `clients/<client>/ui/<client>.ui.ttl` mirrors the platform file.
@@ -566,8 +562,8 @@ Default column. What is left out:
   label text (`sh:name`) is labelled by the key itself when the key carries one
   (`em:computed_title elody:labelKey "metadata.labels.title"`, once per client
   in `keys.ui.ttl`), else `metadata.labels.<key>`, the key in kebab-case
-  (`defaultBranch`, `default_branch` and the v2 schema's
-  `properties.default_branch.value` all give `default-branch`). Write the key
+  (`labourHours`, `labour_hours` and the v2 schema's
+  `properties.labour_hours.value` all give `labour-hours`). Write the key
   on the shape only where it differs from both.
 - **Open panels and elements.** `elody:collapsed` defaults to `false`: write
   it only for a panel or element that starts collapsed.
@@ -598,7 +594,7 @@ Three more things the compact form leaves out, each stated in the ontology:
   and shown on the card; an explicit flag on a property wins. The extractor
   writes the lists when they are shorter than the flags. Two shapes of one key
   (an alias twin: the listing reads `name` as `title`, the detail reads `name`
-  as itself) are declared by name, `sh:property ui:TenantUi-field-title`, and a
+  as itself) are declared by name, `sh:property ui:GarageUi-field-title`, and a
   list names that node; a list item that is a path matches the shapes declared
   inline.
 - **The platform's contexts as presets.** A bulk operation's context is one of
@@ -608,7 +604,7 @@ Three more things the compact form leaves out, each stated in the ontology:
   with other settings stays a node of its own.
 - **A form's fields from the type's properties.** Instead of repeating a
   property shape in the form, the form lists the type's properties:
-  `elody:fieldsFrom ui:BookUi ; elody:fields ( em:title [ sh:path em:isbn ;
+  `elody:fieldsFrom ui:CarUi ; elody:fields ( em:licence_plate [ sh:path em:vin ;
   sh:minCount 1 ] )`. An item takes its input (`sh:datatype`, `shui:editor`,
   `elody:clientInputField`, `sh:class`, as a group) and its label, unit and
   relation from the type's shape unless it says its own; `sh:minCount` and
@@ -640,7 +636,7 @@ Three more things the compact form leaves out, each stated in the ontology:
   client instead.
 - **Order is `sh:order`**, never the position in the file. Two entries with
   the same order render in file order, which the next extraction may change.
-- **A client whose comparison runs against a `ref`** (dishacled) is extracted
+- **A client whose comparison runs against a `ref`** is extracted
   from the export under `out/<client>/source/src`, not from its checkout.
 
 ## Adding a new type: the checklist
