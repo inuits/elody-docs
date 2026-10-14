@@ -563,10 +563,12 @@ a constant default is `sh:defaultValue` on the term's entry, a derived one is
 Default column. What is left out:
 
 - **The label key.** A property shape without `elody:labelKey` and without a
-  label text (`sh:name`) is labelled `metadata.labels.<key>`, the key in
-  kebab-case (`defaultBranch`, `default_branch` and the v2 schema's
+  label text (`sh:name`) is labelled by the key itself when the key carries one
+  (`em:computed_title elody:labelKey "metadata.labels.title"`, once per client
+  in `keys.ui.ttl`), else `metadata.labels.<key>`, the key in kebab-case
+  (`defaultBranch`, `default_branch` and the v2 schema's
   `properties.default_branch.value` all give `default-branch`). Write the key
-  only when the client's convention differs.
+  on the shape only where it differs from both.
 - **Open panels and elements.** `elody:collapsed` defaults to `false`: write
   it only for a panel or element that starts collapsed.
 - **No `sh:name`.** It is documentation derived from the key; the extractor
@@ -594,7 +596,9 @@ Three more things the compact form leaves out, each stated in the ontology:
   for the values the listing reads, `elody:detailFields` for the detail page,
   `elody:cardFields` for the card. Left out, every property is read everywhere
   and shown on the card; an explicit flag on a property wins. The extractor
-  writes the lists when they are shorter than the flags.
+  writes the lists when they are shorter than the flags. Two shapes of one key read
+  differently (an alias twin) keep their flags: a list by path cannot tell
+  them apart.
 - **The platform's contexts as presets.** A bulk operation's context is one of
   four named nodes of the vocabulary when it is the platform's:
   `elody:ReadModeNoneSelectedContext`, `elody:NoneSelectedContext`,
