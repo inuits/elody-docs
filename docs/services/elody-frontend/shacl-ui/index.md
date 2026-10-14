@@ -24,6 +24,10 @@ The [from GraphQL to TTL](./from-graphql-to-ttl.md) guide is for developers
 who know a client's GraphQL and want to write the same thing as a
 declaration: what you write today next to what you write in Turtle, with real
 pairs, the workflow and how to find a term.
+The [reference](./reference/) is generated from the vocabulary and its
+meta-shapes: every kind of node with the terms it carries, their type,
+cardinality and meaning, the enumerations with Elody's binding for each value,
+and the retired terms.
 
 ::: info Status
 Developed for the DiSHACLed project (WP3) under epic #165964. The SHACL 1.2 UI

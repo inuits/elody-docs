@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import referenceSidebar from '../services/elody-frontend/shacl-ui/reference/sidebar.json'
 
 export default defineConfig({
   title: 'Elody Docs',
@@ -82,6 +83,12 @@ export default defineConfig({
                   { text: 'Spec Examples', link: '/services/elody-frontend/shacl-ui/examples' },
                   { text: 'Conformance', link: '/services/elody-frontend/shacl-ui/conformance' },
                   { text: 'From GraphQL to TTL', link: '/services/elody-frontend/shacl-ui/from-graphql-to-ttl' },
+                  {
+                    text: 'Reference',
+                    link: '/services/elody-frontend/shacl-ui/reference/',
+                    collapsed: true,
+                    items: referenceSidebar.slice(1),
+                  },
                 ],
               },
             ],

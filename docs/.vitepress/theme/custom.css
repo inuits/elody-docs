@@ -267,3 +267,17 @@
 .medium-zoom-image--opened {
   z-index: 101;
 }
+
+/* The generated reference (pageClass: reference): wide tables whose Meaning column wraps instead of scrolling. */
+.reference .vp-doc table {
+  display: table;
+  width: 100%;
+  table-layout: auto;
+}
+.reference .vp-doc td,
+.reference .vp-doc th {
+  white-space: normal;
+}
+.reference .vp-doc td:nth-child(1) code {
+  white-space: nowrap;
+}

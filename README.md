@@ -35,3 +35,13 @@ docker run --rm -p 5173:5173 -v "$PWD:/app" \
   -e NPM_CONFIG__AUTH_TOKEN=$NPM_CONFIG__AUTH_TOKEN \
   elody-docs-dev
 ```
+
+## Generated pages
+
+`docs/services/elody-frontend/shacl-ui/reference/` is generated from the Elody UI
+vocabulary and its meta-shapes; do not edit it by hand. Regenerate it from the
+root of elody-common after a change to `elody-ontology` or to the bindings:
+
+```bash
+node elody-generator/bin/elody-ui.js reference --out elody-docs/docs/services/elody-frontend/shacl-ui/reference --declarations elody-declarations/clients --base /services/elody-frontend/shacl-ui/reference/
+```

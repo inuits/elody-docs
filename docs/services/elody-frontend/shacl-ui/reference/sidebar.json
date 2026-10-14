@@ -1,0 +1,62 @@
+[
+  {
+    "text": "Overview",
+    "link": "/services/elody-frontend/shacl-ui/reference/"
+  },
+  {
+    "text": "The type: EntityUi",
+    "link": "/services/elody-frontend/shacl-ui/reference/entity-ui"
+  },
+  {
+    "text": "Properties",
+    "link": "/services/elody-frontend/shacl-ui/reference/properties"
+  },
+  {
+    "text": "The detail page",
+    "link": "/services/elody-frontend/shacl-ui/reference/detail-page"
+  },
+  {
+    "text": "Filters",
+    "link": "/services/elody-frontend/shacl-ui/reference/filters"
+  },
+  {
+    "text": "Bulk operations",
+    "link": "/services/elody-frontend/shacl-ui/reference/bulk-operations"
+  },
+  {
+    "text": "Forms",
+    "link": "/services/elody-frontend/shacl-ui/reference/forms"
+  },
+  {
+    "text": "Guided flows",
+    "link": "/services/elody-frontend/shacl-ui/reference/guided-flows"
+  },
+  {
+    "text": "List queries, pickers and sort documents",
+    "link": "/services/elody-frontend/shacl-ui/reference/list-queries"
+  },
+  {
+    "text": "Previews",
+    "link": "/services/elody-frontend/shacl-ui/reference/previews"
+  },
+  {
+    "text": "Shared fragments",
+    "link": "/services/elody-frontend/shacl-ui/reference/fragments"
+  },
+  {
+    "text": "The app",
+    "link": "/services/elody-frontend/shacl-ui/reference/app"
+  },
+  {
+    "text": "Other nodes",
+    "link": "/services/elody-frontend/shacl-ui/reference/other"
+  },
+  {
+    "text": "Enumerations",
+    "link": "/services/elody-frontend/shacl-ui/reference/enumerations"
+  },
+  {
+    "text": "Retired terms",
+    "link": "/services/elody-frontend/shacl-ui/reference/retired"
+  }
+]

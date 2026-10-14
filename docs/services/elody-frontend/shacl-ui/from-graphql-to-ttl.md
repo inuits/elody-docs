@@ -506,6 +506,9 @@ you never write their bodies.
 
 ## Finding the term
 
+- **Start from the [reference](./reference/):** one section per kind of node, with every term it
+  carries, its type, how many values it takes and what it means, plus the
+  enumerations with Elody's binding for each value.
 - **Is there a standard term?** Prefer `sh:` (SHACL core: path, datatype,
   minCount, order, defaultValue, in) over `shui:` (SHACL-UI: editor, viewer,
   propertyRole) over `dash:` (hidden, readOnly) over `elody:`. The ontology
