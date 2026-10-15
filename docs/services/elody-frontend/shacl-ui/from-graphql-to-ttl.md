@@ -67,7 +67,7 @@ Labels are the same i18n keys as in GraphQL (`metadata.labels.vin`).
 | `fragment minimalCar on Car { ... }` | `ui:CarUi a elody:EntityUi ; elody:graphqlType "Car"` with `sh:property` entries |
 | `vin: keyValue(key: "vin", source: metadata)` | `[ sh:path em:vin ; sh:order 1 ]` |
 | `label(input: "metadata.labels.vin")` on the field | nothing: the conventional key `metadata.labels.&lt;key&gt;` is the default; `elody:labelKey` only when it differs |
-| `owned_by: keyValue(key: "owned_by", source: relations, metadataKeyAsLabel: "last_name")` | `[ sh:path em:owned_by ; elody:relationType "owned_by" ; elody:valueLabelKey "last_name" ]` |
+| `owned_by: keyValue(key: "owned_by", source: relations, keyAsLabel: { origin: metadata, key: "last_name" })` | `[ sh:path em:owned_by ; elody:relationType "owned_by" ; elody:valueLabelKey "last_name" ]` |
 | `slug: keyValue(key: "id", source: root)` | `[ sh:path em:id ; elody:alias "slug" ; elody:source elody:RootSource ]` |
 | a value read on the detail page but not in the listing | `elody:detailOnly true` on the property |
 | `teaserMetadata { title: metaData { label key } }` | the property is on the card unless `elody:teaser false` |
