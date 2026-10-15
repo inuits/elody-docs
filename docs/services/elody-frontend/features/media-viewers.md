@@ -309,7 +309,8 @@ The mimetype dispatch is duplicated verbatim in both. If you change
 [Mirador](https://projectmirador.org/) and
 [TIFY](https://tify.rocks/) in tabs, driven by a `manifestUrl` prop from
 `EntityElementManifestViewer` — not by a mediafile mimetype. Which of the two
-viewers appear is decided by its `viewers` prop.
+viewers appear is decided by its `viewers` prop; see
+[`manifestViewerElement`](../elements/#manifestviewerelement).
 
 **The embedded viewer** is the IIIF viewer on a bare, frameable page for
 external websites. See [Embedded Viewer](./embedded-viewer).

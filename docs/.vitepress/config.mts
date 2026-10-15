@@ -91,6 +91,17 @@ export default defineConfig({
           ],
         },
         {
+          text: 'Page Elements',
+          collapsed: false,
+          items: [
+            { text: 'Overview', link: '/services/elody-frontend/elements/' },
+            { text: 'Window Element', link: '/services/elody-frontend/elements/window' },
+            { text: 'Entity Lists & BaseLibrary', link: '/services/elody-frontend/elements/entity-list' },
+            { text: 'Media Elements', link: '/services/elody-frontend/elements/media' },
+            { text: 'Maps', link: '/services/elody-frontend/elements/map' },
+          ],
+        },
+        {
           text: 'Lists & Views',
           collapsed: false,
           items: [

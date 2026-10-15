@@ -48,6 +48,18 @@ employees, customers, cars, parts and work orders.
 | [Formatters](formatters.md) | Rendering a value as a pill, a link or a chip without changing the value |
 | [Translations](translations.md) | Where labels come from and how base and client translations merge |
 
+## Page elements
+
+What a detail page can hold, and how each element is configured.
+
+| Page | What it covers |
+| --- | --- |
+| [Overview](elements/index.md) | Every element type, plus wysiwyg, comments, hierarchy, graph, Markdown and manifest elements |
+| [Window Element](elements/window.md) | Metadata panels, editing and saving |
+| [Entity Lists & BaseLibrary](elements/entity-list.md) | Related-entity lists, library modes, view modes and overview pages |
+| [Media Elements](elements/media.md) | A mediafile's viewer and an entity's mediafiles |
+| [Maps](elements/map.md) | WKT, heat and point maps, as an element and as a view mode |
+
 ## Features
 
 Each feature page says what the feature does, and then how a client turns it on.

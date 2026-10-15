@@ -93,7 +93,8 @@ Each column's `elements` is an `EntityViewElements` — a bag of optional named
 element types (`windowElement`, `entityListElement`, `wysiwygElement`,
 `mapElement`, `mediaFileElement`, `commentsElement`, …). Same aliasing rule:
 two `entityListElement`s in one column means aliasing them, and the alias is
-just a key, not something the PWA looks up.
+just a key, not something the PWA looks up. Every element type and its
+configuration is in [Page Elements](./elements/).
 
 ## Labels are i18n keys
 
