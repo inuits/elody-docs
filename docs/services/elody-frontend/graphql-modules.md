@@ -121,7 +121,6 @@ In `elody-common` they are checked out under `modules/`.
 | [mediafileModule](#mediafilemodule) | `mediafile-module` | No, but every DAMS client uses it | [inuits/elody-mediafile-module](https://github.com/inuits/elody-mediafile-module) |
 | [importModule](#importmodule) | `import-module` | No | [inuits/elody-import-module](https://github.com/inuits/elody-import-module) |
 | [savedSearchModule](#savedsearchmodule) | `saved-search-module` | No | [inuits/elody-saved-search-module](https://github.com/inuits/elody-saved-search-module) |
-| [advancedSearchModule](#advancedsearchmodule) <Badge type="danger" text="deprecated" /> | `advanced-search-module` | No; no client loads it | [inuits/elody-advanced-search-module](https://github.com/inuits/elody-advanced-search-module) |
 
 ### baseGraphql
 
@@ -209,20 +208,6 @@ It is the example to follow for a module that turns a feature on just by
 being installed. On the collection-api side, the client must register
 `saved_search` as an object configuration first. Otherwise the permission
 check fails and the feature is reported as disabled.
-
-### advancedSearchModule <Badge type="danger" text="deprecated" /> {#advancedsearchmodule}
-
-::: danger Deprecated
-Don't use this module in new clients, and don't add types to it. It will be removed.
-:::
-
-[inuits/elody-advanced-search-module](https://github.com/inuits/elody-advanced-search-module)
-contains only schema: the input types of an older advanced search. It has no
-resolvers, and no client in `elody-common` loads it. Several of its types
-(`FilterInput`, `MinMaxInput`, `TextInput`) also exist in `baseModule`, so it
-falls under the warning above. Filtering is part of baseGraphql now; see
-[Advanced Filtering](/services/elody-collection/advanced-filtering) for the
-backend side.
 
 ## Writing your own module
 
