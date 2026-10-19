@@ -150,6 +150,7 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: 'GraphQL Modules', link: '/services/elody-frontend/graphql-modules' },
+            { text: 'Building a Module', link: '/services/elody-frontend/building-a-module' },
             { text: 'GraphQL Service API Reference', link: '/services/elody-frontend/api-reference' },
             { text: 'Proxy Endpoints', link: '/services/elody-frontend/proxy-endpoints' },
           ],

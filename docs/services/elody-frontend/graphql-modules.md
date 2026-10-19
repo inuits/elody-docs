@@ -225,8 +225,9 @@ check fails and the feature is reported as disabled.
 
 ## Writing your own module
 
-A client's own module, such as `garageModule`, is built the same way as the
-shared ones:
+[Building a Module](building-a-module.md) walks through a shared module from
+an empty repository to a client that runs it. A client's own module, such as
+`garageModule`, is built the same way as the shared ones:
 
 ```ts
 import { createModule } from 'graphql-modules';
