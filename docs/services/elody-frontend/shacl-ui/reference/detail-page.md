@@ -317,7 +317,7 @@ Declared under `elody:createField` of [Comments Element](#comments-element).
 | `sh:order` |  | at most one | The position among its siblings; order never comes from the position in the file. | 8 of 8 |
 | `elody:key` | `xsd:string` | exactly one | A platform key: a config entry's name, a filter's document key, a step's key, a card field's value key when it differs from sh:name. | 8 of 8 |
 | `elody:labelKey` | `xsd:string` | at most one | The Elody translation key under which the label is shown. The label text itself is sh:name (property shapes) or rdfs:label (property groups), language-tagged; `generate` writes those texts into the client's translation bundles under this key. Without elody:labelKey the generator mints ui.&lt;type&gt;.&lt;key&gt;. No standard term: SHACL carries label texts, not an application's translation keys. Left out on a property shape that carries no label text: the label key the key itself carries (em:x elody:labelKey, once per client), else metadata.labels.&lt;key&gt;, the key in kebab-case (elody:defaultRule in the meta-shapes). | 8 of 8 |
-| `elody:clientInputField` | `xsd:string` | at most one | The input field the client registers itself under this name (customInputFields; inputField(type: keywordTypeField)) for editing this property; the generator uses the name and mints no field. Prefer sh:class, sh:in or an editor, which generate the field. | 8 of 8 |
+| `elody:clientInputField` | `xsd:string` | at most one | The input field the client registers itself under this name (its module's inputFields; inputField(type: keywordTypeField)) for editing this property; the generator uses the name and mints no field. Prefer sh:class, sh:in or an editor, which generate the field. | 8 of 8 |
 
 ### List Element
 

@@ -67,8 +67,8 @@ all relations joined into one string.
 
 ## Configuring the colours
 
-Colours come from the client's formatters config (`customFormatters` in the
-GraphQL service's `main.ts`), which the PWA fetches once at startup — a
+Colours come from the client's formatters config (the `formatters` of the
+client's module in its GraphQL service), which the PWA fetches once at startup — a
 GraphQL service restart is enough, no frontend rebuild.
 
 ### The relation pill

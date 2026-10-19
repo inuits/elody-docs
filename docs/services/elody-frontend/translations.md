@@ -57,7 +57,7 @@ A file whose wrapper key does not match its filename — `nl.json` wrapped in
 file and the keys it did find. The other locales still load. Watch the GraphQL
 service log if a whole language is missing.
 
-### 2. A client passes its own into `ElodyInstance`
+### 2. A client ships its own in its module
 
 Client translations live in
 `clients/<client>/client-frontend/inuits-dams-graphql-service/src/translations/`,
@@ -71,20 +71,22 @@ const garageTranslations: Record<string, Object> =
   loadTranslationsFromDirectory(path.join(__dirname, "translations"));
 ```
 
-and hand the result to the `ElodyInstance` constructor:
+and set the result as the `translations` of the client's module:
 
 ```ts
-new ElodyInstance({
-  customModuleConfig: garageElodyConfig,
-  appConfig: garageAppConfig,
-  customTranslations: garageTranslations,
+export const garageModule = defineElodyModule({
+  name: 'garageModule',
+  translations: garageTranslations,
   // ...
-}).start();
+});
 ```
 
-`ElodyInstance` forwards `customTranslations` to the app-config endpoint — it is one of
-the four arguments in the `configsEndoint` slot of
-`defaultElodyEndpointVariableMapping`. Nothing else in baseGraphql reads them.
+Shared modules can ship translations the same way. `ElodyInstance`
+deep-merges the `translations` of every module in the `modules` list (later
+modules win per key, so the client's own module, listed last, has the final
+say) and forwards the result to the app-config endpoint — it is one of the
+arguments in the `configsEndoint` slot of `defaultElodyEndpointVariableMapping`.
+Nothing else in baseGraphql reads them.
 
 ### 3. Merge, then filter
 
@@ -117,7 +119,7 @@ availableLanguages: ["en", "nl"],
 Locales outside that list are dropped from the payload. If the list is absent,
 everything merged is shipped.
 
-::: warning The `availableLanguages` check tests the client's files, not the merged set
+::: warning The `availableLanguages` check tests the modules' translations, not the merged set
 ```ts
 includedTranslationKeys.forEach((key: string) => {
   if (!(key in translations)) {
@@ -128,14 +130,14 @@ includedTranslationKeys.forEach((key: string) => {
 });
 ```
 
-`translations` there is the *client's* object, not `fullTranslations`. So listing
-a locale that baseGraphql ships but the client does not — `ar` is the live example
+`translations` there is the *modules'* merged object, not `fullTranslations`. So listing
+a locale that baseGraphql ships but no module does — `ar` is the live example
 — logs an error and drops the language entirely, even though a complete base
 translation for it exists.
 
 The fix is to add an `ar.json` to the client's own translations directory. It can
 be nearly empty; it only has to exist so the locale is present in
-`customTranslations`, and the merge then fills in everything from base.
+the modules' translations, and the merge then fills in everything from base.
 :::
 
 ### 4. Shipped with the app config
@@ -228,7 +230,7 @@ network tab, or the GraphQL response. Work down this list:
 | [`translations/loadTranslations.ts`](https://github.com/inuits/elody-base-graphql/blob/master/translations/loadTranslations.ts) | elody-base-graphql | `loadTranslationsFromDirectory`, filename-is-locale |
 | [`translations/*.json`](https://github.com/inuits/elody-base-graphql/tree/master/translations) | elody-base-graphql | the shared set (`en`, `nl`, `ar`) |
 | [`endpoints/appConfigEndpoint.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/appConfigEndpoint.ts) | elody-base-graphql | `getAvailableTranslations`, `/api/app-configs` |
-| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql | `customTranslations` → `configsEndoint` |
+| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql merged module `translations` → `configsEndoint` |
 | `src/translations/*.json` | each client | client overrides and additions |
 | [`src/helpers.ts`](https://github.com/inuits/elody-pwa/blob/master/src/helpers.ts) | elody-pwa | `setupI18n`, `getApplicationDetails` |
 | [`src/main.ts`](https://github.com/inuits/elody-pwa/blob/master/src/main.ts) | elody-pwa | installs i18n and validation messages at startup |

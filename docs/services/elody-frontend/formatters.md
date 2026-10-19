@@ -26,8 +26,9 @@ Most `source`s accept a formatter: `metadata`, `repeatableMetadata`, `root`,
 ## Where the colours come from
 
 The string after the `|` is a **lookup key into the client's formatters
-config**, exported from the client's GraphQL service and passed as
-`customFormatters`:
+config**, exported from the client's GraphQL service and set as the
+`formatters` of the client's module (it reaches resolvers as
+`customFormatters` on the GraphQL context):
 
 ```ts
 // clients/<client>/client-frontend/inuits-dams-graphql-service/src/<client>FormattersConfig.ts

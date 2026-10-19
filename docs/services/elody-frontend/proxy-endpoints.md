@@ -24,12 +24,13 @@ mounts handlers in a fixed order:
 
 1. **`defaultElodyEndpointMapping`** — the base endpoints every client gets:
    auth, upload, download, export, XLSX export, health, version, app configs.
-2. **`fullElodyConfig.endpoints`** — module endpoints, contributed by whichever
-   modules the client composes (for example `mediafileElodyConfig.endpoints`).
+2. **Module endpoints** — the `endpoints` of every module in the client's
+   `modules` list, in list order. The shared modules come first (for example
+   `mediafileModule`'s upload and download routes), the client's own module
+   last.
 3. **SEO** (only if `features.SEO`) and **Prometheus** (only if `promUrl` is
    not `no-prom`).
-4. **`customEndpoints`** — the client's own.
-5. **`configureFrontendForEnvironment(app, viteServer)`** — the frontend
+4. **`configureFrontendForEnvironment(app, viteServer)`** — the frontend
    handler.
 
 ::: warning The frontend handler is mounted last, and it catches everything
@@ -37,7 +38,7 @@ Anything not claimed by an earlier handler is answered by the SPA. A proxy
 registered outside this flow, or one whose path the frontend also claims,
 silently returns `index.html` — you get a 200 with HTML where you expected
 JSON or bytes, which is a confusing failure mode. If a new endpoint "does
-nothing", check that it is registered in one of the four slots above.
+nothing", check that it is registered as a base or module endpoint.
 :::
 
 Express is first-match-wins, so two handlers on overlapping paths mean the
@@ -48,48 +49,43 @@ serving different paths, not a conflict. Compare the paths.
 
 ## Setting one up
 
-Both registration paths use the same signature:
+An endpoint is a function with this signature:
 
 ```ts
 (app: Express, environment: Environment) => void
 ```
 
-### As a client endpoint
+### In a module
 
-Write the handler, then pass it to `ElodyInstance` in your client's
-`inuits-dams-graphql-service/src/main.ts`:
+Add it to the `endpoints` of a module. For a client endpoint that is the
+client's own module, in its GraphQL service:
 
 ```ts
-new ElodyInstance({
-  customModuleConfig: garageElodyConfig,
-  appConfig: garageAppConfig,
-  customTranslations: garageTranslations,
-  customEndpoints: [redirectEndpoint, genericApiRedirectEndpoint],
+export const garageModule = defineElodyModule({
+  name: 'garageModule',
   // ...
-}).start();
+  endpoints: [redirectEndpoint, genericApiRedirectEndpoint],
+});
 ```
 
-### As a module endpoint
-
-Module authors add to the `endpoints` array on their `ElodyModuleConfig`, as
+A shared module does the same, as
 [`mediafileModule.ts`](https://github.com/inuits/elody-mediafile-module/blob/main/mediafileModule.ts)
 does:
 
 ```ts
-export const mediafileElodyConfig: ElodyModuleConfig = {
-  modules: [mediafileModule],
-  dataSources: { /* ... */ },
+const mediafileModule = defineElodyModule({
+  name: 'mediafileModule',
+  // ...
   endpoints: [
     (app) => applyUploadEndpoint(app),
-    (app, env) => applyDownloadZipEndpoint(app),
-    (app, env) => applyMediaFileEndpoint(app, env),
+    (app) => applyDownloadZipEndpoint(app),
+    (app, environment) => applyMediaFileEndpoint(app, environment),
   ],
-};
+});
 ```
 
-A client that composes the module gets the endpoints along with it — but only
-if it forwards them. A client that builds its own module config, for instance,
-has to pass `endpoints: mediafileElodyConfig.endpoints` through explicitly.
+A client that lists the module in `modules` gets its endpoints along with it;
+there is nothing to forward.
 
 ## Three patterns — pick by response type
 
@@ -248,7 +244,8 @@ For how the media viewers consume the first three, see
 
 | File | Repo | Role |
 | --- | --- | --- |
-| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql | `ElodyInstance`, registration order, custom endpoints |
+| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql | `ElodyInstance`, registration order |
+| [`helpers/elodyModule.ts`](https://github.com/inuits/elody-base-graphql/blob/master/helpers/elodyModule.ts) | elody-base-graphql | module `endpoints`, collected in module order |
 | [`sources/defaultElodyEndpointMapping.ts`](https://github.com/inuits/elody-base-graphql/blob/master/sources/defaultElodyEndpointMapping.ts) | elody-base-graphql | the base endpoint set |
 | [`endpoints/fetchWithToken.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/fetchWithToken.ts) | elody-base-graphql | `fetchWithTokenRefresh` |
 | [`auth/AuthRESTDataSource.ts`](https://github.com/inuits/elody-base-graphql/blob/master/auth/AuthRESTDataSource.ts) | elody-base-graphql | token, `X-request-id`, `X-tenant-id`, retries |

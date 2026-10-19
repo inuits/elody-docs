@@ -21,27 +21,29 @@ and what each shared module adds.
 
 ## What a module is
 
-A module is a `createModule()` call from `graphql-modules` with an `id`, its
-`typeDefs` and its `resolvers`. Elody wraps that in an `ElodyModuleConfig`,
-which can also carry what the module needs at runtime:
+An Elody module is an `ElodyModule` from `base-graphql`
+([`helpers/elodyModule.ts`](https://github.com/inuits/elody-base-graphql/blob/master/helpers/elodyModule.ts)).
+It bundles a `graphql-modules` module with everything the feature needs at
+runtime. `defineElodyModule({ name, ... })` fills every field you leave out
+with an empty default:
 
-| Field | What it holds |
-| --- | --- |
-| `modules` | The `graphql-modules` modules: schema and resolvers |
-| `dataSources` | `AuthRESTDataSource` subclasses, created once per request and available as `context.dataSources.*` |
-| `endpoints` | `(app, environment) => void` functions that mount Express routes next to `/api/graphql` |
-
-A module can also attach three things to the module object itself. base-graphql
-collects them from every installed module, so a client doesn't configure them:
-
-| Property | Merged into | A client overrides it with |
+| Field | What it holds | Merged how |
 | --- | --- | --- |
-| `elodyPermissions` | The permissions the GraphQL layer can evaluate | `customPermissions` |
-| `elodyFeatures` | `features` on `/api/app-configs` | — |
-| `elodyInputFields` | The input field definitions forms use | `customInputFields` |
+| `name` | The module's name, used in boot errors | — |
+| `graphqlModule` | A `createModule()` call from `graphql-modules`: `typeDefs` and `resolvers` | Later definitions override earlier ones |
+| `dataSources` | `{ name, source, enabled? }` entries: `AuthRESTDataSource` subclasses, created once per request as `context.dataSources.<name>`. `enabled(environment)` can switch one off | Two modules registering the same `name` is a boot error |
+| `endpoints` | `(app, environment) => void` functions that mount Express routes next to `/api/graphql` | Mounted in module order |
+| `translations` | Translation keys per locale | Deep merge, later module wins per key |
+| `permissions` | The permissions the GraphQL layer can evaluate | By key, later module wins |
+| `features` | `features` on `/api/app-configs` | By key, later module wins |
+| `inputFields` | The input field definitions forms use | By key, later module wins |
+| `formatters` | The [formatters](formatters.md) config | Deep merge |
+| `typeCollectionMapping`, `typePillLabelMapping`, `filterMatchers` | Per-type lookups | By key, later module wins |
+| `typeUrlMapping` | `{ mapping, reverseMapping }` | Both sides by key |
+| `initialize` | `(environment) => void`, run at boot before anything else; throw to refuse to start | — |
 
-Because these come with the module, installing a module is enough to turn its
-feature on. Removing it from `modules` turns the feature off.
+Because all of this comes with the module, installing a module is enough to
+turn its feature on. Removing it from `modules` turns the feature off.
 
 ## How a client puts them together
 
@@ -49,37 +51,26 @@ A client's GraphQL service has a `main.ts` that lists its modules and starts an
 `ElodyInstance` from `base-graphql`:
 
 ```ts
-import { ElodyInstance, type ElodyModuleConfig } from 'base-graphql';
-import { mediafileElodyConfig } from 'mediafile-module';
-import { importModule, ImportAPI } from 'import-module';
+import { ElodyInstance } from 'base-graphql';
+import { mediafileModule } from 'mediafile-module';
+import { importModule } from 'import-module';
 import { savedSearchModule } from 'saved-search-module';
-import { garageModule, garageAppConfig, garageTranslations } from './garageModule';
-import { garagePermissions } from './garagePermissions';
-
-const garageElodyConfig: ElodyModuleConfig = {
-  modules: [
-    ...mediafileElodyConfig.modules,
-    importModule,
-    savedSearchModule,
-    garageModule,
-  ],
-  dataSources: { ...mediafileElodyConfig.dataSources, ImportAPI },
-  endpoints: mediafileElodyConfig.endpoints,
-};
+import { garageModule, garageAppConfig } from './garageModule';
 
 new ElodyInstance({
-  customModuleConfig: garageElodyConfig,
   appConfig: garageAppConfig,
-  customTranslations: garageTranslations,
-  customPermissions: garagePermissions,
+  modules: [mediafileModule, importModule, savedSearchModule, garageModule],
 }).start();
 ```
 
-At boot, base-graphql puts its own `baseModule` first and appends the
-client's modules after it, in the order listed. It then builds one
-`graphql-modules` application from the whole list. On every request, each
-data source class is created with the user's session and tenant, and the
-results are merged into `context.dataSources`.
+At boot, base-graphql puts its own base module first and the client's modules
+after it, in the order listed. It runs every module's `initialize`, merges
+their contributions, and builds one `graphql-modules` application from their
+`graphqlModule`s. On every request, each enabled data source class is created
+with the user's session and tenant under its `name` in `context.dataSources`.
+
+List the client's own module last: on a key clash it then overrides what the
+shared modules contribute.
 
 `CollectionAPI` is the only data source a request can't do without. If it is
 missing, the request fails with `Missing required data sources: CollectionAPI`.
@@ -91,6 +82,28 @@ the list overrides the earlier one. Before you add a type to a module, search
 `baseModule/baseSchema.schema.ts` for it. A stale copy in a module will shadow
 the base version, and nothing will tell you it happened.
 :::
+
+### Required settings
+
+A module that can't work without some configuration checks it in
+`initialize`. `requireSettings` maps an environment path to the env variable
+that sets it, and throws when the value is missing or empty. Values set in
+`appConfig` count too, since it reads the merged environment:
+
+```ts
+initialize: (environment) =>
+  requireSettings(environment, {
+    'api.fileSystemImporterServiceUrl': 'FILE_SYSTEM_IMPORTER_URL',
+  }),
+```
+
+base-graphql runs every module's `initialize` and reports all failures in one
+error, so the service refuses to start with a list of what to configure:
+
+```
+Elody modules failed to initialize:
+- importModule: settings are not set: FILE_SYSTEM_IMPORTER_URL
+```
 
 ### Extending the shared types
 
@@ -125,8 +138,9 @@ In `elody-common` they are checked out under `modules/`.
 ### baseGraphql
 
 [inuits/elody-base-graphql](https://github.com/inuits/elody-base-graphql) is
-the foundation. It is a library rather than a service: it exports `start()`
-and `ElodyInstance`, and a client's `main.ts` is what runs it.
+the foundation. It is a library rather than a service: it exports
+`ElodyInstance`, `defineElodyModule` and `requireSettings`, and a client's
+`main.ts` is what runs it. It is also the first module in every instance.
 
 - **Server:** Express with Apollo Server, CORS, CSP, compression, a query
   depth limit, sessions (in memory or MongoDB), and OpenTelemetry tracing.
@@ -169,9 +183,8 @@ getting them back out.
   storage-api), and the `/api/iiif/*` proxy that the
   [media viewers](features/media-viewers.md) load images and manifests from.
 
-It is the only module that ships endpoints, so it exports a ready-made
-`mediafileElodyConfig` rather than a bare module. Spread its `modules`,
-`dataSources` and `endpoints` into your config, as in the example above.
+All of these come with `mediafileModule` itself: listing it in `modules`
+registers its data sources and mounts its endpoints.
 
 ### importModule
 
@@ -184,9 +197,10 @@ the PWA.
 - **Data source:** `ImportAPI`, which calls the importer at
   `api.fileSystemImporterServiceUrl`.
 
-When that URL is not set, the resolvers return empty results instead of
-failing. A client can therefore install the module before the importer
-service is deployed.
+The URL is set with `FILE_SYSTEM_IMPORTER_URL`, which has no default. The
+module requires it in `initialize`, so an instance that lists `importModule`
+without it refuses to start (see [Required settings](#required-settings)).
+Don't install the module before the importer service is deployed.
 
 ### savedSearchModule
 
@@ -216,22 +230,47 @@ shared ones:
 
 ```ts
 import { createModule } from 'graphql-modules';
-import { baseSchema, loadTranslationsFromDirectory } from 'base-graphql';
+import {
+  baseSchema,
+  defineElodyModule,
+  loadTranslationsFromDirectory,
+} from 'base-graphql';
 import path from 'path';
 import { garageSchema } from './garageSchema.schema';
 import { garageResolver } from './garageResolver';
+import { GarageCollectionAPI } from './sources/garageCollection';
+import { garageRedirectEndpoint } from './endpoints/garageRedirectEndpoint';
+import { garageFields } from './garageFields';
+import { garagePermissions } from './garagePermissions';
+import { garageFormattersConfig } from './garageFormatters';
+import { garageTypeCollectionMapping } from './garageTypeCollectionMapping';
 
-export const garageTranslations = loadTranslationsFromDirectory(
-  path.join(__dirname, 'translations')
-);
+declare module 'base-graphql' {
+  interface DataSources {
+    GarageCollectionAPI: GarageCollectionAPI;
+  }
+}
 
-export const garageModule = createModule({
-  id: 'garageModule',
-  dirname: __dirname,
-  typeDefs: [baseSchema, garageSchema],
-  resolvers: [garageResolver],
+export const garageModule = defineElodyModule({
+  name: 'garageModule',
+  graphqlModule: createModule({
+    id: 'garageModule',
+    dirname: __dirname,
+    typeDefs: [baseSchema, garageSchema],
+    resolvers: [garageResolver],
+  }),
+  dataSources: [{ name: 'GarageCollectionAPI', source: GarageCollectionAPI }],
+  endpoints: [garageRedirectEndpoint],
+  translations: loadTranslationsFromDirectory(path.join(__dirname, 'translations')),
+  inputFields: garageFields,
+  permissions: garagePermissions,
+  formatters: garageFormattersConfig,
+  typeCollectionMapping: garageTypeCollectionMapping,
 });
 ```
+
+Leave out any field the module doesn't need; `defineElodyModule` fills it
+with an empty default.
 
 Put code in a shared module only if more than one client needs it. Behaviour
 specific to one client belongs in that client's module. When something moves

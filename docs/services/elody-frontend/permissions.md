@@ -53,9 +53,11 @@ export const garagePermissions: { [key: string]: PermissionRequestInfo } = {
 };
 ```
 
-The map is handed to [`ElodyInstance`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) in the client's `main.ts` as
-`customPermissions`, and it is merged with whatever the installed modules
-contribute — see [Module-contributed permissions](#module-contributed-permissions).
+The map is the `permissions` of the client's own module (see
+[GraphQL Modules](graphql-modules.md#writing-your-own-module)), and
+[`ElodyInstance`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts)
+merges it with whatever the other installed modules contribute — see
+[Module-contributed permissions](#module-contributed-permissions).
 
 The names are free-form strings. The convention in every existing client is
 `<action>:<subject>[:<qualifier>]`, e.g. `create:part`,
@@ -225,9 +227,10 @@ A GraphQL module can ship its own permissions and its own feature flags, so a
 feature that lives entirely in a module needs no per-client configuration:
 
 ```ts
-export const savedSearchModule = {
-  ...createModule({ /* ... */ }),
-  elodyPermissions: {
+export const savedSearchModule = defineElodyModule({
+  name: "savedSearchModule",
+  graphqlModule: createModule({ /* ... */ }),
+  permissions: {
     "create:saved_search": {
       datasource: "CollectionAPI",
       crud: "post",
@@ -235,14 +238,16 @@ export const savedSearchModule = {
       body: { type: "saved_search" },
     },
   },
-  elodyFeatures: {
-    hasSavedSearch: { enabled: true, permission: "create:saved_search" },
+  features: {
+    savedSearch: { enabled: true, permission: "create:saved_search" },
   },
-};
+});
 ```
 
-Module permissions are merged with the client's `customPermissions`, which win
-on a name collision. A feature declared with a `permission` is resolved in the
+Permissions from all modules are merged by name; the module later in the
+`modules` list wins on a collision, so the client's own module, listed last,
+overrides the shared ones. The merged map reaches resolvers as
+`customPermissions` on the GraphQL context. A feature declared with a `permission` is resolved in the
 app config: the frontend receives `{ enabled: false }` when the probe is
 denied, and never learns why.
 
@@ -311,8 +316,8 @@ single call per request through the cache.
 | [`endpoints/appConfigEndpoint.ts`](https://github.com/inuits/elody-base-graphql/blob/master/endpoints/appConfigEndpoint.ts) | elody-base-graphql | route, feature and simple-search resolution |
 | [`baseModule/baseResolver.ts`](https://github.com/inuits/elody-base-graphql/blob/master/baseModule/baseResolver.ts) | elody-base-graphql | per-surface wiring |
 | [`baseModule/baseSchema.schema.ts`](https://github.com/inuits/elody-base-graphql/blob/master/baseModule/baseSchema.schema.ts) | elody-base-graphql | which fields accept a permission argument |
-| [`helpers/moduleContributions.ts`](https://github.com/inuits/elody-base-graphql/blob/master/helpers/moduleContributions.ts) | elody-base-graphql | `elodyPermissions` / `elodyFeatures` collection |
-| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql | `customPermissions` merge, request context |
+| [`helpers/elodyModule.ts`](https://github.com/inuits/elody-base-graphql/blob/master/helpers/elodyModule.ts) | elody-base-graphql | merges module `permissions` / `features` |
+| [`elodyInstance.ts`](https://github.com/inuits/elody-base-graphql/blob/master/elodyInstance.ts) | elody-base-graphql | request context (`customPermissions`) |
 | [`src/routerNavigationGuards.ts`](https://github.com/inuits/elody-pwa/blob/master/src/routerNavigationGuards.ts) | elody-pwa | reads `meta.permitted`, redirects |
 | [`src/composables/useEditState.ts`](https://github.com/inuits/elody-pwa/blob/master/src/composables/useEditState.ts) | elody-pwa | maps `canUpdate` / `canDelete` to an edit mode |
 | [`src/components/metadata/useMetadataWrapper.ts`](https://github.com/inuits/elody-pwa/blob/master/src/components/metadata/useMetadataWrapper.ts) | elody-pwa | applies `permitted` / `readOnly` to a field |
