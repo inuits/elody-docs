@@ -29,7 +29,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Serve the static output with nginx
-FROM nginx:1.28-bookworm
+FROM nginx:1.29-bookworm
 
 COPY --from=builder /app/docs/.vitepress/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
