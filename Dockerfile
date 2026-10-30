@@ -1,5 +1,5 @@
 # Stage 0: Development stage (source volume-mounted, runs dev server)
-FROM node:22.23.4-bookworm-slim AS development-stage
+FROM node:26.13.0-bookworm-slim AS development-stage
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ EXPOSE 5173
 CMD ["sh", "-c", "npm install && npm run dev -- --host"]
 
 # Stage 1: Build the VitePress documentation site
-FROM node:22.23.4-bookworm-slim AS builder
+FROM node:26.13.0-bookworm-slim AS builder
 
 WORKDIR /app
 
