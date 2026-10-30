@@ -32,8 +32,8 @@ which is why they belong on this page, but they are not PWA packages.
 
 | # | Repo | Trigger | Output | Deployed? |
 | --- | --- | --- | --- | --- |
-| 1 | `modules/<module>` | version bump on default branch | npm package on Nexus | No |
-| 2 | `inuits-dams-pwa` | push to default branch | `dams-frontend` image | No |
+| 1 | `modules/<module>` | version bump on default branch or a `beta/*` branch | npm package on Nexus | No |
+| 2 | `inuits-dams-pwa` | push to default branch or a `beta/*` branch | `dams-frontend` image | No |
 | 3 | `clients/<client>/client-frontend` | push to default branch | client image | **Yes** |
 
 Only pipeline 3 produces something that runs. Pipelines 1 and 2 publish
@@ -118,9 +118,10 @@ internalising:
 - **Forget the bump and the pipeline still goes green.** It just prints
   `Version exists, skipping.` and publishes nothing. If a client build doesn't
   pick up your change, check the published version first.
-- **Only the default branch publishes.** The template's `workflow.rules` set
-  `when: never` for every other branch, so a feature branch runs no jobs at
-  all. Merging is the publishing action.
+- **Only the default branch publishes a release.** A feature branch runs no
+  jobs at all, so merging is the publishing action. The one exception is a
+  `beta/<name>` branch, which publishes a prerelease that no client picks up
+  unless it opts in — see [Beta channels](#beta-channels).
 - The version check uses `grep -F`, a plain substring match. A version that is
   a substring of an already-published one (`0.9.2` against a published
   `0.9.22`) would be considered existing and silently skipped. Rare, but it
@@ -230,8 +231,11 @@ Two details are easy to miss:
   Failing unit tests fail the image build.
 - **The pipeline never deploys.**
   [`.gitlab-ci.yml`](https://github.com/inuits/elody-pwa/blob/master/.gitlab-ci.yml)
-  sets `SKIP_DEPLOY: 'true'` and disables the `uat` and `prod` jobs. It only
-  builds and pushes to Harbor.
+  is built from two GitLab CI components and only pushes to Harbor.
+  `Containers/build` builds the image and pushes it to the short-lived
+  `build/elody-dams` project. `Containers/deliver` then copies it to
+  `elody-dams-dev` as `<pipeline>-<sha>` and `latest`. A `beta/<name>` branch
+  is delivered as `beta-<name>` only and never moves `latest`.
 
 ## 3. The client image — where everything is actually built
 
@@ -327,7 +331,9 @@ The client Dockerfile references `dams-frontend:latest` (the pinned, tagged form
 is commented out just above it). A client rebuild therefore picks up whatever
 the newest PWA build is, including changes nobody on that client asked for. If a
 client build suddenly behaves differently without a client-side change, this and
-the module version ranges are the first two things to check.
+the module version ranges are the first two things to check. A client that has
+opted into a [beta channel](#beta-channels) references `dams-frontend:beta-<name>`
+instead.
 
 ## Deployment
 
@@ -356,6 +362,92 @@ variables:
 `IMAGE_TAG` is passed in as a build arg and is also the value written into
 `pwa-version.json`, so the version the running app reports matches the deployed
 image tag.
+
+## Beta channels
+
+Because every client follows `latest` and `*`, a big PWA or `base-graphql`
+change reaches every client on its next rebuild. A **beta channel** lets a
+change like that ship to the clients that opted in, while everyone else stays
+on the current release.
+
+A channel is a branch named `beta/<name>` in the PWA repo, in `baseGraphql`, or
+in both. It publishes alongside the normal release, never instead of it:
+
+| | Default branch | Branch `beta/redesign` |
+| --- | --- | --- |
+| PWA image | `dams-frontend:latest` | `dams-frontend:beta-redesign` |
+| `base-graphql` | `0.10.50`, dist-tag `latest` | `0.11.0-redesign.0`, dist-tag `beta-redesign` |
+
+The channel name is the branch's `CI_COMMIT_REF_SLUG`, so `beta/redesign`
+becomes `beta-redesign`. Several channels can run side by side. Starting one
+needs no CI change, only a new branch. Any other branch still runs no pipeline
+at all.
+
+### Publishing a beta of a module
+
+A beta branch commits a **prerelease version** in `package.json`, and CI
+publishes it under the channel's dist-tag instead of `latest`:
+
+```bash
+npm version prerelease --preid redesign --no-git-tag-version   # 0.11.0-redesign.0 → 0.11.0-redesign.1
+```
+
+Releasing works just like on the default branch: bump the version and push.
+The build job skips a version that is already published. It also **fails** if
+the version is not a prerelease, so a beta branch can never publish a normal
+version number by accident.
+
+Pick the prerelease from a version the default branch won't reach by
+patch-bumping, typically the next minor. A prerelease sorts *before* its own
+version (`0.10.50-redesign.0` < `0.10.50`). So a beta of `0.10.50` would be
+older than a release that already exists, and a beta of `0.10.51` would clash
+with the default branch's next patch release.
+
+Clients that depend on `"base-graphql": "*"` never pick up a beta: under
+semver, `*` doesn't match a prerelease. The modules' peer dependency on
+`base-graphql` doesn't get in the way either. pnpm links the client's
+prerelease to every module without installing a second copy.
+
+### Opting a client in
+
+The garage client opts into `beta-redesign` with two changes in
+`clients/garage/client-frontend/inuits-dams-graphql-service/`:
+
+```yaml
+# .gitlab-ci.yml (or the FROM line of docker/Dockerfile)
+FRONTEND_IMAGE: "…/elody-dams-dev/inuits/dams-frontend:beta-redesign"
+```
+
+```json
+// package.json
+"base-graphql": "beta-redesign",
+```
+
+Without a lockfile, each client build resolves the dist-tag again, so the
+client follows the channel the same way other clients follow `latest`. To opt
+out, revert both lines.
+
+### Promoting and retiring a channel
+
+- **Promote:** merge `beta/<name>` into the default branch and set a normal
+  version in `package.json`, then point the opted-in clients back at `latest`
+  and `*`.
+- **Retire:** delete the branch. The leftover image tag and dist-tag don't
+  affect any client that has opted out.
+- **Keep it current:** merge the default branch into the beta branch
+  regularly, or its clients miss fixes. The merge conflicts on the
+  `package.json` version line every time the default branch bumps it. Keep the
+  prerelease.
+
+::: warning Running an opted-in client locally
+Locally, the client is a pnpm workspace that links your `modules/` checkout. pnpm
+only links `modules/baseGraphql` for `"base-graphql": "beta-redesign"` when the
+checkout's version *is* that prerelease. Otherwise the GraphQL service installs
+the beta from Nexus, while the other modules still link your local copy. You
+then have two `base-graphql` instances, and the service fails at boot. Check out
+`beta/redesign` in both `modules/baseGraphql` and `inuits-dams-pwa` before the
+next `pnpm install`.
+:::
 
 ## I changed something — what do I need to rebuild?
 
