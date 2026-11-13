@@ -10,6 +10,18 @@ and the features it exposes.
 - [Elody Frontend](/services/elody-frontend/) — the Vue 3 PWA that renders the
   GraphQL-driven UI.
 
+The add-on services, which a client includes when it needs them:
+
+- [Elody Storage](/services/elody-storage/)
+- [Elody Transcode Service](/services/elody-transcode-service/)
+- [Elody OCR Service](/services/elody-ocr-service/)
+- [Elody Antivirus Service](/services/elody-antivirus-service/)
+- [Elody Filesystem Importer Service](/services/elody-filesystem-importer-service/)
+- [Elody Cantaloupe](/services/elody-cantaloupe/)
+- [Elody IIIF Manifest Mapper](/services/elody-iiif-manifest-mapper/)
+- [Elody CSV Exporter](/services/elody-csv-exporter/)
+- [Elody Canopy Generator](/services/elody-canopy-generator/)
+
 ## How a deployment is composed
 
 A running Elody environment is assembled from four layers.
@@ -33,15 +45,15 @@ client needs it:
 | --- | --- |
 | `dashboard` | One container serving two things: the Apollo GraphQL server on `PathPrefix(/api)` and the Vue 3 PWA on `PathPrefix(/)`. |
 | `collection-api` | Flask REST + GraphQL. Also carries the `job-api` network alias and Traefik router, which is what the add-on services call for job tracking. |
-| `storage-api` | Uploads, downloads and tickets against MinIO. Usually pulled in via `docker-compose-include-storage-api.yml`, but `digipolis-asset-engine` and `pza-iot` declare their own. |
+| `storage-api` | Uploads, downloads and tickets against MinIO. Usually pulled in via `docker-compose-include-storage-api.yml`, but a client can declare its own. |
 
 **Opt-in add-ons** live in `docker-compose-include-*.yml` at the repository
 root. A client includes only the ones it needs. They communicate over the
 RabbitMQ topic exchange and call back into `collection-api` / `job-api`.
 
 **Client-specific services** are declared inside the client repository itself. A
-client can also ship its own include file — `vliz-dams` provides
-`docker-compose-include-vocab.yml` next to its compose file.
+client can also ship its own include file next to its compose file, for example
+`docker-compose-include-vocab.yml`.
 
 ## How a client extends the core
 
@@ -54,29 +66,19 @@ there is no fork of `collection-api` or the PWA.
   validators.
 - **Frontend** — `clients/<client>/client-frontend` supplies the
   `inuits-dams-graphql-service` (queries, resolvers, translations, schema). It
-  is combined at build time with the six shared GraphQL modules in `modules/`
-  (`baseGraphql`, `advancedFiltersModule`, `advancedSearchModule`,
-  `importModule`, `mediafileModule`, `savedSearchModule`) and the
-  `inuits-dams-pwa` source.
+  is combined at build time with the shared
+  [GraphQL modules](/services/elody-frontend/graphql-modules) in `modules/`
+  and the `inuits-dams-pwa` source.
 
-## Which client runs what
+## Picking the services
 
-`inc` = pulled in through the shared include file, `own` = declared in the
-client's own compose file.
-
-| Client | iiif + cantaloupe | storage-api | transcode | ocr | antivirus | filesystem-importer | csv-exporter | canopy | mailpit | Client-specific |
-| --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | --- |
-| amvb-dams | inc | inc | inc | inc | | inc | | | | drupal, apache, mysql |
-| coghent-dams | inc | inc | inc | | | | | | | csv-import, ldes-import, data-seed, image jobs |
-| digipolis-asset-engine | inc | own | | | inc | | | | | — (headless, no dashboard) |
-| digipolis-dams | inc | inc | inc | inc | inc | inc | inc | | | — |
-| dishacled-wp3-prototype | | | | | | | | | | — (collection-api + dashboard only) |
-| hairoad-elody | inc | inc | inc | | | inc | | | | — |
-| podiumnet | inc | inc | inc | | | inc | | | inc | typesense |
-| pza-iot | inc | own | | | | | | | | — |
-| ugent-aicap | inc | inc | | | | own | | | | — |
-| vlacc-dams | | inc | | | | inc | | | | typesense, docs |
-| vliz-dams | inc | inc | inc | | | inc | | inc | | vocab, minio-setup, docs |
+Each client picks its own mix. A headless client can run `collection-api` and
+`storage-api` without a `dashboard`; a minimal one runs only `collection-api`
+and `dashboard`. A typical DAMS client includes iiif + cantaloupe,
+`storage-api`, transcode and the filesystem importer, and adds OCR, antivirus,
+the CSV exporter, canopy or mailpit when it needs them. Services only one
+client uses, such as a Typesense search index or a CMS next to the platform,
+go in that client's own compose file.
 
 ## Runtime flow
 

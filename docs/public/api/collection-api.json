@@ -1,0 +1,4118 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Elody Collection API",
+    "version": "1.0.0",
+    "description": "The REST endpoints every Elody deployment gets from **collection-api**, the service that stores and serves entities and mediafiles. This is not the GraphQL API the frontend talks to. A client can add its own endpoints and override these, so check your deployment for extras.\n\nThe examples use [the garage network](/example-domain).\n\n**Base path.** Behind the standard ingress the API lives under `/collection/v1`. A local docker-compose setup serves it from the root of `collection-api.<domain>`. Every `/entities…` path is also reachable as `/elody/v1/entities…`.\n\n**Authentication.** Send a bearer token issued by the deployment's identity provider (Keycloak by default) on every request, plus the tenant header (`X-tenant-id` unless the deployment renames it with `TENANT_DEFINING_HEADER`).\n\n**Dry run.** Every endpoint accepts `?soft=1`: the request runs through authentication and the policies and stops before doing anything. A `200` means the caller would be allowed. The frontend uses this to decide which buttons to show.\n\n**Concurrency.** When an entity type has an ETag key configured, `GET /entities/{id}` returns an `ETag`. Send it back as `If-Match` on `PUT` or `PATCH` to get `412` instead of overwriting someone else's change. Without `If-Match` the write goes through.\n\n**Formats.** Single entities and filter results honour the `Accept` header: JSON by default, and `text/turtle`, `application/ld+json`, `application/rdf+xml` or `application/n-triples` for linked data. Filter results also come as `text/csv`."
+  },
+  "servers": [
+    {
+      "url": "https://garage.example.com/collection/v1",
+      "description": "Example deployment; replace with your own host"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Entities",
+      "description": "Create, read, update and delete entities of any type."
+    },
+    {
+      "name": "Filtering",
+      "description": "Search entities and mediafiles with a list of filter criteria. The filter language is documented in [Advanced Filtering](/services/elody-collection/advanced-filtering)."
+    },
+    {
+      "name": "Metadata and relations",
+      "description": "Change only the metadata or only the relations of an entity or mediafile."
+    },
+    {
+      "name": "Mediafiles",
+      "description": "Files attached to entities: photos, invoices, manuals."
+    },
+    {
+      "name": "Import",
+      "description": "Create or update many documents in one request."
+    },
+    {
+      "name": "History",
+      "description": "Earlier versions of a document. Needs the history service."
+    },
+    {
+      "name": "Share links",
+      "description": "Stored share links."
+    },
+    {
+      "name": "Jobs (internal)",
+      "description": "Job tracking used by Elody's own services (importer, transcoder, OCR). Not meant for integrations."
+    }
+  ],
+  "paths": {
+    "/entities": {
+      "get": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "List entities",
+        "description": "Returns a page of entities. Use `type`, `ids` and `q` for simple lookups and `POST /entities/filter` for anything more. Formats other than JSON need the `export` bulk operation enabled.",
+        "operationId": "listEntities",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Only return entities of this type.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "workOrder"
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comma-separated identifiers to fetch.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "WO-6V8VLIHP0,WO-3KQ7ZT0M1"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "`key==value` equality filter on a key of the document. Repeatable.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "form",
+            "explode": true,
+            "example": [
+              "metadata.status.value==in_progress"
+            ]
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of entities.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "Create an entity",
+        "description": "Creates an entity. The type's validation and creation hooks run first. An array body creates several entities; the response is then the last one. Pass `current_job_id` to attach the new entity to a running job.",
+        "operationId": "createEntity",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "name": "current_job_id",
+            "in": "query",
+            "description": "Job to attach the new entity to.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The created entity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entity"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/entityInput"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "Update many entities",
+        "description": "Patches several entities in one request; the body is read like an import, see `POST /batch`. Only present when the client enables the `edit` bulk operation.",
+        "operationId": "bulkUpdateEntities",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Per-document results, as for `POST /batch`."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "Delete entities",
+        "description": "Deletes every entity in `identifiers` as a job. All are checked against the policies first; if any is forbidden, none is deleted. More than one identifier needs the `delete` bulk operation enabled.",
+        "operationId": "bulkDeleteEntities",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The job tracking the deletion.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/jobReference"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "More than one identifier, and the `delete` bulk operation isn't enabled."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/identifiers"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/entities/filter": {
+      "post": {
+        "tags": [
+          "Filtering"
+        ],
+        "summary": "Filter entities",
+        "description": "Returns the entities that match every criterion in the body. A `type` criterion, or a `selection` on the `type` key, is required. The caller's access restrictions are added to the criteria automatically. See [Advanced Filtering](/services/elody-collection/advanced-filtering).",
+        "operationId": "filterEntities",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/orderBy"
+          },
+          {
+            "$ref": "#/components/parameters/asc"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "name": "exact_count",
+            "in": "query",
+            "description": "`1` skips the count cap and counts every match.",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "default": 0
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Representation to return.",
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "enum": [
+                "application/json",
+                "text/csv",
+                "text/turtle",
+                "application/ld+json",
+                "application/rdf+xml",
+                "application/n-triples"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/filter"
+                }
+              },
+              "examples": {
+                "open_work_orders": {
+                  "summary": "Work orders waiting for parts",
+                  "value": [
+                    {
+                      "type": "type",
+                      "value": "workOrder"
+                    },
+                    {
+                      "type": "selection",
+                      "key": "pim:1|properties.status.value",
+                      "value": [
+                        "waiting_for_parts"
+                      ],
+                      "match_exact": true
+                    }
+                  ]
+                },
+                "parts_below_reorder": {
+                  "summary": "Brake parts low on stock",
+                  "value": [
+                    {
+                      "type": "type",
+                      "value": "part"
+                    },
+                    {
+                      "type": "selection",
+                      "key": "pim:1|properties.category.value",
+                      "value": [
+                        "brakes"
+                      ],
+                      "match_exact": true
+                    },
+                    {
+                      "type": "number",
+                      "key": "pim:1|properties.stock_quantity.value",
+                      "value": {
+                        "max": 5,
+                        "included": true
+                      }
+                    }
+                  ]
+                },
+                "work_orders_for_car": {
+                  "summary": "Every work order on one car",
+                  "value": [
+                    {
+                      "type": "type",
+                      "value": "workOrder"
+                    },
+                    {
+                      "type": "selection",
+                      "key": "relations.for_car.key",
+                      "value": [
+                        "CAR-JQGB344X"
+                      ],
+                      "match_exact": true
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/entities/{id}": {
+      "get": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "Get an entity",
+        "description": "Returns one entity. The `ETag` header is set when the type has an ETag key configured.",
+        "operationId": "getEntity",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/accept"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The entity.",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entity"
+                }
+              },
+              "text/turtle": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/ld+json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/rdf+xml": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/n-triples": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "Replace an entity",
+        "description": "Replaces the entity with the body. Metadata and relations left out of the body are removed.",
+        "operationId": "replaceEntity",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/ifMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The entity after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entity"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "412": {
+            "$ref": "#/components/responses/PreconditionFailed"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/entityInput"
+              },
+              "example": {
+                "type": "workOrder",
+                "metadata": [
+                  {
+                    "key": "title",
+                    "value": "Annual service"
+                  },
+                  {
+                    "key": "status",
+                    "value": "done"
+                  }
+                ],
+                "relations": [
+                  {
+                    "key": "CAR-JQGB344X",
+                    "type": "for_car"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "Update an entity",
+        "description": "Merges the body into the entity: only the metadata keys and fields in the body change.",
+        "operationId": "updateEntity",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/ifMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The entity after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entity"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "412": {
+            "$ref": "#/components/responses/PreconditionFailed"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/documentPatch"
+              },
+              "example": {
+                "metadata": [
+                  {
+                    "key": "status",
+                    "value": "done"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Entities"
+        ],
+        "summary": "Delete an entity",
+        "description": "Deletes the entity.",
+        "operationId": "deleteEntity",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/entities/{id}/metadata": {
+      "patch": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Update metadata",
+        "description": "Sets the metadata keys in the body on the entity. Keys the body leaves out keep their value.",
+        "operationId": "updateEntityMetadata",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/ifMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's metadata after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/metadataEntry"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "title",
+                    "value": "Annual service"
+                  },
+                  {
+                    "key": "status",
+                    "value": "in_progress"
+                  },
+                  {
+                    "key": "planned_date",
+                    "value": "2026-09-03"
+                  },
+                  {
+                    "key": "mileage_at_intake",
+                    "value": 84210
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "412": {
+            "$ref": "#/components/responses/PreconditionFailed"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/metadataEntry"
+                }
+              },
+              "example": [
+                {
+                  "key": "status",
+                  "value": "ready_for_pickup"
+                },
+                {
+                  "key": "labour_hours",
+                  "value": 1.5
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/entities/{id}/relations": {
+      "post": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Add relations",
+        "description": "Adds the relations in the body to the entity. A relation with the same `key` and `type` as an existing one replaces it; the rest stay. In all three methods, relation metadata keys the body leaves out keep their stored value; send an empty value to clear one.",
+        "operationId": "addEntityRelations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's relations after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/relation"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "CAR-JQGB344X",
+                    "type": "for_car"
+                  },
+                  {
+                    "key": "EMP-SYOO1RU3",
+                    "type": "assigned_to"
+                  },
+                  {
+                    "key": "PRT-884O25BR0",
+                    "type": "uses_part",
+                    "metadata": [
+                      {
+                        "key": "quantity",
+                        "value": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/relation"
+                }
+              },
+              "example": [
+                {
+                  "key": "CAR-JQGB344X",
+                  "type": "for_car"
+                },
+                {
+                  "key": "PRT-884O25BR0",
+                  "type": "uses_part",
+                  "metadata": [
+                    {
+                      "key": "quantity",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Replace matching relations",
+        "description": "Same result as `POST`: relations whose `key` and `type` appear in the body are replaced, all others are kept. In all three methods, relation metadata keys the body leaves out keep their stored value; send an empty value to clear one.",
+        "operationId": "updateEntityRelations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's relations after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/relation"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "CAR-JQGB344X",
+                    "type": "for_car"
+                  },
+                  {
+                    "key": "EMP-SYOO1RU3",
+                    "type": "assigned_to"
+                  },
+                  {
+                    "key": "PRT-884O25BR0",
+                    "type": "uses_part",
+                    "metadata": [
+                      {
+                        "key": "quantity",
+                        "value": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/relation"
+                }
+              },
+              "example": [
+                {
+                  "key": "CAR-JQGB344X",
+                  "type": "for_car"
+                },
+                {
+                  "key": "PRT-884O25BR0",
+                  "type": "uses_part",
+                  "metadata": [
+                    {
+                      "key": "quantity",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Replace all relations",
+        "description": "Replaces the entity's whole relation list with the body. Relations not in the body are removed. In all three methods, relation metadata keys the body leaves out keep their stored value; send an empty value to clear one.",
+        "operationId": "replaceEntityRelations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's relations after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/relation"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "CAR-JQGB344X",
+                    "type": "for_car"
+                  },
+                  {
+                    "key": "EMP-SYOO1RU3",
+                    "type": "assigned_to"
+                  },
+                  {
+                    "key": "PRT-884O25BR0",
+                    "type": "uses_part",
+                    "metadata": [
+                      {
+                        "key": "quantity",
+                        "value": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/relation"
+                }
+              },
+              "example": [
+                {
+                  "key": "CAR-JQGB344X",
+                  "type": "for_car"
+                },
+                {
+                  "key": "PRT-884O25BR0",
+                  "type": "uses_part",
+                  "metadata": [
+                    {
+                      "key": "quantity",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/entities/{id}/mediafiles": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "List an entity's mediafiles",
+        "description": "Returns the mediafiles attached to the entity. Where the link is stored, on the entity or on the mediafile, and its relation type are set per client.",
+        "operationId": "listEntityMediafiles",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/orderBy"
+          },
+          {
+            "$ref": "#/components/parameters/asc"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of mediafiles.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Attach a new mediafile",
+        "description": "Creates a mediafile and links it to the entity. `relation_properties` becomes the metadata of that link. With `Accept: text/uri-list` the response is the upload URL for the file.",
+        "operationId": "createEntityMediafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The created mediafile, or its upload URL.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/mediafile"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/mediafileInput"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "relation_properties": {
+                        "type": "object",
+                        "description": "Metadata for the link between the entity and the mediafile."
+                      }
+                    }
+                  }
+                ]
+              },
+              "example": {
+                "filename": "rear-bumper.jpg",
+                "metadata": [
+                  {
+                    "key": "title",
+                    "value": "Damage rear bumper"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/entities/{id}/set_primary_mediafile/{mediafile_id}": {
+      "put": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Set the primary mediafile",
+        "description": "Makes the mediafile the entity's primary mediafile.",
+        "operationId": "setPrimaryMediafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "name": "mediafile_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "MF-7EOU64IBC"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/entities/{id}/set_primary_thumbnail/{mediafile_id}": {
+      "put": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Set the primary thumbnail",
+        "description": "Makes the mediafile the entity's primary thumbnail.",
+        "operationId": "setPrimaryThumbnail",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "name": "mediafile_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "MF-7EOU64IBC"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/mediafiles": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "List mediafiles",
+        "description": "Returns a page of original mediafiles; derived files such as transcodes are left out unless `q` says otherwise.",
+        "operationId": "listMediafiles",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comma-separated identifiers to fetch.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "WO-6V8VLIHP0,WO-3KQ7ZT0M1"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "`key==value` equality filter on a key of the document. Repeatable.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "form",
+            "explode": true,
+            "example": [
+              "metadata.status.value==in_progress"
+            ]
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of mediafiles.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Create a mediafile",
+        "description": "Creates a mediafile that isn't linked to anything yet. Usually you want `POST /entities/{id}/mediafiles` instead.",
+        "operationId": "createMediafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The created mediafile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/mediafile"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/mediafileInput"
+              },
+              "example": {
+                "filename": "service-manual-golf-vii.pdf"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Delete mediafiles",
+        "description": "Same as `DELETE /entities`, for mediafiles.",
+        "operationId": "bulkDeleteMediafiles",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The job tracking the deletion.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/jobReference"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/identifiers"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mediafiles/filter": {
+      "post": {
+        "tags": [
+          "Filtering"
+        ],
+        "summary": "Filter mediafiles",
+        "description": "Returns the mediafiles that match every criterion in the body. A `type` criterion, or a `selection` on the `type` key, is required. The caller's access restrictions are added to the criteria automatically. See [Advanced Filtering](/services/elody-collection/advanced-filtering).",
+        "operationId": "filterMediafiles",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/orderBy"
+          },
+          {
+            "$ref": "#/components/parameters/asc"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "name": "exact_count",
+            "in": "query",
+            "description": "`1` skips the count cap and counts every match.",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "default": 0
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Representation to return.",
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "enum": [
+                "application/json",
+                "text/csv",
+                "text/turtle",
+                "application/ld+json",
+                "application/rdf+xml",
+                "application/n-triples"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The matches.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/filter"
+                }
+              },
+              "examples": {
+                "photos_of_work_order": {
+                  "summary": "Mediafiles of one work order",
+                  "value": [
+                    {
+                      "type": "type",
+                      "value": "mediafile"
+                    },
+                    {
+                      "type": "selection",
+                      "key": "relations.is_mediafile_for.key",
+                      "value": [
+                        "WO-6V8VLIHP0"
+                      ],
+                      "match_exact": true
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mediafiles/{id}": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Get a mediafile",
+        "description": "Returns one mediafile. The `ETag` header is set when the type has an ETag key configured.",
+        "operationId": "getMediafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/accept"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The mediafile.",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/mediafile"
+                }
+              },
+              "text/turtle": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/ld+json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/rdf+xml": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/n-triples": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Replace a mediafile",
+        "description": "Replaces the mediafile with the body. Metadata and relations left out of the body are removed.",
+        "operationId": "replaceMediafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/ifMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The mediafile after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/mediafile"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "412": {
+            "$ref": "#/components/responses/PreconditionFailed"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/entityInput"
+              },
+              "example": {
+                "type": "mediafile",
+                "metadata": [
+                  {
+                    "key": "title",
+                    "value": "Damage rear bumper, left"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Update a mediafile",
+        "description": "Merges the body into the mediafile: only the metadata keys and fields in the body change.",
+        "operationId": "updateMediafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/ifMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The mediafile after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/mediafile"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "412": {
+            "$ref": "#/components/responses/PreconditionFailed"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/documentPatch"
+              },
+              "example": {
+                "metadata": [
+                  {
+                    "key": "status",
+                    "value": "done"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Delete a mediafile",
+        "description": "Deletes the mediafile.",
+        "operationId": "deleteMediafile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/mediafiles/{id}/metadata": {
+      "patch": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Update metadata",
+        "description": "Sets the metadata keys in the body on the mediafile. Keys the body leaves out keep their value.",
+        "operationId": "updateMediafileMetadata",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "$ref": "#/components/parameters/ifMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's metadata after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/metadataEntry"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "title",
+                    "value": "Annual service"
+                  },
+                  {
+                    "key": "status",
+                    "value": "in_progress"
+                  },
+                  {
+                    "key": "planned_date",
+                    "value": "2026-09-03"
+                  },
+                  {
+                    "key": "mileage_at_intake",
+                    "value": 84210
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "412": {
+            "$ref": "#/components/responses/PreconditionFailed"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/metadataEntry"
+                }
+              },
+              "example": [
+                {
+                  "key": "status",
+                  "value": "ready_for_pickup"
+                },
+                {
+                  "key": "labour_hours",
+                  "value": 1.5
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/mediafiles/{id}/relations": {
+      "post": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Add relations",
+        "description": "Adds the relations in the body to the mediafile. A relation with the same `key` and `type` as an existing one replaces it; the rest stay. In all three methods, relation metadata keys the body leaves out keep their stored value; send an empty value to clear one.",
+        "operationId": "addMediafileRelations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's relations after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/relation"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "CAR-JQGB344X",
+                    "type": "for_car"
+                  },
+                  {
+                    "key": "EMP-SYOO1RU3",
+                    "type": "assigned_to"
+                  },
+                  {
+                    "key": "PRT-884O25BR0",
+                    "type": "uses_part",
+                    "metadata": [
+                      {
+                        "key": "quantity",
+                        "value": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/relation"
+                }
+              },
+              "example": [
+                {
+                  "key": "CAR-JQGB344X",
+                  "type": "for_car"
+                },
+                {
+                  "key": "PRT-884O25BR0",
+                  "type": "uses_part",
+                  "metadata": [
+                    {
+                      "key": "quantity",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Replace matching relations",
+        "description": "Same result as `POST`: relations whose `key` and `type` appear in the body are replaced, all others are kept. In all three methods, relation metadata keys the body leaves out keep their stored value; send an empty value to clear one.",
+        "operationId": "updateMediafileRelations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's relations after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/relation"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "CAR-JQGB344X",
+                    "type": "for_car"
+                  },
+                  {
+                    "key": "EMP-SYOO1RU3",
+                    "type": "assigned_to"
+                  },
+                  {
+                    "key": "PRT-884O25BR0",
+                    "type": "uses_part",
+                    "metadata": [
+                      {
+                        "key": "quantity",
+                        "value": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/relation"
+                }
+              },
+              "example": [
+                {
+                  "key": "CAR-JQGB344X",
+                  "type": "for_car"
+                },
+                {
+                  "key": "PRT-884O25BR0",
+                  "type": "uses_part",
+                  "metadata": [
+                    {
+                      "key": "quantity",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Metadata and relations"
+        ],
+        "summary": "Replace all relations",
+        "description": "Replaces the mediafile's whole relation list with the body. Relations not in the body are removed. In all three methods, relation metadata keys the body leaves out keep their stored value; send an empty value to clear one.",
+        "operationId": "replaceMediafileRelations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The document's relations after the change.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/relation"
+                  }
+                },
+                "example": [
+                  {
+                    "key": "CAR-JQGB344X",
+                    "type": "for_car"
+                  },
+                  {
+                    "key": "EMP-SYOO1RU3",
+                    "type": "assigned_to"
+                  },
+                  {
+                    "key": "PRT-884O25BR0",
+                    "type": "uses_part",
+                    "metadata": [
+                      {
+                        "key": "quantity",
+                        "value": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/relation"
+                }
+              },
+              "example": [
+                {
+                  "key": "CAR-JQGB344X",
+                  "type": "for_car"
+                },
+                {
+                  "key": "PRT-884O25BR0",
+                  "type": "uses_part",
+                  "metadata": [
+                    {
+                      "key": "quantity",
+                      "value": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/mediafiles/{id}/download-urls": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Get download links",
+        "description": "Returns ticketed download links for the original and the transcode. Which links the caller gets depends on the client's copyright policy, so this endpoint needs a client policy that sets copyright access.",
+        "operationId": "getMediafileDownloadUrls",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The links the caller may use.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/downloadUrls"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/mediafiles/{id}/copyright": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Check copyright access",
+        "description": "Returns whether the caller may download the original file, as decided by the client's copyright policy. Needs that policy to be present.",
+        "operationId": "getMediafileCopyright",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The copyright access verdict.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                },
+                "example": true
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/mediafiles/{id}/derivatives": {
+      "post": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Add a derived file",
+        "description": "Creates a mediafile derived from this one, such as an OCR result or a transcode, and links the two. Set `technical_origin` to what produced it.",
+        "operationId": "createMediafileDerivative",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The derived mediafile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/mediafile"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "OCR is locked for this entity."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/mediafileInput"
+              },
+              "example": {
+                "filename": "service-manual-golf-vii.txt",
+                "technical_origin": "ocr"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mediafiles/{id}/generate-transcode": {
+      "patch": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Regenerate the transcode",
+        "description": "Asks the transcode service to build the mediafile's transcode again, as a job. Only works on original files.",
+        "operationId": "regenerateTranscode",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/mediafileId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was queued."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/mediafiles/admin/generate-transcodes-bulk": {
+      "post": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Regenerate many transcodes",
+        "description": "Regenerates the transcode of every mediafile in `identifiers`, under one parent job.",
+        "operationId": "regenerateTranscodes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The parent job.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/jobReference"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/identifiers"
+              },
+              "example": {
+                "identifiers": [
+                  "MF-7EOU64IBC",
+                  "MF-2PL9X0QAA"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch": {
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import documents",
+        "description": "Creates or updates many entities and mediafiles in one request, as a job. The body is parsed according to its `Content-Type` by the client's batch serializer, typically `text/csv` with one document per line. With `Accept: text/uri-list` the response is the list of upload URLs for the mediafiles in the import. Only present when the client enables the `import` bulk operation.",
+        "operationId": "importBatch",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Entity type of the rows.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "part"
+          },
+          {
+            "name": "dry_run",
+            "in": "query",
+            "description": "`1` validates every row and writes nothing.",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "default": 0
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "Name shown on the import job.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parent_job_id",
+            "in": "query",
+            "description": "Job to run this import under.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The result per document.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entities": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/entity"
+                      }
+                    },
+                    "mediafiles": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/mediafile"
+                      }
+                    },
+                    "links": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Upload URLs for the mediafiles."
+                    },
+                    "warnings": {
+                      "type": "object"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "entities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "mediafiles": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "job_id": {
+                      "type": "string"
+                    },
+                    "parent_job_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "text/csv": {
+              "schema": {
+                "type": "string"
+              },
+              "example": "part_number,name,category,price,stock_quantity\nBP-1042,Brake pad set front,brakes,64.50,12\nOF-0331,Oil filter,filters,11.90,40\n"
+            }
+          }
+        }
+      }
+    },
+    "/history/{collection}/{id}": {
+      "get": {
+        "tags": [
+          "History"
+        ],
+        "summary": "Get earlier versions",
+        "description": "Returns the latest stored version of a document, the version that was current at `timestamp`, or every version with `all=1`. Needs the history service to be running.",
+        "operationId": "getHistory",
+        "parameters": [
+          {
+            "name": "collection",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "entities"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "description": "Return the version at this moment.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "all",
+            "in": "query",
+            "description": "`1` returns every version. Can't be combined with `timestamp`.",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One version, or a list of versions with `all=1`."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/share_links": {
+      "get": {
+        "tags": [
+          "Share links"
+        ],
+        "summary": "List share links",
+        "description": "Returns a page of share links.",
+        "operationId": "listShareLinks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comma-separated identifiers to fetch.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "WO-6V8VLIHP0,WO-3KQ7ZT0M1"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/skip"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of share links.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "share_link"
+                            ]
+                          },
+                          "metadata": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/metadataEntry"
+                            }
+                          },
+                          "relations": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/relation"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "total_count": {
+                      "type": "integer"
+                    },
+                    "skip": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Share links"
+        ],
+        "summary": "Create a share link",
+        "description": "Creates a share link.",
+        "operationId": "createShareLink",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The created share link."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "share_link"
+                    ]
+                  },
+                  "metadata": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/metadataEntry"
+                    }
+                  },
+                  "relations": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/relation"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/share_links/{id}": {
+      "get": {
+        "tags": [
+          "Share links"
+        ],
+        "summary": "Get a share link",
+        "description": "Gets one share link.",
+        "operationId": "getShareLink",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Share links"
+        ],
+        "summary": "Replace a share link",
+        "description": "Replaces one share link.",
+        "operationId": "replaceShareLink",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "share_link"
+                    ]
+                  },
+                  "metadata": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/metadataEntry"
+                    }
+                  },
+                  "relations": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/relation"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Share links"
+        ],
+        "summary": "Update a share link",
+        "description": "Updates one share link.",
+        "operationId": "updateShareLink",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "share_link"
+                    ]
+                  },
+                  "metadata": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/metadataEntry"
+                    }
+                  },
+                  "relations": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/relation"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Share links"
+        ],
+        "summary": "Delete a share link",
+        "description": "Deletes one share link.",
+        "operationId": "deleteShareLink",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/job/init": {
+      "post": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Create a job",
+        "description": "Creates a job in the `queued` state.",
+        "operationId": "initJob",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The new job.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "job_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "job_type": {
+                    "type": "string"
+                  },
+                  "user_email": {
+                    "type": "string"
+                  },
+                  "parent_id": {
+                    "type": "string"
+                  },
+                  "id_of_document_job_was_initiated_for": {
+                    "type": "string"
+                  },
+                  "track_async_children": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "example": {
+                "name": "Import parts.csv",
+                "job_type": "Import",
+                "user_email": "an.peeters@garage.example.com"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/start/{id}": {
+      "post": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Start a job",
+        "description": "Start a job.",
+        "operationId": "startJob",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/jobId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/job/finish/{id}": {
+      "post": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Finish a job",
+        "description": "Finish a job.",
+        "operationId": "finishJob",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/jobId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/job/fail/{id}": {
+      "post": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Fail a job",
+        "description": "Fail a job.",
+        "operationId": "failJob",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/jobId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "exception_message": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "exception_message": "Line 3: unknown category 'brake'"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/warn/{id}": {
+      "post": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Finish a job with a warning",
+        "description": "Finish a job with a warning.",
+        "operationId": "finishJobWithWarning",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/jobId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "info_message": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "info_message": "2 rows skipped"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/add_document/{id}": {
+      "post": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Link a document to a job",
+        "description": "Link a document to a job.",
+        "operationId": "addDocumentToJob",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/jobId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Done."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id_of_document_job_was_initiated_for": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "id_of_document_job_was_initiated_for": "PRT-884O25BR0"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/status/{id}": {
+      "get": {
+        "tags": [
+          "Jobs (internal)"
+        ],
+        "summary": "Get a job's status",
+        "description": "Returns the job's status and info message.",
+        "operationId": "getJobStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/jobId"
+          },
+          {
+            "$ref": "#/components/parameters/tenant"
+          },
+          {
+            "$ref": "#/components/parameters/soft"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "info": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                },
+                "example": {
+                  "status": "finished",
+                  "info": null
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "An access token from the deployment's identity provider, or a static JWT issued for a service account."
+      }
+    },
+    "parameters": {
+      "tenant": {
+        "name": "X-tenant-id",
+        "in": "header",
+        "required": false,
+        "description": "The garage (tenant) the request acts in. Required when the user has access to more than one.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "tenant:GAR-2KD81LQ7"
+      },
+      "id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Any of the document's identifiers: the readable id, the UUID, or another identifier the type registers.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "WO-6V8VLIHP0"
+      },
+      "mediafileId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Any of the mediafile's identifiers.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "MF-7EOU64IBC"
+      },
+      "skip": {
+        "name": "skip",
+        "in": "query",
+        "description": "Number of results to skip.",
+        "schema": {
+          "type": "integer",
+          "default": 0
+        }
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of results to return.",
+        "schema": {
+          "type": "integer",
+          "default": 20
+        }
+      },
+      "orderBy": {
+        "name": "order_by",
+        "in": "query",
+        "description": "Key to sort on, for example `metadata.planned_date.value`.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "asc": {
+        "name": "asc",
+        "in": "query",
+        "description": "`1` sorts ascending, `0` descending.",
+        "schema": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "default": 1
+        }
+      },
+      "field": {
+        "name": "field",
+        "in": "query",
+        "description": "Return only these keys. Repeatable; `field[]` works too.",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "style": "form",
+        "explode": true
+      },
+      "soft": {
+        "name": "soft",
+        "in": "query",
+        "description": "`1` checks authentication and policies and stops there. See *Dry run* above.",
+        "schema": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "default": 0
+        }
+      },
+      "accept": {
+        "name": "Accept",
+        "in": "header",
+        "description": "Representation to return.",
+        "schema": {
+          "type": "string",
+          "default": "application/json",
+          "enum": [
+            "application/json",
+            "text/turtle",
+            "application/ld+json",
+            "application/rdf+xml",
+            "application/n-triples"
+          ]
+        }
+      },
+      "ifMatch": {
+        "name": "If-Match",
+        "in": "header",
+        "description": "The `ETag` from your last read. The write fails with `412` when the document changed since.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "jobId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "The request is invalid, for example a body that fails the type's validation.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "No valid token."
+      },
+      "Forbidden": {
+        "description": "The policies deny this request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "No document with this identifier.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            },
+            "example": {
+              "message": "R0011 | id:WO-0000000 | collection:entities - Item with id WO-0000000 doesn't exist in collection entities"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "A unique key is already taken by another document."
+      },
+      "PreconditionFailed": {
+        "description": "`If-Match` doesn't match the current ETag: someone changed the document after you read it."
+      }
+    },
+    "schemas": {
+      "error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Starts with an error code, for example `R0011`."
+          }
+        }
+      },
+      "metadataEntry": {
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "description": "A string, number, boolean, object or array, depending on the key."
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language of the value, for multilingual keys."
+          }
+        },
+        "example": {
+          "key": "status",
+          "value": "in_progress"
+        }
+      },
+      "relation": {
+        "type": "object",
+        "required": [
+          "key",
+          "type"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Identifier of the related document."
+          },
+          "type": {
+            "type": "string",
+            "description": "Relation type, for example `for_car`."
+          },
+          "metadata": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metadataEntry"
+            },
+            "description": "Metadata stored on the relation itself."
+          }
+        },
+        "example": {
+          "key": "CAR-JQGB344X",
+          "type": "for_car"
+        }
+      },
+      "auditEntry": {
+        "type": "object",
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "by": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          }
+        }
+      },
+      "audit": {
+        "type": "object",
+        "properties": {
+          "created": {
+            "$ref": "#/components/schemas/auditEntry"
+          },
+          "updated": {
+            "$ref": "#/components/schemas/auditEntry"
+          },
+          "last_activity": {
+            "$ref": "#/components/schemas/auditEntry"
+          }
+        }
+      },
+      "entity": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Internal UUID."
+          },
+          "id": {
+            "type": "string",
+            "description": "Readable identifier, when the type has one."
+          },
+          "type": {
+            "type": "string",
+            "description": "The entity type, for example `workOrder`."
+          },
+          "schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "version": {
+                "type": "integer"
+              }
+            }
+          },
+          "identifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Every identifier the document can be fetched by."
+          },
+          "metadata": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metadataEntry"
+            }
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/relation"
+            }
+          },
+          "audit": {
+            "$ref": "#/components/schemas/audit"
+          },
+          "document_version": {
+            "type": "integer"
+          }
+        },
+        "example": {
+          "_id": "8c1f3a52-6d0e-4b8f-9a1d-2e5c7b904f13",
+          "id": "WO-6V8VLIHP0",
+          "type": "workOrder",
+          "schema": {
+            "type": "elody",
+            "version": 1
+          },
+          "identifiers": [
+            "WO-6V8VLIHP0",
+            "8c1f3a52-6d0e-4b8f-9a1d-2e5c7b904f13"
+          ],
+          "metadata": [
+            {
+              "key": "title",
+              "value": "Annual service"
+            },
+            {
+              "key": "status",
+              "value": "in_progress"
+            },
+            {
+              "key": "planned_date",
+              "value": "2026-09-03"
+            },
+            {
+              "key": "mileage_at_intake",
+              "value": 84210
+            }
+          ],
+          "relations": [
+            {
+              "key": "CAR-JQGB344X",
+              "type": "for_car"
+            },
+            {
+              "key": "EMP-SYOO1RU3",
+              "type": "assigned_to"
+            },
+            {
+              "key": "PRT-884O25BR0",
+              "type": "uses_part",
+              "metadata": [
+                {
+                  "key": "quantity",
+                  "value": 4
+                }
+              ]
+            }
+          ],
+          "audit": {
+            "created": {
+              "at": "2026-09-02T08:14:03.512000+00:00",
+              "by": "an.peeters@garage.example.com"
+            },
+            "updated": {
+              "at": "2026-09-03T15:40:27.108000+00:00",
+              "by": "tom.claes@garage.example.com"
+            },
+            "last_activity": {
+              "at": "2026-09-03T15:40:27.108000+00:00",
+              "by": "tom.claes@garage.example.com",
+              "event": "update"
+            }
+          },
+          "document_version": 3
+        }
+      },
+      "entityInput": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metadataEntry"
+            }
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/relation"
+            }
+          }
+        },
+        "example": {
+          "type": "workOrder",
+          "metadata": [
+            {
+              "key": "title",
+              "value": "Replace front brake pads"
+            },
+            {
+              "key": "status",
+              "value": "planned"
+            },
+            {
+              "key": "planned_date",
+              "value": "2026-10-20"
+            }
+          ],
+          "relations": [
+            {
+              "key": "CAR-JQGB344X",
+              "type": "for_car"
+            }
+          ]
+        }
+      },
+      "documentPatch": {
+        "type": "object",
+        "description": "Only the parts to change.",
+        "properties": {
+          "metadata": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metadataEntry"
+            }
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/relation"
+            }
+          }
+        }
+      },
+      "mediafileInput": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "technical_origin": {
+            "type": "string",
+            "default": "original",
+            "description": "`original` for an uploaded file, otherwise what derived it, for example `ocr`."
+          },
+          "metadata": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metadataEntry"
+            }
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/relation"
+            }
+          }
+        }
+      },
+      "mediafile": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/entity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "display_filename": {
+                "type": "string",
+                "description": "The file to show: the transcode when there is one."
+              },
+              "original_filename": {
+                "type": "string"
+              },
+              "mimetype": {
+                "type": "string"
+              },
+              "md5sum": {
+                "type": "string"
+              },
+              "filesize": {
+                "type": "string"
+              },
+              "technical_origin": {
+                "type": "string",
+                "description": "`original` for an uploaded file, otherwise what derived it, for example `transcode` or `ocr`."
+              },
+              "original_file_location": {
+                "type": "string",
+                "description": "Download link through storage-api."
+              },
+              "thumbnail_file_location": {
+                "type": "string",
+                "description": "IIIF thumbnail, for images."
+              }
+            }
+          }
+        ],
+        "example": {
+          "_id": "3d9e6b1a-27c4-4f0e-8b53-a61c0d2e7f88",
+          "id": "MF-7EOU64IBC",
+          "type": "mediafile",
+          "schema": {
+            "type": "elody",
+            "version": 1
+          },
+          "identifiers": [
+            "3d9e6b1a-27c4-4f0e-8b53-a61c0d2e7f88",
+            "MF-7EOU64IBC",
+            "b5f0c6e2d1a94e7f8c3b2a1d0e9f8a7b"
+          ],
+          "metadata": [
+            {
+              "key": "title",
+              "value": "Damage rear bumper"
+            }
+          ],
+          "relations": [
+            {
+              "key": "WO-6V8VLIHP0",
+              "type": "is_mediafile_for"
+            }
+          ],
+          "filename": "b5f0c6e2d1a94e7f8c3b2a1d0e9f8a7b-rear-bumper.jpg",
+          "display_filename": "b5f0c6e2d1a94e7f8c3b2a1d0e9f8a7b-rear-bumper.jpg",
+          "original_filename": "rear-bumper.jpg",
+          "mimetype": "image/jpeg",
+          "md5sum": "b5f0c6e2d1a94e7f8c3b2a1d0e9f8a7b",
+          "filesize": "2.31 MB",
+          "technical_origin": "original",
+          "original_file_location": "https://garage.example.com/storage/v1/download-with-ticket/rear-bumper.jpg?ticket_id=0f6b1d7e-...",
+          "thumbnail_file_location": "https://garage.example.com/iiif/3/b5f0c6e2d1a94e7f8c3b2a1d0e9f8a7b-rear-bumper.jpg/full/,150/0/default.jpg",
+          "audit": {
+            "created": {
+              "at": "2026-09-02T08:14:03.512000+00:00",
+              "by": "an.peeters@garage.example.com"
+            },
+            "updated": {
+              "at": "2026-09-03T15:40:27.108000+00:00",
+              "by": "tom.claes@garage.example.com"
+            },
+            "last_activity": {
+              "at": "2026-09-03T15:40:27.108000+00:00",
+              "by": "tom.claes@garage.example.com",
+              "event": "update"
+            }
+          },
+          "document_version": 2
+        }
+      },
+      "filter": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "description": "One filter criterion. See [Advanced Filtering](/services/elody-collection/advanced-filtering) for every type, matcher and option.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "type",
+              "text",
+              "number",
+              "date",
+              "selection",
+              "boolean",
+              "geo"
+            ]
+          },
+          "key": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "value": {},
+          "match_exact": {
+            "type": "boolean"
+          }
+        }
+      },
+      "entityList": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/entity"
+            }
+          },
+          "count": {
+            "type": "integer",
+            "description": "Total number of matches. Can be capped; see the filtering docs."
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "facets": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "next": {
+            "type": "string",
+            "description": "Relative link to the next page, when there is one."
+          },
+          "previous": {
+            "type": "string",
+            "description": "Relative link to the previous page, when there is one."
+          }
+        },
+        "example": {
+          "results": [
+            {
+              "_id": "8c1f3a52-6d0e-4b8f-9a1d-2e5c7b904f13",
+              "id": "WO-6V8VLIHP0",
+              "type": "workOrder",
+              "schema": {
+                "type": "elody",
+                "version": 1
+              },
+              "identifiers": [
+                "WO-6V8VLIHP0",
+                "8c1f3a52-6d0e-4b8f-9a1d-2e5c7b904f13"
+              ],
+              "metadata": [
+                {
+                  "key": "title",
+                  "value": "Annual service"
+                },
+                {
+                  "key": "status",
+                  "value": "in_progress"
+                },
+                {
+                  "key": "planned_date",
+                  "value": "2026-09-03"
+                },
+                {
+                  "key": "mileage_at_intake",
+                  "value": 84210
+                }
+              ],
+              "relations": [
+                {
+                  "key": "CAR-JQGB344X",
+                  "type": "for_car"
+                },
+                {
+                  "key": "EMP-SYOO1RU3",
+                  "type": "assigned_to"
+                },
+                {
+                  "key": "PRT-884O25BR0",
+                  "type": "uses_part",
+                  "metadata": [
+                    {
+                      "key": "quantity",
+                      "value": 4
+                    }
+                  ]
+                }
+              ],
+              "audit": {
+                "created": {
+                  "at": "2026-09-02T08:14:03.512000+00:00",
+                  "by": "an.peeters@garage.example.com"
+                },
+                "updated": {
+                  "at": "2026-09-03T15:40:27.108000+00:00",
+                  "by": "tom.claes@garage.example.com"
+                },
+                "last_activity": {
+                  "at": "2026-09-03T15:40:27.108000+00:00",
+                  "by": "tom.claes@garage.example.com",
+                  "event": "update"
+                }
+              },
+              "document_version": 3
+            }
+          ],
+          "count": 128,
+          "facets": [],
+          "skip": 0,
+          "limit": 1,
+          "next": "/entities/filter?skip=1&limit=1"
+        }
+      },
+      "identifiers": {
+        "type": "object",
+        "required": [
+          "identifiers"
+        ],
+        "properties": {
+          "identifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "identifiers": [
+            "WO-6V8VLIHP0",
+            "WO-3KQ7ZT0M1"
+          ]
+        }
+      },
+      "jobReference": {
+        "type": "object",
+        "properties": {
+          "parent_job_id": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "parent_job_id": "c07e2f4a-91b3-4d6e-a8f5-3b2d1c0e9f76"
+        }
+      },
+      "downloadUrls": {
+        "type": "object",
+        "properties": {
+          "original_file_location": {
+            "type": "string",
+            "description": "Ticketed link to the original file, when the caller may download it."
+          },
+          "transcode_file_location": {
+            "type": "string",
+            "description": "Ticketed link to the transcode. For PDF, XML and plain text this is the original."
+          }
+        },
+        "example": {
+          "original_file_location": "https://garage.example.com/storage/v1/download-with-ticket/rear-bumper.jpg?ticket_id=0f6b1d7e-...",
+          "transcode_file_location": "https://garage.example.com/storage/v1/download-with-ticket/rear-bumper.jpg?ticket_id=4a2c9e10-..."
+        }
+      }
+    }
+  }
+}

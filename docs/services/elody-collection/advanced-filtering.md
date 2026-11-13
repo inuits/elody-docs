@@ -46,17 +46,17 @@ The body is always a JSON array of filter criteria:
 
 ```json
 [
-  { "type": "type", "value": "asset" },
+  { "type": "type", "value": "part" },
   {
     "type": "text",
-    "key": "properties.title.value",
-    "value": "Portret",
+    "key": "properties.name.value",
+    "value": "Brake pad set",
     "match_exact": true
   }
 ]
 ```
 
-This returns every asset whose title property equals `Portret`.
+This returns every part whose name property equals `Brake pad set`.
 
 **A type filter is strictly required for every request.** Every request body
 must contain at least one criterion that filters on the entity type: either a
@@ -101,15 +101,15 @@ Filters on text values. Applies to any field that stores a string.
 | `regex`       | `"value": "..."`, `"regex": true`, `"regex_options": "i"` | Regular expression match.              |
 
 Contains matches are case-insensitive. The characters `*`, `^` and `$` are
-treated as wildcards (`.` and anchors), so `^lpa1:` matches any value starting
-with `lpa1:`.
+treated as wildcards (`.` and anchors), so `^WVW` matches any value starting
+with `WVW`.
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
-  { "type": "text", "key": "properties.name.value", "value": "*" },
-  { "type": "text", "key": "properties.serial_number.value", "value": "^lpa1:" },
-  { "type": "text", "key": "properties.description.value", "value": "" }
+  { "type": "type", "value": "car" },
+  { "type": "text", "key": "properties.licence_plate.value", "value": "*" },
+  { "type": "text", "key": "properties.vin.value", "value": "^WVW" },
+  { "type": "text", "key": "properties.colour.value", "value": "" }
 ]
 ```
 
@@ -118,11 +118,11 @@ flags (for example `i` for a case-insensitive match):
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
+  { "type": "type", "value": "car" },
   {
     "type": "text",
-    "key": "properties.serial_number.value",
-    "value": "^(lpa1|lpb2)-[0-9]{4}$",
+    "key": "properties.vin.value",
+    "value": "^(WVW|WAU)[A-Z0-9]{14}$",
     "regex": true
   }
 ]
@@ -143,16 +143,16 @@ apply.
 
 ```json
 [
-  { "type": "type", "value": "asset" },
+  { "type": "type", "value": "part" },
   {
     "type": "number",
-    "key": "properties.width.value",
-    "value": { "min": 4137, "included": true }
+    "key": "properties.price.value",
+    "value": { "min": 50, "included": true }
   },
   {
     "type": "number",
-    "key": "properties.height.value",
-    "value": { "min": 800, "max": 1200, "included": true }
+    "key": "properties.stock_quantity.value",
+    "value": { "min": 0, "max": 5, "included": true }
   }
 ]
 ```
@@ -175,10 +175,10 @@ calendar day** rather than a single instant:
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
+  { "type": "type", "value": "workOrder" },
   {
     "type": "date",
-    "key": "properties.date_last_reported.value",
+    "key": "properties.planned_date.value",
     "value": { "min": "2022-04-13", "max": "2022-04-14T15:00:00" }
   },
   {
@@ -215,7 +215,7 @@ as an OR (any value in the list matches).
   {
     "type": "selection",
     "key": "identifiers",
-    "value": ["R 53.5", "Bg9DTJPNRjLQmViHTb72qGeR"],
+    "value": ["invoice-2024-0153", "Bg9DTJPNRjLQmViHTb72qGeR"],
     "match_exact": true
   }
 ]
@@ -227,7 +227,7 @@ Filters on boolean fields.
 
 ```json
 [
-  { "type": "type", "value": "asset" },
+  { "type": "type", "value": "part" },
   {
     "type": "boolean",
     "key": "properties.is_original.value",
@@ -242,7 +242,7 @@ Filters on the entity type. The simple form takes a single type:
 
 ```json
 [
-  { "type": "type", "value": "asset" }
+  { "type": "type", "value": "car" }
 ]
 ```
 
@@ -253,7 +253,7 @@ To match one of several types, use a `selection` filter on the `type` key:
   {
     "type": "selection",
     "key": "type",
-    "value": ["asset", "asset_part"],
+    "value": ["customer", "employee"],
     "match_exact": true
   }
 ]
@@ -277,7 +277,7 @@ it.
 [
   {
     "type": "type",
-    "value": "region"
+    "value": "garage"
   },
   {
     "type": "geo",
@@ -334,11 +334,11 @@ objects, and the path tells the filter engine how to traverse them. The main
 object lists are `metadata`, `properties`, `relations` and `data`.
 
 ```
-properties.object_number.value   ->  the property entry with key "object_number",
+properties.licence_plate.value   ->  the property entry with key "licence_plate",
                                      and its "value" field
 properties.gps_coordinates.geojson -> the "geojson" field of the "gps_coordinates"
                                      property
-properties.ref_words.value      ->  the id of a referenced word entity
+properties.ref_car_model.value  ->  the id of a referenced carModel entity
 ```
 
 Parts of a key that are part of an object list need no special syntax. Fields
@@ -352,10 +352,10 @@ then treats each entry as a separate schema and combines them with an OR:
 
 ```json
 [
-  { "type": "type", "value": "asset" },
+  { "type": "type", "value": "workOrder" },
   {
     "type": "selection",
-    "key": ["dams:1|relations.isAssetFor.key"],
+    "key": ["pim:1|relations.for_car.key"],
     "value": ["9f7146e4-7aba-5993-8f58-320dc325a2f9"],
     "match_exact": true
   }
@@ -372,11 +372,11 @@ automatically.
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
+  { "type": "type", "value": "car" },
   {
     "type": "text",
-    "key": "?properties.alternate_name.value",
-    "value": "POA-ANTHAO-002",
+    "key": "?properties.colour.value",
+    "value": "blue",
     "match_exact": true
   }
 ]
@@ -386,11 +386,11 @@ Forcing an optional criterion to apply strictly:
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
+  { "type": "type", "value": "car" },
   {
     "type": "text",
-    "key": "!?properties.serial_number.value",
-    "value": "^lpa1:",
+    "key": "!?properties.vin.value",
+    "value": "^WVW",
     "match_exact": true
   }
 ]
@@ -403,26 +403,26 @@ are combined with **OR** when at least one of them carries `"operator": "or"`:
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
+  { "type": "type", "value": "car" },
   {
     "type": "selection",
-    "key": "properties.device_category.value",
-    "value": ["tracker"],
+    "key": "properties.colour.value",
+    "value": ["red"],
     "match_exact": true,
     "operator": "or"
   },
   {
     "type": "selection",
-    "key": "properties.alternate_name.value",
-    "value": ["POA-ANTHAO-002"],
+    "key": "properties.licence_plate.value",
+    "value": ["1-ABC-123"],
     "match_exact": true,
     "operator": "or"
   }
 ]
 ```
 
-This matches IotDevices whose category is `tracker` **or** whose alternate name
-is `POA-ANTHAO-002`.
+This matches cars whose colour is `red` **or** whose licence plate is
+`1-ABC-123`.
 
 For a nested OR group inside an otherwise AND-combined request, use the `or`
 field on a criterion:
@@ -432,19 +432,19 @@ field on a criterion:
   {
     "type": "selection",
     "key": "type",
-    "value": ["asset", "asset_part"],
+    "value": ["workOrder"],
     "match_exact": true
   },
   {
     "type": "selection",
-    "key": "relations.isAssetFor.key",
+    "key": "relations.for_car.key",
     "value": ["9f7146e4-7aba-5993-8f58-320dc325a2f9"],
     "match_exact": true,
     "or": [
       {
         "type": "selection",
-        "key": "relations.isAssetPartFor.key",
-        "value": ["9f7146e4-7aba-5993-8f58-320dc325a2f9"],
+        "key": "relations.assigned_to.key",
+        "value": ["3c2d8a10-5b7e-5f4a-9e61-0a7c4b2f8d15"],
         "match_exact": true
       }
     ]
@@ -452,23 +452,23 @@ field on a criterion:
 ]
 ```
 
-This matches assets (or asset parts) that are an asset for the given entity
-**or** an asset part for it.
+This matches work orders that are for the given car **or** assigned to the
+given employee.
 
 ## Inner exact matches
 
 `inner_exact_matches` adds equality constraints on the entries of an object
-list being scanned. For example, to collect keyword relations that have the
-`lang` entry set to `en`, add an exact match on that entry field:
+list being scanned. For example, to collect part relations that have the
+`category` entry set to `brakes`, add an exact match on that entry field:
 
 ```json
 [
-  { "type": "type", "value": "media" },
+  { "type": "type", "value": "workOrder" },
   {
     "type": "text",
-    "key": "relations.hasKeyword.key",
+    "key": "relations.uses_part.key",
     "value": "*",
-    "inner_exact_matches": { "lang": "en" }
+    "inner_exact_matches": { "category": "brakes" }
   }
 ]
 ```
@@ -479,25 +479,25 @@ Entities are linked to each other through relations. A relation is stored as a
 plain property on the document that references the id of another entity. There
 is no dedicated relations namespace: such id references can live anywhere in
 the document, for example under `relations.<type>.key` or under a property
-such as `properties.ref_words.value`, which holds the id of a referenced word
-entity. For filtering purposes a relation has no special
+such as `properties.ref_car_model.value`, which holds the id of a referenced
+carModel entity. For filtering purposes a relation has no special
 meaning: it is filtered on exactly like any other field that stores an id.
 
 Filtering on a relation is therefore just an equality check on its id value:
 
 ```json
 [
-  { "type": "type", "value": "asset" },
+  { "type": "type", "value": "workOrder" },
   {
     "type": "selection",
-    "key": "relations.isAssetFor.key",
+    "key": "relations.for_car.key",
     "value": ["9f7146e4-7aba-5993-8f58-320dc325a2f9"],
     "match_exact": true
   }
 ]
 ```
 
-This matches every entity that has a relation of type `isAssetFor` pointing to
+This matches every entity that has a relation of type `for_car` pointing to
 the given entity.
 
 Counting relations with the `aggregation` modifier (see
@@ -505,10 +505,10 @@ Counting relations with the `aggregation` modifier (see
 
 ```json
 [
-  { "type": "type", "value": "inscription" },
+  { "type": "type", "value": "workOrder" },
   {
     "type": "number",
-    "key": "properties.ref_words.value",
+    "key": "properties.ref_parts.value",
     "value": { "min": 4, "max": 6, "included": true },
     "match_exact": true,
     "aggregation": "size"
@@ -516,7 +516,7 @@ Counting relations with the `aggregation` modifier (see
 ]
 ```
 
-This matches inscriptions that have between 4 and 6 referenced words.
+This matches work orders that use between 4 and 6 parts.
 
 ### Virtual relations (lookup)
 
@@ -535,42 +535,41 @@ A `lookup` object has the following fields:
 
 ```json
 [
-  { "type": "type", "value": "PoliceZone" },
+  { "type": "type", "value": "garage" },
   {
     "lookup": {
-      "from": "devices_actual",
+      "from": "cars_actual",
       "local_field": "id",
       "foreign_field": "tenants",
-      "as": "lookup.virtual_relations.zonesServed"
+      "as": "lookup.virtual_relations.cars"
     },
     "type": "selection",
-    "key": "lookup.virtual_relations.zonesServed.identifiers",
-    "value": ["urn:ngsi-ld:IotDevice:anpr:5345ANT664ADJ1"],
+    "key": "lookup.virtual_relations.cars.identifiers",
+    "value": ["WVWZZZ1KZ6W000001"],
     "match_exact": true
   }
 ]
 ```
 
-This returns every police zone that has the given IotDevice among its served
-devices, where the relationship lives on the device (`tenants`) rather than on
-the zone.
+This returns every garage that has the given car among its cars, where the
+relationship lives on the car (`tenants`) rather than on the garage.
 
 The same mechanism works in the reverse direction, where the joined collection
 references the source document:
 
 ```json
 [
-  { "type": "type", "value": "PoliceAsset" },
+  { "type": "type", "value": "car" },
   {
     "lookup": {
-      "from": "assets_actual",
-      "local_field": "properties.ref_asset_group.value",
+      "from": "car_models_actual",
+      "local_field": "properties.ref_car_model.value",
       "foreign_field": "id",
-      "as": "lookup.virtual_relations.ref_asset_group"
+      "as": "lookup.virtual_relations.ref_car_model"
     },
     "type": "selection",
-    "key": "lookup.virtual_relations.ref_asset_group.properties.name.value",
-    "value": ["dev"],
+    "key": "lookup.virtual_relations.ref_car_model.properties.make.value",
+    "value": ["Volkswagen"],
     "match_exact": true
   }
 ]
@@ -584,12 +583,12 @@ attribute values.
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
+  { "type": "type", "value": "car" },
   {
     "type": "text",
-    "key": "properties.state.value",
+    "key": "properties.colour.value",
     "value": "*",
-    "distinct_by": "properties.state.value"
+    "distinct_by": "properties.colour.value"
   }
 ]
 ```
@@ -603,25 +602,25 @@ returned alongside the results in the response `facets` list.
 [
   {
     "type": "type",
-    "value": "point",
+    "value": "workOrder",
     "facets": [
-      { "key": "properties.record_completion_status.value" },
+      { "key": "properties.status.value" },
       {
         "lookups": [
           {
-            "from": "sites_actual",
-            "local_field": "properties.ref_site.value",
+            "from": "cars_actual",
+            "local_field": "properties.ref_car.value",
             "foreign_field": "id",
-            "as": "lookup.virtual_relations.ref_site"
+            "as": "lookup.virtual_relations.ref_car"
           },
           {
-            "from": "areas_actual",
-            "local_field": "lookup.virtual_relations.ref_site.properties.ref_area.value",
+            "from": "car_models_actual",
+            "local_field": "lookup.virtual_relations.ref_car.properties.ref_car_model.value",
             "foreign_field": "id",
-            "as": "lookup.virtual_relations.ref_area"
+            "as": "lookup.virtual_relations.ref_car_model"
           }
         ],
-        "key": "lookup.virtual_relations.ref_area.properties.name.value"
+        "key": "lookup.virtual_relations.ref_car_model.properties.make.value"
       }
     ]
   }
@@ -640,10 +639,10 @@ has:
 
 ```json
 [
-  { "type": "type", "value": "inscription" },
+  { "type": "type", "value": "workOrder" },
   {
     "type": "number",
-    "key": "properties.ref_words.value",
+    "key": "properties.ref_parts.value",
     "value": { "min": 4, "max": 6, "included": true },
     "match_exact": true,
     "aggregation": "size"
@@ -710,34 +709,35 @@ query, which is useful for testing whether a request body is accepted.
 ## Worked examples
 
 A search combining an exact match on a category with a contains search on a
-serial number:
+part number:
 
 ```json
 [
-  { "type": "type", "value": "IotDevice" },
+  { "type": "type", "value": "part" },
   {
     "type": "text",
     "key": "properties.category.value",
-    "value": "track&trace",
+    "value": "brakes",
     "match_exact": true
   },
   {
     "type": "text",
-    "key": "properties.serial_number.value",
-    "value": "^lpa1:"
+    "key": "properties.part_number.value",
+    "value": "^BP-"
   }
 ]
 ```
 
-Negating a text match to find creators whose initials do not contain a value:
+Negating a text match to find employees whose last name does not contain a
+value:
 
 ```json
 [
-  { "type": "type", "value": "creator" },
+  { "type": "type", "value": "employee" },
   {
     "type": "text",
-    "key": "properties.initials.value",
-    "value": "zn",
+    "key": "properties.last_name.value",
+    "value": "jans",
     "match_exact": false,
     "match_not": true
   }
@@ -758,17 +758,17 @@ Filtering mediafiles of a single schema on a technical field:
 ]
 ```
 
-Finding an asset group by its members, using a reverse lookup:
+Finding car models by their cars, using a reverse lookup:
 
 ```json
 [
-  { "type": "type", "value": "AssetGroup" },
+  { "type": "type", "value": "carModel" },
   {
     "lookup": {
-      "from": "assets_actual",
+      "from": "cars_actual",
       "local_field": "id",
-      "foreign_field": "properties.ref_asset_group.value",
-      "as": "lookup.virtual_relations.assets"
+      "foreign_field": "properties.ref_car_model.value",
+      "as": "lookup.virtual_relations.cars"
     },
     "type": "selection",
     "key": "identifiers",

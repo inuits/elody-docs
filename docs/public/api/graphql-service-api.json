@@ -1,0 +1,1562 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Elody GraphQL Service API",
+    "version": "0.10.37",
+    "description": "The HTTP endpoints of a client's GraphQL service, the Node/Express app that serves the PWA. Most of the work goes through `POST /api/graphql`; the other endpoints cover what doesn't fit in a GraphQL response: logging in, files, exports and the PWA's boot config. See [Proxy Endpoints](/services/elody-frontend/proxy-endpoints) for how they work.\n\nThe endpoints come from **base-graphql**, except those tagged as added by **mediafileModule**, which every DAMS client installs. A client can add its own endpoints, so check your deployment for extras. The examples use [the garage network](/example-domain).\n\n**Authentication.** These endpoints are meant for the PWA. They use the `connect.sid` session cookie that `POST /api/auth_code` sets, and call collection-api with the token held in the session. A request without a session usually fails with `500 AUTH | NO VALID TOKEN`, unless the deployment allows anonymous users or whitelists the caller's IP or domain. To integrate from another service, call [collection-api](/services/elody-collection/api-reference) directly instead.\n\n**Left out:** `/api/prom/query_range`, which returns fixed sample data.",
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/inuits/elody-base-graphql/blob/master/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://garage.example.com",
+      "description": "A client's dashboard; the GraphQL service and the PWA share one origin."
+    }
+  ],
+  "tags": [
+    {
+      "name": "GraphQL",
+      "description": "The GraphQL endpoint."
+    },
+    {
+      "name": "Auth and session",
+      "description": "The server side of the OIDC login. See [Auth & Session](/services/elody-frontend/auth-session)."
+    },
+    {
+      "name": "App configuration",
+      "description": "What the PWA loads at boot."
+    },
+    {
+      "name": "Export and ordering",
+      "description": "CSV and Excel exports, and ordering an entity's children."
+    },
+    {
+      "name": "Mediafiles",
+      "description": "Uploading and downloading files, and the IIIF proxy. Added by [mediafileModule](/services/elody-frontend/graphql-modules#mediafilemodule)."
+    },
+    {
+      "name": "Linked Open Data",
+      "description": "Entity URLs that also serve RDF."
+    },
+    {
+      "name": "Operations",
+      "description": "Health, version and SEO."
+    }
+  ],
+  "security": [
+    {
+      "sessionCookie": []
+    }
+  ],
+  "paths": {
+    "/api/graphql": {
+      "post": {
+        "tags": [
+          "GraphQL"
+        ],
+        "summary": "Run a GraphQL operation",
+        "operationId": "graphql",
+        "description": "The Apollo Server endpoint the PWA talks to. The path is `APOLLO_GRAPHQL_PATH`, `/api/graphql` by default.\n\nThe schema depends on the modules a client installs, so it isn't listed here. See [GraphQL Modules](/services/elody-frontend/graphql-modules), or run an introspection query against your own deployment.\n\n**Content-Type must be exactly `application/json`.** Anything else, including `application/json; charset=utf-8`, gets `415 Unsupported Media Type`.\n\nWithout a session, queries still run; `extensions.authStatus` in the response is then `UNAUTHENTICATED`.",
+        "parameters": [
+          {
+            "name": "X-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "garage-ghent",
+            "description": "The tenant (garage) to work in. Passed on to collection-api."
+          },
+          {
+            "name": "X-Parent-Entity-Id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CAR-JQGB344X",
+            "description": "The entity the current page is about. Permission checks that use `$parentEntityId` read it from here."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphqlRequest"
+              },
+              "example": {
+                "operationName": "getEntityById",
+                "query": "query getEntityById($id: String!, $type: String!) { Entity(id: $id, type: $type) { id type intialValues { licence_plate: keyValue(key: \"licence_plate\", source: metadata) } } }",
+                "variables": {
+                  "id": "CAR-JQGB344X",
+                  "type": "car"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The GraphQL result. Errors are reported in `errors` with a 200 status, as GraphQL does.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphqlResponse"
+                },
+                "example": {
+                  "data": {
+                    "Entity": {
+                      "id": "CAR-JQGB344X",
+                      "type": "car",
+                      "intialValues": {
+                        "licence_plate": "1-ABC-123"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "The `Content-Type` header is not exactly `application/json`.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Unsupported Media Type"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth_code": {
+      "post": {
+        "tags": [
+          "Auth and session"
+        ],
+        "summary": "Exchange an authorization code for a session",
+        "operationId": "authCode",
+        "description": "The last step of the OIDC login. The PWA sends the code it received from Keycloak; the server exchanges it for tokens and keeps them in the session. The browser only ever gets the `connect.sid` cookie.\n\nIf the session already holds a token that hasn't expired, nothing is exchanged. See [Auth & Session](/services/elody-frontend/auth-session).",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthCodeRequest"
+              },
+              "example": {
+                "authCode": "f3b1c2d4-…",
+                "clientId": "garage-dashboard",
+                "redirectUri": "https://garage.example.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A session now holds valid tokens. Sets the `connect.sid` cookie.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Got token succesfully."
+              }
+            }
+          },
+          "401": {
+            "description": "Keycloak rejected the code.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Something went wrong. Error: AUTHENTICATE | Invalid response from OpenID server: {\"error\":\"invalid_grant\"}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "get": {
+        "tags": [
+          "Auth and session"
+        ],
+        "summary": "Log out",
+        "operationId": "logout",
+        "description": "Revokes the session's tokens at Keycloak, destroys the session and clears the `connect.sid` cookie.",
+        "responses": {
+          "200": {
+            "description": "Logged out.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Logged out"
+              }
+            }
+          },
+          "500": {
+            "description": "The session could not be destroyed.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Could not log out"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me": {
+      "get": {
+        "tags": [
+          "Auth and session"
+        ],
+        "summary": "Get the logged-in user",
+        "operationId": "me",
+        "description": "Returns the claims of the session's access token, decoded. Nothing is fetched from Keycloak.",
+        "responses": {
+          "200": {
+            "description": "The decoded access token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "example": {
+                  "sub": "4f8c2a6e-91d3-4b7a-a5e2-0c9d8b7f6e15",
+                  "preferred_username": "jdewit",
+                  "email": "j.dewit@garage-ghent.example.com",
+                  "name": "Jan De Wit",
+                  "exp": 1792060800,
+                  "resource_access": {
+                    "garage-dashboard": {
+                      "roles": [
+                        "service_advisor"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No session, or the session holds no token.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Unauthorized"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/app-configs": {
+      "get": {
+        "tags": [
+          "App configuration"
+        ],
+        "summary": "Get the PWA's runtime configuration",
+        "operationId": "appConfigs",
+        "description": "Everything the PWA needs before it can render: OIDC settings, feature flags, routes, translations and the type→URL mapping. The PWA fetches it once at boot.\n\nSome of it is resolved for the user making the request:\n\n- A module feature that names a permission, such as `savedSearch`, is `enabled: false` for a user who fails that permission.\n- `features.simpleSearch.itemTypes` only lists the types the user may read.\n- Routes with `meta.can` get `meta.permitted`, and routes with `meta.landingRedirect` get `meta.landingRoute`.\n\nBecause it is fetched once, a permission change only shows up after a reload.",
+        "security": [
+          {},
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The configuration. Served without a `Content-Type` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppConfigs"
+                },
+                "example": {
+                  "config": {
+                    "graphQlLink": "/api/graphql",
+                    "iiifLink": "https://garage.example.com/iiif",
+                    "oidc": {
+                      "baseUrl": "https://auth.garage.example.com/auth/realms/garage",
+                      "clientId": "garage-dashboard",
+                      "tokenEndpoint": "/protocol/openid-connect/token",
+                      "authEndpoint": "/protocol/openid-connect/auth",
+                      "apiCodeEndpoint": "/api/auth_code",
+                      "logoutEndpoint": "/protocol/openid-connect/logout",
+                      "redirectUri": "https://garage.example.com"
+                    },
+                    "api": {
+                      "storageApiUrl": "https://garage.example.com/storage/v1/"
+                    },
+                    "features": {
+                      "hasTenantSelect": true,
+                      "enableCrossTabAuthSync": true,
+                      "hasBulkOperations": true,
+                      "hasBulkSelect": true,
+                      "hideSuperTenant": false,
+                      "supportsMultilingualMetadataEditing": false,
+                      "simpleSearch": {
+                        "itemTypes": [
+                          "car",
+                          "customer",
+                          "workOrder"
+                        ],
+                        "simpleSearchMetadataKey": [
+                          "licence_plate",
+                          "last_name",
+                          "title"
+                        ]
+                      },
+                      "savedSearch": {
+                        "enabled": true
+                      }
+                    },
+                    "customization": {
+                      "applicationTitle": "Garage Network",
+                      "applicationLocale": "en",
+                      "hideEmptyFields": false,
+                      "entityIdKey": "id"
+                    },
+                    "allowAnonymousUsers": false,
+                    "routerConfig": [
+                      {
+                        "path": "/work-orders",
+                        "name": "WorkOrders",
+                        "component": "HomeWrapper",
+                        "meta": {
+                          "type": "entities",
+                          "entityType": "workOrder",
+                          "requiresAuth": true,
+                          "permitted": true
+                        }
+                      }
+                    ],
+                    "bulkSelectAllSizeLimit": 1000,
+                    "listingCountCap": 1000,
+                    "GLITCH_TIP_ENABLED": false,
+                    "DEPLOYMENT_ENVIRONMENT": "production"
+                  },
+                  "translations": {
+                    "en": {
+                      "entity-types": {
+                        "car": "Car"
+                      }
+                    },
+                    "nl": {
+                      "entity-types": {
+                        "car": "Auto"
+                      }
+                    }
+                  },
+                  "urlMapping": {
+                    "mapping": {
+                      "workOrder": "work-orders"
+                    },
+                    "reverseMapping": {
+                      "work-orders": "workOrder"
+                    }
+                  },
+                  "version": {
+                    "apollo-graphql-version": "0.10.37"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/export/csv": {
+      "post": {
+        "tags": [
+          "Export and ordering"
+        ],
+        "summary": "Export entities as CSV",
+        "operationId": "exportCsv",
+        "description": "Exports the given entities as CSV. Pass `ids`, or pass `parentId` and `relation` to export everything the parent relates to with that relation type.\n\nWhen the CSV export service is enabled (`api.csvExportService.csvExportServiceEnabled`), it builds the file. Otherwise collection-api does, which needs collection-api's `export` feature.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CsvExportRequest"
+              },
+              "examples": {
+                "byIds": {
+                  "summary": "Selected cars",
+                  "value": {
+                    "type": "car",
+                    "ids": [
+                      "CAR-JQGB344X",
+                      "CAR-7KQ2M9XL"
+                    ],
+                    "field": [
+                      "licence_plate",
+                      "vin",
+                      "mileage"
+                    ]
+                  }
+                },
+                "byRelation": {
+                  "summary": "The parts used on a work order",
+                  "value": {
+                    "type": "part",
+                    "parentId": "WO-6V8VLIHP0",
+                    "relation": "uses_part",
+                    "field": [
+                      "part_number",
+                      "name",
+                      "price"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The CSV.",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "licence_plate,vin,mileage\n1-ABC-123,WVWZZZ1KZAW000001,84210\n"
+              }
+            }
+          },
+          "4XX": {
+            "description": "An error from the upstream service, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Anything else, including a request without a valid session.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "AUTH | NO VALID TOKEN"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/export/xlsx": {
+      "post": {
+        "tags": [
+          "Export and ordering"
+        ],
+        "summary": "Export entities as Excel",
+        "operationId": "exportXlsx",
+        "description": "Asks collection-api for an `.xlsx` of the given entities, or of the first `limit` entities of `type` when `ids` is empty. Needs collection-api's `export` feature. The request may take up to ten minutes.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/XlsxExportRequest"
+              },
+              "example": {
+                "type": "part",
+                "order_by": "name",
+                "asc": "1",
+                "limit": 500
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The workbook.",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "An error from collection-api, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Anything else, including a request without a valid session.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "AUTH | NO VALID TOKEN"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/download/csv": {
+      "post": {
+        "tags": [
+          "Export and ordering"
+        ],
+        "summary": "Download the order of an entity's children",
+        "operationId": "downloadOrderCsv",
+        "description": "Downloads, as CSV, the order of the entities under `parentId`. Edit it and send it back with `POST /api/upload/csv`.\n\n**Needs a client route.** This endpoint proxies to `GET /entities/{id}/order` on collection-api. That route is not part of the base collection-api, so it only works for a client whose collection module adds it.",
+        "parameters": [
+          {
+            "name": "return_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Passed on to collection-api."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParentIdRequest"
+              },
+              "example": {
+                "parentId": "WO-6V8VLIHP0"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The order as CSV.",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error from collection-api, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/upload/csv": {
+      "post": {
+        "tags": [
+          "Export and ordering"
+        ],
+        "summary": "Upload a new order for an entity's children",
+        "operationId": "uploadOrderCsv",
+        "description": "Sends an edited order CSV, as downloaded from `POST /api/download/csv`, back to collection-api.\n\n**Needs a client route.** This endpoint proxies to `POST /entities/{id}/order` on collection-api. That route is not part of the base collection-api, so it only works for a client whose collection module adds it.",
+        "parameters": [
+          {
+            "name": "parentId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "WO-6V8VLIHP0"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "text/csv": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The order was saved. The body is empty."
+          },
+          "default": {
+            "description": "An error from collection-api, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/upload/xml": {
+      "post": {
+        "tags": [
+          "Export and ordering"
+        ],
+        "summary": "Import a MARC21 XML file",
+        "operationId": "uploadXml",
+        "description": "Passes an XML file on to collection-api's MARC21 batch import.\n\n**Needs a client route.** This endpoint proxies to `POST /marc21/v1/batch` on collection-api. That route is not part of the base collection-api, so it only works for a client whose collection module adds it.",
+        "parameters": [
+          {
+            "name": "upload_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Passed on to collection-api as `xml_type`."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The import was accepted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "success"
+              }
+            }
+          },
+          "default": {
+            "description": "An error from collection-api, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/upload/batch": {
+      "post": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Import entities and mediafiles from a CSV or Excel file",
+        "operationId": "uploadBatch",
+        "description": "Sends a CSV or `.xlsx` file to collection-api's `POST /batch`. Run it with `dry_run=1` first to validate the file without creating anything. A real run returns the created entities and one upload URL per file the sheet mentions; the PWA then uploads each file to its URL.\n\nNeeds collection-api's `import` feature.\n\nAdded by [mediafileModule](/services/elody-frontend/graphql-modules#mediafilemodule).",
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "intake-week-41.csv"
+          },
+          {
+            "name": "dry_run",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1"
+              ]
+            },
+            "description": "Validate only."
+          },
+          {
+            "name": "main_job_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Job to attach this import to."
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "car"
+          },
+          {
+            "name": "extra_mediafile_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "text/csv": {
+              "schema": {
+                "type": "string"
+              },
+              "example": "type,licence_plate,vin,file_identifier\ncar,1-ABC-123,WVWZZZ1KZAW000001,damage-front.jpg\n"
+            },
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "For a dry run, collection-api's validation result. Otherwise the created entities and upload URLs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchUploadResult"
+                },
+                "example": {
+                  "entities": [
+                    {
+                      "id": "CAR-JQGB344X",
+                      "type": "car"
+                    }
+                  ],
+                  "links": [
+                    "https://garage.example.com/storage/v1/upload-with-ticket/damage-front.jpg?id=MF-7EOU64IBC&ticket_id=…&parent_job_id=JOB-81F2"
+                  ],
+                  "parent_job_id": "JOB-81F2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error from collection-api, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/upload/single": {
+      "post": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Create a mediafile and get its upload URL",
+        "operationId": "uploadSingle",
+        "description": "Creates a mediafile record and returns the URL to upload the file to. With `hasRelation` and `entityId` the mediafile is attached to that entity; without them a new entity of `type` is created with the mediafile.\n\nLeave out `filename` to create a mediafile that only carries metadata, such as an external URL. No upload URL is returned then.\n\nAdded by [mediafileModule](/services/elody-frontend/graphql-modules#mediafilemodule).",
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "damage-front.jpg"
+          },
+          {
+            "name": "hasRelation",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "entityId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CAR-JQGB344X",
+            "description": "Required with `hasRelation`."
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Type of the new entity when there's no `hasRelation`. Defaults to `customization.uploadEntityTypeToCreate`, then `BaseEntity`."
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SingleUploadRequest"
+              },
+              "example": {
+                "entityInput": {
+                  "metadata": [
+                    {
+                      "key": "title",
+                      "value": "Damage, front bumper"
+                    }
+                  ],
+                  "relations": []
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The upload URL, as a JSON string.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "https://garage.example.com/storage/v1/upload-with-ticket/damage-front.jpg?id=MF-7EOU64IBC&ticket_id=…"
+              }
+            }
+          },
+          "default": {
+            "description": "An error from collection-api, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mediafile/{filename}": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Download a mediafile",
+        "operationId": "downloadMediafile",
+        "description": "Looks up the mediafile's download URLs on collection-api and streams the file. By default that's the transcode (the web-friendly version); pass `original=true` for the uploaded file.\n\nNeeds a client policy that gives the user `copyright_access`, as collection-api's `download-urls` does.\n\nAdded by [mediafileModule](/services/elody-frontend/graphql-modules#mediafilemodule).",
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "MF-7EOU64IBC",
+            "description": "The mediafile id. The last path segment is used as the id."
+          },
+          {
+            "name": "original",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "originalFilename",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "damage-front",
+            "description": "Download as an attachment with this name. The extension is taken from the content type."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The file.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Any failure, as an HTML error page."
+          }
+        }
+      }
+    },
+    "/api/download/zip/{id}": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Download an entity's files as a zip",
+        "operationId": "downloadZip",
+        "description": "Asks the transcode service to build a zip for the entity and streams it back. Needs the transcode service.\n\nAdded by [mediafileModule](/services/elody-frontend/graphql-modules#mediafilemodule).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "WO-6V8VLIHP0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The zip.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Passed on from the transcode service."
+              }
+            },
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error from the transcode service, passed on with its status.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/iiif/{path}": {
+      "get": {
+        "tags": [
+          "Mediafiles"
+        ],
+        "summary": "Get an IIIF image or manifest",
+        "operationId": "iiif",
+        "description": "Proxies the IIIF image service (Cantaloupe) for the [media viewers](/services/elody-frontend/features/media-viewers). Tiles, crops and scaled images are streamed as-is.\n\nFor paths ending in `.json` (`info.json`, manifests), the `id` in the response is rewritten to an `/api/iiif/…` URL so that viewers request the tiles through this proxy too.\n\nAn `Authorization` header on the request is used as-is, for services that call with their own token. Otherwise the session's token is used. Errors are sent with `Cache-Control: no-store`.\n\nAdded by [mediafileModule](/services/elody-frontend/graphql-modules#mediafilemodule).",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "3/MF-7EOU64IBC.jpg/full/max/0/default.jpg",
+            "description": "The IIIF path after `/iiif/`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The image, or the JSON document with its `id` rewritten.",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error from the IIIF service, passed on with its status."
+          }
+        }
+      }
+    },
+    "/{route}/{id}": {
+      "get": {
+        "tags": [
+          "Linked Open Data"
+        ],
+        "summary": "Get an entity as RDF",
+        "operationId": "linkedOpenData",
+        "description": "Any page URL of the PWA also serves the entity it shows as data, when the `Accept` header asks for an RDF format or JSON. The last path segment is taken as the entity id, and the request is passed on to collection-api's `GET /entities/{id}` with the same `Accept` header.\n\nA browser asking for `text/html` gets the PWA page as usual. See [Linked Open Data](/services/elody-frontend/features/linked-open-data).\n\nThis request does **not** use the session. Send an `Authorization` header, or the entity must be readable anonymously.",
+        "servers": [
+          {
+            "url": "https://garage.example.com"
+          }
+        ],
+        "security": [
+          {},
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "route",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "cars"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CAR-JQGB344X"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "text/turtle",
+                "application/ld+json",
+                "application/rdf+xml",
+                "application/n-triples",
+                "application/json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The entity in the requested format.",
+            "content": {
+              "text/turtle": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<https://garage.example.com/cars/CAR-JQGB344X> a <https://garage.example.com/ns#car> ;\n  <https://garage.example.com/ns#licence_plate> \"1-ABC-123\" .\n"
+              },
+              "application/ld+json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "collection-api needs a token for this entity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "collection-api could not be reached.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Could not reach the collection api"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "summary": "Health check",
+        "operationId": "health",
+        "security": [
+          {}
+        ],
+        "description": "Answers 200 as long as the process is up. It checks no dependencies.",
+        "responses": {
+          "200": {
+            "description": "The service is up. The body is empty."
+          }
+        }
+      }
+    },
+    "/api/version": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "summary": "Get the version",
+        "operationId": "version",
+        "security": [
+          {}
+        ],
+        "description": "The version of the GraphQL service, from the `version` config. A local build reports `development-version`.",
+        "responses": {
+          "200": {
+            "description": "The version.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "apollo-graphql-version": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "apollo-graphql-version": "0.10.37"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/seo": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "summary": "Get SEO meta tags for a page",
+        "operationId": "seo",
+        "security": [
+          {}
+        ],
+        "description": "Renders an HTML snippet with Open Graph meta tags for the entity on `request_uri`, for crawlers and link previews. Title, description and image come from the metadata keys in `features.SEO.seoMetadataKeys`.\n\nOnly exists when the `SEO` feature is configured. The entity is fetched with the static token.",
+        "parameters": [
+          {
+            "name": "request_uri",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri"
+            },
+            "example": "https://garage.example.com/cars/CAR-JQGB344X"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The meta tags.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The SEO feature is not configured."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "The session cookie set by `POST /api/auth_code`."
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Only where noted: a token passed on as-is."
+      }
+    },
+    "schemas": {
+      "GraphqlRequest": {
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "operationName": {
+            "type": "string"
+          },
+          "variables": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "GraphqlResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "array",
+                  "items": {}
+                },
+                "extensions": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "extensions": {
+            "type": "object",
+            "properties": {
+              "authStatus": {
+                "type": "string",
+                "example": "UNAUTHENTICATED"
+              }
+            }
+          }
+        }
+      },
+      "AuthCodeRequest": {
+        "type": "object",
+        "required": [
+          "authCode",
+          "clientId",
+          "redirectUri"
+        ],
+        "properties": {
+          "authCode": {
+            "type": "string",
+            "description": "The `code` Keycloak redirected back with."
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string",
+            "description": "Must match the redirect URI the login started with."
+          }
+        }
+      },
+      "AppConfigs": {
+        "type": "object",
+        "properties": {
+          "config": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "graphQlLink": {
+                "type": "string"
+              },
+              "iiifLink": {
+                "type": "string"
+              },
+              "oidc": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "api": {
+                "type": "object",
+                "properties": {
+                  "storageApiUrl": {
+                    "type": "string"
+                  }
+                }
+              },
+              "features": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Base flags, plus one `{ enabled }` entry per feature a module contributes."
+              },
+              "customization": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "allowAnonymousUsers": {
+                "type": "boolean"
+              },
+              "routerConfig": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "bulkSelectAllSizeLimit": {
+                "type": "integer"
+              },
+              "listingCountCap": {
+                "type": "integer"
+              }
+            }
+          },
+          "translations": {
+            "type": "object",
+            "description": "Base and client translations merged, per language.",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "urlMapping": {
+            "type": "object",
+            "properties": {
+              "mapping": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "reverseMapping": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "version": {
+            "type": "object",
+            "properties": {
+              "apollo-graphql-version": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "CsvExportRequest": {
+        "type": "object",
+        "required": [
+          "type",
+          "field"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Entity type; picks the collection to export from."
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "parentId": {
+            "type": "string",
+            "description": "With `relation`, used when `ids` is empty."
+          },
+          "relation": {
+            "type": "string"
+          },
+          "field": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Metadata keys to put in the columns."
+          },
+          "order_by": {
+            "type": "string",
+            "default": "date_created"
+          },
+          "asc": {
+            "type": "string",
+            "default": "1"
+          }
+        }
+      },
+      "XlsxExportRequest": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "description": "Used when `ids` is empty."
+          },
+          "order_by": {
+            "type": "string",
+            "default": "date_created"
+          },
+          "asc": {
+            "type": "string",
+            "default": "1"
+          }
+        }
+      },
+      "ParentIdRequest": {
+        "type": "object",
+        "required": [
+          "parentId"
+        ],
+        "properties": {
+          "parentId": {
+            "type": "string"
+          }
+        }
+      },
+      "SingleUploadRequest": {
+        "type": "object",
+        "properties": {
+          "entityInput": {
+            "type": "object",
+            "properties": {
+              "metadata": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "value": {}
+                  }
+                }
+              },
+              "relations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "BatchUploadResult": {
+        "type": "object",
+        "properties": {
+          "entities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "One upload URL per file, with `parent_job_id` appended."
+          },
+          "parent_job_id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

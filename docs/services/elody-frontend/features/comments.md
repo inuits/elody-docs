@@ -1,5 +1,10 @@
 # Comments & Threads
 
+::: tip Configuring it
+The `commentsElement` fields are in
+[Page Elements](../elements/#commentselement).
+:::
+
 Users can hold threaded discussions on an entity. A top-level comment acts as
 the **subject** (the thread starter) and every reply is a separate comment
 entity linked back to it. The entity detail page lists the subjects; opening a

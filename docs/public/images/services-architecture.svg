@@ -130,23 +130,19 @@
   <text class="box-sub" x="852.4" y="711.0">dev SMTP catcher</text>
   <rect class="band b-client" x="30" y="774" width="1180" height="136" rx="10"/>
   <text class="band-title" x="48" y="800">Client-specific services  —  defined inside the client repo itself</text>
-  <text class="band-sub" x="48" y="819">A client may also add its own compose file (vliz ships docker-compose-include-vocab.yml)</text>
+  <text class="band-sub" x="48" y="819">A client may also add its own compose file (e.g. docker-compose-include-vocab.yml)</text>
   <rect class="box n-client" x="46.0" y="830" width="276.5" height="64" rx="7"/>
   <text class="box-label" x="184.2" y="856.0">typesense</text>
   <text class="box-sub" x="184.2" y="873.0">full-text index</text>
-  <text class="box-sub" x="184.2" y="886.0">(podiumnet, vlacc)</text>
   <rect class="box n-client" x="336.5" y="830" width="276.5" height="64" rx="7"/>
   <text class="box-label" x="474.8" y="856.0">drupal + apache + mysql</text>
   <text class="box-sub" x="474.8" y="873.0">public site</text>
-  <text class="box-sub" x="474.8" y="886.0">(amvb)</text>
   <rect class="box n-client" x="627.0" y="830" width="276.5" height="64" rx="7"/>
   <text class="box-label" x="765.2" y="856.0">csv / ldes / seed importers</text>
   <text class="box-sub" x="765.2" y="873.0">domain ingest</text>
-  <text class="box-sub" x="765.2" y="886.0">(coghent)</text>
   <rect class="box n-client" x="917.5" y="830" width="276.5" height="64" rx="7"/>
   <text class="box-label" x="1055.8" y="856.0">vocab, minio-setup</text>
   <text class="box-sub" x="1055.8" y="873.0">thesaurus + buckets</text>
-  <text class="box-sub" x="1055.8" y="886.0">(vliz)</text>
   <rect class="band b-infra" x="30" y="936" width="1180" height="212" rx="10"/>
   <text class="band-title" x="48" y="962">Shared infrastructure  —  root docker-compose.yml</text>
   <text class="band-sub" x="48" y="981">Started once with `task start-root`, shared by every client on the machine</text>
