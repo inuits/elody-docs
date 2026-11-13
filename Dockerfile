@@ -1,3 +1,6 @@
+ARG STORYBOOK_IMAGE=kearblx6.c1.gra9.container-registry.ovh.net/elody-dams-dev/inuits/elody-storybook:beta-redesign
+FROM ${STORYBOOK_IMAGE} AS storybook
+
 # Stage 0: Development stage (source volume-mounted, runs dev server)
 FROM node:22.23.4-bookworm-slim AS development-stage
 
@@ -26,12 +29,14 @@ RUN --mount=type=secret,id=NPM_CONFIG_REGISTRY,uid=1000 \
 
 
 COPY . .
+ENV VITE_STORYBOOK_BASE=/storybook
 RUN npm run build
 
 # Stage 2: Serve the static output with nginx
 FROM nginx:1.28-bookworm
 
 COPY --from=builder /app/docs/.vitepress/dist /usr/share/nginx/html
+COPY --from=storybook /storybook /usr/share/nginx/html/storybook
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
