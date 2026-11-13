@@ -4,7 +4,7 @@ title: Toggle & slider
 
 # Toggle & slider
 
-Toggle group and range slider primitives · Implemented by the toggle/slider primitives
+Toggle group and range slider primitives
 
 ## When to use / when not
 Toggle group: 2–4 mutually exclusive short options (view modes, Ja/Nee where

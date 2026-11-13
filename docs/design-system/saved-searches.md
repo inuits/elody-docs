@@ -4,7 +4,7 @@ title: Saved searches
 
 # Saved searches
 
-Save, recall and manage filter sets — three surfaces · Implemented by the rail menu, create modal and picker modal
+Save, recall and manage filter sets — three surfaces
 
 ## When to use / when not
 Daily-recall workflows on any filtered list. Not a substitute for default

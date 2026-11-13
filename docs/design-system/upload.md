@@ -4,7 +4,7 @@ title: Upload
 
 # Upload
 
-Dropzone + per-file progress, end to end · Implemented by the dropzone family, `BaseProgressStep.vue`, `ProgressBar.vue`, upload status banner
+Dropzone + per-file progress, end to end
 
 ## When to use / when not
 Media upload everywhere (detail panels, import). Not for tiny single-value

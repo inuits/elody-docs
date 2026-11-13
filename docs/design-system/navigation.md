@@ -4,7 +4,7 @@ title: Navigation chrome
 
 # Navigation chrome
 
-Breadcrumb, record stepper, nav rail, wizard steps · Implemented by the detail-view chrome components
+Breadcrumb, record stepper, nav rail, wizard steps
 
 ## When to use / when not
 Fixed chrome only — two fixed elements exist: the 52px nav rail and the
@@ -46,7 +46,7 @@ nouns ("Bibliotheek", "Import").
 Do keep capsules consequence-free (they only navigate). Don't add a third
 fixed element; don't truncate the current breadcrumb item.
 
-## Round 2 — expanded nav & header extras
+## Expanded nav & header extras
 **Expanded nav flyout**: the rail expands to a 320px (w-80) flyout — logo top,
 grouped items (icon + 12.5px label, sub-items indented 16px), saved searches
 entry, login/logout footer row; opens over content with overlay shadow,

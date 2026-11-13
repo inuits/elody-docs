@@ -4,7 +4,7 @@ title: Inputs & tooltips
 
 # Inputs & tooltips
 
-The text/number/textarea primitives + tooltip · Implemented by the base input components
+The text/number/textarea primitives + tooltip
 
 ## When to use / when not
 Every raw input in editors, forms and filters. Tooltips: supplementary info

@@ -4,7 +4,7 @@ title: Per-field editing
 
 # Per-field editing
 
-The system's core pattern: edit scope = save scope = validation scope · Implemented by `MetadataWrapper.vue` + `useBlockEditor.ts`
+The system's core pattern: edit scope = save scope = validation scope
 
 ## When to use / when not
 All metadata editing. The pattern replaces the v1 whole-form edit mode; there

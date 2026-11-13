@@ -4,7 +4,7 @@ title: Entity list element
 
 # Entity list element
 
-The query-driven result list: table, list and grid view modes · Implemented by `BaseLibrary.vue`, `ViewModesList.vue`, `ListItem.vue`, `TableViewRow.vue`
+The query-driven result list: table, list and grid view modes
 
 ## When to use / when not
 Every collection of entities a query returns — main library, relation panels,
@@ -25,7 +25,7 @@ line. Grid: thumbnail cards. Row title navigates; entity badge tones per
 | selected | accent wash + accent row shadow, checkbox checked | checkbox |
 | preview open | container splits 40/60→25/75 by width; table collapses to its **first** metadata column | eye / row |
 | loading | skeleton rows | fetch |
-| empty | text-only line — art is Open, see brief | 0 results |
+| empty | text-only line | 0 results |
 
 <StoryEmbed id="library-viewmodes-viewmodeslist--default" />
 
@@ -48,7 +48,7 @@ sentence case.
 Do collapse columns rather than truncate the title. Don't show more than one
 primary action per row; don't reshuffle badge tones per view mode.
 
-## Round 2 — modes & row states
+## Modes & row states
 **Grid card**: 300×350 — media area 300×220 (`--color-surface-muted`,
 letterboxed thumb; no-media = muted glyph + "Geen media", never blank), body:
 title (13px bold, 2-line clamp), badges row, one secondary line; card = 8px

@@ -4,7 +4,7 @@ title: History diff
 
 # History diff
 
-Side-by-side version compare · Implemented by `HistoryDiffPreview.vue`
+Side-by-side version compare
 
 ## When to use / when not
 Comparing two versions from the audit trail. Extends [AuditEntry](./feedback) —

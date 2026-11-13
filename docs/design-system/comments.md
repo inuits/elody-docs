@@ -4,7 +4,7 @@ title: Comments
 
 # Comments
 
-Threads on records for cataloguer coordination · Implemented by the comment components
+Threads on records for cataloguer coordination
 
 ## When to use / when not
 Human notes *about* the record (questions, review remarks) — never metadata.

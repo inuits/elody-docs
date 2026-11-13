@@ -4,7 +4,7 @@ title: Field row
 
 # Field row
 
-One metadata field: label above value, editable in place · Implemented by `MetadataWrapper.vue`
+One metadata field: label above value, editable in place
 
 ## When to use / when not
 Every single-valued metadata field on a detail screen. Not for interdependent
@@ -50,7 +50,7 @@ Empty: "Geen waarde" / "No value". Error pattern: "{Label} is verplicht" /
 Do keep labels under two words where possible. Don't open a modal for one
 field; don't validate other rows on save; don't hide empty required fields.
 
-## Round 2 — label adornments & value types
+## Label adornments & value types
 Label line adornments, in order after the label: required `*` (danger ink);
 "één van verplicht" group marker (`◦` + tooltip naming the group); help
 tooltip (?); locale selector (11px chip per language, active bold); virtual-

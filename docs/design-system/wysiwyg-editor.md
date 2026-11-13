@@ -4,7 +4,7 @@ title: WYSIWYG editor
 
 # WYSIWYG editor
 
-Rich-text field editor + virtual keyboard for diacritics · Implemented by the WYSIWYG + virtual-keyboard components
+Rich-text field editor + virtual keyboard for diacritics
 
 ## When to use / when not
 HTML-typed field values (annotations, descriptions). Not for plain text

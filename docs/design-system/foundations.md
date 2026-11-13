@@ -4,7 +4,7 @@ title: Foundations
 
 # Foundations
 
-The token layer · Implemented by `tokens.css` (Tailwind 4 `@theme`)
+The token layer
 
 ## When to use / when not
 Consume role tokens (`--color-surface-panel-header`), never raw palette values;
@@ -38,8 +38,7 @@ slides. Focus: 2px `#0CB2BC` ring, 1px offset.
 A generic concept: every entity type a client's config declares gets one of
 **three fixed tones** — tone1 green, tone2 blue, tone3 orange — assigned in
 config order and never reshuffled, plus a grey subtype chip. The badge is
-identical on list rows, breadcrumbs, side panels and wizard steps. vlacc maps
-W→tone1, E→tone2, M→tone3. Green is spoken for twice (tone1 + saved check), so
+identical on list rows, breadcrumbs, side panels and wizard steps. Green is spoken for twice (tone1 + saved check), so
 success feedback never appears as a green pill.
 
 ## States
@@ -69,7 +68,7 @@ both). Sentence case everywhere: "Bewaar" (Save), "Voeg persoon toe" (Add person
 Do derive new colours with oklch from the accent. Don't introduce a fourth
 badge tone; don't shadow a card; don't uppercase labels.
 
-## Round 2 — deprecations & gaps closed
+## Deprecated variants
 Legacy button variants **deprecated**: grey "default" → secondary; mint
 "accentNormal" → commit. Empty value placeholder is **"Geen waarde"** ("-"
 deprecated). `::selection` is `#4169E1` background / white text (from the

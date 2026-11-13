@@ -4,7 +4,7 @@ title: Primitives
 
 # Primitives
 
-Buttons, checkbox, chips, icon, spinner · Implemented by `BaseButton.vue`, `BaseCheckbox.vue`, `CustomIcon.vue`, `SpinnerLoader.vue`
+Buttons, checkbox, chips, icon, spinner
 
 ## When to use / when not
 Every clickable in the system is one of these. Never restyle a native button
@@ -38,8 +38,7 @@ while loading (no layout shift).
 ## Accessibility
 IconButton: `aria-label` mandatory. Checkbox: real `<input type="checkbox">`
 with visible label or `aria-label`. Spinner inside a live region announces via
-its container, not itself. Skeleton loaders exist code-side
-(`ListItemSkeleton.vue`, `EntityDetailSkeleton.vue`) — not re-specified here.
+its container, not itself. Skeleton loaders exist but are not specified here.
 
 ## Content & i18n
 Verbs on buttons, sentence case: "Bewaar" / "Save", "Annuleer" / "Cancel",

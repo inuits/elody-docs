@@ -1,14 +1,13 @@
 ---
-title: elody design system
+title: Elody design system
 ---
 
-# elody design system
+# Elody design system
 
-Working reference for the elody per-field-editing redesign, validated with Open
-Vlacc cataloguers. Every token, size and duration was lifted from the product
-code (`inuits-dams-pwa`) or the redesign prototypes — nothing here is
-decorative. Pages embed live Storybook stories via `<StoryEmbed>`; IDs marked
-in STORYBOOK_TODO.md do not exist yet.
+The shared visual language and interaction patterns of the Elody interface.
+Each page describes one component or pattern: when to use it, how it looks
+and behaves in every state, and how it stays accessible. Live examples come
+from the Elody Storybook.
 
 ## The seven interaction principles
 
@@ -19,7 +18,7 @@ in STORYBOOK_TODO.md do not exist yet.
 3. **Labelled actions, never a bare ⋮.** The primary action is a labelled split
    button; overflow triggers carry a label too.
 4. **Undo over confirm.** Destructive-ish actions execute immediately and offer
-   *Ongedaan maken* in a toast; confirmation modals are reserved for true loss.
+   *Ongedaan maken* (Undo) in a toast; confirmation modals are reserved for true loss.
 5. **Shape encodes role.** Pills start something (add, search, navigate chrome —
    always safe); rectangles execute something immediately (save, open).
 6. **Two elevation levels.** Cards have a 1px border and no shadow; only
@@ -27,18 +26,9 @@ in STORYBOOK_TODO.md do not exist yet.
 7. **Structural accessibility.** Roles, accessible names, focus order and
    `role="alert"|"status"` are part of the component contract, not a pass after.
 
-## Implementing this in the codebase
-
-Follow `IMPLEMENTATION.md` in the handoff root: phased plan (tokens →
-primitives → fields → lists → filters → viewers → flows → Storybook), with a
-definition of done per component and the list of deprecations to retire. For
-the migration itself — PR-sized work packages, Storybook as the system's home,
-and the screen-level refresh pass — use `MIGRATION_PLAN.md`.
-
 ## How to read these pages
 
-Each page: definition + implementing Vue component(s) → when (not) to use →
+Each page: definition → when (not) to use →
 anatomy → state table → live embed → behaviour & keyboard → accessibility →
 NL/EN copy → do & don't → related. Copy examples are bilingual; prose is
-English. "Open — see brief" marks gaps deliberately left open (iconography
-final set, empty-state art, data-viz colours, dark mode).
+English.

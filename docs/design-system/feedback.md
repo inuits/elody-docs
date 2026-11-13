@@ -4,7 +4,7 @@ title: Feedback & undo
 
 # Feedback & undo
 
-Toast, undo-over-confirm, audit entry · Implemented by the notification components + audit trail
+Toast, undo-over-confirm, audit entry
 
 ## When to use / when not
 All mutation feedback. Confirmation modals only for true, unrecoverable loss;
@@ -45,7 +45,7 @@ trap focus. Audit trail is a `role="log"`.
 Do pause dismissal on hover/focus. Don't stack more than 3 toasts; don't use
 a toast for validation errors (those belong at the field).
 
-## Round 2 — undo carrier, toast variants, busy overlay
+## Undo carrier, toast variants, busy overlay
 **Post-save undo is the inline chip** next to the value (until next action) —
 see field-row; the undo-toast remains ONLY for removals (the row is gone).
 **Warn toast**: warning-bg accent bar, `role="status"`, auto-dismiss 8s — for

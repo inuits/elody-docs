@@ -4,11 +4,11 @@ title: Media viewer
 
 # Media viewer
 
-Deep-zoom media display with toolbar · Implemented by `MediaViewerNew.vue`, `IIIFViewer.vue` (OpenSeadragon)
+Deep-zoom media display with toolbar
 
 ## When to use / when not
 Mediafiles on detail screens, previews, and as the primary column for
-DAMS-type clients (damsv2). Not for plain thumbnails in lists.
+DAMS deployments. Not for plain thumbnails in lists.
 
 ## Anatomy
 Dark viewport (`--color-surface-inverted`), the image, and the
@@ -23,7 +23,7 @@ below. Multi-file: filmstrip of thumbnails under the viewport.
 | loaded | image fitted (home) | — |
 | zoomed | cursor grab/grabbing | wheel/toolbar |
 | fullscreen | viewport fills screen, Escape hint | toolbar |
-| no media | text-only line — art is Open, see brief | no files |
+| no media | text-only line | no files |
 
 <StoryEmbed id="components-mediaviewer--with-toolbar" />
 
@@ -45,7 +45,7 @@ Fullscreen announces via `role="status"`.
 Do keep the toolbar visible (no hover-only chrome on touch). Don't recreate
 the toolbar per surface — one ViewerToolbar everywhere.
 
-## Round 2 — one toolbar, four modes
+## One toolbar, four modes
 **Decision: PdfToolbar is deprecated — one ViewerToolbar** hosts mode-specific
 buttons in the same 26px capsule style: **image** (zoom, home, fullscreen,
 rotate), **PDF** (page ‹ n/m ›, zoom, fullscreen, download), **AV** (play/

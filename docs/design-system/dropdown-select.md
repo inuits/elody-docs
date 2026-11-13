@@ -4,7 +4,7 @@ title: Dropdown select
 
 # Dropdown select
 
-The overlay listbox behind every select · Implemented by `AdvancedDropdown.vue`
+The overlay listbox behind every select
 
 ## When to use / when not
 Every enum/closed-list choice in edit, filter and chrome surfaces — the custom

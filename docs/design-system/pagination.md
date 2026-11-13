@@ -4,7 +4,7 @@ title: Pagination
 
 # Pagination
 
-Page navigation + page size on every list · Implemented by `BasePagination.vue`, LibraryBar footer
+Page navigation + page size on every list
 
 ## When to use / when not
 Every paged entity list (library, relation panels, picker results). Not for

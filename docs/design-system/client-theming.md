@@ -4,52 +4,71 @@ title: Client theming
 
 # Client theming
 
-Per-client accent scopes · Implemented by dashboard `theme.txt` → CSS injection; scopes in `tokens.css`
+Each Elody deployment can carry its own brand colours. A theme belongs to a
+deployment, never to a single screen: every page of that deployment uses the
+same colours.
 
-## When to use / when not
-Theme a deployment, never a screen. A client may swap **only** the accent pair
-(+ its five derivations); neutrals, semantic colours, commit teal, focus ring
-and badges are platform-fixed. aicap is the sole sanctioned exception.
+## What a client can change
 
-## Accent table (product triples, verbatim)
-| Client | accent-light | accent | Panel-header ink | Notes |
-|---|---|---|---|---|
-| vlacc | #DEF1FA | #3BA6CB | dark (#1D5C7A) | reference values (redesign) |
-| pza | #DCF4F9 | #2A97E2 | dark (#0B5F87) | hover #0057B7 |
-| podiumnet | #164C85 | #0057b1 | **white** | dark accent-light |
-| damsv2 | #164C85 | #0057b1 | **white** | same triple as podiumnet today; own scope so they can diverge |
-| vliz | #465DAA | #354D9B | **white** | teal #65C9CD stays for commit/focus |
-| aicap | #F2EFEC | #9F8332 | dark (#6E5A22) | + warm surfaces #FAF8F4/#FFFEFE, own ink #343a40 |
+### Accent colours (the usual theme)
+Setting these seven colours gives a complete theme. Everything built on them
+follows automatically.
 
-## Anatomy
-A scope is `[data-elody-client="…"]` on `<body>` overriding the accent set
-**and re-declaring the seven accent-derived aliases** (surface-panel-header,
-surface-section-header, editable-hover, group-tint, text-panel-header,
-link-hover, border-panel) — CSS custom properties resolve `var()` where
-defined, so :root-only aliases freeze to vlacc's accent.
+| Token | What it colours |
+|---|---|
+| `--color-accent` | section headers, primary buttons, active markers, link hover |
+| `--color-accent-hover` | hover on primary buttons and other accent-filled controls |
+| `--color-accent-light` | panel headers, chosen values in dropdowns |
+| `--color-accent-light-strong` | panel borders |
+| `--color-accent-ink` | text on panel headers and on chosen values |
+| `--color-accent-wash` | selected rows; hover on options, editable values and secondary buttons |
+| `--color-accent-tint` | background of grouped fields |
 
-## States
-| State | Visual cue | Trigger |
-|---|---|---|
-| light accent-light | dark accent ink on pale header | default |
-| dark accent-light | white header ink (`--color-accent-ink:#FFF`) | podiumnet, damsv2, vliz |
-| media-first | viewer occupies the wide column | DAMS-type clients |
+### Text and backgrounds (optional)
+Only for a client with its own neutral colours: body text, field labels,
+links, panel and page backgrounds, and the text-selection highlight.
 
-<StoryEmbed id="entityelements-entityelementwindow--default" />
+### Save button and focus ring (fixed by default)
+The save (commit) colour and the keyboard focus ring are the same on every
+deployment, so users always recognise them. Change them only when a brand
+really requires it.
 
-## Behaviour & keyboard
-None — theming is declarative.
+## What stays the same everywhere
+- Status colours: error, success, warning and info.
+- Entity-type badges and chips.
+- Borders and greys.
 
-## Accessibility
-Dark-header clients must keep `--color-text-accent-strong` dark for text on
-white; verify 4.5:1 for every new accent against white and accent-light.
+## How to set a theme
+A deployment's colours are part of its app configuration, under
+`customization.theme`. The app applies them when it starts.
 
-## Content & i18n
-Client names are lowercase identifiers (pza, podiumnet, damsv2, vliz, aicap).
+```ts
+customization: {
+  theme: {
+    "--color-accent": "#7A4FB5",
+    "--color-accent-hover": "#5E3A8E",
+    "--color-accent-light": "#F1EAFA",
+    "--color-accent-light-strong": "#DCCDF0",
+    "--color-accent-ink": "#4A2C73",
+    "--color-accent-wash": "#F6F1FC",
+    "--color-accent-tint": "#F8F4FD",
+  },
+},
+```
 
-## Do & don't
-Do derive hover as a darkened accent. Don't theme the commit teal, focus ring
-or badges; don't let two clients share one scope.
+Only `--color-…` tokens with colour values (hex, `rgb()`, `hsl()`, `var()` or
+`transparent`) are accepted. Anything else is ignored.
+
+<StoryEmbed id="entityelements-entityelementwindow--default" title="Detail panel in the accent colours" />
+
+## Checklist for a new theme
+- Every text colour reaches a 4.5:1 contrast ratio on white and on
+  `--color-accent-light`.
+- Set `--color-accent-light` and `--color-accent-ink` together. A dark panel
+  header needs light text, and the reverse.
+- Make hover colours a darker shade of the accent.
+- Check panel headers, section headers, primary buttons, row hover, links,
+  labels and the focus ring in the running app.
 
 ## Related
 [Foundations](./foundations)

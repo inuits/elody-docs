@@ -4,7 +4,7 @@ title: Panel & block shells
 
 # Panel & block shells
 
-The three chrome layers of a detail screen · Implemented by `EntityElementWindow.vue`
+The three chrome layers of a detail screen
 
 ## When to use / when not
 Every detail-screen region. Maximum nesting: panel → block heading → rows —
@@ -45,7 +45,7 @@ Panel titles are plural nouns ("Titels", "Personen"). Status copy:
 Do reuse this exact chrome for previews and pickers. Don't shadow a panel;
 don't nest a bordered box inside a block.
 
-## Round 2 — expand & quality popover
+## Expand & quality popover
 Panels that support a wide view get an expand button (⤢, icon button in the
 header actions slot, name "Vergroot paneel") opening the panel as a modal at
 overlay elevation. The quality-status popover lists the failing fields as

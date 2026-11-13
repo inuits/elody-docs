@@ -4,7 +4,7 @@ title: Inline editor
 
 # Inline editor
 
-The in-place input a field row swaps to · Implemented by `InlineFieldEditor.vue`
+The in-place input a field row swaps to
 
 ## When to use / when not
 Rendered by a field row (or group card) when editing starts — never mounted
@@ -45,7 +45,7 @@ generic failure: "Opslaan mislukt, probeer opnieuw" / "Saving failed, try again"
 Do preserve the user's input on error. Don't auto-save on blur; don't move the
 commit buttons under the field on wide screens.
 
-## Round 2 — commit model & new inline types
+## Commit model & new inline types
 Commit model everywhere: **pick-then-Bewaar**. Choosing in a select, date
 picker or autocomplete marks the editor dirty; nothing saves until Bewaar.
 The select editor is the custom [dropdown select](./dropdown-select) overlay —

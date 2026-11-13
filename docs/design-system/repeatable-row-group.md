@@ -4,7 +4,7 @@ title: Repeatable row group
 
 # Repeatable row group
 
-N identical rows with add/remove/reorder · Implemented by `EntityElementWindowPanel.vue` (repeatable panels)
+N identical rows with add/remove/reorder
 
 ## When to use / when not
 Multi-valued fields (auteurs, identificatoren). Not for one-off groups or
@@ -44,7 +44,7 @@ Ongedaan maken" / "Author removed — Undo".
 Do keep row content one line. Don't confirm removals; don't hide the add pill
 when rows exist.
 
-## Round 2 — table input merged
+## Table input merged
 Multi-column editable mini-tables (`tableInputFields/*`) are a **variant of
 this component**, not a separate one: each row = cells per the field-grid
 (text/number inputs, relation autocomplete in a cell), a column-header row

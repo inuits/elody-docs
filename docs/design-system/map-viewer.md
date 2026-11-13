@@ -4,10 +4,10 @@ title: Map viewer
 
 # Map viewer
 
-Geodata display: points, WKT geometries, heatmaps · Implemented by `PointMap.vue`, `WktMap.vue`, `HeatMap.vue`, `ViewModesMap.vue`, `EntityElementMapViewer.vue` (OpenLayers, OSM tiles)
+Geodata display: points, WKT geometries, heatmaps
 
 ## When to use / when not
-Location-bearing entities (vliz sampling stations, geo assets) — detail
+Location-bearing entities (sampling stations, geo assets) — detail
 panels, previews, and the map view mode of a list. Not for a single static
 address (plain text).
 

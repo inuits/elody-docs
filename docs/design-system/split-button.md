@@ -4,7 +4,7 @@ title: Split button
 
 # Split button
 
-Primary action + related actions, always labelled · Implemented by `ContextMenuActionsShell.vue`
+Primary action + related actions, always labelled
 
 ## When to use / when not
 Wherever an entity offers one primary action plus alternatives (Open record ▾).
@@ -44,7 +44,7 @@ Primary is a verb: "Open record" · "Bewaar". Menu items verb-first:
 Do keep the primary the statistically most-used action. **Never a bare ⋮** —
 the label is the discovery mechanism. Don't exceed ~7 menu items.
 
-## Round 2 — submenus & destructive marker
+## Submenus & destructive marker
 Menus may nest **one** submenu level (item with › opens right; ←/→ traverse;
 never deeper). Config-driven menus mark destructive items with a schema flag
 (`"tone": "danger"` on the action definition) — the renderer, not the label,

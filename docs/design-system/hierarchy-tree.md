@@ -4,7 +4,7 @@ title: Hierarchy & folder trees
 
 # Hierarchy & folder trees
 
-Tree blocks for record hierarchies and folder structures · Implemented by the hierarchy/folder tree blocks
+Tree blocks for record hierarchies and folder structures
 
 ## When to use / when not
 Parent/child record structures (archief → reeks → stuk) and folder browsing

@@ -4,7 +4,7 @@ title: Import browser
 
 # Import browser
 
-Network-drive browsing for media import · Implemented by the import browser components
+Network-drive browsing for media import
 
 ## When to use / when not
 Selecting files/folders from mounted network drives for import. Not for local

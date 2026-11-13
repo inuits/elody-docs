@@ -4,7 +4,7 @@ title: Action discovery
 
 # Action discovery
 
-Labelled actions, never a bare ⋮ · Implemented by `ContextMenuActionsShell.vue`
+Labelled actions, never a bare ⋮
 
 ## When to use / when not
 Every place an entity or panel offers actions. The pattern exists because

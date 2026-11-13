@@ -4,7 +4,7 @@ title: Date picker
 
 # Date picker
 
-Calendar popup for date, time and range · Implemented by `BaseDatePicker.vue`
+Calendar popup for date, time and range
 
 ## When to use / when not
 Date-typed fields and filters. Typing remains primary — the popup assists; do

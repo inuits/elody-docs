@@ -4,7 +4,7 @@ title: Filter panel
 
 # Filter panel
 
-The 250px query-driven filter rail · Implemented by `FiltersBase.vue`, `FiltersListItem*.vue`, matcher components
+The 250px query-driven filter rail
 
 ## When to use / when not
 Beside every library list whose query declares filters. Not for in-page search
@@ -45,7 +45,7 @@ Matchers: "bevat" / "contains", "begint met" / "starts with", "is exact" /
 Do keep sections in query order. Don't auto-apply on checkbox click; don't
 hide active filters in collapsed sections without the count chip.
 
-## Round 2 — rail chrome & semantics
+## Rail chrome & semantics
 Each active section gets a "Wis filter" link (11.5px) that clears AND applies
 immediately (undo via toast) — clearing is consequence-light, unlike applying.
 Rail header chrome: applied saved-search title chip (with modified dot), a

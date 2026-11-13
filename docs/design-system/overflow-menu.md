@@ -4,7 +4,7 @@ title: Overflow menu
 
 # Overflow menu
 
-Labelled trigger for secondary actions without a primary · Implemented by `ContextMenuActionsShell.vue`
+Labelled trigger for secondary actions without a primary
 
 ## When to use / when not
 When actions are all secondary (panel corner, toolbar end). If one action

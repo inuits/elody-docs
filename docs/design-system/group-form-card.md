@@ -4,7 +4,7 @@ title: Group form card
 
 # Group form card
 
-One-gesture, in-place editing of an interdependent field group · Implemented by `EntityElementWindowPanel.vue`, `useBlockEditor.ts`
+One-gesture, in-place editing of an interdependent field group
 
 ## When to use / when not
 Fields that only make sense together (e.g. uitgever + plaats + jaar). Not for

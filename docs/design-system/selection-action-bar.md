@@ -4,7 +4,7 @@ title: Selection action bar
 
 # Selection action bar
 
-Bulk actions on the current selection · Implemented by BulkOperations components
+Bulk actions on the current selection
 
 ## When to use / when not
 Appears with any list selection; disabled-resting otherwise. Not for
@@ -39,7 +39,7 @@ in their accessible name ("Verwijder 2 records").
 Do keep it visible (not floating over rows). Don't offer more than ~5 bulk
 actions; overflow the rest.
 
-## Round 2 — extras
+## Extras
 The bar may embed compact [pagination](./pagination) right-aligned. A
 "Selecteer pagina" link selects the visible page; with a capped count
 ("500+"), clicking the count reveals the exact total (spinner + tooltip

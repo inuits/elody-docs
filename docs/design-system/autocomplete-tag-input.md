@@ -4,7 +4,7 @@ title: Autocomplete tag input
 
 # Autocomplete tag input
 
-Removable value chips + async search — the relation gesture · Implemented by `BaseInputAutocomplete.vue` (+ relation/metadata variants)
+Removable value chips + async search — the relation gesture
 
 ## When to use / when not
 Authors, subjects, publishers — any multi-valued relation edited in place. The

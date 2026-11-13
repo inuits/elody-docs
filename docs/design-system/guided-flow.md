@@ -4,7 +4,7 @@ title: Guided flow
 
 # Guided flow
 
-Stepped record creation with per-step cards and a created-so-far list · Implemented by `RepetitiveFlow`, `StepModal.vue`, `StepField.vue`, `Overview.vue`
+Stepped record creation with per-step cards and a created-so-far list
 
 ## When to use / when not
 Multi-entity creation (work → expression → manifestation) and repetitive

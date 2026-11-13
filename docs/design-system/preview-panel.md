@@ -4,7 +4,7 @@ title: Preview panel
 
 # Preview panel
 
-The panel a list opens beside itself instead of navigating · Implemented by `PreviewWrapper.vue`
+The panel a list opens beside itself instead of navigating
 
 ## When to use / when not
 When a query declares a `previewComponent` for an entity type (ColumnList,
@@ -26,8 +26,6 @@ rows with optional thumbnail on top; media = viewer; map = map.
 | columnlist | dl rows, em-dash for empty values | type |
 | media | viewer with toolbar | type |
 
-<!-- PreviewWrapper resolves its own Apollo preview query and cannot render in
-Storybook; its chrome is the panel shell, whose story stands in here. -->
 <StoryEmbed id="entityelements-entityelementwindow--default" />
 
 ## Behaviour & keyboard

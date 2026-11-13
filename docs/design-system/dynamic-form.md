@@ -4,7 +4,7 @@ title: Dynamic form
 
 # Dynamic form
 
-Config-driven form layout: tabs, ordering, validation, submit zone · Implemented by `DynamicForm.vue`
+Config-driven form layout: tabs, ordering, validation, submit zone
 
 ## When to use / when not
 Whole-record forms the config generates (creation, import mapping). Not for

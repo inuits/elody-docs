@@ -4,7 +4,7 @@ title: Entity picker
 
 # Entity picker
 
-Search-and-pick overlay for relation values · Implemented by the relation/search modal components
+Search-and-pick overlay for relation values
 
 ## When to use / when not
 Setting a relation field (auteur, uitgever, onderwerp). Not for enum values
@@ -24,9 +24,6 @@ in header), footer with "Voeg toe" commit + "Annuleer".
 | selected | accent wash + check on row(s) | click |
 | no results | text line + "Maak nieuw" if config allows | empty |
 
-<!-- EntityPickerComponent needs a live relation context to mount; the
-saved-searches picker is a real instance of the same picker chrome and
-stands in here. -->
 <StoryEmbed id="modals-savedsearches--picker" />
 
 ## Behaviour & keyboard
@@ -45,7 +42,7 @@ Modal `role="dialog"` named by its title, focus trapped. Results are a
 Do reuse entity badges in rows. Don't nest a second picker; don't clear the
 query on select in multi-select mode.
 
-## Round 2 — library-embedded variant
+## Library-embedded variant
 Inside library contexts the picker reuses the full [entity list
 element](./entity-list-element) (filters, view modes, pagination) in
 confirm-selection mode instead of the compact result list — same dialog
