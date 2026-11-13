@@ -2,7 +2,7 @@ ARG STORYBOOK_IMAGE=kearblx6.c1.gra9.container-registry.ovh.net/elody-dams-dev/i
 FROM ${STORYBOOK_IMAGE} AS storybook
 
 # Stage 0: Development stage (source volume-mounted, runs dev server)
-FROM node:22.23.4-bookworm-slim AS development-stage
+FROM node:22.23.5-bookworm-slim AS development-stage
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ EXPOSE 5173
 CMD ["sh", "-c", "npm install && npm run dev -- --host"]
 
 # Stage 1: Build the VitePress documentation site
-FROM node:22.23.4-bookworm-slim AS builder
+FROM node:22.23.5-bookworm-slim AS builder
 
 WORKDIR /app
 
