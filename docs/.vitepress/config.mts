@@ -68,6 +68,7 @@ export default defineConfig({
           items: [
             { text: "Button", link: "/design-system/button" },
             { text: "Checkbox", link: "/design-system/checkbox" },
+            { text: "Chip & badge", link: "/design-system/chip-and-badge" },
             { text: "Split button", link: "/design-system/split-button" },
             { text: "Overflow menu", link: "/design-system/overflow-menu" },
           ],
