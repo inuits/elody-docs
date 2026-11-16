@@ -7,7 +7,7 @@ export default defineConfig({
 
   base: '/',
 
-  srcExclude: ['design-system/{action-discovery,autocomplete-tag-input,comments,date-picker,dropdown-select,dynamic-form,entity-list-element,entity-picker,feedback,field-row,filter-panel,group-form-card,guided-flow,hierarchy-tree,history-diff,import-browser,inline-editor,inputs-and-tooltips,map-viewer,media-viewer,modal,navigation,overflow-menu,pagination,panel-and-block-shells,per-field-editing,preview-panel,primitives,repeatable-row-group,saved-searches,selection-action-bar,split-button,toggle-and-slider,upload,wysiwyg-editor}.md'],
+  srcExclude: ['design-system/{action-discovery,autocomplete-tag-input,comments,date-picker,dropdown-select,dynamic-form,entity-list-element,entity-picker,feedback,field-row,filter-panel,group-form-card,guided-flow,hierarchy-tree,history-diff,import-browser,inline-editor,inputs-and-tooltips,map-viewer,media-viewer,modal,navigation,overflow-menu,pagination,panel-and-block-shells,per-field-editing,preview-panel,primitives,repeatable-row-group,saved-searches,selection-action-bar,toggle-and-slider,upload,wysiwyg-editor}.md'],
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
@@ -60,6 +60,13 @@ export default defineConfig({
             { text: "Accessibility", link: "/design-system/accessibility" },
             { text: "Content & language", link: "/design-system/content" },
             { text: "Client theming", link: "/design-system/client-theming" },
+          ],
+        },
+        {
+          text: "Components",
+          collapsed: false,
+          items: [
+            { text: "Split button", link: "/design-system/split-button" },
           ],
         },
       ],
