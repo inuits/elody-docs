@@ -66,6 +66,7 @@ export default defineConfig({
           text: "Components",
           collapsed: false,
           items: [
+            { text: "Button", link: "/design-system/button" },
             { text: "Split button", link: "/design-system/split-button" },
             { text: "Overflow menu", link: "/design-system/overflow-menu" },
           ],
