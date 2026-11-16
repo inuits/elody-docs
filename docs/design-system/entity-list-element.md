@@ -15,7 +15,7 @@ Header: title + count chip, view-mode switch (table/list/grid), sort. Table
 mode: checkbox · metadata columns · actions (112px) · optional preview eye
 (26px). List mode: thumbnail · title (link-blue, bold) · badges · secondary
 line. Grid: thumbnail cards. Row title navigates; entity badge tones per
-[Foundations](./foundations).
+[Colour](./colour).
 
 ## States
 | State | Visual cue | Trigger |

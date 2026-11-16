@@ -51,4 +51,4 @@ Do reuse this ring for every focusable. Don't put actions in tooltips; don't
 truncate without the tooltip escape hatch.
 
 ## Related
-[Inline editor](./inline-editor) · [Dropdown select](./dropdown-select) · [Foundations](./foundations)
+[Inline editor](./inline-editor) · [Dropdown select](./dropdown-select) · [Colour](./colour)

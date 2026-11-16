@@ -40,7 +40,7 @@ export default defineConfig({
     sidebar: {
       '/design-system/': [
         {
-          text: "Design system",
+          text: "Get started",
           collapsed: false,
           items: [
             { text: "Introduction", link: "/design-system/" },
@@ -50,9 +50,21 @@ export default defineConfig({
           text: "Foundations",
           collapsed: false,
           items: [
-            { text: "Foundations", link: "/design-system/foundations" },
-            { text: "Primitives", link: "/design-system/primitives" },
+            { text: "Principles", link: "/design-system/principles" },
+            { text: "Colour", link: "/design-system/colour" },
+            { text: "Typography", link: "/design-system/typography" },
+            { text: "Spacing, shape & motion", link: "/design-system/spacing-shape-motion" },
+            { text: "Icons", link: "/design-system/icons" },
+            { text: "Accessibility", link: "/design-system/accessibility" },
+            { text: "Content & language", link: "/design-system/content" },
             { text: "Client theming", link: "/design-system/client-theming" },
+          ],
+        },
+        {
+          text: "Basics (not yet reviewed)",
+          collapsed: false,
+          items: [
+            { text: "Primitives", link: "/design-system/primitives" },
             { text: "Inputs & tooltips", link: "/design-system/inputs-and-tooltips" },
             { text: "Toggle & slider", link: "/design-system/toggle-and-slider" },
           ],

@@ -58,4 +58,4 @@ inside an already-split container recomputes tiers against its own container
 width (container queries, not viewport).
 
 ## Related
-[Foundations](./foundations) · [Panel & block shells](./panel-and-block-shells)
+[Colour](./colour) · [Panel & block shells](./panel-and-block-shells)

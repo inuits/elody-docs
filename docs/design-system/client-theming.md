@@ -71,4 +71,4 @@ Only `--color-…` tokens with colour values (hex, `rgb()`, `hsl()`, `var()` or
   labels and the focus ring in the running app.
 
 ## Related
-[Foundations](./foundations)
+[Colour](./colour) · [Accessibility](./accessibility)

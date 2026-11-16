@@ -49,4 +49,4 @@ Do pair icon + label on primary actions. Don't ship a bare ⋮; don't put two
 primary buttons in one row; don't shrink hit targets under 44px on tablet.
 
 ## Related
-[Split button](./split-button) · [Foundations](./foundations)
+[Split button](./split-button) · [Colour](./colour)
