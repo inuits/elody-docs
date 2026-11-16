@@ -19,7 +19,7 @@ One primary action and its alternatives, joined in one labelled control.
 
 - **Only one action:** use a plain button.
 - **No clear primary action:** use the labelled _Actions_ menu on its own
-  (the overflow menu).
+  ([overflow menu](./overflow-menu)).
 - **More than one promoted action:** show them as separate buttons followed by
   the _Actions_ menu. The split button only forms when there is one promoted action.
 
@@ -88,5 +88,5 @@ A click outside the menu or a scroll closes it without running anything.
 
 ## Related
 
-[Colour](./colour) · [Spacing, shape & motion](./spacing-shape-motion) ·
+[Overflow menu](./overflow-menu) · [Colour](./colour) ·
 [Accessibility](./accessibility)
