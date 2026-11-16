@@ -45,7 +45,7 @@ Turns one option on or off, or selects an item in a list.
 | Checked | commit fill with a white check | click, Space |
 | Partial | commit fill with a dash | some, not all, items below it are selected |
 | Focus | focus ring around the box | keyboard |
-| Disabled | pale box, no pointer | option unavailable |
+| Disabled | muted grey box and label, no pointer; a checked box shows a grey check | option unavailable |
 | Required | checked and locked, with a warning icon after the label | the item must be included |
 | Limit reached | unchecked boxes are disabled | the selection limit of a bulk action is reached |
 
