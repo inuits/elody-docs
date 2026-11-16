@@ -7,7 +7,7 @@ export default defineConfig({
 
   base: '/',
 
-  srcExclude: ['design-system/{action-discovery,autocomplete-tag-input,comments,date-picker,dropdown-select,dynamic-form,entity-list-element,entity-picker,feedback,field-row,filter-panel,group-form-card,guided-flow,hierarchy-tree,history-diff,import-browser,inline-editor,inputs-and-tooltips,map-viewer,media-viewer,modal,navigation,pagination,panel-and-block-shells,per-field-editing,preview-panel,primitives,repeatable-row-group,saved-searches,selection-action-bar,toggle-and-slider,upload,wysiwyg-editor}.md'],
+  srcExclude: ['design-system/{action-discovery,autocomplete-tag-input,comments,dropdown-select,dynamic-form,entity-list-element,entity-picker,feedback,field-row,filter-panel,group-form-card,guided-flow,hierarchy-tree,history-diff,import-browser,inline-editor,inputs-and-tooltips,map-viewer,media-viewer,navigation,panel-and-block-shells,per-field-editing,preview-panel,primitives,repeatable-row-group,saved-searches,selection-action-bar,toggle-and-slider,wysiwyg-editor}.md'],
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
@@ -66,11 +66,22 @@ export default defineConfig({
           text: "Components",
           collapsed: false,
           items: [
+            { text: "Autocomplete", link: "/design-system/autocomplete" },
             { text: "Button", link: "/design-system/button" },
             { text: "Checkbox", link: "/design-system/checkbox" },
             { text: "Chip & badge", link: "/design-system/chip-and-badge" },
-            { text: "Split button", link: "/design-system/split-button" },
+            { text: "Date picker", link: "/design-system/date-picker" },
+            { text: "Dropdown", link: "/design-system/dropdown" },
+            { text: "Loading", link: "/design-system/loading" },
+            { text: "Modal", link: "/design-system/modal" },
             { text: "Overflow menu", link: "/design-system/overflow-menu" },
+            { text: "Pagination", link: "/design-system/pagination" },
+            { text: "Slider", link: "/design-system/slider" },
+            { text: "Split button", link: "/design-system/split-button" },
+            { text: "Text input", link: "/design-system/text-input" },
+            { text: "Toggle", link: "/design-system/toggle" },
+            { text: "Tooltip", link: "/design-system/tooltip" },
+            { text: "Upload", link: "/design-system/upload" },
           ],
         },
       ],

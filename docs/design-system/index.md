@@ -21,7 +21,7 @@ every screen, and the patterns that combine them.
 |---|---|
 | **Foundations** | Principles, colour, typography, spacing, shape, motion, icons, accessibility and content rules that everything else follows. |
 | **Components** | Single building blocks, such as buttons, inputs and menus. |
-| **Patterns** | How components work together for a task, such as editing a record or filtering a list. |
+| **Patterns** | How components work together for a task, such as editing a record or filtering a list. Coming in a later release. |
 
 Every page describes what Elody does today. Features that are not built yet
 are not documented.
@@ -31,13 +31,6 @@ are not documented.
 The examples on these pages are live components from the
 <a href="/storybook/" target="_blank">Elody Storybook</a>. Open a
 story in Storybook to see it full size and try its options.
-
-## Component status
-
-| Status | Meaning |
-|---|---|
-| <Badge type="tip" text="Stable" /> | In use across Elody. Changes are announced in the changelog. |
-| <Badge type="warning" text="Beta" /> | In use, but its look or behaviour may still change. |
 
 ## Building with the design system
 

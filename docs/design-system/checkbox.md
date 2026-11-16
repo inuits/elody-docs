@@ -49,7 +49,7 @@ Turns one option on or off, or selects an item in a list.
 | Required | checked and locked, with a warning icon after the label | the item must be included |
 | Limit reached | unchecked boxes are disabled | the selection limit of a bulk action is reached |
 
-<StoryEmbed id="base-baseinputcheckbox--states" />
+<StoryEmbed id="base-baseinputcheckbox--states" height="380px" />
 
 ## Keyboard & accessibility
 

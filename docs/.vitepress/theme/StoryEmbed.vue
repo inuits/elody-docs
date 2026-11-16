@@ -5,7 +5,6 @@
         :src="src"
         :title="title ?? `Storybook story ${id}`"
         :style="{ height }"
-        loading="lazy"
       />
     </ClientOnly>
     <figcaption>
@@ -16,7 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
+import { armScrollGuard } from "./storyScrollGuard";
 
 const props = withDefaults(
   defineProps<{
@@ -34,6 +34,8 @@ const props = withDefaults(
 // Storybook; the default is the local workshop on its usual port.
 const base =
   import.meta.env.VITE_STORYBOOK_BASE ?? "http://localhost:6006";
+
+onMounted(armScrollGuard);
 
 const src = computed(() => {
   const params = new URLSearchParams({ id: props.id, viewMode: "story" });
