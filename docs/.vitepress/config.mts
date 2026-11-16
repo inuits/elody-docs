@@ -7,6 +7,8 @@ export default defineConfig({
 
   base: '/',
 
+  srcExclude: ['design-system/{action-discovery,autocomplete-tag-input,comments,date-picker,dropdown-select,dynamic-form,entity-list-element,entity-picker,feedback,field-row,filter-panel,group-form-card,guided-flow,hierarchy-tree,history-diff,import-browser,inline-editor,inputs-and-tooltips,map-viewer,media-viewer,modal,navigation,overflow-menu,pagination,panel-and-block-shells,per-field-editing,preview-panel,primitives,repeatable-row-group,saved-searches,selection-action-bar,split-button,toggle-and-slider,upload,wysiwyg-editor}.md'],
+
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#165c74' }],
@@ -58,89 +60,6 @@ export default defineConfig({
             { text: "Accessibility", link: "/design-system/accessibility" },
             { text: "Content & language", link: "/design-system/content" },
             { text: "Client theming", link: "/design-system/client-theming" },
-          ],
-        },
-        {
-          text: "Basics (not yet reviewed)",
-          collapsed: false,
-          items: [
-            { text: "Primitives", link: "/design-system/primitives" },
-            { text: "Inputs & tooltips", link: "/design-system/inputs-and-tooltips" },
-            { text: "Toggle & slider", link: "/design-system/toggle-and-slider" },
-          ],
-        },
-        {
-          text: "Forms & flows",
-          collapsed: false,
-          items: [
-            { text: "Dropdown select", link: "/design-system/dropdown-select" },
-            { text: "Autocomplete tag input", link: "/design-system/autocomplete-tag-input" },
-            { text: "Date picker", link: "/design-system/date-picker" },
-            { text: "Dynamic form", link: "/design-system/dynamic-form" },
-            { text: "Guided flow", link: "/design-system/guided-flow" },
-            { text: "Upload", link: "/design-system/upload" },
-            { text: "WYSIWYG editor", link: "/design-system/wysiwyg-editor" },
-          ],
-        },
-        {
-          text: "Fields & editing",
-          collapsed: false,
-          items: [
-            { text: "Field row", link: "/design-system/field-row" },
-            { text: "Inline editor", link: "/design-system/inline-editor" },
-            { text: "Group form card", link: "/design-system/group-form-card" },
-            { text: "Repeatable row group", link: "/design-system/repeatable-row-group" },
-          ],
-        },
-        {
-          text: "Lists & actions",
-          collapsed: false,
-          items: [
-            { text: "Entity list element", link: "/design-system/entity-list-element" },
-            { text: "Preview panel", link: "/design-system/preview-panel" },
-            { text: "Split button", link: "/design-system/split-button" },
-            { text: "Overflow menu", link: "/design-system/overflow-menu" },
-            { text: "Selection action bar", link: "/design-system/selection-action-bar" },
-            { text: "Panel & block shells", link: "/design-system/panel-and-block-shells" },
-            { text: "Pagination", link: "/design-system/pagination" },
-          ],
-        },
-        {
-          text: "Filters & overlays",
-          collapsed: false,
-          items: [
-            { text: "Filter panel", link: "/design-system/filter-panel" },
-            { text: "Entity picker", link: "/design-system/entity-picker" },
-            { text: "Modal", link: "/design-system/modal" },
-            { text: "Saved searches", link: "/design-system/saved-searches" },
-          ],
-        },
-        {
-          text: "Viewers",
-          collapsed: false,
-          items: [
-            { text: "Media viewer", link: "/design-system/media-viewer" },
-            { text: "Map viewer", link: "/design-system/map-viewer" },
-          ],
-        },
-        {
-          text: "Navigation",
-          collapsed: false,
-          items: [
-            { text: "Navigation chrome", link: "/design-system/navigation" },
-            { text: "Hierarchy & folder trees", link: "/design-system/hierarchy-tree" },
-            { text: "Import browser", link: "/design-system/import-browser" },
-          ],
-        },
-        {
-          text: "Patterns",
-          collapsed: false,
-          items: [
-            { text: "Per-field editing", link: "/design-system/per-field-editing" },
-            { text: "Action discovery", link: "/design-system/action-discovery" },
-            { text: "Feedback & undo", link: "/design-system/feedback" },
-            { text: "History diff", link: "/design-system/history-diff" },
-            { text: "Comments", link: "/design-system/comments" },
           ],
         },
       ],
