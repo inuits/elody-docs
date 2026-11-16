@@ -4,49 +4,88 @@ title: Entity picker
 
 # Entity picker
 
-Search-and-pick overlay for relation values
+A dialog to search for entities and pick them as the value of a relation field.
 
-## When to use / when not
-Setting a relation field (auteur, uitgever, onderwerp). Not for enum values
-(inline select) or free text.
+<StoryEmbed id="modals-entitypicker--single" height="480px" />
+
+## When to use
+
+- Setting a relation, such as a publisher or a person, when the field's own
+  dropdown is not enough to find the right entity.
+- It opens from _Browse…_, the link under a relation field while you edit it.
+
+## When not to use
+
+- **A fixed list of values:** use a [dropdown](./dropdown).
+- **Free text:** use a [text input](./text-input).
+- **A short list you can type through:** the relation field's
+  [autocomplete](./autocomplete) is enough.
 
 ## Anatomy
-Modal on scrim: panel-shell header ("Kies {type}"), search pill (14px radius,
-search icon), result rows (title bold + badges + secondary line, count chip
-in header), footer with "Voeg toe" commit + "Annuleer".
+
+1. **Header:** the title _Choose {type}_, a count chip _Results: {n}_
+   (`--chip-padding`) and the close button.
+2. **Search pill:** search icon, input and, while results load, a spinner.
+3. **Results:** a fixed-height area (`--relation-picker-results-height`), so
+   the dialog keeps its size while you type. Each row shows a check when
+   selected, the entity's label in bold and an optional secondary line.
+4. **Footer (multiple only):** _Cancel_ (ghost) and _Add_ (commit), padded
+   with `--modal-footer-pad`.
+
+From 48rem up the dialog is `--relation-picker-width` wide. The body uses
+`--modal-body-pad`.
+
+## Variants
+
+| Variant | Field | Behaviour |
+|---|---|---|
+| Single | single-select relation | choosing a row picks it and closes the dialog; no footer |
+| Multiple | multi-select relation | rows toggle; _Add_ hands all selected entities to the field |
+
+<StoryEmbed id="modals-entitypicker--multiple" height="480px" />
 
 ## States
-| State | Visual cue | Trigger |
+
+| State | What you see | Trigger |
 |---|---|---|
-| open | scrim + modal shadow | add/edit relation |
-| searching | spinner in pill | typing (debounced) |
-| results | rows with hover wash | response |
-| selected | accent wash + check on row(s) | click |
-| no results | text line + "Maak nieuw" if config allows | empty |
+| Loading | spinner in the search pill | opening, typing |
+| Results | rows, `--color-surface-row-hover` on hover | results arrive |
+| Selected | `--color-accent-wash` row with a check in `--color-commit`; _Add_ enabled | choosing a row (multiple) |
+| No results | _No results._ | nothing matches |
+| Create | _Create '{query}'_ button after _No results._ | nothing matches, the field allows new entities and the query is not empty |
 
-<StoryEmbed id="modals-savedsearches--picker" />
+<StoryEmbed id="modals-entitypicker--no-results" height="480px" />
 
-## Behaviour & keyboard
-Focus lands in the search pill; ↓ enters results, Enter selects, Escape
-closes. Multi-select keeps the modal open; single-select commits on Enter.
+The search runs as you type, 250 ms after the last key. Only the first page
+of results is listed; the count chip shows how many entities match in total.
 
-## Accessibility
-Modal `role="dialog"` named by its title, focus trapped. Results are a
-`listbox`; count announces via `role="status"`.
+Picking does not save on its own: the entities are added to the field, which
+saves like any other inline edit. _Create_ closes the picker first and then
+starts the field's own create flow, so two dialogs never stack.
 
-## Content & i18n
-"Kies persoon" / "Choose person" · "Zoek…" / "Search…" · "Geen resultaten" /
-"No results" · "Voeg toe" / "Add".
+## Keyboard & accessibility
 
-## Do & don't
-Do reuse entity badges in rows. Don't nest a second picker; don't clear the
-query on select in multi-select mode.
+| Key | In the search pill | On a row |
+|---|---|---|
+| ↓ | first row | next row |
+| ↑ | — | previous row; from the first row back to the search pill |
+| Enter / Space | — | chooses the row |
+| Escape | closes the dialog | closes the dialog |
 
-## Library-embedded variant
-Inside library contexts the picker reuses the full [entity list
-element](./entity-list-element) (filters, view modes, pagination) in
-confirm-selection mode instead of the compact result list — same dialog
-chrome, same footer. The compact list remains the default for field editing.
+- Focus lands in the search pill when the dialog opens.
+- The dialog is named by its title. The search input is labelled with the
+  same title.
+- The results are a `listbox` (`aria-multiselectable` when multiple), each row
+  an `option` with `aria-selected`.
+- The count chip is `role="status"`, so a new count is announced.
+
+## Content
+
+- The title names the type in words, in lower case: _Choose company_.
+- Translation keys: `inline-edit.browse`, `inline-edit.browse-title`,
+  `inline-edit.picker-*` and `inline-edit.cancel`.
 
 ## Related
-[Modal](./modal) · [Filter panel](./filter-panel) · [Repeatable row group](./repeatable-row-group)
+
+[Modal](./modal) · [Autocomplete](./autocomplete) · [Dropdown](./dropdown) ·
+[Filter panel](./filter-panel)

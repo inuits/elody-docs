@@ -7,7 +7,7 @@ export default defineConfig({
 
   base: '/',
 
-  srcExclude: ['design-system/{action-discovery,autocomplete-tag-input,comments,dropdown-select,dynamic-form,entity-list-element,entity-picker,feedback,field-row,filter-panel,group-form-card,guided-flow,hierarchy-tree,history-diff,import-browser,inline-editor,inputs-and-tooltips,map-viewer,media-viewer,navigation,panel-and-block-shells,per-field-editing,preview-panel,primitives,repeatable-row-group,saved-searches,selection-action-bar,toggle-and-slider,wysiwyg-editor}.md'],
+  srcExclude: ['design-system/{action-discovery,comments,feedback,group-form-card,history-diff,per-field-editing}.md'],
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
@@ -82,6 +82,30 @@ export default defineConfig({
             { text: "Toggle", link: "/design-system/toggle" },
             { text: "Tooltip", link: "/design-system/tooltip" },
             { text: "Upload", link: "/design-system/upload" },
+          ],
+        },
+        {
+          text: "Composite components",
+          collapsed: false,
+          items: [
+            { text: "Dynamic form", link: "/design-system/dynamic-form" },
+            { text: "Entity list element", link: "/design-system/entity-list-element" },
+            { text: "Entity picker", link: "/design-system/entity-picker" },
+            { text: "Field row", link: "/design-system/field-row" },
+            { text: "Filter panel", link: "/design-system/filter-panel" },
+            { text: "Folder tree", link: "/design-system/folder-tree" },
+            { text: "Guided flow", link: "/design-system/guided-flow" },
+            { text: "Import browser", link: "/design-system/import-browser" },
+            { text: "Inline editor", link: "/design-system/inline-editor" },
+            { text: "Map viewer", link: "/design-system/map-viewer" },
+            { text: "Media viewer", link: "/design-system/media-viewer" },
+            { text: "Navigation chrome", link: "/design-system/navigation" },
+            { text: "Panel & block shells", link: "/design-system/panel-and-block-shells" },
+            { text: "Preview panel", link: "/design-system/preview-panel" },
+            { text: "Repeatable row group", link: "/design-system/repeatable-row-group" },
+            { text: "Saved searches", link: "/design-system/saved-searches" },
+            { text: "Selection action bar", link: "/design-system/selection-action-bar" },
+            { text: "WYSIWYG editor", link: "/design-system/wysiwyg-editor" },
           ],
         },
       ],
