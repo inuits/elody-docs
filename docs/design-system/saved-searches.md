@@ -48,7 +48,7 @@ turned on.
 | Recent searches | applies that search; the applied one is highlighted | up to five, per list |
 | _All saved searches_ | opens the dialog with every saved search | always |
 
-<StoryEmbed id="modals-savedsearches--picker" height="480px" />
+<StoryEmbed id="modals-savedsearches--picker" :width="800" height="480px" />
 
 ## States
 

@@ -6,7 +6,7 @@ title: Media viewer
 
 Shows a mediafile in the viewer that fits its type, under one shared toolbar.
 
-<StoryEmbed id="components-mediaviewer--with-toolbar" height="360px" />
+<StoryEmbed id="components-mediaviewer--with-toolbar" :width="800" height="360px" />
 
 ## When to use
 
@@ -57,8 +57,8 @@ The toolbar shows what the viewer can do:
 | Text | zoom in, zoom out, download | — |
 | Audio, video | download | — |
 
-<StoryEmbed id="components-mediaviewer--modes" height="520px" />
-<StoryEmbed id="base-pdfviewer--default" height="520px" />
+<StoryEmbed id="components-mediaviewer--modes" :width="800" height="460px" />
+<StoryEmbed id="base-pdfviewer--default" :width="800" height="460px" />
 
 - **Image:** drag to pan, scroll to zoom. _Reset_ fits the image again. With
   cropping on, the crop button draws a selection and the clear button removes
@@ -71,7 +71,7 @@ The toolbar shows what the viewer can do:
   (`--color-warning-bg` with a `--viewer-banner-accent-width` bar in
   `--color-warning`), with _Dismiss_.
 
-<StoryEmbed id="base-textviewer--default" height="340px" />
+<StoryEmbed id="base-textviewer--default" :width="800" height="300px" />
 
 ## States
 
@@ -84,7 +84,7 @@ The toolbar shows what the viewer can do:
 | No file type | _No viewer available for this file_ | the file has no type |
 | External link | a frame with the URL and _Open link_, or only _Open link_ | the mediafile is a link |
 
-<StoryEmbed id="base-mediaviewernew--unsupported" />
+<StoryEmbed id="base-mediaviewernew--unsupported" :width="800" />
 
 ## Keyboard & accessibility
 

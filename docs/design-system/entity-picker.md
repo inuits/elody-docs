@@ -6,7 +6,7 @@ title: Entity picker
 
 A dialog to search for entities and pick them as the value of a relation field.
 
-<StoryEmbed id="modals-entitypicker--single" height="480px" />
+<StoryEmbed id="modals-entitypicker--single" :width="800" height="560px" />
 
 ## When to use
 
@@ -42,7 +42,7 @@ From 48rem up the dialog is `--relation-picker-width` wide. The body uses
 | Single | single-select relation | choosing a row picks it and closes the dialog; no footer |
 | Multiple | multi-select relation | rows toggle; _Add_ hands all selected entities to the field |
 
-<StoryEmbed id="modals-entitypicker--multiple" height="480px" />
+<StoryEmbed id="modals-entitypicker--multiple" :width="800" height="560px" />
 
 ## States
 
@@ -54,7 +54,7 @@ From 48rem up the dialog is `--relation-picker-width` wide. The body uses
 | No results | _No results._ | nothing matches |
 | Create | _Create '{query}'_ button after _No results._ | nothing matches, the field allows new entities and the query is not empty |
 
-<StoryEmbed id="modals-entitypicker--no-results" height="480px" />
+<StoryEmbed id="modals-entitypicker--no-results" :width="800" height="560px" />
 
 The search runs as you type, 250 ms after the last key. Only the first page
 of results is listed; the count chip shows how many entities match in total.

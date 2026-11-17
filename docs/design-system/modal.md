@@ -7,7 +7,7 @@ title: Modal
 A dialog over a dimmed page, for a task or a decision that needs full
 attention.
 
-<StoryEmbed id="modals-basemodal--default" />
+<StoryEmbed id="modals-basemodal--default" :width="800" />
 
 ## When to use
 
@@ -55,7 +55,7 @@ action (both danger by default). The second choice offers a way out that is
 not cancelling, such as _Save changes and leave editor_ in the commit colour.
 Asking a new question while one is open cancels the first.
 
-<StoryEmbed id="base-confirmmodal--default" />
+<StoryEmbed id="base-confirmmodal--default" :width="800" />
 
 **Inline confirm.** A confirm button (danger) and a cancel button (secondary)
 side by side, sharing the width, in the small size. The delete dialog ends with
@@ -73,7 +73,7 @@ it, under any related records that are deleted along with the record.
 | Confirming (inline) | spinner in the confirm button; cancel is disabled | the delete runs |
 | Closed | dialog and scrim disappear | close button, Escape, a cancel button, or the task completes |
 
-<StoryEmbed id="modals-basemodal--busy" />
+<StoryEmbed id="modals-basemodal--busy" :width="800" />
 
 A click on the scrim does not close the dialog.
 

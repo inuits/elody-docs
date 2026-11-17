@@ -1,11 +1,13 @@
 <template>
-  <figure class="story-embed">
+  <figure ref="figure" class="story-embed">
     <ClientOnly>
-      <iframe
-        :src="src"
-        :title="title ?? `Storybook story ${id}`"
-        :style="{ height }"
-      />
+      <div class="story-frame" :style="{ height }">
+        <iframe
+          :src="src"
+          :title="title ?? `Storybook story ${id}`"
+          :style="frameStyle"
+        />
+      </div>
     </ClientOnly>
     <figcaption>
       <code>{{ id }}</code>
@@ -15,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { armScrollGuard } from "./storyScrollGuard";
 
 const props = withDefaults(
@@ -26,6 +28,9 @@ const props = withDefaults(
     height?: string;
     /** Applies a [data-elody-client] tenant scope to the embedded story. */
     client?: string;
+    /** Renders the story this many px wide and scales it down to fit, so
+     * layouts that switch on the window width show their desktop form. */
+    width?: number;
   }>(),
   { height: "320px" },
 );
@@ -35,7 +40,30 @@ const props = withDefaults(
 const base =
   import.meta.env.VITE_STORYBOOK_BASE ?? "http://localhost:6006";
 
-onMounted(armScrollGuard);
+const figure = ref<HTMLElement>();
+const available = ref(0);
+let observer: ResizeObserver | undefined;
+
+onMounted(() => {
+  armScrollGuard();
+  if (!props.width || !figure.value) return;
+  observer = new ResizeObserver(([entry]) => {
+    available.value = entry.contentRect.width;
+  });
+  observer.observe(figure.value);
+});
+onBeforeUnmount(() => observer?.disconnect());
+
+const frameStyle = computed(() => {
+  if (!props.width || !available.value) return { height: "100%" };
+  const scale = Math.min(1, available.value / props.width);
+  return {
+    width: `${props.width}px`,
+    height: `${100 / scale}%`,
+    transform: `scale(${scale})`,
+    transformOrigin: "0 0",
+  };
+});
 
 const src = computed(() => {
   const params = new URLSearchParams({ id: props.id, viewMode: "story" });
@@ -49,6 +77,10 @@ const src = computed(() => {
   margin: 20px 0;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.story-frame {
   overflow: hidden;
 }
 
