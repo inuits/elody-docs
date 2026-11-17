@@ -96,6 +96,7 @@ export default defineConfig({
             { text: "Filter panel", link: "/design-system/filter-panel" },
             { text: "Folder tree", link: "/design-system/folder-tree" },
             { text: "Guided flow", link: "/design-system/guided-flow" },
+            { text: "Hierarchy list", link: "/design-system/hierarchy-list" },
             { text: "History diff", link: "/design-system/history-diff" },
             { text: "Import browser", link: "/design-system/import-browser" },
             { text: "Inline editor", link: "/design-system/inline-editor" },
