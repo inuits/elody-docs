@@ -20,10 +20,9 @@ One primary action and its alternatives, joined in one labelled control.
 - **Only one action:** use a plain button.
 - **No clear primary action:** use the labelled _Actions_ menu on its own
   ([overflow menu](./overflow-menu)).
-- **More than one promoted action:** show them as separate buttons followed by
-  the _Actions_ menu. The split button only forms when there is one promoted action.
-
-<StoryEmbed id="contextmenuactions-contextmenuactionsshell--promoted-and-menu" />
+- **Several actions that all seem primary:** pick one. Only one action per
+  subject is shown as the primary segment; other promoted actions lead the menu.
+  See [action discovery](./action-discovery).
 
 ## Anatomy
 

@@ -22,7 +22,7 @@ every screen, and the patterns that combine them.
 | **Foundations** | Principles, colour, typography, spacing, shape, motion, icons, accessibility and content rules that everything else follows. |
 | **Components** | Single building blocks, such as buttons, inputs and menus. |
 | **Composite components** | Larger parts built from those blocks, such as a field row, the filter panel or the media viewer. |
-| **Patterns** | How components work together for a task, such as editing a record or filtering a list. Coming in a later release. |
+| **Patterns** | How components work together for a task, such as editing a record or giving feedback after an action. |
 
 Every page describes what Elody does today. Features that are not built yet
 are not documented.

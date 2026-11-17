@@ -7,7 +7,7 @@ export default defineConfig({
 
   base: '/',
 
-  srcExclude: ['design-system/{action-discovery,comments,feedback,group-form-card,history-diff,per-field-editing}.md'],
+  srcExclude: ['design-system/{group-form-card}.md'],
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
@@ -88,6 +88,7 @@ export default defineConfig({
           text: "Composite components",
           collapsed: false,
           items: [
+            { text: "Comments", link: "/design-system/comments" },
             { text: "Dynamic form", link: "/design-system/dynamic-form" },
             { text: "Entity list element", link: "/design-system/entity-list-element" },
             { text: "Entity picker", link: "/design-system/entity-picker" },
@@ -95,6 +96,7 @@ export default defineConfig({
             { text: "Filter panel", link: "/design-system/filter-panel" },
             { text: "Folder tree", link: "/design-system/folder-tree" },
             { text: "Guided flow", link: "/design-system/guided-flow" },
+            { text: "History diff", link: "/design-system/history-diff" },
             { text: "Import browser", link: "/design-system/import-browser" },
             { text: "Inline editor", link: "/design-system/inline-editor" },
             { text: "Map viewer", link: "/design-system/map-viewer" },
@@ -106,6 +108,15 @@ export default defineConfig({
             { text: "Saved searches", link: "/design-system/saved-searches" },
             { text: "Selection action bar", link: "/design-system/selection-action-bar" },
             { text: "WYSIWYG editor", link: "/design-system/wysiwyg-editor" },
+          ],
+        },
+        {
+          text: "Patterns",
+          collapsed: false,
+          items: [
+            { text: "Action discovery", link: "/design-system/action-discovery" },
+            { text: "Feedback", link: "/design-system/feedback" },
+            { text: "Per-field editing", link: "/design-system/per-field-editing" },
           ],
         },
       ],

@@ -78,8 +78,8 @@ menu can't cover them.
   value and closes an unchanged editor. Clicks in the editor's own menus,
   date picker and dialogs count as inside.
 - **One field at a time.** Opening another field saves the changed one first.
-  If that save fails, the changed field stays open with its error and gets
-  focus back, and the other field does not open.
+  If that save fails, the changed field stays open with its error, and the
+  other field does not open.
 - When the editor opens, the input gets focus. After save or cancel, focus
   returns to the value, unless you already moved it on.
 - The input is named after the field label. The buttons are named _Save
