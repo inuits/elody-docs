@@ -69,8 +69,10 @@ field.
 | Error | _Saving failed, try again_ under the content; the editor stays open | the save fails |
 | Saved | read-only again; _Saved_ is announced | the save succeeds |
 
+<StoryEmbed id="entityelements-wysiwygfield--states" height="300px" />
 <StoryEmbed id="entityelements-wysiwygfield--editing" height="380px" />
-<StoryEmbed id="entityelements-wysiwyginplaceactions--states" />
+<StoryEmbed id="entityelements-wysiwygfield--saving" height="340px" />
+<StoryEmbed id="entityelements-wysiwygfield--save-failed" height="360px" />
 
 ## Keyboard & accessibility
 
