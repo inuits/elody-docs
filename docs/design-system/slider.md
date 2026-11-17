@@ -4,40 +4,30 @@ title: Slider
 
 # Slider
 
-Picks a number, or a range between two numbers, by dragging along a track.
+Picks a range between two numbers, by dragging two handles along a track or
+typing the ends.
 
 <StoryEmbed id="base-baserangeslider--default" />
 
 ## When to use
 
-- **Range slider:** filtering on a numeric range, such as a year or a size,
-  where both ends matter. It is the input of the range filter in the filter
-  panel.
-- **Slider:** a single value or a range on a short scale, where the position
-  matters more than the exact number.
+- Filtering on a numeric range, such as a year or a size, where both ends
+  matter. It is the input of the range filter in the filter panel.
 
 ## When not to use
 
 - **An exact value people already know:** use a [text input](./text-input)
   with a number type.
 - **A date or a date range:** use a [date picker](./date-picker).
-- **A wide scale:** the range slider draws one tick per whole number, so a
+- **A wide scale:** the slider draws one tick per whole number, so a
   scale of more than a few dozen steps turns its tick labels into a blur.
 
 ## Anatomy
 
-**Slider**
-
 1. **Track:** a thin rounded bar in neutral grey.
-2. **Fill:** the part between the handles (or from the start to the single
-   handle), in `--color-accent-normal`.
-3. **Handle:** a small white circle with a soft shadow; one or two of them.
-
-There is no value bubble above the handle; the value is not shown while
-dragging.
-
-**Range slider** adds:
-
+2. **Fill:** the part between the two handles, in `--color-accent-normal`.
+3. **Handles:** two small white circles with a soft shadow. There is no value
+   bubble above a handle.
 4. **Tick scale:** a tick for every whole number from the minimum to the
    maximum; every second tick is labelled with its number.
 5. **From and To fields:** two number inputs under the scale, labelled
@@ -45,18 +35,10 @@ dragging.
    handles.
 6. **Error line:** a red message under a field when the two values cross.
 
-<StoryEmbed id="base-baseslider--default" />
-
 ## Variants
 
-| Variant | Handles | Shows the value |
-|---|---|---|
-| Single slider | one | no |
-| Range on a slider | two | no |
-| Range slider | two | in the From and To fields |
-
-Values move in whole steps of 1. A slider sends its new value when the handle
-is released (or after each key press), not while it is being dragged.
+There is one variant. Values move in whole steps of 1. The slider sends its
+new value when the handle is released (or after each key press), not while it is being dragged.
 
 ## States
 
@@ -94,8 +76,8 @@ disabled state.
 
 ## Content
 
-- The range slider's _From:_ and _To:_ labels are fixed English text and are
-  not translated.
+- The _From:_ and _To:_ labels are fixed English text and are not
+  translated.
 - Error messages come from `filters.rangeFilterFromInputError` and
   `filters.rangeFilterToInputError`.
 - Choose a minimum and maximum that give a short scale; the scale has no

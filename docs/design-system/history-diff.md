@@ -7,7 +7,7 @@ title: History diff
 Two versions of a record side by side, read-only, with what changed between
 them marked in red and green.
 
-<StoryEmbed id="history-entityhistoryelement--versions" height="480px" />
+<StoryEmbed id="history-historycomparison--default" :width="1100" height="380px" />
 
 ## When to use
 
@@ -81,6 +81,8 @@ fields that differ in an entry are marked.
 | No earlier version | _There are no earlier versions yet._ in the right column | the record has only its current version |
 | Version failed | _This version could not be loaded._ in that column | fetching one version fails |
 | History failed | _The history could not be loaded. Please try again later._ above both columns | fetching the version list fails |
+
+<StoryEmbed id="history-historycomparison--states" :width="1100" height="740px" />
 
 Messages sit in a bordered box in body text. When the
 client hides empty fields, a field that is empty in a version is left out of

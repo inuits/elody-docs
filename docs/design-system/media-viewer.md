@@ -6,7 +6,7 @@ title: Media viewer
 
 Shows a mediafile in the viewer that fits its type, under one shared toolbar.
 
-<StoryEmbed id="components-mediaviewer--with-toolbar" :width="800" height="360px" />
+<StoryEmbed id="base-mediaviewernew--default" :width="800" height="490px" />
 
 ## When to use
 
@@ -57,7 +57,7 @@ The toolbar shows what the viewer can do:
 | Text | zoom in, zoom out, download | — |
 | Audio, video | download | — |
 
-<StoryEmbed id="components-mediaviewer--modes" :width="800" height="460px" />
+<StoryEmbed id="components-viewertoolbar--modes" :width="800" height="460px" />
 <StoryEmbed id="base-pdfviewer--default" :width="800" height="460px" />
 
 - **Image:** drag to pan, scroll to zoom. _Reset_ fits the image again. With

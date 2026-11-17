@@ -48,7 +48,7 @@ group fields inside it.
 | Element panel | one list, viewer or map | title and a chevron that collapses the panel |
 | In a preview | the same content without a card | none; an element panel's title becomes a block heading |
 
-<StoryEmbed id="base-entityelementwrapper--default" height="160px" />
+<StoryEmbed id="base-entityelementwrapper--default" height="300px" />
 
 In a [preview panel](./preview-panel) the preview itself is the card: panels
 inside it drop their border and header band. An element panel keeps its

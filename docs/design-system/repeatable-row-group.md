@@ -7,7 +7,7 @@ title: Repeatable row group
 A block that repeats the same fields for every entry in a list, such as each
 ISBN with its edition.
 
-<StoryEmbed id="entityelements-entityelementwindowpanel--repeatable" height="400px" />
+<StoryEmbed id="entityelements-entityelementwindowpanel--repeatable" height="340px" />
 
 ## When to use
 
@@ -25,8 +25,9 @@ ISBN with its edition.
 1. **Block header:** the block's label, bold, and on the right an _Add more_
    pill (`--radius-pill`, `--button-sm-padding`, `--text-button-sm`,
    `--color-text-light`, `--color-accent-wash` on hover).
-2. **Row:** one entry. Each field in it is a [field row](./field-row) and
-   keeps its full width. Rows are rounded (`--radius-input`); every second row
+2. **Row:** one entry. Each field in it is a [field row](./field-row); the
+   fields sit side by side in columns and wrap to fewer columns when the
+   block is narrow. Rows are rounded (`--radius-input`); every second row
    is striped with `--color-surface-repeat-row`, and a hovered row fills with
    `--color-surface-row-hover`.
 3. **Row header:** the block label and the row number (_ISBN 2_) in
@@ -43,7 +44,7 @@ ISBN with its edition.
 | Read-only | rows separated by a rule, no pill and no trash buttons | the user can't update the entity, or the block isn't editable |
 
 <StoryEmbed id="entityelements-entityelementwindowpanel--repeatable-empty" height="220px" />
-<StoryEmbed id="entityelements-entityelementwindowpanel--repeatable-read-only" height="390px" />
+<StoryEmbed id="entityelements-entityelementwindowpanel--repeatable-read-only" height="320px" />
 
 ## States
 
@@ -56,7 +57,7 @@ ISBN with its edition.
 | Remove saved row | a confirmation dialog, then the row is gone | the trash button of a saved row |
 | Remove new row | the row is gone, no confirmation | the trash button of a row that isn't saved yet |
 
-<StoryEmbed id="entityelements-entityelementwindowpanel--repeatable-new-row" height="400px" />
+<StoryEmbed id="entityelements-entityelementwindowpanel--repeatable-new-row" height="340px" />
 
 How rows save:
 

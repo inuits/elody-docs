@@ -7,7 +7,7 @@ title: Upload
 A drop zone that collects files, with one row per file showing each step of
 its upload.
 
-<StoryEmbed id="components-dropzone--progress" />
+<StoryEmbed id="components-dropzone--progress" height="360px" />
 
 ## When to use
 

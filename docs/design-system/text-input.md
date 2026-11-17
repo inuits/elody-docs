@@ -33,8 +33,8 @@ Lets people type a short text, a number or a longer note.
 2. **Border:** `--color-border-default`, one step darker on hover
    (`--color-input-border-hover`).
 3. **Placeholder (optional):** `--color-text-placeholder`.
-4. **Error message (optional):** below the field, `--text-hint` in
-   `--color-danger`.
+4. **Error message (optional):** below the field, in `--color-danger`. The
+   field shows it; the input does not draw it itself.
 
 The label is not part of the input. It comes from the surrounding form or
 field row.
@@ -45,7 +45,6 @@ field row.
 |---|---|---|
 | Bordered | every field that stands on its own — use this by default | white with a border |
 | Borderless | inside another control, such as a filter | white, no border |
-| Tinted | a field on a tinted surface | `--color-accent-tint`, no border |
 | Number | numeric values | right-aligned, no spinner buttons |
 | Compact | a value inside a chip, such as a page number on a relation | `--control-height-compact`, `--input-padding-compact`, label-size text |
 | Multi-line | longer notes | at least three rows (`--textarea-min-height`); drag the corner to make it taller |
@@ -65,8 +64,8 @@ In an inline editor, a multi-line field grows with its content up to six rows
 | Hover | border one step darker | pointer |
 | Focus | `--focus-ring-width` ring in `--color-focus-ring` | click or Tab |
 | Placeholder | example text in placeholder ink | empty field with a placeholder |
-| Error | `--color-danger` border, message below the field | the value is invalid |
-| Read-only | no border and no fill; the value reads as plain text | the value can be seen but not changed |
+| Error in a form | default border, message below the field | the form is checked and the value is invalid |
+| Error in an inline editor | `--color-danger` border, message below the field | saving the value failed or it is invalid |
 | Disabled | `--color-surface-muted` fill, `--color-text-disabled` ink, subtle border | the field is unavailable |
 
 <StoryEmbed id="base-baseinputtext--states" title="Text input styles and states" height="500px" />
@@ -81,11 +80,11 @@ can show an error instead of keeping the old number.
   editing keys work.
 - **Every field needs a name:** a visible label linked to it, or an
   `aria-label` such as _Title_ when there is no visible label.
-- **Errors are linked to the field.** The message is a `role="alert"`, so it
-  is announced when it appears; it is connected to the field with
-  `aria-describedby`, and the field gets `aria-invalid="true"`.
-- A hint or an error shown elsewhere can be linked as well; it stays linked
-  next to the field's own message.
+- **In an inline editor, the error is linked to the field.** The message is a
+  `role="alert"`, so it is announced when it appears; it is connected to the
+  field with `aria-describedby`, and the field gets `aria-invalid="true"`.
+- **In a form, the error is plain text under the field.** It is not linked to
+  the field and not announced.
 - In the colour variant, the hex field is a normal text field, so the value
   can always be typed instead of picked.
 

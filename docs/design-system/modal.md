@@ -7,7 +7,7 @@ title: Modal
 A dialog over a dimmed page, for a task or a decision that needs full
 attention.
 
-<StoryEmbed id="modals-basemodal--default" :width="800" />
+<StoryEmbed id="modals-basemodal--default" :width="800" height="560px" />
 
 ## When to use
 
@@ -34,7 +34,9 @@ attention.
    bold `--text-panel-title`, optional extra controls, and a close button (✕)
    at the end. On small screens the close button is `--touch-target-min`
    square. Without a title the header holds only the close button.
-4. **Body:** scrolls when its content is taller than the dialog.
+4. **Body:** the task itself, such as a form with its own action button at
+   the end. It scrolls when its content is taller than the dialog. The modal
+   adds no buttons of its own.
 5. **Footer (confirm dialog):** a top border, `--modal-footer-pad`, buttons
    aligned right. The message above it uses `--modal-body-pad`.
 

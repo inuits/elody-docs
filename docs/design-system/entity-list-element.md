@@ -90,6 +90,10 @@ table.
 | Loading | skeleton rows on the first load; rows pulse while a new page loads | fetching |
 | Empty | _No results found_, or _No results match your filters_ with a tip | no records |
 
+<StoryEmbed id="library-viewmodes-listitem--states" height="580px" />
+
+A table row shows the same states:
+
 <StoryEmbed id="library-viewmodes-tableviewrow--states" height="560px" />
 
 The checkbox owns the wash and the open preview owns the left border, so a row

@@ -7,7 +7,7 @@ title: Comments
 Discussions about a record: a list of threads on the record's page, each
 opened in a modal to read and reply.
 
-<StoryEmbed id="components-comments--list" height="270px" />
+<StoryEmbed id="components-comments--list" height="360px" />
 
 ## When to use
 
@@ -50,7 +50,7 @@ opened in a modal to read and reply.
 | Discussion | in the modal | the first comment, then the replies indented, oldest first; your own comments get _Edit_ and _Delete_ |
 | Editing | in the modal, on your own comment | the card turns into the composer, with _Save_ and _Cancel_ |
 
-<StoryEmbed id="components-comments--thread" height="390px" />
+<StoryEmbed id="components-comments--thread" :width="800" height="780px" />
 
 **The discussion modal** has the title _Discussion_ and, on the right, the
 status buttons and a close cross. The reply composer sits at the bottom with

@@ -53,6 +53,13 @@ A dialog that creates linked records step by step, and lists what it added.
 
 <StoryEmbed id="repetitiveform-guidedflow--later-step" height="600px" />
 
+A step is either a create step or a picker step. A create step shows only
+the form. A picker step lists the existing records: pick one or more and
+_Confirm selection_ links them. _Create new_ above the list switches to the
+step's form, with _Back to search_ to return to the list.
+
+<StoryEmbed id="repetitiveform-guidedflow--picker-step" :width="800" height="560px" />
+
 Each step saves as you go: _Create_ in a step creates the record at once, and
 picking records links them straight away. Moving on to the next step needs no
 extra button.

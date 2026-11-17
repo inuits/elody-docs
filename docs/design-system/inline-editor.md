@@ -48,7 +48,11 @@ menu can't cover them.
 | Relation | [autocomplete](./autocomplete), with a _Browse…_ link under it that opens the [entity picker](./entity-picker) |
 | Relation table | the table with editable rows: add a row, change a cell, remove a row |
 
-<StoryEmbed id="metadata-inlinefieldeditor--field-types" height="580px" />
+<StoryEmbed id="metadata-inlinefieldeditor--field-types" height="520px" />
+
+A relation field, the most common editor on a detail page:
+
+<StoryEmbed id="metadata-inlinefieldeditor--relation" height="200px" />
 
 ## States
 

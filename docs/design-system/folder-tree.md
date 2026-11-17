@@ -6,7 +6,7 @@ title: Folder tree
 
 Folders and their subfolders as a tree, to pick one folder.
 
-<StoryEmbed id="components-hierarchytree--default" height="340px" />
+<StoryEmbed id="components-foldertree--default" height="440px" />
 
 ## When to use
 
@@ -31,7 +31,7 @@ Folders and their subfolders as a tree, to pick one folder.
 
 There is one tree. Each level loads its subfolders the first time it opens.
 
-<StoryEmbed id="components-hierarchytree--collapsed" height="220px" />
+<StoryEmbed id="components-foldertree--collapsed" height="220px" />
 
 ## States
 

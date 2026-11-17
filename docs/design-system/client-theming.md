@@ -59,7 +59,11 @@ customization: {
 Only `--color-…` tokens with colour values (hex, `rgb()`, `hsl()`, `var()` or
 `transparent`) are accepted. Anything else is ignored.
 
-<StoryEmbed id="entityelements-entityelementwindow--default" title="Detail panel in the accent colours" />
+<StoryEmbed id="entityelements-entityelementwindow--default" title="Detail panel in the default accent colours" height="470px" />
+
+The same panel with the theme above applied:
+
+<StoryEmbed id="entityelements-entityelementwindow--client-theme" title="Detail panel with the sample client theme" height="470px" />
 
 ## Checklist for a new theme
 - Every text colour reaches a 4.5:1 contrast ratio on white and on
