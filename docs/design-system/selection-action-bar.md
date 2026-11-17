@@ -89,3 +89,4 @@ panel, add actions move to the list's own header.
 
 [Entity list element](./entity-list-element) · [Checkbox](./checkbox) ·
 [Button](./button) · [Overflow menu](./overflow-menu)
+· [Bulk edit](./bulk-edit) · [Merge entities](./merge-entities)

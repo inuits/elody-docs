@@ -30,9 +30,8 @@ table.
 2. **Count chip:** _1,258 results_, bold, on `--color-surface`
    (`--radius-chip`, `--chip-padding`, `--text-chip`). Above the count limit
    it reads _1,000+ results_ and is a button that loads the exact count.
-3. **View switch:** icon buttons (`--view-switch-size`) in one capsule; the
-   active one has an accent wash. In grid mode a second switch,
-   _Large | Compact_, sets the card size.
+3. **View switch:** picks the list, grid, table or another mode; see
+   [view modes](./view-modes).
 4. **Selection bar:** the [selection action bar](./selection-action-bar), on
    its own row.
 5. **Column header row:** labels in `--text-label`, bold,
@@ -50,6 +49,9 @@ table.
 <StoryEmbed id="library-resultcountchip--states" height="200px" />
 
 ## Variants
+
+Which variant opens, and how people switch, is on the
+[view modes](./view-modes) page.
 
 | Variant | Layout | Where |
 |---|---|---|
@@ -69,7 +71,7 @@ table.
   without an image shows the file-type icon on `--color-surface-muted`. The
   checkbox sits on the image's top-left corner. Titles wrap to two lines, other
   values wrap to two lines and then cut off; the full value is in a tooltip.
-  The card size is remembered per browser.
+
 - **Small screens** (below 48rem) get two control rows: search, then filters,
   one sort button and the view switch. Sort options open as a bottom sheet. The
   column header row is replaced by a row with _Select page_, the count and the
@@ -106,8 +108,7 @@ can show both without one hiding the other.
   is checkbox, title, eye, actions. Space toggles a checkbox; Enter on a link
   opens the record.
 - The count chip sits in a `role="status"` region, so a new total is announced.
-- The view switch is a `role="group"` named _View_; each button has
-  `aria-pressed` and a name such as _List view_ or _Grid view_.
+- The view switch is described on the [view modes](./view-modes) page.
 - The _Select page_ checkbox ticks when the whole page is selected, shows a
   partial state when some rows are, and clears the page when unticked.
 - The column header row is hidden from screen readers; each value keeps its
@@ -125,6 +126,7 @@ can show both without one hiding the other.
 
 ## Related
 
+[View modes](./view-modes) ·
 [Selection action bar](./selection-action-bar) ·
 [Preview panel](./preview-panel) · [Pagination](./pagination) ·
 [Checkbox](./checkbox) · [Filter panel](./filter-panel)
