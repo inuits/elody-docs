@@ -68,6 +68,12 @@ title as a block heading.
 <StoryEmbed id="entityelements-entityelementwindow--states" height="340px" />
 <StoryEmbed id="base-entityelementwrapper--collapsed" height="320px" />
 
+The expand button on a detail page with two columns, before and after a
+click:
+
+<StoryEmbed id="entityelements-entitycolumn--default" height="380px" :width="1100" />
+<StoryEmbed id="entityelements-entitycolumn--expanded" height="380px" :width="1100" />
+
 Opening and collapsing animate the height.
 
 ## Keyboard & accessibility
