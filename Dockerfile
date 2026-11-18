@@ -33,7 +33,7 @@ ENV VITE_STORYBOOK_BASE=/storybook
 RUN npm run build
 
 # Stage 2: Serve the static output with nginx
-FROM nginx:1.30.7-alpine
+FROM nginx:1.31.9-alpine
 
 COPY --from=builder /app/docs/.vitepress/dist /usr/share/nginx/html
 COPY --from=storybook /storybook /usr/share/nginx/html/storybook
