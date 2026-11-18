@@ -38,7 +38,9 @@ group fields inside it.
 5. **Block heading:** `--text-table`, bold, body ink. It can carry a count
    [chip](./chip-and-badge) and a status. A collapse icon sits on the right.
 6. **Expand button (optional):** a tab on the panel's outer edge, on a
-   `--color-tag-neutral` fill, with an arrow.
+   `--color-tag-neutral` fill, with an arrow. On a detail page with two
+   columns it widens this panel's column to half the page; clicking it again
+   restores the default split. It is set per panel in the configuration.
 
 ## Variants
 
@@ -64,7 +66,7 @@ title as a block heading.
 | Expanded | the page's two columns split 50/50; the expand arrow flips | click on the expand button |
 
 <StoryEmbed id="entityelements-entityelementwindow--states" height="340px" />
-<StoryEmbed id="base-entityelementwrapper--collapsed" height="120px" />
+<StoryEmbed id="base-entityelementwrapper--collapsed" height="320px" />
 
 Opening and collapsing animate the height.
 
