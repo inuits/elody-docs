@@ -7,7 +7,7 @@ title: Upload
 A drop zone that collects files, with one row per file showing each step of
 its upload.
 
-<StoryEmbed id="components-dropzone--progress" height="360px" />
+<StoryEmbed id="components-dropzone--progress" height="450px" />
 
 ## When to use
 
@@ -87,6 +87,16 @@ There is no percentage bar per file; a row shows which step a file is in.
 
 <StoryEmbed id="base-baseprogressstep--all-statuses" />
 
+**Row messages**
+
+| Message | What you see | Trigger |
+|---|---|---|
+| Error | a bulleted list on `--color-danger-bg` in `--color-danger-ink`; the row gets a `--color-danger` border and the step a ban icon | a step failed |
+| Warning | a bulleted list on `--color-warning-bg`; the row keeps its normal border and its steps still complete | the CSV check found something to look at, or the server accepted the file with a warning |
+
+A file with a warning is uploaded; the warning is for the person to check
+afterwards.
+
 Files beyond the maximum number are removed again straight away, without a
 message. Removing a file makes room again. A failed file keeps its row.
 
@@ -103,7 +113,8 @@ message. Removing a file makes room again. A failed file keeps its row.
 - Each row has a `role="progressbar"` named by the file name. Its value is
   the number of steps done, and its `aria-valuetext` is the status of the
   last step that changed, such as _Uploading_.
-- A row's error list is a `role="alert"`.
+- A row's error list is a `role="alert"`. A warning list has no role, so it
+  is not announced.
 - The remove button is named _Remove file_; the name does not include the
   file name.
 - The status glyphs carry their status only in a `title` tooltip, which
@@ -117,6 +128,8 @@ message. Removing a file makes room again. A failed file keeps its row.
   prompt, such as _Drag your files, or click here to add your files_.
 - Error lines name the file or row and the problem: _scan-003.tiff is
   missing_, _2 row(s) could not be updated, see the details on the file_.
+- Warning lines say what to check, not that something failed: the file is
+  uploaded.
 - Translation keys: `upload-fields.labels.*`, `upload-fields.errors.*`,
   `upload-fields.remove-file`, `upload-fields.uploaded-of` and
   `actions.progress-steps.*`.
