@@ -4,49 +4,137 @@ title: Upload
 
 # Upload
 
-Dropzone + per-file progress, end to end
+A drop zone that collects files, with one row per file showing each step of
+its upload.
 
-## When to use / when not
-Media upload everywhere (detail panels, import). Not for tiny single-value
-file fields inside forms (those use a compact input variant of this spec).
+<StoryEmbed id="components-dropzone--progress" height="450px" />
+
+## When to use
+
+- Adding media files, a CSV or an Excel file in an upload form or import
+  flow.
+- Uploading several files at once, where people need to see which file is
+  where in the process.
+
+## When not to use
+
+- **Picking a record that already exists:** use an
+  [autocomplete](./autocomplete) or [dropdown](./dropdown).
+- **Pasting text or a link:** use a [text input](./text-input).
 
 ## Anatomy
-**Dropzone**: dashed 2px `--color-border-dashed` border, 8px radius, pale
-surface; centred copy "Sleep bestanden hierheen of <u>blader</u>" (browse is a
-real button). **File list**: one row per file — name + size, thin ProgressBar
-(commit teal fill), per-file state glyph, cancel ✕. **Status banner**: panel-
-top strip summarising "{n} van {m} geüpload"; **BaseProgressStep** shows the
-pipeline (uploaden → verwerken → klaar) per file where relevant.
+
+1. **Zone:** a dashed `--color-border-dashed` border, `--radius-card`
+   corners and a white fill. Its minimum
+   height is `--dropzone-height-small`, `--dropzone-height-normal` (default) or
+   `--dropzone-height-big`; it grows with its rows.
+2. **Label:** a real button with the field's prompt, such as _Drag your
+   files, or click here to add your files_. Centred while the zone is empty;
+   above the rows once it has files.
+3. **File row:** `--color-border-subtle` border; a file icon tile, the file
+   name, its size in `--color-text-light`, one status glyph per step, and a
+   remove button (trash icon). Rows are sorted by file name.
+4. **Status glyph:** a small round step marker; its icon and colour show the
+   status (see [States](#states)). In a row it shows no text; its tooltip
+   gives the status.
+5. **Message lines (optional):** warnings on `--color-warning-bg` and errors
+   on `--color-danger-bg` in `--color-danger-ink`, as a bulleted list under
+   the row.
+
+Outside the zone, the upload form shows a banner while files upload:
+_{done} of {total} uploaded_ with a progress bar for the whole batch. Some
+flows also show the batch steps as labelled status pills.
+
+## Variants
+
+| Variant | Steps in each row | Used for |
+|---|---|---|
+| Media upload | validate, prepare, upload | media files, alone or with a CSV |
+| Validation file | validate | a CSV or Excel file that is checked first (dry run) |
+| Reorder upload | upload | uploads that only reorder existing records |
+
+| Step | Tooltips |
+|---|---|
+| Validate | _No CSV_, _Validating CSV_, _OK_, _Error in CSV_ |
+| Prepare | _No mediafiles_, _Loading mediafiles_, _OK_, _Mismatch between mediafiles and CSV_ |
+| Upload | _Not uploading_, _Uploading_, _Uploaded_, _Something went wrong while uploading_ |
+
+A media file's validate step turns complete as soon as the file is added.
+There is no percentage bar per file; a row shows which step a file is in.
 
 ## States
-| State | Visual cue | Trigger |
+
+**Zone**
+
+| State | What you see | Trigger |
 |---|---|---|
-| idle | dashed zone | — |
-| dragover | accent border + wash | drag |
-| uploading | per-file bar + % | files |
-| processing | step 2 active (spinner) | server |
-| done | green check per file, banner success | complete |
-| error | danger row + "Opnieuw" retry link, others continue | per-file fail |
-| rejected | toast: type/size reason | invalid file |
+| Empty | dashed zone, label centred | — |
+| Drag over | `--color-accent` border, `--color-accent-wash` fill | dragging files over the zone |
+| With files | label at the top, one row per file | files added |
+| Full | no change; drops and clicks are ignored | the maximum number of files is reached |
+| Locked | no change; drops and clicks are ignored | the upload has finished |
 
-<StoryEmbed id="components-dropzone--progress" />
+**Step glyph**
 
-## Behaviour & keyboard
-Browse opens the file dialog; the zone is focusable and Enter opens it too.
-Per-file cancel aborts only that file. Failures never abort the batch.
+| State | What you see | Trigger |
+|---|---|---|
+| Empty | outline circle on grey | step not started |
+| Loading | spinning cog on teal | step in progress |
+| Complete | green check on light green | step done |
+| Failed | ban icon on red; the row gets a `--color-danger` border and an error list | step failed |
+| Incomplete | image-plus icon on orange | mediafiles missing (not used in file rows) |
+| Paused | pause icon on orange | upload paused (not used in file rows) |
 
-## Accessibility
-Zone is a button "Upload bestanden"; per-file progress uses
-`role="progressbar"` with `aria-valuenow`; the banner is `role="status"`;
-errors `role="alert"` per row.
+<StoryEmbed id="base-baseprogressstep--all-statuses" />
 
-## Content & i18n
-"Sleep bestanden hierheen of blader" / "Drag files here or browse" ·
-"{n} van {m} geüpload" / "{n} of {m} uploaded" · "Opnieuw" / "Retry".
+**Row messages**
 
-## Do & don't
-Do keep per-file progress visible (no single aggregate bar only). Don't block
-the page during upload; don't clear failed rows automatically.
+| Message | What you see | Trigger |
+|---|---|---|
+| Error | a bulleted list on `--color-danger-bg` in `--color-danger-ink`; the row gets a `--color-danger` border and the step a ban icon | a step failed |
+| Warning | a bulleted list on `--color-warning-bg`; the row keeps its normal border and its steps still complete | the CSV check found something to look at, or the server accepted the file with a warning |
+
+A file with a warning is uploaded; the warning is for the person to check
+afterwards.
+
+Files beyond the maximum number are removed again straight away, without a
+message. Removing a file makes room again. A failed file keeps its row.
+
+## Keyboard & accessibility
+
+| Key | Action |
+|---|---|
+| Tab | reaches the zone's label, then each row's remove button |
+| Enter / Space | on the label: opens the file dialog; on a remove button: removes that file |
+
+- Dragging is optional: the label is a native `<button>`, and clicking an
+  empty part of the zone also opens the file dialog. The dialog filters on
+  the accepted file types.
+- Each row has a `role="progressbar"` named by the file name. Its value is
+  the number of steps done, and its `aria-valuetext` is the status of the
+  last step that changed, such as _Uploading_.
+- A row's error list is a `role="alert"`. A warning list has no role, so it
+  is not announced.
+- The remove button is named _Remove file_; the name does not include the
+  file name.
+- The status glyphs carry their status only in a `title` tooltip, which
+  pointer users see on hover.
+- The loading cog keeps spinning when reduced motion is requested.
+- The upload banner is a `role="status"`, so each new count is announced.
+
+## Content
+
+- The label says both ways in: drag, or click. Use the field's configured
+  prompt, such as _Drag your files, or click here to add your files_.
+- Error lines name the file or row and the problem: _scan-003.tiff is
+  missing_, _2 row(s) could not be updated, see the details on the file_.
+- Warning lines say what to check, not that something failed: the file is
+  uploaded.
+- Translation keys: `upload-fields.labels.*`, `upload-fields.errors.*`,
+  `upload-fields.remove-file`, `upload-fields.uploaded-of` and
+  `actions.progress-steps.*`.
 
 ## Related
-[Media viewer](./media-viewer) · [Import browser](./import-browser) · [Feedback & undo](./feedback)
+
+[Loading](./loading) · [Button](./button) · [Tooltip](./tooltip) ·
+[Accessibility](./accessibility)

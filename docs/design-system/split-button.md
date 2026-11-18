@@ -4,51 +4,88 @@ title: Split button
 
 # Split button
 
-Primary action + related actions, always labelled
-
-## When to use / when not
-Wherever an entity offers one primary action plus alternatives (Open record ▾).
-Not when there is exactly one action (plain button) or no clear primary
-([overflow menu](./overflow-menu)).
-
-## Anatomy
-Two segments sharing one 6px-radius capsule: labelled primary (accent fill,
-white text) + chevron segment (1px divider). Menu: 8px radius, overlay shadow,
-12.5px items with 14px icons; destructive item last, danger ink.
-
-## States
-| State | Visual cue | Trigger |
-|---|---|---|
-| resting | accent fill | — |
-| hover | accent-hover per segment | pointer |
-| open | chevron segment pressed (sunken), menu below-right | click chevron |
-| focus | teal ring per segment | keyboard |
-| disabled item | disabled ink + reason as title/tooltip | permissions |
+One primary action and its alternatives, joined in one labelled control.
 
 <StoryEmbed id="contextmenuactions-contextmenuactionsshell--split-button" />
 
-## Behaviour & keyboard
-Primary fires immediately; chevron only opens the menu. Chevron: Enter/Space/
-↓ opens, arrows cycle, Escape closes to the chevron. Menu closes on outside
-click without firing.
+## When to use
 
-## Accessibility
-Two buttons: primary named by its label; chevron "Meer acties voor {titel}",
-`aria-haspopup="menu"` + `aria-expanded`. Menu `role="menu"`/`menuitem`.
+- An entity or a selection has **exactly one** action people use most, plus a few
+  related ones: _Open record_ ▾ with _Duplicate_, _Export_, _Delete_.
+- The primary action should be one click away and the rest should still be
+  findable under the same control.
 
-## Content & i18n
-Primary is a verb: "Open record" · "Bewaar". Menu items verb-first:
-"Dupliceer" / "Duplicate", "Verwijder" / "Delete" (last, red).
+## When not to use
 
-## Do & don't
-Do keep the primary the statistically most-used action. **Never a bare ⋮** —
-the label is the discovery mechanism. Don't exceed ~7 menu items.
+- **Only one action:** use a plain button.
+- **No clear primary action:** use the labelled _Actions_ menu on its own
+  ([overflow menu](./overflow-menu)).
+- **Several actions that all seem primary:** pick one. Only one action per
+  subject is shown as the primary segment; other promoted actions lead the menu.
+  See [action discovery](./action-discovery).
 
-## Submenus & destructive marker
-Menus may nest **one** submenu level (item with › opens right; ←/→ traverse;
-never deeper). Config-driven menus mark destructive items with a schema flag
-(`"tone": "danger"` on the action definition) — the renderer, not the label,
-decides the danger ink and last-position sorting; never infer from the verb.
+## Anatomy
+
+1. **Primary segment:** a small primary button with a verb label. It runs its
+   action straight away.
+2. **Chevron segment:** a small primary button that only opens the menu. A
+   divider (`--split-button-divider`) separates it from the primary segment;
+   `--split-button-chevron-padding-x` sets its width.
+3. **Menu:** opens under the chevron. Items have an optional icon
+   (`--menu-icon-size`) and a label (`--menu-item-padding`, `--menu-item-gap`).
+   Destructive items use `--color-danger-ink` and always sit last.
+
+Both segments share one capsule: the inner corners are square, the outer
+corners keep `--radius-button`.
+
+## States
+
+| State | What you see | Trigger |
+|---|---|---|
+| Resting | accent fill, chevron points down | — |
+| Hover | each segment shows its own hover fill | pointer |
+| Focus | focus ring on the focused segment | keyboard |
+| Open | chevron points up and takes `--color-accent-hover`; menu under the chevron | click or ↓ on the chevron |
+| Disabled item | item in disabled ink with a help icon; its tooltip says why | the action does not apply |
+| Small screen (< 48rem) | the menu opens as a bottom sheet | viewport width |
+
+The menu opens under the chevron, aligned to its left edge. Near the right edge
+of the window it aligns to the chevron's right edge, and near the bottom it
+opens upwards.
+
+## Keyboard & accessibility
+
+| Key | On the chevron | In the menu |
+|---|---|---|
+| Tab | moves from the primary segment to the chevron | closes the menu, focus back on the chevron |
+| Enter / Space | opens or closes the menu | runs the focused item |
+| ↓ | opens the menu, focus on the first item | next item (wraps) |
+| ↑ | — | previous item (wraps) |
+| Home / End | — | first / last item |
+| Escape | — | closes the menu, focus back on the chevron |
+
+A click outside the menu or a scroll closes it without running anything.
+
+- The two segments sit in a `role="group"`.
+- The primary segment is named by its label.
+- The chevron is named _More actions for {title}_ when it knows what it acts
+  on, otherwise _More actions_. It has `aria-haspopup="menu"` and
+  `aria-expanded`.
+- The menu is a `role="menu"` with `role="menuitem"` items; a disabled item has
+  `aria-disabled="true"`.
+
+## Content
+
+- The primary label is a short verb phrase: _Open record_, _Save_.
+- Menu items start with a verb: _Duplicate_, _Export_, _Delete_.
+- Whether an item is destructive comes from the action's configuration
+  (`tone: Danger`), not from its label. The menu then colours it and moves it
+  to the end.
+- Keep the menu short.
+- Translation keys for the chevron: `contextMenu.more-actions` and
+  `contextMenu.more-actions-for`.
 
 ## Related
-[Overflow menu](./overflow-menu) · [Action discovery](./action-discovery)
+
+[Overflow menu](./overflow-menu) · [Colour](./colour) ·
+[Accessibility](./accessibility)

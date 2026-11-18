@@ -4,64 +4,129 @@ title: Entity list element
 
 # Entity list element
 
-The query-driven result list: table, list and grid view modes
+The list of records a query returns, shown as a list, a grid of cards or a
+table.
 
-## When to use / when not
-Every collection of entities a query returns — main library, relation panels,
-picker results. Not for static key/value data (use a column list).
+<StoryEmbed id="library-viewmodes-viewmodeslist--default" height="260px" />
+
+## When to use
+
+- Any set of records that comes from a query: the main library, the relations
+  in a detail panel, search results.
+- People need to scan, sort, select or open records.
+
+## When not to use
+
+- **Fields of one record:** use label and value rows in a
+  [panel](./panel-and-block-shells).
+- **Choosing records for a field:** use the [entity picker](./entity-picker),
+  which shows this list inside a modal.
 
 ## Anatomy
-Header: title + count chip, view-mode switch (table/list/grid), sort. Table
-mode: checkbox · metadata columns · actions (112px) · optional preview eye
-(26px). List mode: thumbnail · title (link-blue, bold) · badges · secondary
-line. Grid: thumbnail cards. Row title navigates; entity badge tones per
-[Foundations](./foundations).
+
+1. **Results band:** `--color-surface-panel-header`, `--list-band-pad`, with a
+   hairline below. It holds the count chip, the [pager](./pagination), page
+   size, sort, search and the view switch, and wraps when narrow.
+2. **Count chip:** _1,258 results_, bold, on `--color-surface`
+   (`--radius-chip`, `--chip-padding`, `--text-chip`). Above the count limit
+   it reads _1,000+ results_ and is a button that loads the exact count.
+3. **View switch:** picks the list, grid, table or another mode; see
+   [view modes](./view-modes).
+4. **Selection bar:** the [selection action bar](./selection-action-bar), on
+   its own row.
+5. **Column header row:** labels in `--text-label`, bold,
+   `--color-text-field-label`, `--list-header-height` high, with a _Select
+   page_ [checkbox](./checkbox) and _Actions_ on the right. It stays on top
+   while the list scrolls.
+6. **Row:** a [checkbox](./checkbox), a thumbnail, the fields and the row
+   actions; `--list-row-pad`, `--text-table`, a `--color-border-faint`
+   hairline below. In list and grid mode the first field is the title: bold,
+   `--color-text-link`, with a dashed underline in `--color-border-dashed`;
+   the other values are in `--color-text-secondary`.
+7. **Preview eye (optional):** opens the [preview panel](./preview-panel)
+   for that row.
+
+<StoryEmbed id="library-resultcountchip--states" height="200px" />
+
+## Variants
+
+Which variant opens, and how people switch, is on the
+[view modes](./view-modes) page.
+
+| Variant | Layout | Where |
+|---|---|---|
+| List | one row per record, fields side by side | default for most lists |
+| Grid | cards with square media on top, title and fields below | media-heavy lists |
+| Grid, compact | cards with media and title only, in narrower columns | scanning many images |
+| Table | fixed columns under a header row; can be grouped by a field | comparing values across records |
+
+<StoryEmbed id="library-viewmodes-viewmodeslist--grid" height="462px" />
+<StoryEmbed id="library-viewmodes-viewmodestable--default" height="260px" />
+
+- **List** shows the column header row only when every row on the page has
+  the same fields; otherwise each value keeps its own label.
+- **Grid** cards are at least `--grid-card-min-width` wide (compact:
+  `--grid-card-min-width-compact`), `--grid-gap` apart, with a
+  `--color-border-subtle` border, `--radius-card` corners and no shadow. A card
+  without an image shows the file-type icon on `--color-surface-muted`. The
+  checkbox sits on the image's top-left corner. Titles wrap to two lines, other
+  values wrap to two lines and then cut off; the full value is in a tooltip.
+
+- **Small screens** (below 48rem) get two control rows: search, then filters,
+  one sort button and the view switch. Sort options open as a bottom sheet. The
+  column header row is replaced by a row with _Select page_, the count and the
+  selection actions.
 
 ## States
-| State | Visual cue | Trigger |
+
+| State | What you see | Trigger |
 |---|---|---|
-| resting | 12.5px cells, faint hairlines | — |
-| row hover | row-hover fill, actions visible | pointer |
-| selected | accent wash + accent row shadow, checkbox checked | checkbox |
-| preview open | container splits 40/60→25/75 by width; table collapses to its **first** metadata column | eye / row |
-| loading | skeleton rows | fetch |
-| empty | text-only line | 0 results |
+| Resting | white row, hairline below | — |
+| Hover | `--color-surface-row-hover` fill; text keeps its colour, no underline | pointer |
+| Selected | `--color-accent-wash` and `--shadow-accent-row`; in a grid, the wash and a `--color-accent` border | checkbox |
+| Preview open | a `--list-row-preview-border` accent border on the left, no wash; the eye is pressed (grid: accent border) | the row's eye |
+| Last previewed | the same left border, eye not pressed | the preview closed, if the list keeps the last row marked |
+| New | a small accent dot before the row, text in semibold | record added since the last visit |
+| Seen | the title in `--color-text-secondary` | record visited before, if the list tracks seen records |
+| Disabled | grey row, no checkbox, not clickable | record not available here |
+| Loading | skeleton rows on the first load; rows pulse while a new page loads | fetching |
+| Empty | _No results found_, or _No results match your filters_ with a tip | no records |
 
-<StoryEmbed id="library-viewmodes-viewmodeslist--default" />
+<StoryEmbed id="library-viewmodes-listitem--states" height="580px" />
 
-## Behaviour & keyboard
-Checkbox selection feeds the [selection action bar](./selection-action-bar).
-Preview split matches the responsive-grid container tiers: <500px stacks,
-500/630/830/1024px → 40/60, 35/65, 30/70, 25/75. Arrow keys move the row
-cursor; Space toggles selection; Enter opens.
+A table row shows the same states:
 
-## Accessibility
-Table mode is a real `<table>` (or `role="table"`); the count chip is
-`role="status"`. Row checkboxes named by the row title. The preview eye:
-"Toon voorbeeld van {titel}".
+<StoryEmbed id="library-viewmodes-tableviewrow--states" height="560px" />
 
-## Content & i18n
-Count chip: "1.204 resultaten" / "1,204 results". Column headers are nouns,
-sentence case.
+The checkbox owns the wash and the open preview owns the left border, so a row
+can show both without one hiding the other.
 
-## Do & don't
-Do collapse columns rather than truncate the title. Don't show more than one
-primary action per row; don't reshuffle badge tones per view mode.
+## Keyboard & accessibility
 
-## Modes & row states
-**Grid card**: 300×350 — media area 300×220 (`--color-surface-muted`,
-letterboxed thumb; no-media = muted glyph + "Geen media", never blank), body:
-title (13px bold, 2-line clamp), badges row, one secondary line; card = 8px
-radius, 1px border, no shadow; hover = row-hover fill. **List mode** may run
-multi-line (title + up to 2 secondary lines) and gets a column-header row like
-table mode. **New-relation preview rows** (added but unsaved): dashed 1px
-border, tint background, "nog niet bewaard" hint — they commit with the
-editor's Bewaar. **Seen-items dimming**: rows already visited this session
-render title in secondary ink (history aid, config-flagged). **Selection
-visual (decision)**: the checkbox owns wash + accent shadow; the row whose
-preview is open gets a **3px accent border left** and no wash. **Promoted
-actions**: config may promote 1–2 actions as small pills before the split
-button (pill = safe: navigation/preview only, never mutation).
+- Tab reaches each row's link (when the list opens records), its checkbox,
+  the preview eye and the row actions, in that order. In a grid card the order
+  is checkbox, title, eye, actions. Space toggles a checkbox; Enter on a link
+  opens the record.
+- The count chip sits in a `role="status"` region, so a new total is announced.
+- The view switch is described on the [view modes](./view-modes) page.
+- The _Select page_ checkbox ticks when the whole page is selected, shows a
+  partial state when some rows are, and clears the page when unticked.
+- The column header row is hidden from screen readers; each value keeps its
+  label for them, visually hidden.
+- The preview eye is a toggle button named _Open preview_ or _Close preview_.
+- A grid card's image has the record's title as its `alt` text.
+
+## Content
+
+- Column labels are short nouns in sentence case: _Title_, _Author_.
+- The first field is the title; keep it the field people recognise a record by.
+- Translation keys: `library.result-count`, `library.view-modes.*`,
+  `library.grid-size.*`, `search.noresult`, `search.noresult-nofilters`,
+  `search.tip`.
 
 ## Related
-[Preview panel](./preview-panel) · [Selection action bar](./selection-action-bar) · [Filter panel](./filter-panel)
+
+[View modes](./view-modes) ·
+[Selection action bar](./selection-action-bar) ·
+[Preview panel](./preview-panel) · [Pagination](./pagination) ·
+[Checkbox](./checkbox) · [Filter panel](./filter-panel)

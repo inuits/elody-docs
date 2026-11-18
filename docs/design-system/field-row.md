@@ -4,67 +4,118 @@ title: Field row
 
 # Field row
 
-One metadata field: label above value, editable in place
-
-## When to use / when not
-Every single-valued metadata field on a detail screen. Not for interdependent
-fields (use the [group form card](./group-form-card)) and not for repeating
-values (use the [repeatable row group](./repeatable-row-group)).
-
-## Anatomy
-Label (11.5px bold, field-label blue) over value (13px, secondary ink). The
-value carries a dashed underline (`--color-border-dashed`) when editable. Empty
-non-required values render at 45% opacity with placeholder copy. A pencil glyph
-appears on hover, right-aligned.
-
-## States
-| State | Visual cue | Trigger |
-|---|---|---|
-| resting | dashed underline under value | — |
-| hover | accent wash fill + pencil | pointer |
-| focus | 2px teal ring on the value | keyboard |
-| editing | swaps to [inline editor](./inline-editor) | click/Enter |
-| saving | 14px spinner right of value | commit |
-| saved | green check, fades after 2s | success |
-| error | red underline + message below, `role="alert"` | validation |
-| empty | 45% opacity, "Geen waarde" | no value |
-| read-only | no underline, no hover | permissions |
+One metadata field on a detail page: its label above its value, editable in
+place.
 
 <StoryEmbed id="metadata-metadatawrapper--default" />
 
-## Behaviour & keyboard
-Click or Enter starts editing. **Edit scope = save scope = validation scope**:
-the row saves alone, validates alone, never opens siblings. Tab moves between
-rows; editing traps focus in the editor until save/cancel.
+## When to use
 
-## Accessibility
-The editable value is a button: role `button`, accessible name = "{label},
-bewerken". Error message linked via `aria-describedby`; `role="alert"` on
-appearance. Focus returns to the value after save/cancel.
+- Every single-valued metadata field on a detail page or in a preview.
+- Relation fields (a single or multiple relation, or a table of relations)
+  that are stored on the entity itself.
 
-## Content & i18n
-Empty: "Geen waarde" / "No value". Error pattern: "{Label} is verplicht" /
-"{Label} is required". Labels are nouns, sentence case, no colon.
+## When not to use
 
-## Do & don't
-Do keep labels under two words where possible. Don't open a modal for one
-field; don't validate other rows on save; don't hide empty required fields.
+- **A field with several values that belong together per entry**, such as
+  ISBN numbers with their edition: use a
+  [repeatable row group](./repeatable-row-group).
+- **A form that creates a new entity:** fields there are plain inputs, such as
+  a [text input](./text-input) or a [dropdown](./dropdown).
 
-## Label adornments & value types
-Label line adornments, in order after the label: required `*` (danger ink);
-"één van verplicht" group marker (`◦` + tooltip naming the group); help
-tooltip (?); locale selector (11px chip per language, active bold); virtual-
-keyboard trigger ⌨ (fields that need diacritics). Value-type renderings:
-boolean = "Ja"/"Nee" with check/dash glyph (never a bare checkbox as display);
-image values = 48px thumb, click opens viewer; URL = link ink + external
-glyph, HTML values render sanitised; coordinates = text pair + "Toon op
-kaart" link. Values gain a copy affordance (⧉ on hover, "Gekopieerd" status);
-one-line truncation always pairs with the full-value tooltip. After a save an
-**inline undo chip** ("Ongedaan maken", pill, commit-teal outline) sits next
-to the value **until the next action** — it replaces the undo-toast for saves.
-A failed save never renders on the closed row: the editor stays open. Scope
-notes render as 11px muted microcopy in the block/row footer. A panel header
-flashes the saved check for 2s after any row inside saves.
+## Anatomy
+
+1. **Label:** `--text-label`, bold, in `--color-text-field-label`. The space
+   under it is `--field-label-gap`, so the hover wash and the focus ring clear
+   it.
+2. **Label adornments (optional),** in this order after the label:
+   - a required `*` in `--color-danger`, or a `◦` when one of several fields
+     is required;
+   - a help icon `?` with a [tooltip](./tooltip), or one that opens an info
+     panel;
+   - a language picker for multilingual fields.
+3. **Value:** `--text-value` in `--color-text-secondary`. Every value row is at
+   least `--field-value-min-height` high, so rows line up whatever the type.
+4. **Editable cue:** when the value can be edited in place, a dashed underline
+   in `--color-border-dashed` sits under the text, and a pencil in
+   `--color-text-subtle` follows the value. On hover a wash in
+   `--color-surface-editable-hover` fills the value, `--field-value-pad-x`
+   wider than the text on both sides.
+5. **Copy button (optional):** for fields configured to be copied, a small icon
+   button after the value (`--button-sm-padding-icon`, `--color-text-subtle`,
+   `--color-accent-wash` on hover).
+
+## Variants
+
+| Value type | What you see |
+|---|---|
+| Text, number, date | the value as text |
+| URL | a link in link ink with an external-link icon; it opens in a new tab |
+| Checkbox | _Yes_ with a check in `--color-success`, or _No_ with a cross in the value colour |
+| Colour | a swatch followed by the hex value |
+| Dropdown, relation | the chosen options as [chips](./chip-and-badge); a relation chip links to its entity |
+| Image | the image itself, small |
+| Formatted text | sanitised HTML |
+| Copy | the value with a copy button after it |
+
+<StoryEmbed id="metadata-metadatawrapper--value-types" height="400px" />
+
+Chip values and tables have no dashed underline: their shape already marks
+them. A value that is cut off after a set number of lines shows its full text
+in a tooltip.
+
+## States
+
+| State | What you see | Trigger |
+|---|---|---|
+| Editable | dashed underline and pencil | the field can be edited in place |
+| Hover | wash behind the value | pointer |
+| Focus | focus ring around the value | keyboard |
+| Editing | the [inline editor](./inline-editor) replaces the value | click, Enter or Space |
+| Saved | a check in `--color-success` replaces the pencil for 2 seconds; the block header shows the same check | the save worked |
+| Empty | _No value_ at `--opacity-empty`, no underline | no value |
+| Read-only | the plain value: no underline, pencil or wash | the field or the entity can't be edited by this user |
+| Locked | the plain value with a lock icon on the right; its tooltip says why | the field is locked on this entity |
+
+<StoryEmbed id="metadata-metadatawrapper--states" height="340px" />
+
+<StoryEmbed id="metadata-metadatawrapper--editing" />
+
+A value is editable in place only when all of these hold:
+
+- the field type has an inline editor: text, number, date, textarea,
+  checkbox, colour, dropdown, or a relation stored on the entity;
+- the field is not read-only, locked or masked;
+- the user may update the entity;
+- the page is not in its page-wide edit mode. In that mode every row shows
+  its form input instead.
+
+## Keyboard & accessibility
+
+| Key | On an editable value |
+|---|---|
+| Tab | moves to the value |
+| Enter / Space | opens the inline editor |
+
+- An editable value is `role="button"` and named _{label}, edit_.
+- A link, a relation chip or the copy button inside the value keeps its own
+  click and keys. Enter and Space open the editor only when the value itself
+  has focus.
+- The pencil and the saved check are decorative (`aria-hidden`). A successful
+  save is announced as _Saved_ through a `role="status"` region.
+- The one-of-required `◦` has an accessible name.
+- The copy button is a real `<button>` named _Copy_. After copying, its icon
+  turns into a check and _Copied_ shows next to it for 2 seconds, in a
+  `role="status"` region. A copy that fails shows an error notification.
+
+## Content
+
+- Labels are nouns in sentence case, without a colon: _Title_, _Inventory
+  number_.
+- Keep labels short; the value carries the detail.
+- Translation keys: `metadata.labels.no-value`, `inline-edit.edit-field`,
+  `copy-to-clipboard.copy` and `copy-to-clipboard.copied`.
 
 ## Related
-[Inline editor](./inline-editor) · [Group form card](./group-form-card) · [Per-field editing](./per-field-editing)
+
+[Inline editor](./inline-editor) · [Repeatable row group](./repeatable-row-group) · [Text input](./text-input) · [Tooltip](./tooltip) · [Chip & badge](./chip-and-badge)

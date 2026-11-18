@@ -1,34 +1,47 @@
 ---
-title: Elody design system
+title: Get started
 ---
 
 # Elody design system
 
-The shared visual language and interaction patterns of the Elody interface.
-Each page describes one component or pattern: when to use it, how it looks
-and behaves in every state, and how it stays accessible. Live examples come
-from the Elody Storybook.
+The design system is the shared visual language and behaviour of the Elody
+interface: the colours, type and spacing it is built from, the components on
+every screen, and the patterns that combine them.
 
-## The seven interaction principles
+## Who it is for
 
-1. **Edit scope = save scope = validation scope.** A field edits, saves and
-   validates alone; a group edits, saves and validates as one card. No third mode.
-2. **One gesture opens a group.** Clicking any value in an interdependent group
-   opens the whole group in place — never a navigation, never a modal.
-3. **Labelled actions, never a bare ⋮.** The primary action is a labelled split
-   button; overflow triggers carry a label too.
-4. **Undo over confirm.** Destructive-ish actions execute immediately and offer
-   *Ongedaan maken* (Undo) in a toast; confirmation modals are reserved for true loss.
-5. **Shape encodes role.** Pills start something (add, search, navigate chrome —
-   always safe); rectangles execute something immediately (save, open).
-6. **Two elevation levels.** Cards have a 1px border and no shadow; only
-   overlays float.
-7. **Structural accessibility.** Roles, accessible names, focus order and
-   `role="alert"|"status"` are part of the component contract, not a pass after.
+- **Designers** who design screens or features for Elody.
+- **Developers** who build on the Elody interface or add components to it.
+- **Anyone configuring a deployment**, for example to give it a client's
+  brand colours (see [client theming](./client-theming)).
 
-## How to read these pages
+## How it is organised
 
-Each page: definition → when (not) to use →
-anatomy → state table → live embed → behaviour & keyboard → accessibility →
-NL/EN copy → do & don't → related. Copy examples are bilingual; prose is
-English.
+| Section | What you find there |
+|---|---|
+| **Foundations** | Principles, colour, typography, spacing, shape, motion, icons, accessibility and content rules that everything else follows. |
+| **Components** | Single building blocks, such as buttons, inputs and menus. |
+| **Composite components** | Larger parts built from those blocks, such as a field row, the filter panel or the media viewer. |
+| **Patterns** | How components work together for a task, such as editing a record or giving feedback after an action. |
+
+Every page describes what Elody does today. Features that are not built yet
+are not documented.
+
+## Live examples
+
+The examples on these pages are live components from the
+<a href="/storybook/" target="_blank">Elody Storybook</a>. Open a
+story in Storybook to see it full size and try its options.
+
+## Building with the design system
+
+- **Use tokens, never raw values.** Every colour, size, radius, shadow and
+  duration is a design token: a CSS custom property such as
+  `--color-text-body`. A hard-coded colour or size can't follow a client
+  theme and drifts from the rest of the interface.
+- **Use role tokens.** Pick a token for what the value means
+  (`--color-border-default`, `--color-surface-muted`), not for how it looks.
+- **Reuse components.** Build screens from the existing components before
+  adding a new one, so behaviour and accessibility stay the same everywhere.
+- **Follow the [principles](./principles).** They explain why components
+  behave the way they do.
