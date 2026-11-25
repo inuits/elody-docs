@@ -3,7 +3,7 @@
   "info": {
     "title": "Elody Collection API",
     "version": "1.0.0",
-    "description": "The REST endpoints every Elody deployment gets from **collection-api**, the service that stores and serves entities and mediafiles. This is not the GraphQL API the frontend talks to. A client can add its own endpoints and override these, so check your deployment for extras.\n\nThe examples use [the garage network](/example-domain).\n\n**Base path.** Behind the standard ingress the API lives under `/collection/v1`. A local docker-compose setup serves it from the root of `collection-api.<domain>`. Every `/entities…` path is also reachable as `/elody/v1/entities…`.\n\n**Authentication.** Send a bearer token issued by the deployment's identity provider (Keycloak by default) on every request, plus the tenant header (`X-tenant-id` unless the deployment renames it with `TENANT_DEFINING_HEADER`).\n\n**Dry run.** Every endpoint accepts `?soft=1`: the request runs through authentication and the policies and stops before doing anything. A `200` means the caller would be allowed. The frontend uses this to decide which buttons to show.\n\n**Concurrency.** When an entity type has an ETag key configured, `GET /entities/{id}` returns an `ETag`. Send it back as `If-Match` on `PUT` or `PATCH` to get `412` instead of overwriting someone else's change. Without `If-Match` the write goes through.\n\n**Formats.** Single entities and filter results honour the `Accept` header: JSON by default, and `text/turtle`, `application/ld+json`, `application/rdf+xml` or `application/n-triples` for linked data. Filter results also come as `text/csv`."
+    "description": "The REST endpoints every Elody deployment gets from **collection-api**, the service that stores and serves entities and mediafiles. This is not the GraphQL API the frontend talks to. A client can add its own endpoints and override these, so check your deployment for extras.\n\nThe examples use [the garage network](https://docs.elody.eu/example-domain).\n\n**Base path.** Behind the standard ingress the API lives under `/collection/v1`. A local docker-compose setup serves it from the root of `collection-api.<domain>`. Every `/entities…` path is also reachable as `/elody/v1/entities…`.\n\n**Authentication.** Send a bearer token issued by the deployment's identity provider (Keycloak by default) on every request, plus the tenant header (`X-tenant-id` unless the deployment renames it with `TENANT_DEFINING_HEADER`).\n\n**Dry run.** Every endpoint accepts `?soft=1`: the request runs through authentication and the policies and stops before doing anything. A `200` means the caller would be allowed. The frontend uses this to decide which buttons to show.\n\n**Concurrency.** When an entity type has an ETag key configured, `GET /entities/{id}` returns an `ETag`. Send it back as `If-Match` on `PUT` or `PATCH` to get `412` instead of overwriting someone else's change. Without `If-Match` the write goes through.\n\n**Formats.** Single entities and filter results honour the `Accept` header: JSON by default, and `text/turtle`, `application/ld+json`, `application/rdf+xml` or `application/n-triples` for linked data. Filter results also come as `text/csv`."
   },
   "servers": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "name": "Filtering",
-      "description": "Search entities and mediafiles with a list of filter criteria. The filter language is documented in [Advanced Filtering](/services/elody-collection/advanced-filtering)."
+      "description": "Search entities and mediafiles with a list of filter criteria. The filter language is documented in [Advanced Filtering](https://docs.elody.eu/services/elody-collection/advanced-filtering)."
     },
     {
       "name": "Metadata and relations",
@@ -274,7 +274,7 @@
           "Filtering"
         ],
         "summary": "Filter entities",
-        "description": "Returns the entities that match every criterion in the body. A `type` criterion, or a `selection` on the `type` key, is required. The caller's access restrictions are added to the criteria automatically. See [Advanced Filtering](/services/elody-collection/advanced-filtering).",
+        "description": "Returns the entities that match every criterion in the body. A `type` criterion, or a `selection` on the `type` key, is required. The caller's access restrictions are added to the criteria automatically. See [Advanced Filtering](https://docs.elody.eu/services/elody-collection/advanced-filtering).",
         "operationId": "filterEntities",
         "parameters": [
           {
@@ -1460,7 +1460,7 @@
           "Filtering"
         ],
         "summary": "Filter mediafiles",
-        "description": "Returns the mediafiles that match every criterion in the body. A `type` criterion, or a `selection` on the `type` key, is required. The caller's access restrictions are added to the criteria automatically. See [Advanced Filtering](/services/elody-collection/advanced-filtering).",
+        "description": "Returns the mediafiles that match every criterion in the body. A `type` criterion, or a `selection` on the `type` key, is required. The caller's access restrictions are added to the criteria automatically. See [Advanced Filtering](https://docs.elody.eu/services/elody-collection/advanced-filtering).",
         "operationId": "filterMediafiles",
         "parameters": [
           {
@@ -3921,7 +3921,7 @@
         "required": [
           "type"
         ],
-        "description": "One filter criterion. See [Advanced Filtering](/services/elody-collection/advanced-filtering) for every type, matcher and option.",
+        "description": "One filter criterion. See [Advanced Filtering](https://docs.elody.eu/services/elody-collection/advanced-filtering) for every type, matcher and option.",
         "properties": {
           "type": {
             "type": "string",
